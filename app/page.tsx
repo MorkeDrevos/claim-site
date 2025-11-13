@@ -62,7 +62,7 @@ export default function ClaimPoolPage() {
   const firstPoolStatus: 'not-opened' | 'open' | 'closed' = 'not-opened';
 
   // Example history – replace with real on-chain data later
-  const claimHistory = [
+  const claimHistory: { round: number; amount: number; tx?: string; date?: string }[] = [
     // {
     //   round: 1,
     //   amount: 123_456,
