@@ -1,8 +1,30 @@
 import { NextResponse } from 'next/server';
-import { ClaimPortalState } from '../../../lib/claimState';
+
+type PoolStatus = 'not-opened' | 'open' | 'closed';
+
+type ClaimHistoryEntry = {
+  round: number;
+  amount: number;
+  tx?: string;
+  date?: string;
+};
+
+export type ClaimPortalState = {
+  walletConnected: boolean;
+  walletShort: string;
+  networkLabel: string;
+  snapshotLabel: string;
+  eligibleAmount: number;
+  claimWindowStatus: string;
+  snapshotBlock: string;
+  frontEndStatus: string;
+  contractStatus: string;
+  firstPoolStatus: PoolStatus;
+  claimHistory: ClaimHistoryEntry[];
+};
 
 // For now this is still mock data.
-// Later this will read from your indexer / database.
+// Later this will read from your indexer / program.
 const mockState: ClaimPortalState = {
   walletConnected: false,
   walletShort: 'Wallet not connected',
