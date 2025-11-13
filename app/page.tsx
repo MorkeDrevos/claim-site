@@ -152,11 +152,11 @@ export default function ClaimPoolPage() {
                     Claim pool
                   </Link>
                   <Link
-                    href="/analytics"
-                    className="rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 ring-1 ring-slate-800 hover:bg-slate-900/60 hover:text-slate-200"
-                  >
-                    Analytics (soon)
-                  </Link>
+  href="/analytics"
+  className="rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 ring-1 ring-slate-800 hover:bg-slate-900/60 hover:text-slate-200"
+>
+  Analytics
+</Link>
                 </nav>
               </div>
             </div>
