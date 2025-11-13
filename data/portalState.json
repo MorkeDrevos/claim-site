@@ -19,17 +19,17 @@
     "eligibilityMinHold": 100000,
     "eligibilityMinLP": 0
   },
- "wallet": {
-  "connected": false,
-  "addressShort": "Wallet not connected",
-  "inSnapshot": false,
-  "eligibleAmount": 0,
-  "claim": {
+  "wallet": {
+    "connected": false,
+    "addressShort": "Wallet not connected",
+    "inSnapshot": false,
+    "eligibleAmount": 0,
+    "claim": {
       "alreadyClaimed": false,
       "claimedAmount": 0,
       "claimTx": null
-  }
-}
+    }
+  },
   "claimHistory": [
     {
       "round": 1,
