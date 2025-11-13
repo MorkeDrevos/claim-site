@@ -1,7 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+
+/* ───────────────────────────
+   Types
+─────────────────────────── */
 
 type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
@@ -19,17 +23,22 @@ type ClaimPortalState = {
   walletShort: string;
   networkLabel: string;
   snapshotLabel: string;
-  eligibleAmount: number;
-  claimWindowStatus: string;
   snapshotBlock: string;
+
+  claimWindowStatus: string;      // pretty text line
+  claimWindowOpensAt?: string | null; // ISO timestamp for countdown
+
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
-  claimHistory: ClaimHistoryEntry[];
 
-  // NEW:
-  claimWindowOpensAt?: string | null;
+  eligibleAmount: number;
+  claimHistory: ClaimHistoryEntry[];
 };
+
+/* ───────────────────────────
+   UI helpers
+─────────────────────────── */
 
 function PillLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -69,29 +78,19 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ───────────────────────────────────────────
-// CENTRAL CLAIM PORTAL STATE – via /api/portal-state
-// ───────────────────────────────────────────
-
-async function getClaimPortalState(): Promise<ClaimPortalState> {
-  const res = await fetch('/api/portal-state', { cache: 'no-store' });
-  if (!res.ok) {
-    throw new Error('Failed to load portal state');
-  }
-  return res.json();
-}
+/* ───────────────────────────
+   Countdown helpers
+─────────────────────────── */
 
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
+
   const target = new Date(targetIso).getTime();
   if (Number.isNaN(target)) return null;
 
   const now = Date.now();
   const diff = target - now;
-
-  if (diff <= 0) {
-    return 'opens very soon';
-  }
+  if (diff <= 0) return 'opens very soon';
 
   const totalSeconds = Math.floor(diff / 1000);
   const days = Math.floor(totalSeconds / (24 * 3600));
@@ -101,13 +100,15 @@ function formatCountdown(targetIso?: string | null): string | null {
   const parts: string[] = [];
   if (days > 0) parts.push(`${days} day${days === 1 ? '' : 's'}`);
   if (hours > 0) parts.push(`${hours}h`);
-  if (minutes >= 0) parts.push(`${minutes}m`);
+  if (minutes > 0) parts.push(`${minutes}m`);
 
   return parts.join(' ');
 }
 
-function useCountdown(targetIso?: string | null) {
-  const [label, setLabel] = useState<string | null>(() => formatCountdown(targetIso));
+function useCountdown(targetIso?: string | null): string | null {
+  const [label, setLabel] = useState<string | null>(() =>
+    formatCountdown(targetIso)
+  );
 
   useEffect(() => {
     if (!targetIso) {
@@ -118,14 +119,28 @@ function useCountdown(targetIso?: string | null) {
     const update = () => setLabel(formatCountdown(targetIso));
     update(); // initial
 
-    // Once per minute is enough for this UI
-    const id = setInterval(update, 60_000);
+    const id = setInterval(update, 60_000); // once per minute is enough
     return () => clearInterval(id);
   }, [targetIso]);
 
   return label;
 }
 
+/* ───────────────────────────
+   API fetcher
+─────────────────────────── */
+
+async function getClaimPortalState(): Promise<ClaimPortalState> {
+  const res = await fetch('/api/portal-state', { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error('Failed to load portal state');
+  }
+  return res.json();
+}
+
+/* ───────────────────────────
+   Page component
+─────────────────────────── */
 
 export default function ClaimPoolPage() {
   const [state, setState] = useState<ClaimPortalState | null>(null);
@@ -162,21 +177,21 @@ export default function ClaimPoolPage() {
   }
 
   const {
-  walletConnected,
-  walletShort,
-  networkLabel,
-  snapshotLabel,
-  eligibleAmount,
-  claimWindowStatus,
-  snapshotBlock,
-  frontEndStatus,
-  contractStatus,
-  firstPoolStatus,
-  claimHistory,
-  claimWindowOpensAt,   // ➜ NEW LINE
+    walletConnected,
+    walletShort,
+    networkLabel,
+    snapshotLabel,
+    eligibleAmount,
+    claimWindowStatus,
+    snapshotBlock,
+    frontEndStatus,
+    contractStatus,
+    firstPoolStatus,
+    claimHistory,
+    claimWindowOpensAt,
   } = state;
 
-const countdownLabel = useCountdown(claimWindowOpensAt);
+  const countdownLabel = useCountdown(claimWindowOpensAt ?? null);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
@@ -195,7 +210,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
                 CLAIM PORTAL
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-slate-100">$CLAIM</span>
+                <span className="text-sm font-semibold text-slate-100">
+                  $CLAIM
+                </span>
                 <nav className="hidden items-center gap-3 text-xs sm:flex">
                   <Link
                     href="/"
@@ -204,11 +221,11 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
                     Claim pool
                   </Link>
                   <Link
-  href="/analytics"
-  className="rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 ring-1 ring-slate-800 hover:bg-slate-900/60 hover:text-slate-200"
->
-  Analytics
-</Link>
+                    href="/analytics"
+                    className="rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500 ring-1 ring-slate-800 hover:bg-slate-900/60 hover:text-slate-200"
+                  >
+                    Analytics (soon)
+                  </Link>
                 </nav>
               </div>
             </div>
@@ -239,14 +256,16 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
               <StatusBadge label={snapshotLabel} tone="muted" />
             </div>
             <p className="max-w-xl text-sm text-slate-400">
-              Connect a Solana wallet to check if it&apos;s in the snapshot set, preview your claim and see
-              the exact claim window once it opens.
+              Connect a Solana wallet to check if it&apos;s in the snapshot set,
+              preview your claim and see the exact claim window once it opens.
             </p>
           </div>
 
           <p className="mt-1 text-[11px] text-right text-slate-500 sm:mt-0">
-            <span className="font-semibold text-slate-300">Front-end preview</span> · Terms may change before
-            Round 1 opens.
+            <span className="font-semibold text-slate-300">
+              Front-end preview
+            </span>{' '}
+            · Terms may change before Round 1 opens.
           </p>
         </div>
 
@@ -254,11 +273,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
         <Card>
           <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-200">
             <div className="space-y-1">
-              <p>
-  {countdownLabel
-    ? `Opens in ${countdownLabel}`
-    : claimWindowStatus}
-</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Connected wallet
+              </p>
               <p className="text-sm text-slate-200">{walletShort}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
@@ -280,7 +297,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <PillLabel>Your position</PillLabel>
-                <p className="text-sm font-medium text-slate-200">Claim pool · Round 1</p>
+                <p className="text-sm font-medium text-slate-200">
+                  Claim pool · Round 1
+                </p>
               </div>
               <button
                 type="button"
@@ -303,7 +322,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
                   Estimated eligible amount
                 </p>
                 <p className="text-lg font-semibold text-slate-50">
-                  {eligibleAmount.toLocaleString('en-US')}{' '}
+                  {typeof eligibleAmount === 'number'
+                    ? eligibleAmount.toLocaleString('en-US')
+                    : 'TBA'}{' '}
                   <span className="text-xs text-slate-400">$CLAIM</span>
                 </p>
               </div>
@@ -312,7 +333,14 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Claim window
                 </p>
-                <p>{claimWindowStatus}</p>
+                <p>
+                  {claimWindowStatus}
+                  {countdownLabel && (
+                    <span className="ml-2 text-xs text-emerald-300">
+                      · Opens in {countdownLabel}
+                    </span>
+                  )}
+                </p>
               </div>
 
               <div className="space-y-1">
@@ -324,8 +352,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
             </div>
 
             <p className="mt-5 text-xs leading-relaxed text-slate-500">
-              This preview does not move any funds and does not require a signature. Final eligibility will be
-              mirrored from the audited on-chain contract once Round 1 is live.
+              This preview does not move any funds and does not require a
+              signature. Final eligibility will be mirrored from the audited
+              on-chain contract once Round 1 is live.
             </p>
           </Card>
 
@@ -364,8 +393,9 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
             </div>
 
             <p className="mt-5 text-xs leading-relaxed text-slate-500">
-              Once the claim contract is deployed and audited, this card will show the official contract address,
-              audit links and real-time pool metrics mirrored from Solana.
+              Once the claim contract is deployed and audited, this card will
+              show the official contract address, audit links and real-time pool
+              metrics mirrored from Solana.
             </p>
           </Card>
         </div>
@@ -374,28 +404,30 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
         <Card>
           {/* Tabs */}
           <div className="flex flex-wrap items-center gap-3 border-b border-slate-800 pb-3">
-            {(['eligibility', 'rewards', 'history'] as PortalTab[]).map((tab) => {
-              const labels: Record<PortalTab, string> = {
-                eligibility: 'Eligibility',
-                rewards: 'Rewards',
-                history: 'Claim history',
-              };
-              const isActive = activeTab === tab;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setActiveTab(tab)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-semibold tracking-[0.18em] ${
-                    isActive
-                      ? 'bg-slate-100 text-slate-900'
-                      : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/70'
-                  }`}
-                >
-                  {labels[tab]}
-                </button>
-              );
-            })}
+            {(['eligibility', 'rewards', 'history'] as PortalTab[]).map(
+              (tab) => {
+                const labels: Record<PortalTab, string> = {
+                  eligibility: 'Eligibility',
+                  rewards: 'Rewards',
+                  history: 'Claim history',
+                };
+                const isActive = activeTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={`rounded-full px-4 py-1.5 text-xs font-semibold tracking-[0.18em] ${
+                      isActive
+                        ? 'bg-slate-100 text-slate-900'
+                        : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/70'
+                    }`}
+                  >
+                    {labels[tab]}
+                  </button>
+                );
+              }
+            )}
           </div>
 
           {/* Tab body */}
@@ -403,17 +435,25 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
             {activeTab === 'eligibility' && (
               <div className="space-y-3">
                 <p className="text-slate-300">
-                  The $CLAIM pool is built around timing. Your eligibility is determined by balances and activity
-                  at specific snapshot blocks — not by random forms or manual lists.
+                  The $CLAIM pool is built around timing. Your eligibility is
+                  determined by balances and activity at specific snapshot
+                  blocks — not by random forms or manual lists.
                 </p>
                 <ul className="list-disc space-y-1 pl-5 text-slate-400">
-                  <li>Snapshot block and date will be announced before each round.</li>
-                  <li>Minimum token holdings or LP position thresholds may apply.</li>
-                  <li>Optional bonus rules may reward long-term or early participants.</li>
+                  <li>
+                    Snapshot block and date will be announced before each round.
+                  </li>
+                  <li>
+                    Minimum token holdings or LP position thresholds may apply.
+                  </li>
+                  <li>
+                    Optional bonus rules may reward long-term or early
+                    participants.
+                  </li>
                 </ul>
                 <p className="text-xs text-slate-500">
-                  The final rule set for Round 1 will be published before the snapshot is taken and mirrored here
-                  inside the portal.
+                  The final rule set for Round 1 will be published before the
+                  snapshot is taken and mirrored here inside the portal.
                 </p>
               </div>
             )}
@@ -421,11 +461,13 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
             {activeTab === 'rewards' && (
               <div className="space-y-3">
                 <p className="text-slate-300">
-                  Rewards will be distributed in clearly defined rounds. Each pool will specify the reward size,
-                  snapshot rules and vesting conditions (if any) before the snapshot is taken.
+                  Rewards will be distributed in clearly defined rounds. Each
+                  pool will specify the reward size, snapshot rules and vesting
+                  conditions (if any) before the snapshot is taken.
                 </p>
                 <p className="text-xs text-slate-500">
-                  Detailed tokenomics and pool sizes will appear here once the first round parameters are finalized.
+                  Detailed tokenomics and pool sizes will appear here once the
+                  first round parameters are finalized.
                 </p>
               </div>
             )}
@@ -434,9 +476,10 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
               <div className="space-y-3">
                 {claimHistory.length === 0 ? (
                   <p className="text-slate-400">
-                    Once the first pool is live, this section will show a simple history for your connected wallet:
-                    amounts claimed per round, with transaction links and any unclaimed allocations that are still
-                    available.
+                    Once the first pool is live, this section will show a simple
+                    history for your connected wallet: amounts claimed per
+                    round, with transaction links and any unclaimed allocations
+                    that are still available.
                   </p>
                 ) : (
                   <div className="space-y-2">
@@ -446,9 +489,15 @@ const countdownLabel = useCountdown(claimWindowOpensAt);
                         className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-xs"
                       >
                         <div className="space-y-0.5">
-                          <p className="font-medium text-slate-100">Round {entry.round}</p>
+                          <p className="font-medium text-slate-100">
+                            Round {entry.round}
+                          </p>
                           <p className="text-[11px] text-slate-400">
-                            Claimed {entry.amount.toLocaleString('en-US')} $CLAIM
+                            Claimed{' '}
+                            {typeof entry.amount === 'number'
+                              ? entry.amount.toLocaleString('en-US')
+                              : entry.amount}{' '}
+                            $CLAIM
                           </p>
                         </div>
                         {entry.tx && (
