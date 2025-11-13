@@ -4,6 +4,29 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 type PortalTab = 'eligibility' | 'rewards' | 'history';
+type PoolStatus = 'not-opened' | 'open' | 'closed';
+type Tone = 'neutral' | 'success' | 'warning' | 'muted';
+
+type ClaimHistoryEntry = {
+  round: number;
+  amount: number;
+  tx?: string;
+  date?: string;
+};
+
+type ClaimPortalState = {
+  walletConnected: boolean;
+  walletShort: string;
+  networkLabel: string;
+  snapshotLabel: string;
+  eligibleAmount: number;
+  claimWindowStatus: string;
+  snapshotBlock: string;
+  frontEndStatus: string;
+  contractStatus: string;
+  firstPoolStatus: PoolStatus;
+  claimHistory: ClaimHistoryEntry[];
+};
 
 function PillLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -18,9 +41,9 @@ function StatusBadge({
   tone = 'neutral',
 }: {
   label: string;
-  tone?: 'neutral' | 'success' | 'warning' | 'muted';
+  tone?: Tone;
 }) {
-  const toneClasses: Record<typeof tone, string> = {
+  const toneClasses: Record<Tone, string> = {
     neutral: 'bg-slate-800 text-slate-100 ring-1 ring-slate-700',
     success: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40',
     warning: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/40',
@@ -41,35 +64,53 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function ClaimPoolPage() {
-  // ───────────────────────────────────────────
-  // MOCKED DATA – plug in your real values here
-  // ───────────────────────────────────────────
+// ───────────────────────────────────────────
+// CENTRAL CLAIM PORTAL STATE
+// → Replace getClaimPortalState() implementation with real data later
+// ───────────────────────────────────────────
 
-  // TODO: Replace with your real wallet hook
-  const walletConnected = false;
+// TODO: swap this mock implementation with real data from your wallet + program/API
+function getClaimPortalState(): ClaimPortalState {
+  const walletConnected = false; // ← plug Solana wallet adapter here later
   const walletShort = walletConnected ? '9uuq…kH5' : 'Wallet not connected';
-  const networkLabel = 'Solana devnet';
 
-  // TODO: Replace with data from your claim program / API
-  const snapshotLabel = 'Snapshot – TBA';
-  const eligibleAmount = 0;
-  const claimWindowStatus = 'Not opened yet';
-  const snapshotBlock = 'To be announced';
+  return {
+    walletConnected,
+    walletShort,
+    networkLabel: 'Solana devnet',
+    snapshotLabel: 'Snapshot – TBA',
+    eligibleAmount: 0,
+    claimWindowStatus: 'Not opened yet',
+    snapshotBlock: 'To be announced',
+    frontEndStatus: 'Online',
+    contractStatus: 'In progress',
+    firstPoolStatus: 'not-opened',
+    claimHistory: [
+      // Example – replace when live:
+      // {
+      //   round: 1,
+      //   amount: 123_456,
+      //   tx: 'https://solscan.io/tx/…',
+      //   date: '2025-01-10',
+      // },
+    ],
+  };
+}
 
-  const frontEndStatus = 'Online';
-  const contractStatus = 'In progress';
-  const firstPoolStatus: string = 'not-opened';
-
-  // Example history – replace with real on-chain data later
-  const claimHistory: { round: number; amount: number; tx?: string; date?: string }[] = [
-    // {
-    //   round: 1,
-    //   amount: 123_456,
-    //   tx: 'https://solscan.io/tx/…',
-    //   date: '2025-01-10',
-    // },
-  ];
+export default function ClaimPoolPage() {
+  const {
+    walletConnected,
+    walletShort,
+    networkLabel,
+    snapshotLabel,
+    eligibleAmount,
+    claimWindowStatus,
+    snapshotBlock,
+    frontEndStatus,
+    contractStatus,
+    firstPoolStatus,
+    claimHistory,
+  } = getClaimPortalState();
 
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
@@ -196,7 +237,8 @@ export default function ClaimPoolPage() {
                   Estimated eligible amount
                 </p>
                 <p className="text-lg font-semibold text-slate-50">
-                  {eligibleAmount.toLocaleString('en-US')} <span className="text-xs text-slate-400">$CLAIM</span>
+                  {eligibleAmount.toLocaleString('en-US')}{' '}
+                  <span className="text-xs text-slate-400">$CLAIM</span>
                 </p>
               </div>
 
@@ -266,7 +308,7 @@ export default function ClaimPoolPage() {
         <Card>
           {/* Tabs */}
           <div className="flex flex-wrap items-center gap-3 border-b border-slate-800 pb-3">
-            {(['eligibility', 'rewards', 'history'] as PortalTab[]).map(tab => {
+            {(['eligibility', 'rewards', 'history'] as PortalTab[]).map((tab) => {
               const labels: Record<PortalTab, string> = {
                 eligibility: 'Eligibility',
                 rewards: 'Rewards',
