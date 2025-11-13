@@ -1,241 +1,369 @@
-// app/page.tsx
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { useState, FormEvent } from 'react';
 
-type Status = 'idle' | 'checking' | 'eligible' | 'not-eligible';
+type Tab = 'eligibility' | 'rewards' | 'history';
 
 export default function Home() {
   const [wallet, setWallet] = useState('');
-  const [status, setStatus] = useState<Status>('idle');
-  const [message, setMessage] = useState<string | null>(null);
+  const [connected, setConnected] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [eligible, setEligible] = useState<boolean | null>(null);
+  const [previewReward, setPreviewReward] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>('eligibility');
 
-  const [snapshotDate] = useState<string>('Snapshot: TBA');
-  const [claimWindow] = useState<string>('First claim round: TBA');
-  const [eligibilityScore, setEligibilityScore] = useState<string>('--');
-  const [estimatedReward, setEstimatedReward] = useState<string>('--');
-
-  function handlePreviewCheck(e: FormEvent) {
-    e.preventDefault();
-    const trimmed = wallet.trim();
-
-    if (!trimmed) {
-      setMessage('Enter a Solana wallet to check your preview status.');
-      setStatus('idle');
-      return;
-    }
-
-    setStatus('checking');
-    setMessage(null);
-
-    // Temporary “live preview” behaviour.
-    setTimeout(() => {
-      const isEligible = trimmed.length % 2 === 0;
-
-      setEligibilityScore(isEligible ? 'Preview: eligible' : 'Preview: not eligible');
-      setEstimatedReward(isEligible ? 'Reward calculated at launch' : '—');
-
-      setStatus(isEligible ? 'eligible' : 'not-eligible');
-      setMessage(
-        isEligible
-          ? 'This wallet would qualify in the first $CLAIM pool based on the current preview logic.'
-          : 'This wallet would not qualify in the first $CLAIM pool based on the current preview logic.'
-      );
-    }, 900);
+  function handleConnect() {
+    if (!wallet.trim()) return;
+    setConnected(true);
+    // Fake initial preview
+    handleCheckPreview();
   }
 
-  const statusLabel =
-    status === 'idle'
-      ? 'Waiting for wallet'
-      : status === 'checking'
-      ? 'Checking…'
-      : status === 'eligible'
-      ? 'Preview: eligible'
-      : 'Preview: not eligible';
+  function handleDisconnect() {
+    setConnected(false);
+    setEligible(null);
+    setPreviewReward(null);
+  }
+
+  function handleCheckPreview(e?: FormEvent) {
+    if (e) e.preventDefault();
+    if (!wallet.trim()) return;
+
+    setChecking(true);
+
+    // Temporary mock logic (remove later when real on-chain check is wired)
+    setTimeout(() => {
+      const isEligible = wallet.trim().length % 2 === 0;
+      setEligible(isEligible);
+      setPreviewReward(
+        isEligible ? 'Preview: 2,340 $CLAIM (subject to final snapshot)' : null
+      );
+      setChecking(false);
+    }, 800);
+  }
+
+  const statusLabel = !connected
+    ? 'Wallet not connected'
+    : checking
+    ? 'Checking…'
+    : eligible === null
+    ? 'Connected · run preview'
+    : eligible
+    ? 'Eligible (preview)'
+    : 'Not eligible (preview)';
+
+  const statusTone =
+    !connected || eligible === null
+      ? 'neutral'
+      : eligible
+      ? 'positive'
+      : 'negative';
 
   return (
-    <main className="claim-page">
-      <div className="claim-shell">
-        {/* Top bar */}
-        <div className="claim-topbar">
-          <div className="claim-badge">$CLAIM · LIVE CLAIM PORTAL</div>
-          <div className="claim-top-links">
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noreferrer"
-              className="claim-link subtle"
-            >
-              X (Twitter)
-            </a>
-            <span className="divider">•</span>
-            <a
-              href="https://t.me"
-              target="_blank"
-              rel="noreferrer"
-              className="claim-link subtle"
-            >
-              Telegram
-            </a>
+    <main className="claim-dash-root">
+      {/* Sidebar */}
+      <aside className="claim-sidebar">
+        <div className="sidebar-header">
+          <div className="logo-circle">
+            {/* If you have the CLAIM logo PNG, put it as background in CSS or add <img> here */}
+            <span className="logo-mark">C</span>
+          </div>
+          <div className="logo-text">
+            <span className="logo-name">$CLAIM</span>
+            <span className="logo-sub">Claim portal</span>
           </div>
         </div>
 
-        {/* MAIN SECTION: CLAIM POOL FIRST */}
-        <section id="claim-pool" className="claim-main">
-          {/* Left side – main claim pool card */}
-          <div className="pool-card primary">
-            <div className="pool-card-header">
-              <div>
-                <span className="pool-label">Your claim pool</span>
-                <div style={{ marginTop: 4, fontSize: 15, fontWeight: 500 }}>
-                  Connect your wallet to check $CLAIM rewards
-                </div>
-              </div>
-              <span className="pool-chip chip-waiting">Round 1 · Preparing</span>
-            </div>
+        <nav className="sidebar-nav">
+          <div className="nav-section-label">Portal</div>
+          <button className="nav-item nav-item-active">
+            <span className="nav-dot" />
+            Claim pool
+          </button>
+          <button className="nav-item" disabled>
+            Analytics (soon)
+          </button>
 
-            <p className="pool-wallet-placeholder">
-              This is the official $CLAIM portal. As soon as the first pool opens,
-              this card will show your snapshot, eligibility and reward amount.
+          <div className="nav-section-label">External</div>
+          <a
+            href="https://x.com"
+            target="_blank"
+            rel="noreferrer"
+            className="nav-item link"
+          >
+            X (Twitter)
+          </a>
+          <a
+            href="https://t.me"
+            target="_blank"
+            rel="noreferrer"
+            className="nav-item link"
+          >
+            Telegram
+          </a>
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="badge-soft">Portal · Online (preview)</div>
+          <div className="sidebar-footnote">
+            First on-chain claim round will appear here as soon as the pool is live.
+          </div>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <section className="claim-main">
+        {/* Top header */}
+        <header className="claim-header">
+          <div>
+            <h1>$CLAIM · Claim pool</h1>
+            <p>
+              Connect a Solana wallet to check your status for the upcoming claim
+              pool.
             </p>
+          </div>
 
-            <form className="wallet-form" onSubmit={handlePreviewCheck}>
-              <label className="label" htmlFor="wallet">
-                Solana wallet address
-              </label>
+          <div className="wallet-box">
+            <form onSubmit={handleCheckPreview} className="wallet-inline-form">
               <input
-                id="wallet"
                 type="text"
-                placeholder="Paste your Solana wallet"
+                placeholder="Paste Solana wallet"
                 value={wallet}
                 onChange={(e) => setWallet(e.target.value)}
                 className="wallet-input"
               />
-              <button
-                type="submit"
-                className="primary-button full"
-                disabled={status === 'checking'}
-              >
-                {status === 'checking'
-                  ? 'Checking preview status…'
-                  : 'Check claim preview'}
-              </button>
-              {message && <p className="status-message">{message}</p>}
+              {!connected ? (
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={handleConnect}
+                  disabled={!wallet.trim()}
+                >
+                  Connect
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  onClick={handleDisconnect}
+                >
+                  Disconnect
+                </button>
+              )}
             </form>
 
-            <div className="panel-divider" />
+            <div className={`wallet-status wallet-status-${statusTone}`}>
+              <span className="dot" />
+              <span>{statusLabel}</span>
+            </div>
+          </div>
+        </header>
 
-            {/* Live-style pool summary */}
-            <div className="panel-grid">
-              <div className="panel-item">
-                <span className="panel-label">Wallet status</span>
-                <span className={`panel-value status-${status}`}>{statusLabel}</span>
+        {/* Claim pool + meta */}
+        <div className="claim-main-grid">
+          {/* Claim pool card */}
+          <div className="card card-main">
+            <div className="card-header">
+              <div>
+                <div className="pill-live">Claim pool · Round 1</div>
+                <h2>Your position</h2>
               </div>
-              <div className="panel-item">
-                <span className="panel-label">Snapshot</span>
-                <span className="panel-value">{snapshotDate}</span>
-              </div>
-              <div className="panel-item">
-                <span className="panel-label">Claim window</span>
-                <span className="panel-value">{claimWindow}</span>
-              </div>
-              <div className="panel-item">
-                <span className="panel-label">Eligibility</span>
-                <span className="panel-value">{eligibilityScore}</span>
-              </div>
-              <div className="panel-item">
-                <span className="panel-label">Estimated reward</span>
-                <span className="panel-value">{estimatedReward}</span>
-              </div>
+              <span className="tag-soft">Snapshot · TBA</span>
             </div>
 
-            <div className="pool-progress">
-              <div className="pool-progress-bar">
-                <div className="pool-progress-fill" />
+            {!connected ? (
+              <div className="card-body">
+                <p className="muted">
+                  Connect a wallet above to see if it qualifies for the first
+                  $CLAIM pool. This preview does not move any funds and does not
+                  require a signature.
+                </p>
+                <ul className="bullet-list">
+                  <li>Check if this wallet is in the current snapshot set.</li>
+                  <li>Preview how many tokens you&apos;ll be able to claim.</li>
+                  <li>See the exact claim window and deadline once it&apos;s live.</li>
+                </ul>
               </div>
-              <div className="pool-progress-legend">
-                <span>1 · Contract deployed</span>
-                <span>2 · Snapshot confirmed</span>
-                <span>3 · Claim window live</span>
+            ) : (
+              <div className="card-body">
+                <div className="stat-grid">
+                  <div className="stat">
+                    <span className="stat-label">Wallet</span>
+                    <span className="stat-value mono">
+                      {wallet.slice(0, 4)}…{wallet.slice(-4)}
+                    </span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-label">Preview status</span>
+                    <span
+                      className={`stat-value highlight highlight-${statusTone}`}
+                    >
+                      {eligible === null
+                        ? 'Run preview'
+                        : eligible
+                        ? 'Eligible'
+                        : 'Not eligible'}
+                    </span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-label">Preview reward</span>
+                    <span className="stat-value">
+                      {previewReward ?? '—'}
+                    </span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-label">Claim window</span>
+                    <span className="stat-value">TBA</span>
+                  </div>
+                </div>
+
+                <button
+                  className="btn-primary full"
+                  onClick={handleCheckPreview}
+                  disabled={checking}
+                >
+                  {checking ? 'Checking preview…' : 'Run eligibility preview'}
+                </button>
+
+                <p className="fineprint">
+                  This is a live preview of how the portal will behave. Final
+                  eligibility and rewards are locked in at the published snapshot
+                  block and may differ slightly from this preview.
+                </p>
               </div>
+            )}
+          </div>
+
+          {/* Side meta card */}
+          <div className="card card-side">
+            <h3>Portal status</h3>
+            <div className="status-row">
+              <span>Front-end</span>
+              <span className="status-pill status-ok">Online</span>
+            </div>
+            <div className="status-row">
+              <span>Claim contract</span>
+              <span className="status-pill status-wait">In progress</span>
+            </div>
+            <div className="status-row">
+              <span>First pool</span>
+              <span className="status-pill status-wait">Not opened</span>
             </div>
 
-            <button className="primary-button disabled full" disabled>
-              Claim button appears here when Round 1 opens
+            <hr className="divider" />
+
+            <p className="muted small">
+              When the contract is deployed and audited, this card will show the
+              official contract address, audit links and real-time pool metrics.
+            </p>
+          </div>
+        </div>
+
+        {/* TABS SECTION */}
+        <div className="card tabs-card">
+          <div className="tabs-nav">
+            <button
+              className={`tab-btn ${activeTab === 'eligibility' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('eligibility')}
+            >
+              Eligibility
             </button>
-
-            <p className="panel-footnote" style={{ marginTop: 8 }}>
-              Until the first round is opened, this portal runs in{' '}
-              <strong>live preview mode</strong>: you can test wallets and see how the
-              claim flow will behave.
-            </p>
+            <button
+              className={`tab-btn ${activeTab === 'rewards' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('rewards')}
+            >
+              Rewards
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'history' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('history')}
+            >
+              Claim history
+            </button>
           </div>
 
-          {/* Right side – explanation / status */}
-          <div className="pool-card secondary">
-            <h2 style={{ marginTop: 0, marginBottom: 6 }}>$CLAIM · The Token of Timing</h2>
-            <p style={{ marginTop: 0, fontSize: 13, color: 'var(--text-soft)' }}>
-              This portal is the single home for every $CLAIM distribution. When a
-              pool is active you&apos;ll see your eligibility and rewards here, not in
-              random forms or spreadsheets.
-            </p>
+          <div className="tabs-body">
+            {activeTab === 'eligibility' && (
+              <div className="tab-panel">
+                <h3>How eligibility is calculated</h3>
+                <p>
+                  The $CLAIM pool is built around <strong>timing</strong>. Your
+                  eligibility is determined by balances and activity at specific
+                  snapshot blocks, not by random forms or manual lists.
+                </p>
+                <ul className="bullet-list">
+                  <li>Snapshot block + date (announced before each round).</li>
+                  <li>Minimum token holdings or LP position thresholds.</li>
+                  <li>Optional bonus rules for long-term or early participants.</li>
+                </ul>
+                <p className="muted small">
+                  The final rule set for Round 1 will be published before the
+                  snapshot is taken and mirrored here inside the portal.
+                </p>
+              </div>
+            )}
 
-            <div className="pill-row" style={{ marginTop: 8, marginBottom: 14 }}>
-              <span className="pill pill-live">Portal · Online</span>
-              <span className="pill pill-soft">Round 1 · Not opened yet</span>
-            </div>
+            {activeTab === 'rewards' && (
+              <div className="tab-panel">
+                <h3>Reward structure</h3>
+                <p>
+                  Each claim round has a fixed pool of $CLAIM tokens. Eligible
+                  wallets receive a share based on their weight at the snapshot.
+                </p>
+                <ul className="bullet-list">
+                  <li>Total pool size (Round 1): <strong>TBA</strong>.</li>
+                  <li>Distribution curve: pro-rata with caps to avoid outliers.</li>
+                  <li>
+                    Any unclaimed tokens after the deadline are recycled into future
+                    rounds.
+                  </li>
+                </ul>
+                <p className="muted small">
+                  Exact numbers go live once Round 1 is fully configured and
+                  audited. This tab then becomes a live dashboard.
+                </p>
+              </div>
+            )}
 
-            <h3 style={{ fontSize: 14, margin: '0 0 8px' }}>How each claim round works</h3>
-            <ol className="pool-steps">
-              <li>
-                <span className="step-title">1 · Snapshot</span>
-                <span className="step-text">
-                  A specific block and date are announced. Balances and activity at
-                  that point define eligibility.
-                </span>
-              </li>
-              <li>
-                <span className="step-title">2 · Connect & review</span>
-                <span className="step-text">
-                  Connect your wallet. The portal shows you why you are (or are not)
-                  eligible and what you can claim.
-                </span>
-              </li>
-              <li>
-                <span className="step-title">3 · Claim on-chain</span>
-                <span className="step-text">
-                  Confirm the transaction in your wallet. Tokens are sent
-                  immediately, and this card updates to &quot;Claimed&quot;.
-                </span>
-              </li>
-            </ol>
-
-            <p className="small-note">
-              Final documentation, audits and contract addresses will be published
-              before Round 1 opens. Always verify announcements from the official
-              $CLAIM channels only.
-            </p>
+            {activeTab === 'history' && (
+              <div className="tab-panel">
+                <h3>Claim history</h3>
+                {!connected ? (
+                  <p className="muted">
+                    Connect a wallet to see its past and future claim rounds here.
+                    Once the first pool is complete, this tab will show on-chain
+                    history for this wallet only.
+                  </p>
+                ) : (
+                  <div>
+                    <p className="muted">
+                      No on-chain claims recorded for this wallet yet.
+                    </p>
+                    <div className="history-placeholder">
+                      <div className="history-row">
+                        <span>Round</span>
+                        <span>Amount</span>
+                        <span>Status</span>
+                      </div>
+                      <div className="history-row dim">
+                        <span>1</span>
+                        <span>—</span>
+                        <span>Not opened</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        </section>
-
-        {/* Lower section – softer hero / context */}
-        <section className="claim-pool">
-          <div className="pool-header">
-            <h2>Why this portal exists</h2>
-            <p>
-              $CLAIM is designed to make timing and eligibility transparent. Instead
-              of scattered snapshots and mystery airdrops, every reward round runs
-              through this portal with clear rules and on-chain verification.
-            </p>
-          </div>
-        </section>
+        </div>
 
         <footer className="claim-footer">
-          <span>© {new Date().getFullYear()} $CLAIM · Claim portal.</span>
-          <span className="footer-dot" />
-          <span>Live preview · First pool opening soon</span>
+          <span>© {new Date().getFullYear()} $CLAIM portal</span>
+          <span>·</span>
+          <span>Preview UI · subject to change</span>
         </footer>
-      </div>
+      </section>
     </main>
   );
 }
