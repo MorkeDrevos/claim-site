@@ -25,8 +25,8 @@ type ClaimPortalState = {
   snapshotLabel: string;
   snapshotBlock: string;
 
-  claimWindowStatus: string;           // pretty text line
-  claimWindowOpensAt?: string | null;  // ISO timestamp for countdown
+  claimWindowStatus: string; // pretty text line
+  claimWindowOpensAt?: string | null; // ISO timestamp for countdown
 
   frontEndStatus: string;
   contractStatus: string;
@@ -82,7 +82,16 @@ function Card({ children }: { children: React.ReactNode }) {
    Countdown helpers
 ─────────────────────────── */
 
-function formatCountdown(targetIso?: string | null): string | null {
+type CountdownStage = 'long' | 'medium' | 'short' | 'imminent';
+
+type CountdownState =
+  | {
+      label: string;
+      stage: CountdownStage;
+    }
+  | null;
+
+function makeCountdownLabel(targetIso?: string | null): CountdownState {
   if (!targetIso) return null;
 
   const target = new Date(targetIso).getTime();
@@ -90,40 +99,71 @@ function formatCountdown(targetIso?: string | null): string | null {
 
   const now = Date.now();
   const diff = target - now;
-  if (diff <= 0) return 'opens very soon';
+
+  if (diff <= 0) {
+    return {
+      label: 'opens very soon',
+      stage: 'imminent',
+    };
+  }
 
   const totalSeconds = Math.floor(diff / 1000);
   const days = Math.floor(totalSeconds / (24 * 3600));
   const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  let stage: CountdownStage = 'long';
+  if (diff <= 3 * 24 * 3600 * 1000 && diff > 3600 * 1000) stage = 'medium'; // < 3 days
+  if (diff <= 3600 * 1000 && diff > 60 * 1000) stage = 'short'; // < 1h
+  if (diff <= 60 * 1000) stage = 'imminent'; // < 1m
 
   const parts: string[] = [];
-  if (days > 0) parts.push(`${days} day${days === 1 ? '' : 's'}`);
-  if (hours > 0) parts.push(`${hours}h`);
-  if (minutes > 0) parts.push(`${minutes}m`);
 
-  return parts.join(' ');
+  if (days > 0) {
+    parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+  } else if (hours > 0) {
+    parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}m`);
+  } else if (minutes > 0) {
+    parts.push(`${minutes}m`);
+  } else {
+    parts.push(`${seconds}s`);
+  }
+
+  return {
+    label: parts.join(' '),
+    stage,
+  };
 }
 
-function useCountdown(targetIso?: string | null): string | null {
-  const [label, setLabel] = useState<string | null>(() =>
-    formatCountdown(targetIso)
+function useCountdown(targetIso?: string | null): CountdownState {
+  const [state, setState] = useState<CountdownState>(() =>
+    makeCountdownLabel(targetIso)
   );
 
   useEffect(() => {
+    // If no target, clear countdown
     if (!targetIso) {
-      setLabel(null);
+      setState(null);
       return;
     }
 
-    const update = () => setLabel(formatCountdown(targetIso));
-    update(); // initial
+    const update = () => setState(makeCountdownLabel(targetIso));
+    update(); // initial tick
 
-    const id = setInterval(update, 60_000); // once per minute
+    // Faster updates when close to opening
+    const now = Date.now();
+    const target = new Date(targetIso).getTime();
+    const diff = target - now;
+    const intervalMs = diff > 3600 * 1000 ? 60_000 : 1_000;
+
+    const id = setInterval(update, intervalMs);
     return () => clearInterval(id);
   }, [targetIso]);
 
-  return label;
+  return state;
 }
 
 /* ───────────────────────────
@@ -147,9 +187,6 @@ export default function ClaimPoolPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
-  // Countdown hook – must always be called
-  const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
-
   useEffect(() => {
     getClaimPortalState()
       .then(setState)
@@ -158,6 +195,8 @@ export default function ClaimPoolPage() {
         setError('Unable to load portal data right now.');
       });
   }, []);
+
+  const countdown = useCountdown(state?.claimWindowOpensAt ?? null);
 
   if (error) {
     return (
@@ -192,6 +231,16 @@ export default function ClaimPoolPage() {
     firstPoolStatus,
     claimHistory,
   } = state;
+
+  // Colour for the countdown line
+  const countdownClass =
+    countdown?.stage === 'long'
+      ? 'text-emerald-300'
+      : countdown?.stage === 'medium'
+      ? 'text-emerald-300'
+      : countdown?.stage === 'short'
+      ? 'text-amber-300'
+      : 'text-rose-300';
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
@@ -322,17 +371,24 @@ export default function ClaimPoolPage() {
                   Estimated eligible amount
                 </p>
                 <p className="text-lg font-semibold text-slate-50">
-                  {eligibleAmount.toLocaleString('en-US')}{' '}
+                  {typeof eligibleAmount === 'number'
+                    ? eligibleAmount.toLocaleString('en-US')
+                    : 'TBA'}{' '}
                   <span className="text-xs text-slate-400">$CLAIM</span>
                 </p>
               </div>
 
-              {/* Claim window with countdown */}
+              {/* Claim window */}
               <div className="space-y-1">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Claim window
                 </p>
-                <p>{countdownLabel ?? claimWindowStatus}</p>
+                <p className="text-sm text-slate-200">{claimWindowStatus}</p>
+                {countdown && (
+                  <p className={`text-xs font-medium ${countdownClass}`}>
+                    Opens in {countdown.label}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-1">
@@ -486,7 +542,10 @@ export default function ClaimPoolPage() {
                           </p>
                           <p className="text-[11px] text-slate-400">
                             Claimed{' '}
-                            {entry.amount.toLocaleString('en-US')} $CLAIM
+                            {typeof entry.amount === 'number'
+                              ? entry.amount.toLocaleString('en-US')
+                              : entry.amount}{' '}
+                            $CLAIM
                           </p>
                         </div>
                         {entry.tx && (
@@ -511,9 +570,7 @@ export default function ClaimPoolPage() {
         {/* Footer mini */}
         <footer className="mt-2 flex flex-wrap items-center justify-between gap-3 pb-4 text-[11px] text-slate-500">
           <span>© 2025 $CLAIM portal · Preview UI · Subject to change.</span>
-          <span>
-            Powered by Solana · Built for serious holders, not random forms.
-          </span>
+          <span>Powered by Solana · Built for serious holders, not random forms.</span>
         </footer>
       </div>
     </main>
