@@ -25,8 +25,8 @@ type ClaimPortalState = {
   snapshotLabel: string;
   snapshotBlock: string;
 
-  claimWindowStatus: string;      // pretty text line
-  claimWindowOpensAt?: string | null; // ISO timestamp for countdown
+  claimWindowStatus: string;           // pretty text line
+  claimWindowOpensAt?: string | null;  // ISO timestamp for countdown
 
   frontEndStatus: string;
   contractStatus: string;
@@ -119,7 +119,7 @@ function useCountdown(targetIso?: string | null): string | null {
     const update = () => setLabel(formatCountdown(targetIso));
     update(); // initial
 
-    const id = setInterval(update, 60_000); // once per minute is enough
+    const id = setInterval(update, 60_000); // once per minute
     return () => clearInterval(id);
   }, [targetIso]);
 
@@ -147,7 +147,7 @@ export default function ClaimPoolPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
-  // 👉 NEW: call the hook here, *before* any `if (error)` / `if (!state)`
+  // Countdown hook – must always be called
   const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
 
   useEffect(() => {
@@ -191,10 +191,7 @@ export default function ClaimPoolPage() {
     contractStatus,
     firstPoolStatus,
     claimHistory,
-    claimWindowOpensAt,
   } = state;
-
-  const countdownLabel = useCountdown(claimWindowOpensAt ?? null);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
@@ -325,23 +322,17 @@ export default function ClaimPoolPage() {
                   Estimated eligible amount
                 </p>
                 <p className="text-lg font-semibold text-slate-50">
-                  {typeof eligibleAmount === 'number'
-                    ? eligibleAmount.toLocaleString('en-US')
-                    : 'TBA'}{' '}
+                  {eligibleAmount.toLocaleString('en-US')}{' '}
                   <span className="text-xs text-slate-400">$CLAIM</span>
                 </p>
               </div>
 
+              {/* Claim window with countdown */}
               <div className="space-y-1">
-                <p>{countdownLabel ?? claimWindowStatus}</p>
-                <p>
-                  {claimWindowStatus}
-                  {countdownLabel && (
-                    <span className="ml-2 text-xs text-emerald-300">
-                      · Opens in {countdownLabel}
-                    </span>
-                  )}
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  Claim window
                 </p>
+                <p>{countdownLabel ?? claimWindowStatus}</p>
               </div>
 
               <div className="space-y-1">
@@ -495,10 +486,7 @@ export default function ClaimPoolPage() {
                           </p>
                           <p className="text-[11px] text-slate-400">
                             Claimed{' '}
-                            {typeof entry.amount === 'number'
-                              ? entry.amount.toLocaleString('en-US')
-                              : entry.amount}{' '}
-                            $CLAIM
+                            {entry.amount.toLocaleString('en-US')} $CLAIM
                           </p>
                         </div>
                         {entry.tx && (
@@ -523,7 +511,9 @@ export default function ClaimPoolPage() {
         {/* Footer mini */}
         <footer className="mt-2 flex flex-wrap items-center justify-between gap-3 pb-4 text-[11px] text-slate-500">
           <span>© 2025 $CLAIM portal · Preview UI · Subject to change.</span>
-          <span>Powered by Solana · Built for serious holders, not random forms.</span>
+          <span>
+            Powered by Solana · Built for serious holders, not random forms.
+          </span>
         </footer>
       </div>
     </main>
