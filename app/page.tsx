@@ -2,22 +2,49 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import type { ClaimPortalState } from '../lib/claimState';
 
 /* ───────────────────────────
-   Constants
-─────────────────────────── */
-
-const MIN_HOLDING = 100_000;
-const JUPITER_URL = 'https://jup.ag/swap/SOL-CLAIM'; // 🔁 update with real URL
-const POLL_INTERVAL_MS = 15_000; // how often to refresh portal state
-
-/* ───────────────────────────
-   Small UI helpers
+   Types
 ─────────────────────────── */
 
 type PortalTab = 'eligibility' | 'rewards' | 'history';
+type PoolStatus = 'not-opened' | 'open' | 'closed';
 type Tone = 'neutral' | 'success' | 'warning' | 'muted';
+
+type ClaimHistoryEntry = {
+  round: number;
+  amount: number;
+  tx?: string;
+  date?: string;
+};
+
+type ClaimPortalState = {
+  walletConnected: boolean;
+  walletShort: string;
+  networkLabel: string;
+  snapshotLabel: string;
+  snapshotBlock: string;
+
+  claimWindowStatus: string; // pretty text line
+  claimWindowOpensAt?: string | null;
+
+  frontEndStatus: string;
+  contractStatus: string;
+  firstPoolStatus: PoolStatus;
+
+  eligibleAmount: number;
+  claimHistory: ClaimHistoryEntry[];
+
+  // NEW: reward pool info (optional)
+  rewardPoolTokens?: number; // e.g. 1_000_000
+  rewardPoolUsd?: number; // e.g. 12345.67
+};
+
+type Phase = 'scheduled' | 'open' | 'closed' | 'unknown';
+
+/* ───────────────────────────
+   UI helpers
+─────────────────────────── */
 
 function PillLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -36,8 +63,7 @@ function StatusBadge({
 }) {
   const toneClasses: Record<Tone, string> = {
     neutral: 'bg-slate-800 text-slate-100 ring-1 ring-slate-700',
-    success:
-      'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40',
+    success: 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40',
     warning: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/40',
     muted: 'bg-slate-800/60 text-slate-400 ring-1 ring-slate-700/60',
   };
@@ -50,9 +76,17 @@ function StatusBadge({
   );
 }
 
-function Card({ children }: { children: React.ReactNode }) {
+function Card({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <section className="rounded-3xl border border-slate-800/70 bg-slate-950/80 px-6 py-5 shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur">
+    <section
+      className={`rounded-3xl border border-slate-800/70 bg-slate-950/80 px-6 py-5 shadow-[0_18px_60px_rgba(0,0,0,0.55)] backdrop-blur transition-all ${className}`}
+    >
       {children}
     </section>
   );
@@ -70,7 +104,7 @@ function formatCountdown(targetIso?: string | null): string | null {
 
   const now = Date.now();
   const diff = target - now;
-  if (diff <= 0) return 'opens very soon';
+  if (diff <= 0) return null;
 
   const totalSeconds = Math.floor(diff / 1000);
   const days = Math.floor(totalSeconds / (24 * 3600));
@@ -87,7 +121,7 @@ function formatCountdown(targetIso?: string | null): string | null {
 
 function useCountdown(targetIso?: string | null): string | null {
   const [label, setLabel] = useState<string | null>(() =>
-    formatCountdown(targetIso)
+    formatCountdown(targetIso),
   );
 
   useEffect(() => {
@@ -99,7 +133,7 @@ function useCountdown(targetIso?: string | null): string | null {
     const update = () => setLabel(formatCountdown(targetIso));
     update(); // initial
 
-    const id = setInterval(update, 60_000); // once per minute
+    const id = setInterval(update, 60_000); // once per minute is enough
     return () => clearInterval(id);
   }, [targetIso]);
 
@@ -110,12 +144,21 @@ function useCountdown(targetIso?: string | null): string | null {
    API fetcher
 ─────────────────────────── */
 
-async function fetchClaimPortalState(): Promise<ClaimPortalState> {
+async function getClaimPortalState(): Promise<ClaimPortalState> {
   const res = await fetch('/api/portal-state', { cache: 'no-store' });
   if (!res.ok) {
     throw new Error('Failed to load portal state');
   }
   return res.json();
+}
+
+function getPhaseFromStatus(status?: string): Phase {
+  if (!status) return 'unknown';
+  const lower = status.toLowerCase();
+  if (lower.startsWith('opens')) return 'scheduled';
+  if (lower.startsWith('closes')) return 'open';
+  if (lower.includes('closed')) return 'closed';
+  return 'unknown';
 }
 
 /* ───────────────────────────
@@ -127,56 +170,34 @@ export default function ClaimPoolPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
-  // Hero “announcement” flash
-  const [flashHero, setFlashHero] = useState(false);
-  const firstLoadRef = useRef(true);
+  const [phase, setPhase] = useState<Phase>('unknown');
+  const [justOpened, setJustOpened] = useState(false);
+  const phaseRef = useRef<Phase>('unknown');
 
-  // Countdown – always called
+  // Countdown label (always called)
   const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
 
-  // Live polling + change detection
+  // Poll portal state so countdown + window info auto-refresh
   useEffect(() => {
     let alive = true;
 
-    const load = async () => {
-      try {
-        const next = await fetchClaimPortalState();
-        if (!alive) return;
-
-        setState((prev) => {
-          if (!prev) {
-            // first load – no animation
-            return next;
-          }
-
-          const statusChanged =
-            prev.claimWindowStatus !== next.claimWindowStatus;
-          const poolChanged =
-            prev.rewardPoolTotal !== next.rewardPoolTotal;
-
-          if (!firstLoadRef.current && (statusChanged || poolChanged)) {
-            setFlashHero(true);
-            setTimeout(() => setFlashHero(false), 2200);
-          }
-
-          firstLoadRef.current = false;
-          return next;
-        });
-
-        setError(null);
-      } catch (err) {
-        console.error(err);
-        if (alive) {
+    const load = () => {
+      getClaimPortalState()
+        .then((next) => {
+          if (!alive) return;
+          setState(next);
+          setError(null);
+          setPhase(getPhaseFromStatus(next.claimWindowStatus));
+        })
+        .catch((err) => {
+          console.error(err);
+          if (!alive) return;
           setError('Unable to load portal data right now.');
-        }
-      }
+        });
     };
 
-    // initial load
-    load();
-
-    // polling
-    const id = setInterval(load, POLL_INTERVAL_MS);
+    load(); // initial
+    const id = setInterval(load, 30_000); // every 30s
 
     return () => {
       alive = false;
@@ -184,7 +205,20 @@ export default function ClaimPoolPage() {
     };
   }, []);
 
-  if (error && !state) {
+  // Detect scheduled → open transition to trigger tiny pulse
+  useEffect(() => {
+    const prev = phaseRef.current;
+    if (prev === 'scheduled' && phase === 'open') {
+      setJustOpened(true);
+      const timeout = setTimeout(() => setJustOpened(false), 2500);
+      phaseRef.current = phase;
+      return () => clearTimeout(timeout);
+    }
+    phaseRef.current = phase;
+    return;
+  }, [phase]);
+
+  if (error) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
         <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
@@ -207,7 +241,6 @@ export default function ClaimPoolPage() {
   const {
     walletConnected,
     walletShort,
-    walletEligible,
     networkLabel,
     snapshotLabel,
     eligibleAmount,
@@ -217,29 +250,12 @@ export default function ClaimPoolPage() {
     contractStatus,
     firstPoolStatus,
     claimHistory,
-    rewardPoolTotal,
-    rewardPoolTotalUsd,
+    claimWindowOpensAt,
+    rewardPoolTokens,
+    rewardPoolUsd,
   } = state;
 
-  const formattedPoolClaim =
-    typeof rewardPoolTotal === 'number'
-      ? rewardPoolTotal.toLocaleString('en-US')
-      : 'TBA';
-
-  const formattedPoolUsd =
-    rewardPoolTotalUsd && rewardPoolTotalUsd > 0
-      ? rewardPoolTotalUsd.toLocaleString('en-US', {
-          maximumFractionDigits: 2,
-        })
-      : null;
-
-  const heroGlowClasses = flashHero
-    ? 'ring-2 ring-emerald-400/70 shadow-[0_0_40px_rgba(52,211,153,0.55)] transition-all duration-500'
-    : 'transition-all duration-500';
-
-  /* ───────────────────────
-     Layout
-  ─────────────────────── */
+  const minHolding = 100_000; // 100k CLAIM
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
@@ -291,143 +307,140 @@ export default function ClaimPoolPage() {
 
       {/* Content */}
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-8 sm:px-6 sm:pt-10">
-        {/* HERO – Reward pool focused */}
-        <section className="grid items-start gap-6 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-          {/* Left: Pool overview */}
-          <div className={heroGlowClasses}>
+        {/* Top hero: title + window + quick explainer */}
+        <div className="space-y-6">
+          {/* Breadcrumb + snapshot chip */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-2">
+              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-slate-500">
+                $CLAIM • TOKEN OF TIMING
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+                  Claim pool – Round 1
+                </h1>
+                <StatusBadge label={snapshotLabel} tone="muted" />
+              </div>
+              <p className="max-w-xl text-[15px] leading-relaxed text-slate-300">
+                A reward pool opens. Everyone who clicks{' '}
+                <span className="font-semibold text-slate-50">CLAIM</span>{' '}
+                during the window shares the pool equally. Fewer claimers means
+                a bigger share per wallet.
+              </p>
+            </div>
+
+            <p className="mt-1 text-[11px] text-right text-slate-500 sm:mt-0">
+              <span className="font-semibold text-slate-300">
+                Front-end preview
+              </span>{' '}
+              · Terms may change before Round 1 opens.
+            </p>
+          </div>
+
+          {/* Hero cards */}
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.1fr)]">
+            {/* LEFT: How it works / eligibility */}
             <Card>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                      $CLAIM • REWARD POOL
-                    </p>
-                    <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-                      Claim pool – Round 1
-                    </h1>
-                    <p className="max-w-xl text-sm text-slate-400">
-                      Every time the claim window opens, a reward pool unlocks.
-                      Everyone who clicks{' '}
-                      <span className="font-semibold">CLAIM</span> during that
-                      window shares this pool equally. Fewer claimers means a
-                      bigger share per wallet.
-                    </p>
-                  </div>
-                  <StatusBadge label={snapshotLabel} tone="muted" />
+              <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-500">
+                How it works
+              </p>
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-300">
+                1. Hold at least{' '}
+                <span className="font-semibold">
+                  {minHolding.toLocaleString('en-US')} $CLAIM
+                </span>{' '}
+                in your wallet.
+                <br />
+                2. When the claim window opens, connect and click{' '}
+                <span className="font-semibold text-slate-50">CLAIM</span> once.
+                <br />
+                3. After the window closes, all claimers split the reward pool
+                equally.
+              </p>
+              <p className="mt-4 text-xs text-slate-500">
+                Eligibility is based on balances at the snapshot block — not
+                random forms or manual lists.
+              </p>
+            </Card>
+
+            {/* RIGHT: Next claim window + current reward pool */}
+            <Card
+              className={
+                justOpened
+                  ? 'ring-2 ring-emerald-500/70 shadow-[0_0_40px_rgba(16,185,129,0.60)]'
+                  : ''
+              }
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-slate-500">
+                    Next claim window
+                  </p>
+                  <p className="mt-2 text-xl font-semibold text-slate-50 sm:text-2xl">
+                    {claimWindowStatus}
+                  </p>
+
+                  <p className="mt-2 text-[15px] leading-relaxed text-slate-300">
+                    When the window is live, a{' '}
+                    <span className="font-semibold text-slate-50">CLAIM</span>{' '}
+                    button appears inside this portal. Click once during the
+                    window to join the pool.
+                  </p>
                 </div>
 
-                {/* Big numbers */}
-                <div className="mt-2 grid gap-4 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-                  <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                      Current reward pool
-                    </p>
-                    <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-                      {formattedPoolClaim}{' '}
-                      <span className="text-sm font-normal text-slate-400">
-                        $CLAIM
-                      </span>
-                    </p>
-                    <p className="mt-1 text-sm text-emerald-300">
-                      {formattedPoolUsd
-                        ? `≈ ${formattedPoolUsd} USD`
-                        : 'USD value TBA'}
-                    </p>
+                <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-300">
+                  Preview only
+                </span>
+              </div>
 
-                    <p className="mt-3 text-xs text-slate-500">
-                      Pool size can change from window to window. This number is
-                      the total amount shared equally between all wallets that
-                      successfully claim during the live window.
-                    </p>
-                  </div>
+              {/* Countdown line */}
+              <div className="mt-4 border-t border-slate-800 pt-4">
+                {countdownLabel ? (
+                  <p className="text-sm font-medium text-emerald-300">
+                    Opens in{' '}
+                    <span className="font-semibold">{countdownLabel}</span>
+                  </p>
+                ) : claimWindowOpensAt ? (
+                  <p className="text-sm text-emerald-300">
+                    Opening now – watch for the CLAIM button.
+                  </p>
+                ) : (
+                  <p className="text-sm text-slate-400">
+                    Countdown will appear once the next window is scheduled.
+                  </p>
+                )}
+              </div>
 
-                  {/* Eligibility block */}
-                  <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                      Eligibility
-                    </p>
-                    <p className="mt-2 text-sm text-slate-200">
-                      Hold at least{' '}
-                      <span className="font-semibold">
-                        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-                      </span>{' '}
-                      in your connected wallet at the snapshot to be eligible.
-                    </p>
-                    <p className="mt-2 text-xs text-slate-500">
-                      Eligibility is locked at the snapshot block and applied to
-                      the next live claim window.
-                    </p>
-
-                    <div className="mt-3 space-y-2 text-xs">
-                      {walletConnected ? (
-                        walletEligible ? (
-                          <p className="text-emerald-300">
-                            This wallet is in the preview snapshot set.
-                          </p>
-                        ) : (
-                          <>
-                            <p className="text-amber-300">
-                              Connected wallet is not currently eligible.
-                            </p>
-                            <a
-                              href={JUPITER_URL}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-900 hover:bg-white"
-                            >
-                              Buy $CLAIM on Jupiter
-                            </a>
-                          </>
-                        )
-                      ) : (
-                        <p className="text-slate-400">
-                          Connect a Solana wallet to check if it&apos;s in the
-                          snapshot set and preview your estimated claim.
-                        </p>
-                      )}
-                    </div>
-                  </div>
+              {/* Reward pool in same card */}
+              <div className="mt-5 rounded-2xl bg-slate-900/60 px-4 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  Current reward pool (Round 1)
+                </p>
+                <div className="mt-2 flex flex-wrap items-baseline gap-3">
+                  <p className="text-2xl font-semibold text-slate-50">
+                    {typeof rewardPoolTokens === 'number'
+                      ? rewardPoolTokens.toLocaleString('en-US')
+                      : 'TBA'}{' '}
+                    <span className="text-sm font-normal text-slate-400">
+                      $CLAIM
+                    </span>
+                  </p>
+                  <p className="text-sm text-slate-400">
+                    {typeof rewardPoolUsd === 'number'
+                      ? `≈ $${rewardPoolUsd.toLocaleString('en-US', {
+                          maximumFractionDigits: 0,
+                        })} USD`
+                      : ''}
+                  </p>
                 </div>
+                <p className="mt-2 text-[13px] text-slate-400">
+                  Fewer claimers means a larger share per wallet. All successful
+                  claimers split this pool equally once the window closes.
+                </p>
               </div>
             </Card>
           </div>
-
-          {/* Right: Next claim window */}
-          <Card>
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                  Next claim window
-                </p>
-                <StatusBadge label="Preview only" tone="muted" />
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-slate-100">
-                  {claimWindowStatus}
-                </p>
-                <p className="text-xs text-emerald-300">
-                  {countdownLabel
-                    ? `Opens in ${countdownLabel}`
-                    : 'Exact opening time TBA.'}
-                </p>
-              </div>
-
-              <div className="mt-3 space-y-2 text-xs text-slate-400">
-                <p>
-                  When the window is live, a{' '}
-                  <span className="font-semibold text-slate-100">CLAIM</span>{' '}
-                  button will appear in this portal. Click once during the
-                  window to join the pool.
-                </p>
-                <p>
-                  After the window closes, all successful claimers split the
-                  reward pool equally.
-                </p>
-              </div>
-            </div>
-          </Card>
-        </section>
+        </div>
 
         {/* Connection strip */}
         <Card>
@@ -450,7 +463,7 @@ export default function ClaimPoolPage() {
           </div>
         </Card>
 
-        {/* Main grid: Your position + portal status */}
+        {/* Main grid: position + portal status */}
         <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           {/* Your position */}
           <Card>
@@ -474,13 +487,7 @@ export default function ClaimPoolPage() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Wallet in snapshot set
                 </p>
-                <p>
-                  {walletConnected
-                    ? walletEligible
-                      ? 'In preview snapshot set'
-                      : 'Not currently in snapshot'
-                    : 'Connect to preview'}
-                </p>
+                <p>{walletConnected ? 'Pending check' : 'Connect to preview'}</p>
               </div>
 
               <div className="space-y-1">
@@ -499,12 +506,22 @@ export default function ClaimPoolPage() {
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Claim window
                 </p>
-                <p>{claimWindowStatus}</p>
-                {countdownLabel && (
-                  <p className="text-xs text-emerald-300">
-                    Opens in {countdownLabel}
-                  </p>
-                )}
+                <p className="text-sm text-slate-200">
+                  {countdownLabel ? (
+                    <>
+                      {claimWindowStatus}{' '}
+                      <span className="text-emerald-300">
+                        · Opens in {countdownLabel}
+                      </span>
+                    </>
+                  ) : (
+                    claimWindowStatus
+                  )}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Min holding:{' '}
+                  {minHolding.toLocaleString('en-US')} $CLAIM at snapshot.
+                </p>
               </div>
 
               <div className="space-y-1">
@@ -538,11 +555,7 @@ export default function ClaimPoolPage() {
                 <span className="text-slate-400">CLAIM contract</span>
                 <StatusBadge
                   label={contractStatus}
-                  tone={
-                    contractStatus === 'In progress'
-                      ? 'warning'
-                      : 'success'
-                  }
+                  tone={contractStatus === 'In progress' ? 'warning' : 'success'}
                 />
               </div>
               <div className="flex items-center justify-between gap-3">
@@ -594,7 +607,7 @@ export default function ClaimPoolPage() {
                     {labels[tab]}
                   </button>
                 );
-              }
+              },
             )}
           </div>
 
@@ -602,15 +615,15 @@ export default function ClaimPoolPage() {
           <div className="pt-4 text-sm text-slate-300">
             {activeTab === 'eligibility' && (
               <div className="space-y-3">
-                <p className="text-slate-300">
+                <p className="text-[15px] leading-relaxed text-slate-300">
                   The $CLAIM pool is built around timing. Your eligibility is
                   determined by balances and activity at specific snapshot
                   blocks — not by random forms or manual lists.
                 </p>
-                <ul className="list-disc space-y-1 pl-5 text-slate-400">
+                <ul className="list-disc space-y-1 pl-5 text-[15px] leading-relaxed text-slate-300">
                   <li>
                     You must hold at least{' '}
-                    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM at the snapshot
+                    {minHolding.toLocaleString('en-US')} $CLAIM at the snapshot
                     block for the round.
                   </li>
                   <li>
@@ -630,10 +643,10 @@ export default function ClaimPoolPage() {
 
             {activeTab === 'rewards' && (
               <div className="space-y-3">
-                <p className="text-slate-300">
-                  Rewards are distributed in clearly defined rounds. Each pool
-                  specifies the reward size, snapshot rules and any vesting
-                  conditions before the snapshot is taken.
+                <p className="text-[15px] leading-relaxed text-slate-300">
+                  Rewards will be distributed in clearly defined rounds. Each
+                  pool will specify the reward size, snapshot rules and vesting
+                  conditions (if any) before the snapshot is taken.
                 </p>
                 <p className="text-xs text-slate-500">
                   Detailed tokenomics and pool sizes will appear here once the
@@ -645,7 +658,7 @@ export default function ClaimPoolPage() {
             {activeTab === 'history' && (
               <div className="space-y-3">
                 {claimHistory.length === 0 ? (
-                  <p className="text-slate-400">
+                  <p className="text-[15px] leading-relaxed text-slate-300">
                     Once the first pool is live, this section will show a simple
                     history for your connected wallet: amounts claimed per
                     round, with transaction links and any unclaimed allocations
@@ -692,7 +705,7 @@ export default function ClaimPoolPage() {
         {/* Footer mini */}
         <footer className="mt-2 flex flex-wrap items-center justify-between gap-3 pb-4 text-[11px] text-slate-500">
           <span>© 2025 $CLAIM portal · Preview UI · Subject to change.</span>
-          <span>Powered by Solana · Built for serious holders, not random forms.</span>
+          <span>Powered by Solana · Built for timing, not forms.</span>
         </footer>
       </div>
     </main>
