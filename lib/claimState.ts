@@ -56,7 +56,7 @@ export interface RawPortalState {
   claimHistory: RawClaimHistoryEntry[];
 }
 
-// ========= UI types (what page.tsx uses) =========
+// ========= UI types (what app/page.tsx uses) =========
 
 export type PoolStatus = 'not-opened' | 'open' | 'closed';
 
@@ -74,7 +74,11 @@ export type ClaimPortalState = {
   snapshotLabel: string;
   snapshotBlock: string;
 
+  // Card text:
   claimWindowStatus: string; // pretty text for the card
+
+  // Raw ISO date used by the countdown hook
+  claimWindowOpensAt: string | null;
 
   frontEndStatus: string;
   contractStatus: string;
@@ -106,6 +110,9 @@ export function mapRawPortalState(raw: RawPortalState): ClaimPortalState {
   // Claim window status text for the UI
   let claimWindowStatus = 'TBA';
 
+  // Raw ISO date for countdown (or null if missing)
+  const claimWindowOpensAt = raw.claimWindow?.opensAt ?? null;
+
   if (raw.claimWindow) {
     const { status, opensAt, closesAt } = raw.claimWindow;
 
@@ -136,8 +143,10 @@ export function mapRawPortalState(raw: RawPortalState): ClaimPortalState {
     snapshotBlock: raw.snapshotBlock,
 
     claimWindowStatus,
+    claimWindowOpensAt,
 
-    frontEndStatus: 'Online',        // you can wire this later if needed
+    // Front-end status is static for now – can be wired later
+    frontEndStatus: 'Online',
     contractStatus: raw.contract.status,
     firstPoolStatus,
 
