@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import rawAnalytics from '../../../data/analyticsState.json';
+import rawAnalytics from '../../data/analyticsState.json';
 
 /* TYPES (match analytics page) */
 type PoolStatus = 'not-opened' | 'open' | 'closed';
@@ -28,7 +28,6 @@ function mapRawAnalytics(raw: any): AnalyticsState {
     totalRounds: raw.rounds.length,
     nextEventLabel: raw.nextEvent.label,
 
-    // FIXED: raw.firstPoolStatus DOES NOT EXIST
     firstPoolStatus: raw.rounds.length > 0 ? 'open' : 'not-opened',
 
     snapshotMetrics: raw.rounds.map((r: any) => ({
