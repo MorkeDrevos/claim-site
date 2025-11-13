@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
+import type React from "react";
 import "./globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "$CLAIM Portal",
+  description: "The official $CLAIM pool portal.",
 };
 
 export default function RootLayout({
