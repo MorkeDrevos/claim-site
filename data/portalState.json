@@ -1,13 +1,20 @@
 {
-  "walletConnected": false,
-  "walletShort": "Wallet not connected",
+  "walletConnected": true,
+  "walletShort": "9uuq…kH5",
   "networkLabel": "Solana devnet",
-  "snapshotLabel": "Snapshot – TBA",
-  "eligibleAmount": 0,
-  "claimWindowStatus": "Not opened yet",
-  "snapshotBlock": "To be announced",
+  "snapshotLabel": "Snapshot – ROUND 1 PREVIEW",
+  "eligibleAmount": 1234567,
+  "claimWindowStatus": "Opens in 3 days · 18:00 UTC",
+  "snapshotBlock": "#219038421",
   "frontEndStatus": "Online",
-  "contractStatus": "In progress",
-  "firstPoolStatus": "not-opened",
-  "claimHistory": []
+  "contractStatus": "Deployed",
+  "firstPoolStatus": "open",
+  "claimHistory": [
+    {
+      "round": 1,
+      "amount": 420000,
+      "tx": "https://solscan.io/tx/EXAMPLE_TX_HASH",
+      "date": "2025-11-01"
+    }
+  ]
 }
