@@ -162,18 +162,21 @@ export default function ClaimPoolPage() {
   }
 
   const {
-    walletConnected,
-    walletShort,
-    networkLabel,
-    snapshotLabel,
-    eligibleAmount,
-    claimWindowStatus,
-    snapshotBlock,
-    frontEndStatus,
-    contractStatus,
-    firstPoolStatus,
-    claimHistory,
+  walletConnected,
+  walletShort,
+  networkLabel,
+  snapshotLabel,
+  eligibleAmount,
+  claimWindowStatus,
+  snapshotBlock,
+  frontEndStatus,
+  contractStatus,
+  firstPoolStatus,
+  claimHistory,
+  claimWindowOpensAt,   // ➜ NEW LINE
   } = state;
+
+const countdownLabel = useCountdown(claimWindowOpensAt);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
@@ -251,9 +254,11 @@ export default function ClaimPoolPage() {
         <Card>
           <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-slate-200">
             <div className="space-y-1">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Connected wallet
-              </p>
+              <p>
+  {countdownLabel
+    ? `Opens in ${countdownLabel}`
+    : claimWindowStatus}
+</p>
               <p className="text-sm text-slate-200">{walletShort}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
