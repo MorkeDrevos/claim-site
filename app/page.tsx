@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { getClaimPortalState, ClaimHistoryEntry, PoolStatus } from '../lib/claimState';
 
 type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
@@ -66,11 +65,10 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 
 // ───────────────────────────────────────────
-// CENTRAL CLAIM PORTAL STATE
-// → Replace getClaimPortalState() implementation with real data later
+// CENTRAL CLAIM PORTAL STATE (mocked)
+// → Replace implementation with real data later
 // ───────────────────────────────────────────
 
-// TODO: swap this mock implementation with real data from your wallet + program/API
 function getClaimPortalState(): ClaimPortalState {
   const walletConnected = false; // ← plug Solana wallet adapter here later
   const walletShort = walletConnected ? '9uuq…kH5' : 'Wallet not connected';
