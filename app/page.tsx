@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { ClaimPortalState } from '../lib/claimState';
 
@@ -10,6 +10,7 @@ import type { ClaimPortalState } from '../lib/claimState';
 
 const MIN_HOLDING = 100_000;
 const JUPITER_URL = 'https://jup.ag/swap/SOL-CLAIM'; // 🔁 update with real URL
+const POLL_INTERVAL_MS = 15_000; // how often to refresh portal state
 
 /* ───────────────────────────
    Small UI helpers
@@ -109,7 +110,7 @@ function useCountdown(targetIso?: string | null): string | null {
    API fetcher
 ─────────────────────────── */
 
-async function getClaimPortalState(): Promise<ClaimPortalState> {
+async function fetchClaimPortalState(): Promise<ClaimPortalState> {
   const res = await fetch('/api/portal-state', { cache: 'no-store' });
   if (!res.ok) {
     throw new Error('Failed to load portal state');
@@ -126,19 +127,64 @@ export default function ClaimPoolPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
+  // Hero “announcement” flash
+  const [flashHero, setFlashHero] = useState(false);
+  const firstLoadRef = useRef(true);
+
   // Countdown – always called
   const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
 
+  // Live polling + change detection
   useEffect(() => {
-    getClaimPortalState()
-      .then(setState)
-      .catch((err) => {
+    let alive = true;
+
+    const load = async () => {
+      try {
+        const next = await fetchClaimPortalState();
+        if (!alive) return;
+
+        setState((prev) => {
+          if (!prev) {
+            // first load – no animation
+            return next;
+          }
+
+          const statusChanged =
+            prev.claimWindowStatus !== next.claimWindowStatus;
+          const poolChanged =
+            prev.rewardPoolTotal !== next.rewardPoolTotal;
+
+          if (!firstLoadRef.current && (statusChanged || poolChanged)) {
+            setFlashHero(true);
+            setTimeout(() => setFlashHero(false), 2200);
+          }
+
+          firstLoadRef.current = false;
+          return next;
+        });
+
+        setError(null);
+      } catch (err) {
         console.error(err);
-        setError('Unable to load portal data right now.');
-      });
+        if (alive) {
+          setError('Unable to load portal data right now.');
+        }
+      }
+    };
+
+    // initial load
+    load();
+
+    // polling
+    const id = setInterval(load, POLL_INTERVAL_MS);
+
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
   }, []);
 
-  if (error) {
+  if (error && !state) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
         <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
@@ -186,6 +232,10 @@ export default function ClaimPoolPage() {
           maximumFractionDigits: 2,
         })
       : null;
+
+  const heroGlowClasses = flashHero
+    ? 'ring-2 ring-emerald-400/70 shadow-[0_0_40px_rgba(52,211,153,0.55)] transition-all duration-500'
+    : 'transition-all duration-500';
 
   /* ───────────────────────
      Layout
@@ -244,98 +294,103 @@ export default function ClaimPoolPage() {
         {/* HERO – Reward pool focused */}
         <section className="grid items-start gap-6 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           {/* Left: Pool overview */}
-          <Card>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="space-y-1">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                    $CLAIM • REWARD POOL
-                  </p>
-                  <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-                    Claim pool – Round 1
-                  </h1>
-                  <p className="max-w-xl text-sm text-slate-400">
-                    Every time the claim window opens, a reward pool unlocks.
-                    Everyone who clicks <span className="font-semibold">CLAIM</span>{' '}
-                    during that window shares this pool equally. Fewer claimers
-                    means a bigger share per wallet.
-                  </p>
-                </div>
-                <StatusBadge label={snapshotLabel} tone="muted" />
-              </div>
-
-              {/* Big numbers */}
-              <div className="mt-2 grid gap-4 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-                <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                    Current reward pool
-                  </p>
-                  <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
-                    {formattedPoolClaim}{' '}
-                    <span className="text-sm font-normal text-slate-400">
-                      $CLAIM
-                    </span>
-                  </p>
-                  <p className="mt-1 text-sm text-emerald-300">
-                    {formattedPoolUsd ? `≈ ${formattedPoolUsd} USD` : 'USD value TBA'}
-                  </p>
-
-                  <p className="mt-3 text-xs text-slate-500">
-                    Pool size can change from window to window. This number is
-                    the total amount shared equally between all wallets that
-                    successfully claim during the live window.
-                  </p>
+          <div className={heroGlowClasses}>
+            <Card>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      $CLAIM • REWARD POOL
+                    </p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+                      Claim pool – Round 1
+                    </h1>
+                    <p className="max-w-xl text-sm text-slate-400">
+                      Every time the claim window opens, a reward pool unlocks.
+                      Everyone who clicks{' '}
+                      <span className="font-semibold">CLAIM</span> during that
+                      window shares this pool equally. Fewer claimers means a
+                      bigger share per wallet.
+                    </p>
+                  </div>
+                  <StatusBadge label={snapshotLabel} tone="muted" />
                 </div>
 
-                {/* Eligibility block */}
-                <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                    Eligibility
-                  </p>
-                  <p className="mt-2 text-sm text-slate-200">
-                    Hold at least{' '}
-                    <span className="font-semibold">
-                      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-                    </span>{' '}
-                    in your connected wallet at the snapshot to be eligible.
-                  </p>
-                  <p className="mt-2 text-xs text-slate-500">
-                    Eligibility is locked at the snapshot block and applied to
-                    the next live claim window.
-                  </p>
+                {/* Big numbers */}
+                <div className="mt-2 grid gap-4 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+                  <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                      Current reward pool
+                    </p>
+                    <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl">
+                      {formattedPoolClaim}{' '}
+                      <span className="text-sm font-normal text-slate-400">
+                        $CLAIM
+                      </span>
+                    </p>
+                    <p className="mt-1 text-sm text-emerald-300">
+                      {formattedPoolUsd
+                        ? `≈ ${formattedPoolUsd} USD`
+                        : 'USD value TBA'}
+                    </p>
 
-                  <div className="mt-3 space-y-2 text-xs">
-                    {walletConnected ? (
-                      walletEligible ? (
-                        <p className="text-emerald-300">
-                          This wallet is in the preview snapshot set.
-                        </p>
-                      ) : (
-                        <>
-                          <p className="text-amber-300">
-                            Connected wallet is not currently eligible.
+                    <p className="mt-3 text-xs text-slate-500">
+                      Pool size can change from window to window. This number is
+                      the total amount shared equally between all wallets that
+                      successfully claim during the live window.
+                    </p>
+                  </div>
+
+                  {/* Eligibility block */}
+                  <div className="rounded-2xl bg-slate-950/90 p-4 ring-1 ring-slate-800">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                      Eligibility
+                    </p>
+                    <p className="mt-2 text-sm text-slate-200">
+                      Hold at least{' '}
+                      <span className="font-semibold">
+                        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
+                      </span>{' '}
+                      in your connected wallet at the snapshot to be eligible.
+                    </p>
+                    <p className="mt-2 text-xs text-slate-500">
+                      Eligibility is locked at the snapshot block and applied to
+                      the next live claim window.
+                    </p>
+
+                    <div className="mt-3 space-y-2 text-xs">
+                      {walletConnected ? (
+                        walletEligible ? (
+                          <p className="text-emerald-300">
+                            This wallet is in the preview snapshot set.
                           </p>
-                          <a
-                            href={JUPITER_URL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-900 hover:bg-white"
-                          >
-                            Buy $CLAIM on Jupiter
-                          </a>
-                        </>
-                      )
-                    ) : (
-                      <p className="text-slate-400">
-                        Connect a Solana wallet to check if it&apos;s in the
-                        snapshot set and preview your estimated claim.
-                      </p>
-                    )}
+                        ) : (
+                          <>
+                            <p className="text-amber-300">
+                              Connected wallet is not currently eligible.
+                            </p>
+                            <a
+                              href={JUPITER_URL}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-900 hover:bg-white"
+                            >
+                              Buy $CLAIM on Jupiter
+                            </a>
+                          </>
+                        )
+                      ) : (
+                        <p className="text-slate-400">
+                          Connect a Solana wallet to check if it&apos;s in the
+                          snapshot set and preview your estimated claim.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
 
           {/* Right: Next claim window */}
           <Card>
@@ -361,9 +416,7 @@ export default function ClaimPoolPage() {
               <div className="mt-3 space-y-2 text-xs text-slate-400">
                 <p>
                   When the window is live, a{' '}
-                  <span className="font-semibold text-slate-100">
-                    CLAIM
-                  </span>{' '}
+                  <span className="font-semibold text-slate-100">CLAIM</span>{' '}
                   button will appear in this portal. Click once during the
                   window to join the pool.
                 </p>
@@ -485,7 +538,11 @@ export default function ClaimPoolPage() {
                 <span className="text-slate-400">CLAIM contract</span>
                 <StatusBadge
                   label={contractStatus}
-                  tone={contractStatus === 'In progress' ? 'warning' : 'success'}
+                  tone={
+                    contractStatus === 'In progress'
+                      ? 'warning'
+                      : 'success'
+                  }
                 />
               </div>
               <div className="flex items-center justify-between gap-3">
