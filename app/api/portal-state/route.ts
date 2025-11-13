@@ -1,6 +1,9 @@
+// app/api/portal-state/route.ts
 import { NextResponse } from 'next/server';
-import portalState from '../../../data/portalState.json';
+import portalDoc from '../../../data/portalState.json';
+import { mapPortalDocToState, PortalStateDoc } from '../../../lib/claimState';
 
 export async function GET() {
-  return NextResponse.json(portalState);
+  const state = mapPortalDocToState(portalDoc as PortalStateDoc);
+  return NextResponse.json(state);
 }
