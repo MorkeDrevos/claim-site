@@ -147,6 +147,9 @@ export default function ClaimPoolPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
 
+  // 👉 NEW: call the hook here, *before* any `if (error)` / `if (!state)`
+  const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
+
   useEffect(() => {
     getClaimPortalState()
       .then(setState)
@@ -330,9 +333,7 @@ export default function ClaimPoolPage() {
               </div>
 
               <div className="space-y-1">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  Claim window
-                </p>
+                <p>{countdownLabel ?? claimWindowStatus}</p>
                 <p>
                   {claimWindowStatus}
                   {countdownLabel && (
