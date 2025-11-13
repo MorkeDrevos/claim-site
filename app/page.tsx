@@ -26,6 +26,9 @@ type ClaimPortalState = {
   contractStatus: string;
   firstPoolStatus: PoolStatus;
   claimHistory: ClaimHistoryEntry[];
+
+  // NEW:
+  claimWindowOpensAt?: string | null;
 };
 
 function PillLabel({ children }: { children: React.ReactNode }) {
@@ -77,6 +80,52 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
   }
   return res.json();
 }
+
+function formatCountdown(targetIso?: string | null): string | null {
+  if (!targetIso) return null;
+  const target = new Date(targetIso).getTime();
+  if (Number.isNaN(target)) return null;
+
+  const now = Date.now();
+  const diff = target - now;
+
+  if (diff <= 0) {
+    return 'opens very soon';
+  }
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / (24 * 3600));
+  const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  const parts: string[] = [];
+  if (days > 0) parts.push(`${days} day${days === 1 ? '' : 's'}`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes >= 0) parts.push(`${minutes}m`);
+
+  return parts.join(' ');
+}
+
+function useCountdown(targetIso?: string | null) {
+  const [label, setLabel] = useState<string | null>(() => formatCountdown(targetIso));
+
+  useEffect(() => {
+    if (!targetIso) {
+      setLabel(null);
+      return;
+    }
+
+    const update = () => setLabel(formatCountdown(targetIso));
+    update(); // initial
+
+    // Once per minute is enough for this UI
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, [targetIso]);
+
+  return label;
+}
+
 
 export default function ClaimPoolPage() {
   const [state, setState] = useState<ClaimPortalState | null>(null);
