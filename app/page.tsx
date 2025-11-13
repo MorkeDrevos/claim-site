@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 type PortalTab = 'eligibility' | 'rewards' | 'history';
@@ -50,7 +50,9 @@ function StatusBadge({
     muted: 'bg-slate-800/60 text-slate-400 ring-1 ring-slate-700/60',
   };
   return (
-    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${toneClasses[tone]}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${toneClasses[tone]}`}
+    >
       {label}
     </span>
   );
@@ -65,38 +67,51 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 
 // ───────────────────────────────────────────
-// CENTRAL CLAIM PORTAL STATE (mocked)
-// → Replace implementation with real data later
+// CENTRAL CLAIM PORTAL STATE – via /api/portal-state
 // ───────────────────────────────────────────
 
-function getClaimPortalState(): ClaimPortalState {
-  const walletConnected = false; // ← plug Solana wallet adapter here later
-  const walletShort = walletConnected ? '9uuq…kH5' : 'Wallet not connected';
-
-  return {
-    walletConnected,
-    walletShort,
-    networkLabel: 'Solana devnet',
-    snapshotLabel: 'Snapshot – TBA',
-    eligibleAmount: 0,
-    claimWindowStatus: 'Not opened yet',
-    snapshotBlock: 'To be announced',
-    frontEndStatus: 'Online',
-    contractStatus: 'In progress',
-    firstPoolStatus: 'not-opened',
-    claimHistory: [
-      // Example – replace when live:
-      // {
-      //   round: 1,
-      //   amount: 123_456,
-      //   tx: 'https://solscan.io/tx/…',
-      //   date: '2025-01-10',
-      // },
-    ],
-  };
+async function getClaimPortalState(): Promise<ClaimPortalState> {
+  const res = await fetch('/api/portal-state', { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error('Failed to load portal state');
+  }
+  return res.json();
 }
 
 export default function ClaimPoolPage() {
+  const [state, setState] = useState<ClaimPortalState | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
+
+  useEffect(() => {
+    getClaimPortalState()
+      .then(setState)
+      .catch((err) => {
+        console.error(err);
+        setError('Unable to load portal data right now.');
+      });
+  }, []);
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
+        <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
+          <p className="text-sm text-red-400">{error}</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!state) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
+        <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
+          <p className="text-sm text-slate-400">Loading…</p>
+        </div>
+      </main>
+    );
+  }
+
   const {
     walletConnected,
     walletShort,
@@ -109,9 +124,7 @@ export default function ClaimPoolPage() {
     contractStatus,
     firstPoolStatus,
     claimHistory,
-  } = getClaimPortalState();
-
-  const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
+  } = state;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#020617] via-[#020617] to-black text-slate-50">
