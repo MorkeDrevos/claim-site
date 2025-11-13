@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 /* ───────────────────────────────────────────
-   TYPES (must match what /api/analytics returns)
+   UI TYPES — expected by this page
 ─────────────────────────────────────────── */
 
 type PoolStatus = 'not-opened' | 'open' | 'closed';
@@ -12,27 +12,45 @@ type PoolStatus = 'not-opened' | 'open' | 'closed';
 type SnapshotMetric = {
   round: number;
   snapshotBlock: string;
-  eligibleWallets: number | 'TBA';
-  totalClaim: number | 'TBA';
+  eligibleWallets: number;
+  totalClaim: number;
 };
 
 type AnalyticsState = {
-  totalSnapshotWallets: number | 'TBA';
-  totalAllocatedClaim: number | 'TBA';
+  totalSnapshotWallets: number;
+  totalAllocatedClaim: number;
   totalRounds: number;
   nextEventLabel: string;
   firstPoolStatus: PoolStatus;
-  snapshotMetrics: SnapshotMetric;
+  snapshotMetrics: SnapshotMetric[];
 };
 
 /* ───────────────────────────────────────────
-   API FETCHER — loads real data from /api/analytics
+   FETCH + MAP FROM REAL API → UI FORMAT
 ─────────────────────────────────────────── */
 
 async function getAnalyticsState(): Promise<AnalyticsState> {
   const res = await fetch('/api/analytics', { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to load analytics state');
-  return res.json();
+
+  const raw = await res.json();
+
+  // Map API → UI
+  return {
+    totalSnapshotWallets: raw.totals.walletsInSnapshot,
+    totalAllocatedClaim: raw.totals.totalClaimAllocated,
+    totalRounds: raw.totals.roundCount,
+
+    nextEventLabel: raw.nextEvent.label,
+    firstPoolStatus: raw.pool.status,
+
+    snapshotMetrics: raw.rounds.map((r: any) => ({
+      round: r.round,
+      snapshotBlock: r.snapshotBlock,
+      eligibleWallets: r.eligibleWallets,
+      totalClaim: r.totalClaim
+    })),
+  };
 }
 
 /* ───────────────────────────────────────────
@@ -111,6 +129,7 @@ export default function AnalyticsPage() {
         {/* SNAPSHOT ROUNDS */}
         <div className="mt-12">
           <h2 className="text-lg font-semibold tracking-tight mb-4">Snapshot rounds</h2>
+
           <div className="overflow-hidden rounded-2xl border border-slate-800/70 bg-slate-950/60">
             <table className="w-full text-sm">
               <thead className="bg-slate-900/50 text-slate-300">
@@ -121,17 +140,16 @@ export default function AnalyticsPage() {
                   <th className="px-4 py-3 text-left">Total $CLAIM</th>
                 </tr>
               </thead>
+
               <tbody>
-                <tr className="border-t border-slate-800 text-slate-300">
-                  <td className="px-4 py-4">Round {snapshotMetrics.round}</td>
-                  <td className="px-4 py-4">{snapshotMetrics.snapshotBlock}</td>
-                  <td className="px-4 py-4">{snapshotMetrics.eligibleWallets}</td>
-                  <td className="px-4 py-4">
-                    {snapshotMetrics.totalClaim === 'TBA'
-                      ? 'TBA'
-                      : snapshotMetrics.totalClaim.toLocaleString('en-US')}
-                  </td>
-                </tr>
+                {snapshotMetrics.map((r, i) => (
+                  <tr key={i} className="border-t border-slate-800 text-slate-300">
+                    <td className="px-4 py-4">Round {r.round}</td>
+                    <td className="px-4 py-4">{r.snapshotBlock}</td>
+                    <td className="px-4 py-4">{r.eligibleWallets.toLocaleString('en-US')}</td>
+                    <td className="px-4 py-4">{r.totalClaim.toLocaleString('en-US')}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
