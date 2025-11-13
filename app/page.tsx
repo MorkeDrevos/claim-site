@@ -59,7 +59,7 @@ export default function ClaimPoolPage() {
 
   const frontEndStatus = 'Online';
   const contractStatus = 'In progress';
-  const firstPoolStatus: 'not-opened' | 'open' | 'closed' = 'not-opened';
+  const firstPoolStatus: string = 'not-opened';
 
   // Example history – replace with real on-chain data later
   const claimHistory: { round: number; amount: number; tx?: string; date?: string }[] = [
