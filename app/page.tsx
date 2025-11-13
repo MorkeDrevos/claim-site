@@ -4,6 +4,9 @@ import { FormEvent, useState } from 'react';
 
 type Status = 'idle' | 'checking' | 'eligible' | 'not-eligible';
 
+const TOTAL_POOL = 1_000_000; // demo only
+const TOKEN_SYMBOL = '$CLAIM';
+
 export default function Home() {
   const [wallet, setWallet] = useState('');
   const [status, setStatus] = useState<Status>('idle');
@@ -20,60 +23,97 @@ export default function Home() {
         /^[1-9A-HJ-NP-Za-km-z]+$/.test(w);
 
       setStatus(valid ? 'eligible' : 'not-eligible');
-    }, 700);
+    }, 600);
   }
 
   return (
     <main className="page">
-      {/* Top ribbon */}
-      <div className="ribbon">
-        <span className="ribbon-pill">$CLAIM</span>
-        <span className="ribbon-text">
-          Claim portal preview · On-chain logic & final rules are still in development.
+      {/* Top strip */}
+      <header className="top-strip">
+        <span className="top-strip-pill">{TOKEN_SYMBOL}</span>
+        <span className="top-strip-text">
+          Claim portal preview · on-chain contract & final rules are still in
+          development.
         </span>
-      </div>
+      </header>
 
+      {/* HERO */}
       <section className="hero">
-        {/* Left side */}
         <div className="hero-left">
-          <p className="eyebrow">$CLAIM · The Token of Timing</p>
+          <p className="eyebrow">{TOKEN_SYMBOL} · The Token of Timing</p>
           <h1 className="hero-title">
-            Your future rewards, <span className="accent">one claim away.</span>
+            Your future drops,
+            <br />
+            <span className="hero-accent">one claim away.</span>
           </h1>
-          <p className="hero-body">
-            This will be the official portal for future $CLAIM distributions.
-            Once live, you&apos;ll be able to connect a Solana wallet, verify
-            eligibility, and claim tokens in one place.
+
+          <p className="hero-copy">
+            This portal will be the official place to claim timing-based rewards
+            for {TOKEN_SYMBOL}. Once live, you&apos;ll connect a Solana wallet,
+            see eligibility, and confirm claims in a few clicks.
           </p>
 
-          <ul className="hero-bullets">
-            <li>Single home for all future $CLAIM drops</li>
-            <li>Clear rules and on-chain transparency</li>
-            <li>Designed for timing-based and snapshot-based rewards</li>
+          <ul className="hero-list">
+            <li>Single home for all future claim rounds</li>
+            <li>Transparent rules and clear breakdowns</li>
+            <li>On-chain settlement, one transaction per claim</li>
           </ul>
 
-          <div className="hero-cta-row">
+          <div className="hero-actions">
             <a
               href="https://x.com"
               target="_blank"
               rel="noreferrer"
               className="btn btn-primary"
             >
-              Follow $CLAIM updates
+              Follow updates
             </a>
-            <span className="hero-disclaimer">
-              This page is not live claim logic yet – UI preview only.
+            <span className="hero-note">
+              UI preview only · no real claims are live yet.
             </span>
           </div>
         </div>
 
-        {/* Right side – demo checker */}
         <div className="hero-right">
-          <div className="card checker-card">
-            <p className="card-eyebrow">Preview · Claim portal</p>
-            <h2 className="card-title">Check claim preview</h2>
-            <p className="card-subtitle">
-              Demo-only checker while the smart contract and final rules are wired in.
+          {/* CLAIM POOL CARD */}
+          <section className="card pool-card" aria-label="Claim pool overview">
+            <h2 className="card-title">Claim pool (preview)</h2>
+            <p className="card-sub">
+              Demo values only. Final pool size and rules will be announced
+              before the first round opens.
+            </p>
+
+            <div className="pool-row">
+              <span className="pool-label">Total pool</span>
+              <span className="pool-value">
+                {TOTAL_POOL.toLocaleString()} {TOKEN_SYMBOL}
+              </span>
+            </div>
+
+            <div className="pool-row">
+              <span className="pool-label">Round</span>
+              <span className="pool-pill">Round 1 · Draft</span>
+            </div>
+
+            <div className="pool-row">
+              <span className="pool-label">Snapshot status</span>
+              <span className="pool-status pool-status-draft">
+                Snapshot design in progress
+              </span>
+            </div>
+
+            <p className="pool-footnote">
+              When live, you&apos;ll see a breakdown of how the pool is split:
+              timing brackets, multipliers, and any bonus tiers.
+            </p>
+          </section>
+
+          {/* CHECKER CARD */}
+          <section className="card checker-card" aria-label="Eligibility check">
+            <h2 className="card-title">Demo eligibility checker</h2>
+            <p className="card-sub">
+              Test the flow with a wallet address. This does NOT use real
+              on-chain data yet.
             </p>
 
             <form onSubmit={handleSubmit} className="checker-form">
@@ -84,7 +124,7 @@ export default function Home() {
                 id="wallet"
                 type="text"
                 className="field-input"
-                placeholder="Paste your Solana wallet address"
+                placeholder="Paste a Solana wallet address"
                 value={wallet}
                 onChange={(e) => {
                   setWallet(e.target.value);
@@ -104,8 +144,8 @@ export default function Home() {
             <div className="checker-status">
               {status === 'idle' && (
                 <p className="status-muted">
-                  Paste a wallet and run the demo check. Real eligibility will come from
-                  on-chain data later.
+                  For now this only validates the format. In production, it will
+                  read snapshot data and apply the real rules.
                 </p>
               )}
               {status === 'checking' && (
@@ -113,81 +153,56 @@ export default function Home() {
               )}
               {status === 'eligible' && (
                 <div className="status-good">
-                  <strong>Eligible (demo only)</strong>
+                  <strong>Format looks valid (demo eligible).</strong>
                   <p>
-                    In a real launch, this wallet would pass the basic snapshot check.
+                    In a real round, this wallet would move to the on-chain
+                    claim step if the snapshot says it qualifies.
                   </p>
                 </div>
               )}
               {status === 'not-eligible' && (
                 <div className="status-bad">
-                  <strong>Not eligible (demo only)</strong>
+                  <strong>Format invalid (demo not eligible).</strong>
                   <p>
-                    In a real launch, this would likely mean no match in the claim
-                    snapshot or invalid format.
+                    For production, this usually means no entry in the snapshot
+                    or an invalid address.
                   </p>
                 </div>
               )}
             </div>
-
-            <p className="card-footnote">
-              Next step: connect this checker to real on-chain data and plug in the final
-              $CLAIM contract.
-            </p>
-          </div>
-
-          <div className="card status-card">
-            <h3>Portal status</h3>
-            <ul>
-              <li>
-                Design &amp; front-end
-                <span className="tag tag-live">Live</span>
-              </li>
-              <li>
-                Eligibility rules
-                <span className="tag tag-draft">Drafting</span>
-              </li>
-              <li>
-                On-chain claim contract
-                <span className="tag tag-progress">In progress</span>
-              </li>
-              <li>
-                First claim window
-                <span className="tag tag-tba">TBA</span>
-              </li>
-            </ul>
-          </div>
+          </section>
         </div>
       </section>
 
-      {/* How it will work */}
-      <section className="steps">
-        <h2 className="steps-title">How the CLAIM portal will work</h2>
-        <div className="steps-grid">
-          <article className="step">
-            <div className="step-badge">1</div>
-            <h3>Connect your wallet</h3>
+      {/* FLOW EXPLAINER */}
+      <section className="flow">
+        <h2 className="flow-title">How the CLAIM portal will work</h2>
+        <div className="flow-grid">
+          <article className="flow-step">
+            <div className="flow-badge">1</div>
+            <h3>Connect</h3>
             <p>
-              You&apos;ll connect a Solana wallet (Phantom, Backpack, etc.). The portal
-              will only read balances and snapshot data required for eligibility.
+              You connect a Solana wallet (Phantom, Backpack, etc.). The portal
+              only reads balances and snapshots needed for the round.
             </p>
           </article>
 
-          <article className="step">
-            <div className="step-badge">2</div>
-            <h3>View eligibility</h3>
+          <article className="flow-step">
+            <div className="flow-badge">2</div>
+            <h3>Review</h3>
             <p>
-              You&apos;ll see why you are or aren&apos;t eligible – based on holdings,
-              timing, and any campaign-specific rules, all shown clearly.
+              You see eligibility, reasoning, and any multipliers or bonuses
+              that apply to your wallet for that round.
             </p>
           </article>
 
-          <article className="step">
-            <div className="step-badge">3</div>
-            <h3>Claim rewards</h3>
+          <article className="flow-step">
+            <div className="flow-badge">3</div>
+            <h3>Claim</h3>
             <p>
-              If eligible, you&apos;ll confirm the claim and receive your $CLAIM tokens
-              directly to your wallet in a single transaction.
+              If eligible, you confirm the claim. The contract sends your
+              {` ${TOKEN_SYMBOL}`} directly and marks the claim as completed
+              on-chain.
             </p>
           </article>
         </div>
