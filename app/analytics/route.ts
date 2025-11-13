@@ -27,7 +27,10 @@ function mapRawAnalytics(raw: any): AnalyticsState {
     totalAllocatedClaim: raw.totalAllocatedClaim,
     totalRounds: raw.rounds.length,
     nextEventLabel: raw.nextEvent.label,
-    firstPoolStatus: raw.firstPoolStatus,
+
+    // FIXED: raw.firstPoolStatus DOES NOT EXIST
+    firstPoolStatus: raw.rounds.length > 0 ? 'open' : 'not-opened',
+
     snapshotMetrics: raw.rounds.map((r: any) => ({
       round: r.round,
       snapshotBlock: r.snapshotBlock,
