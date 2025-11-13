@@ -19,8 +19,9 @@ export interface RawContract {
 export interface RawPool {
   status: string;          // e.g. "open" | "closed" | "not-opened"
   rewardTotal: number;     // total rewards in $CLAIM
+  rewardTotalUsd?: number; // derived USD value (optional)
   eligibilityMinHold: number;
-  eligibilityMinLP: number;
+  eligibilityMinLP?: number;
 }
 
 export interface RawWalletClaim {
@@ -32,7 +33,7 @@ export interface RawWalletClaim {
 export interface RawWallet {
   connected: boolean;
   addressShort: string; // e.g. "9uuq…kH5" or "Wallet not connected"
-  inSnapshot: boolean;
+  inSnapshot: boolean;  // used here as "eligible preview"
   eligibleAmount: number;
   claim: RawWalletClaim;
 }
@@ -56,7 +57,7 @@ export interface RawPortalState {
   claimHistory: RawClaimHistoryEntry[];
 }
 
-// ========= UI types (what app/page.tsx uses) =========
+// ========= UI types (what /api/portal-state returns, what page.tsx uses) =========
 
 export type PoolStatus = 'not-opened' | 'open' | 'closed';
 
@@ -68,23 +69,31 @@ export type ClaimHistoryEntry = {
 };
 
 export type ClaimPortalState = {
+  // Wallet + eligibility
   walletConnected: boolean;
   walletShort: string;
+  walletEligible: boolean; // derived from wallet.inSnapshot
+
+  // Labels
   networkLabel: string;
   snapshotLabel: string;
   snapshotBlock: string;
 
-  // Card text:
-  claimWindowStatus: string; // pretty text for the card
+  // Claim window (pretty text + raw opensAt for countdown)
+  claimWindowStatus: string;        // pretty text for the card
+  claimWindowOpensAt?: string | null;
 
-  // Raw ISO date used by the countdown hook
-  claimWindowOpensAt: string | null;
-
+  // Status badges
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
 
+  // Numbers
   eligibleAmount: number;
+  rewardPoolTotal: number;          // CLAIM
+  rewardPoolTotalUsd: number | null; // USD (derived)
+
+  // History preview
   claimHistory: ClaimHistoryEntry[];
 };
 
@@ -107,11 +116,9 @@ function formatUtcShort(iso: string): string {
 // ========= Mapping: RawPortalState -> ClaimPortalState =========
 
 export function mapRawPortalState(raw: RawPortalState): ClaimPortalState {
-  // Claim window status text for the UI
+  // Claim window text + opensAt for countdown
   let claimWindowStatus = 'TBA';
-
-  // Raw ISO date for countdown (or null if missing)
-  const claimWindowOpensAt = raw.claimWindow?.opensAt ?? null;
+  let claimWindowOpensAt: string | null = raw.claimWindow?.opensAt ?? null;
 
   if (raw.claimWindow) {
     const { status, opensAt, closesAt } = raw.claimWindow;
@@ -134,24 +141,41 @@ export function mapRawPortalState(raw: RawPortalState): ClaimPortalState {
       ? 'closed'
       : 'not-opened';
 
+  const rewardPoolTotal = typeof raw.pool.rewardTotal === 'number'
+    ? raw.pool.rewardTotal
+    : 0;
+
+  const rewardPoolTotalUsd =
+    typeof raw.pool.rewardTotalUsd === 'number'
+      ? raw.pool.rewardTotalUsd
+      : null;
+
   return {
+    // Wallet + eligibility
     walletConnected: raw.wallet.connected,
     walletShort: raw.wallet.addressShort,
+    walletEligible: !!raw.wallet.inSnapshot,
 
+    // Labels
     networkLabel: raw.networkLabel,
     snapshotLabel: raw.snapshotLabel,
     snapshotBlock: raw.snapshotBlock,
 
+    // Claim window
     claimWindowStatus,
     claimWindowOpensAt,
 
-    // Front-end status is static for now – can be wired later
-    frontEndStatus: 'Online',
+    // Status badges
+    frontEndStatus: 'Online', // can be wired later
     contractStatus: raw.contract.status,
     firstPoolStatus,
 
+    // Numbers
     eligibleAmount: raw.wallet.eligibleAmount,
+    rewardPoolTotal,
+    rewardPoolTotalUsd,
 
+    // History
     claimHistory: raw.claimHistory.map((entry) => ({
       round: entry.round,
       amount: entry.amount,
