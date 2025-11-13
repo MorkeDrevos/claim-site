@@ -5,8 +5,8 @@
   "snapshotBlock": "219038421",
   "claimWindow": {
     "status": "scheduled",
-    "opensAt": "2025-11-13T23:19:12.458Z",
-    "closesAt": "2025-11-13T23:29:12.458Z"
+    "opensAt": "2025-11-13T23:12:19.193Z",
+    "closesAt": "2025-11-13T23:22:19.193Z"
   },
   "contract": {
     "status": "Deployed",
