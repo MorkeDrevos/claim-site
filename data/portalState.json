@@ -1,0 +1,13 @@
+{
+  "walletConnected": false,
+  "walletShort": "Wallet not connected",
+  "networkLabel": "Solana devnet",
+  "snapshotLabel": "Snapshot – TBA",
+  "eligibleAmount": 0,
+  "claimWindowStatus": "Not opened yet",
+  "snapshotBlock": "To be announced",
+  "frontEndStatus": "Online",
+  "contractStatus": "In progress",
+  "firstPoolStatus": "not-opened",
+  "claimHistory": []
+}
