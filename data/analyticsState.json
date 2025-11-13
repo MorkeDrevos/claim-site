@@ -1,20 +1,19 @@
 {
+  "totalSnapshotWallets": 15234,
+  "totalAllocatedClaim": 42000000,
+
+  "nextEvent": {
+    "label": "Round 1 snapshot – date TBA"
+  },
+
+  "firstPoolStatus": "open",
+
   "rounds": [
     {
       "round": 1,
       "snapshotBlock": "219038421",
       "eligibleWallets": 15234,
-      "totalClaimAllocated": 50000000,
-      "snapshotDate": "2025-01-01T00:00:00Z"
+      "totalClaim": 42000000
     }
-  ],
-  "nextEvent": {
-    "label": "Round 1 snapshot – date TBA",
-    "scheduledAt": null
-  },
-  "totals": {
-    "walletsInSnapshot": 15234,
-    "totalClaimAllocated": 50000000,
-    "roundCount": 1
-  }
+  ]
 }
