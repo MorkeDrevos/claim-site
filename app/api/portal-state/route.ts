@@ -1,9 +1,9 @@
-// app/api/portal-state/route.ts
 import { NextResponse } from 'next/server';
-import portalDoc from '../../../data/portalState.json';
-import { mapPortalDocToState, PortalStateDoc } from '../../../lib/claimState';
+import rawPortalState from '../../../data/portalState.json';
+import { mapRawPortalState, RawPortalState } from '../../../lib/claimState';
 
 export async function GET() {
-  const state = mapPortalDocToState(portalDoc as PortalStateDoc);
-  return NextResponse.json(state);
+  // Cast the imported JSON to the raw type, then map into UI shape
+  const uiState = mapRawPortalState(rawPortalState as RawPortalState);
+  return NextResponse.json(uiState);
 }
