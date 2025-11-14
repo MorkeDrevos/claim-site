@@ -516,19 +516,27 @@ export default function ClaimPoolPage() {
             </div>
           </div>
 
-          {/* Right: network + analytics + connect */}
-          <div className="flex items-center gap-3">
-            <span className="hidden text-xs text-slate-500 sm:inline">
-              {networkLabel}
-            </span>
+          {/* Right: network + analytics + concept + connect */}
+<div className="flex items-center gap-3">
+  <span className="hidden text-xs text-slate-500 sm:inline">
+    {networkLabel}
+  </span>
 
-            {/* Analytics pill (menu item) */}
-            <Link
-              href="/analytics"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-            >
-              Analytics
-            </Link>
+  {/* Analytics pill (menu item) */}
+  <Link
+    href="/analytics"
+    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+  >
+    Analytics
+  </Link>
+
+  {/* New: Concept page */}
+  <Link
+    href="/concept"
+    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+  >
+    Concept
+  </Link>
 
             <button
               type="button"
@@ -675,12 +683,8 @@ export default function ClaimPoolPage() {
                     </span>{' '}
                     to register your wallet for that round. All registered wallets{' '}
                     <span className="font-semibold text-emerald-300">
-                      split the reward pool equally,
+                      split the reward pool equally.
                     </span>{' '}
-                    so the fewer wallets that claim,{' '}
-                    <span className="font-semibold ">
-                      the larger the share each wallet receives.
-                    </span>
                   </p>
                 </div>
               </div>
