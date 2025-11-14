@@ -884,13 +884,11 @@ export default function ClaimPoolPage() {
               </p>
             </div>
           </SoftCard>
-        </div>
+                </div>
       </div>
 
-      </div> {/* end of content wrapper */}
+      {/* end of content wrapper */}
       <ToastContainer />
-    </main>
-      
     </main>
   );
 }
