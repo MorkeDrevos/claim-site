@@ -27,7 +27,7 @@ type ClaimPortalState = {
 
   claimWindowStatus: string;
   claimWindowOpensAt?: string | null;
-  claimWindowClosesAt?: string | null; // optional, for live windows
+  claimWindowClosesAt?: string | null;
 
   frontEndStatus: string;
   contractStatus: string;
@@ -92,11 +92,8 @@ function formatCountdown(targetIso?: string | null): string | null {
   if (Number.isNaN(target)) return null;
 
   const now = Date.now();
-  let diff = target - now;
-
-  if (diff <= 0) {
-    return '0s';
-  }
+  const diff = target - now;
+  if (diff <= 0) return '0s';
 
   const totalSeconds = Math.floor(diff / 1000);
   const days = Math.floor(totalSeconds / 86400);
@@ -127,7 +124,7 @@ function useCountdown(targetIso?: string | null): string | null {
     const update = () => setLabel(formatCountdown(targetIso));
     update();
 
-    const id = setInterval(update, 1000); // update every second
+    const id = setInterval(update, 1000);
     return () => clearInterval(id);
   }, [targetIso]);
 
@@ -147,22 +144,15 @@ function detectWallet(): DetectedWallet | null {
   if (typeof window === 'undefined') return null;
   const w = window as any;
 
-  // Phantom (most common)
   if (w.solana?.isPhantom) {
     return { name: 'Phantom', provider: w.solana };
   }
-
-  // Backpack
   if (w.backpack?.solana) {
     return { name: 'Backpack', provider: w.backpack.solana };
   }
-
-  // Solflare
   if (w.solflare?.connect) {
     return { name: 'Solflare', provider: w.solflare };
   }
-
-  // xNFT
   if (w.xnft?.solana) {
     return { name: 'Backpack xNFT', provider: w.xnft.solana };
   }
@@ -190,16 +180,46 @@ export default function ClaimPoolPage() {
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
 
-  // Local, real wallet connection
   const [connectedWallet, setConnectedWallet] = useState<{
     address: string;
     name: string;
   } | null>(null);
-  const walletProviderRef = useRef<any | null>(null);
 
+  const walletProviderRef = useRef<any | null>(null);
   const lastWindowPhaseRef = useRef<string | null>(null);
 
-  // Initial load + polling (surprise windows)
+  /* ── Phase + countdown derived from (possibly null) state ── */
+
+  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
+  const rawPhase = (state as any)?.windowPhase as
+    | 'scheduled'
+    | 'open'
+    | 'closed'
+    | undefined;
+
+  const lowerStatus = claimWindowStatusSafe.toLowerCase();
+  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+
+  if (rawPhase) {
+    phase = rawPhase;
+  } else if (lowerStatus.includes('closed')) {
+    phase = 'closed';
+  } else if (lowerStatus.includes('closes')) {
+    phase = 'open';
+  } else {
+    phase = 'scheduled';
+  }
+
+  const opensAt = state?.claimWindowOpensAt ?? null;
+  const closesAt = (state as any)?.claimWindowClosesAt ?? null;
+
+  const countdownTarget =
+    phase === 'open' ? (closesAt ?? opensAt) : opensAt;
+
+  const countdownLabel = useCountdown(countdownTarget);
+
+  /* ── Initial load + polling ── */
+
   useEffect(() => {
     let alive = true;
 
@@ -235,11 +255,10 @@ export default function ClaimPoolPage() {
     };
   }, []);
 
-  /* ── Wallet connect / disconnect ───────────────── */
+  /* ── Wallet connect / disconnect ── */
 
   const handleConnectClick = async () => {
     try {
-      // If already connected and provider supports disconnect -> toggle off
       if (connectedWallet && walletProviderRef.current?.disconnect) {
         await walletProviderRef.current.disconnect();
         walletProviderRef.current = null;
@@ -249,7 +268,6 @@ export default function ClaimPoolPage() {
 
       const detected = detectWallet();
       if (!detected) {
-        // No wallet injected – send to Phantom (or any wallet page)
         window.open('https://phantom.app/', '_blank');
         return;
       }
@@ -299,7 +317,7 @@ export default function ClaimPoolPage() {
     );
   }
 
-  /* ── Derived values ───────────────── */
+  /* ── Now we can safely destructure state ───────────────── */
 
   const {
     walletConnected,
@@ -316,33 +334,6 @@ export default function ClaimPoolPage() {
     rewardPoolAmountClaim,
     rewardPoolAmountUsd,
   } = state;
-
-  const rawPhase = (state as any).windowPhase as
-    | 'scheduled'
-    | 'open'
-    | 'closed'
-    | undefined;
-
-  const lowerStatus = claimWindowStatus.toLowerCase();
-  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
-
-  if (rawPhase) {
-    phase = rawPhase;
-  } else if (lowerStatus.includes('closed')) {
-    phase = 'closed';
-  } else if (lowerStatus.includes('closes')) {
-    phase = 'open';
-  } else {
-    phase = 'scheduled';
-  }
-
-  const opensAt = state.claimWindowOpensAt ?? null;
-  const closesAt = (state as any).claimWindowClosesAt ?? null;
-
-  const countdownTarget =
-    phase === 'open' ? (closesAt ?? opensAt) : opensAt;
-
-  const countdownLabel = useCountdown(countdownTarget);
 
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
@@ -474,12 +465,16 @@ export default function ClaimPoolPage() {
                         {isLive ? 'Closes on' : 'Opens on'}
                       </span>
                       <span className="font-medium text-slate-50">
-                        {closesAt && isLive
-                          ? new Date(closesAt).toISOString().slice(0, 16).replace('T', ' · ') +
-                            ' UTC'
+                        {isLive && closesAt
+                          ? new Date(closesAt)
+                              .toISOString()
+                              .slice(0, 16)
+                              .replace('T', ' · ') + ' UTC'
                           : opensAt
-                          ? new Date(opensAt).toISOString().slice(0, 16).replace('T', ' · ') +
-                            ' UTC'
+                          ? new Date(opensAt)
+                              .toISOString()
+                              .slice(0, 16)
+                              .replace('T', ' · ') + ' UTC'
                           : 'TBA'}
                       </span>
                     </div>
