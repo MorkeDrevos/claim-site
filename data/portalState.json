@@ -1,22 +1,42 @@
 {
-  "walletConnected": false,
-  "walletShort": "",
-  
+  "round": 1,
   "networkLabel": "Solana mainnet",
-  "snapshotLabel": "Snapshot — Round 1",
+  "snapshotLabel": "Snapshot — ROUND 1",
   "snapshotBlock": "219038421",
-
-  "claimWindowStatus": "Closes on 2025-11-14 11:12 UTC",
-  "claimWindowOpensAt": "2025-11-14T11:05:00Z",
-  "claimWindowClosesAt": "2025-11-14T11:12:00Z",
-  "windowPhase": "open",
-
-  "frontEndStatus": "Online",
-  "contractStatus": "Deployed",
-  "firstPoolStatus": "open",
-
-  "eligibleAmount": 1200000,
-  "claimHistory": [],
-  "rewardPoolAmountClaim": 42000000,
-  "rewardPoolAmountUsd": 83000
+  "claimWindow": {
+    "status": "scheduled",
+    "opensAt": "2025-11-14T11:29:09.711Z",
+    "closesAt": "2025-11-14T11:34:09.711Z"
+  },
+  "contract": {
+    "status": "Deployed",
+    "address": "CLAIM_PROGRAM_ADDRESS",
+    "auditUrl": null
+  },
+  "pool": {
+    "status": "open",
+    "rewardTotal": 20000000,
+    "eligibilityMinHold": 100000,
+    "eligibilityMinLP": 0,
+    "rewardTotalUsd": 4000
+  },
+  "wallet": {
+    "connected": false,
+    "addressShort": "Wallet not connected",
+    "inSnapshot": false,
+    "eligibleAmount": 0,
+    "claim": {
+      "alreadyClaimed": false,
+      "claimedAmount": 0,
+      "claimTx": null
+    }
+  },
+  "claimHistory": [
+    {
+      "round": 1,
+      "amount": 420000,
+      "tx": "https://solscan.io/tx/EXAMPLE",
+      "date": "2025-01-10T00:00:00Z"
+    }
+  ]
 }
