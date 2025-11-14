@@ -5,8 +5,8 @@
   "snapshotBlock": "219038421",
   "claimWindow": {
     "status": "scheduled",
-    "opensAt": "2025-11-14T23:03:05.365Z",
-    "closesAt": "2025-11-14T23:04:05.365Z"
+    "opensAt": "2025-11-14T23:06:04.233Z",
+    "closesAt": "2025-11-14T23:07:04.233Z"
   },
   "contract": {
     "status": "Deployed",
@@ -15,10 +15,10 @@
   },
   "pool": {
     "status": "open",
-    "rewardTotal": 10000000,
+    "rewardTotal": 9325670,
     "eligibilityMinHold": 100000,
     "eligibilityMinLP": 0,
-    "rewardTotalUsd": 2000
+    "rewardTotalUsd": 1865.13
   },
   "wallet": {
     "connected": false,
