@@ -918,14 +918,17 @@ export default function ClaimPoolPage() {
               </p>
             </div>
 
-            <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
-              <p>
-                © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
-                Subject to change. Built for serious holders, not random forms.
-              </p>
-            </div>
-          </SoftCard>
+              <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
+    <p>
+      © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
+      Subject to change. Built for serious holders, not random forms.
+    </p>
+  </div>
+</SoftCard>
 
+</div> {/* closes the mt-6 grid (rules + snapshot) */}
+
+/* === CLAIM WHITEPAPER / CONCEPT SECTION === */
 <SoftCard>
   <div className="space-y-8">
     {/* Title */}
@@ -943,8 +946,10 @@ export default function ClaimPoolPage() {
       $CLAIM introduces a new economic layer to the blockchain: a{" "}
       <span className="text-emerald-300 font-semibold">proof-of-presence</span>{" "}
       system where rewards are earned not by staking or locking tokens, but by{" "}
-      <span className="text-emerald-300 font-semibold">showing up at the right time</span>.
-      At regular intervals, a live{" "}
+      <span className="text-emerald-300 font-semibold">
+        showing up at the right time
+      </span>
+      . At regular intervals, a live{" "}
       <span className="text-emerald-300 font-semibold">Claim Window</span> opens
       with a fixed Reward Pool. Anyone holding the required minimum at snapshot
       can click <span className="text-emerald-300 font-semibold">Claim</span>{" "}
@@ -954,8 +959,9 @@ export default function ClaimPoolPage() {
 
     <p className="text-[15px] leading-relaxed text-slate-300 max-w-3xl">
       $CLAIM transforms{" "}
-      <span className="text-emerald-300 font-semibold">timing, participation,
-      and human presence</span>{" "}
+      <span className="text-emerald-300 font-semibold">
+        timing, participation, and human presence
+      </span>{" "}
       into economic value.
     </p>
 
@@ -1005,19 +1011,31 @@ export default function ClaimPoolPage() {
 
       <ol className="space-y-3 text-[15px] text-slate-300 max-w-3xl">
         <li>
-          <span className="font-semibold text-emerald-300">1. Snapshot happens</span><br />
+          <span className="font-semibold text-emerald-300">
+            1. Snapshot happens
+          </span>
+          <br />
           Hold the required minimum $CLAIM at that moment.
         </li>
         <li>
-          <span className="font-semibold text-emerald-300">2. A Claim Window opens</span><br />
+          <span className="font-semibold text-emerald-300">
+            2. A Claim Window opens
+          </span>
+          <br />
           A fixed Reward Pool becomes available.
         </li>
         <li>
-          <span className="font-semibold text-emerald-300">3. Show up & click Claim</span><br />
+          <span className="font-semibold text-emerald-300">
+            3. Show up & click Claim
+          </span>
+          <br />
           No race conditions, no gas wars, no tricks.
         </li>
         <li>
-          <span className="font-semibold text-emerald-300">4. All claimers share the pool equally</span><br />
+          <span className="font-semibold text-emerald-300">
+            4. All claimers share the pool equally
+          </span>
+          <br />
           Fewer claimers → larger share per wallet.
         </li>
       </ol>
@@ -1034,7 +1052,10 @@ export default function ClaimPoolPage() {
 
       <p className="text-[15px] text-slate-300">
         The game is simple:{" "}
-        <span className="font-semibold text-emerald-300">show up, click, get your share</span>.
+        <span className="font-semibold text-emerald-300">
+          show up, click, get your share
+        </span>
+        .
       </p>
     </div>
 
@@ -1084,12 +1105,9 @@ export default function ClaimPoolPage() {
     </div>
   </div>
 </SoftCard>
-          
-        </div>
-      </div>
 
-      {/* end of content wrapper */}
-      <ToastContainer />
-    </main>
-  );
-}
+</div> {/* closes the whole content wrapper */}
+
+{/* end of content wrapper */}
+<ToastContainer />
+</main>
