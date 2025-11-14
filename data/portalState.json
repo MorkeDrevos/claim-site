@@ -1,18 +1,20 @@
 {
   "roundNumber": 1,
+
   "walletConnected": false,
   "walletShort": "Wallet not connected",
   "networkLabel": "Solana mainnet",
+
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "Opens on 2025-11-14 • 22:16 UTC",
+  "claimWindowStatus": "Snapshot taken",
   "claimWindowOpensAt": "2025-11-14T22:16:00Z",
-  "claimWindowClosesAt": null,
+  "claimWindowClosesAt": "2025-11-14T23:16:00Z",
 
   "frontEndStatus": "Online",
   "contractStatus": "Deployed",
-  "firstPoolStatus": "not-opened",
+  "firstPoolStatus": "closed",
 
   "eligibleAmount": 0,
   "claimHistory": [],
@@ -20,10 +22,7 @@
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "scheduled",
-
-  "snapshotTakenAt": null,
-  "snapshotTx": null,
-
-  "distributionSummary": null
+  "windowPhase": "snapshot",
+  "snapshotTakenAt": "2025-11-14T23:20:00Z",
+  "distributionCompletedAt": null
 }
