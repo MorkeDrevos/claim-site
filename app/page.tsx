@@ -826,12 +826,13 @@ export default function ClaimPoolPage() {
   <div className="mt-3 flex items-center gap-3">
     {(
       [
-        { id: 'scheduled', label: 'Window scheduled' },
-        { id: 'open', label: 'Live claim window' },
-        { id: 'snapshot', label: 'Snapshot & distribution' },
-        { id: 'distribution', label: 'Round complete' },
+        { id: 'scheduled',    label: 'Window scheduled' },
+        { id: 'open',         label: 'Live claim window' },
+        { id: 'snapshot',     label: 'Snapshot taken' },
+        { id: 'distribution', label: 'Rewards distributed' },
       ] as { id: WindowPhase; label: string }[]
     ).map((step, index, all) => {
+      // Treat "closed" as "snapshot pending / taken" on the bar
       const displayPhase =
         currentPhase === 'closed' ? 'snapshot' : currentPhase;
 
@@ -874,7 +875,7 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
-  {/* Small explainer text */}
+    {/* Small explainer text */}
   <p className="mt-3 text-[11px] text-slate-500">
     {currentPhase === 'scheduled' &&
       'Next claim window is scheduled. Once it opens, you will be able to lock in your share.'}
@@ -883,9 +884,9 @@ export default function ClaimPoolPage() {
     {currentPhase === 'closed' &&
       'Claim window closed. Waiting for the round snapshot to be taken.'}
     {currentPhase === 'snapshot' &&
-      'Snapshot captured for this round. Distribution transactions are being prepared.'}
+      'Snapshot has been taken for this round. Distribution transactions are being prepared.'}
     {currentPhase === 'distribution' &&
-      'Rewards for this round have been distributed. The next round will be announced soon.'}
+      'Rewards for this round have been distributed. This round is complete; the next one will be announced soon.'}
   </p>
 </SoftCard>
 
