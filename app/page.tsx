@@ -39,7 +39,11 @@ type ClaimPortalState = {
 
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
-  windowPhase?: 'scheduled' | 'open' | 'closed';
+
+  // Phase & lifecycle meta
+  windowPhase?: 'scheduled' | 'open' | 'closed' | 'snapshot' | 'distribution';
+  snapshotTakenAt?: string | null;
+  distributionCompletedAt?: string | null;
 };
 
 /* ───────────────────────────
