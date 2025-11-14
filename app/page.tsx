@@ -533,6 +533,22 @@ export default function ClaimPoolPage() {
                         : `Opens in ${countdownLabel}`
                       : 'Next window scheduled'}
                   </h1>
+                  {/* Reward Pool */}
+<div className="mt-3 space-y-1">
+  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    Reward Pool
+  </p>
+
+  <p className="text-[22px] sm:text-[26px] font-semibold text-slate-50">
+    {rewardAmountText} CLAIM
+  </p>
+
+  {rewardUsdText && (
+    <p className="text-[14px] text-slate-400">
+      ≈ {rewardUsdText}
+    </p>
+  )}
+</div>
                 </div>
               </div>
 
