@@ -918,15 +918,14 @@ export default function ClaimPoolPage() {
               </p>
             </div>
 
-              <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
-    <p>
-      © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
-      Subject to change. Built for serious holders, not random forms.
-    </p>
-  </div>
-</SoftCard>
-
-</div> {/* closes the mt-6 grid (rules + snapshot) */}
+            <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
+              <p>
+                © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
+                Subject to change. Built for serious holders, not random forms.
+              </p>
+            </div>
+          </SoftCard>
+        </div> {/* closes the mt-6 grid (rules + snapshot) */}
 
 /* === CLAIM WHITEPAPER / CONCEPT SECTION === */
 <SoftCard>
@@ -1111,3 +1110,5 @@ export default function ClaimPoolPage() {
 {/* end of content wrapper */}
 <ToastContainer />
 </main>
+  );
+}
