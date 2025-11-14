@@ -296,6 +296,32 @@ export default function ClaimPoolPage() {
     }
   };
 
+  // ─────────────────────────────────────
+// CLAIM action handler (live mode only)
+// ─────────────────────────────────────
+const handleClaimClick = async () => {
+  if (!isLive) {
+    alert('Claim window is not open.');
+    return;
+  }
+
+  if (!effectiveWalletConnected || !connectedWallet) {
+    alert('Connect a wallet before claiming.');
+    return;
+  }
+
+  try {
+    // TODO: Replace this with your real claim logic
+    // Example: call API route, RPC, program method, etc.
+    console.log('Claiming for wallet:', connectedWallet.address);
+
+    alert('Claim transaction hook goes here.');
+  } catch (err) {
+    console.error('Claim error', err);
+    alert('Something went wrong while claiming.');
+  }
+};
+
   /* ── Loading / error shells ───────────────── */
 
   if (!state && !error) {
@@ -345,6 +371,11 @@ export default function ClaimPoolPage() {
 
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
+
+  /* ───────────────────────────
+   LIVE vs PREVIEW toggle
+─────────────────────────── */
+const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
@@ -497,18 +528,11 @@ export default function ClaimPoolPage() {
               >
                 <div className="space-y-4">
                   <button
-                    type="button"
-                    disabled={!isLive}
-                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                      isLive
-                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
-                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
-                    }`}
-                  >
-                    {isLive
-                      ? 'Claim this window'
-                      : 'Claim button appears when live'}
-                  </button>
+  type="button"
+  onClick={handleClaimClick}
+  disabled={!canClaim}
+  className="..."
+>
 
                   {/* Big countdown strip */}
                   <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
@@ -632,9 +656,10 @@ export default function ClaimPoolPage() {
                       : 'Connect wallet'}
                   </button>
                   <p className="text-[11px] text-slate-500">
-                    During live rounds this button will trigger the on-chain
-                    claim call. In the preview, it&apos;s visual only.
-                  </p>
+  {isPreview
+    ? 'During live rounds this button will trigger the on-chain claim call. In the preview, it’s visual only.'
+    : 'This button triggers the on-chain claim call during live windows.'}
+</p>
                 </div>
               </div>
 
@@ -644,7 +669,10 @@ export default function ClaimPoolPage() {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                     System status
                   </p>
-                  <StatusPill label="Preview mode" tone="muted" />
+                  <StatusPill
+  label={isPreview ? 'Preview mode' : 'Live'}
+  tone={isPreview ? 'muted' : 'success'}
+/>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
@@ -836,9 +864,9 @@ export default function ClaimPoolPage() {
 
             <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
               <p>
-                © 2025 CLAIM portal · Preview UI · Subject to change. Built for
-                serious holders, not random forms.
-              </p>
+  © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
+  Subject to change. Built for serious holders, not random forms.
+</p>
             </div>
           </SoftCard>
         </div>
