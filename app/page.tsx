@@ -696,27 +696,21 @@ const eligibilityBody = effectiveWalletConnected
 
                 {/* Explanation inside card */}
                 <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-  <p>
-    To be eligible, you must hold at least{' '}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-    </span>{' '}
-    at the snapshot. When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">
-      LOCK IN MY SHARE
-    </span>{' '}
-    to register your wallet for that round.
-  </p>
-
-  <p className="mt-3 text-[12px] font-semibold text-emerald-300">
-    All successful claimers split the reward pool equally once the window closes.
-  </p>
-
-  <p className="mt-2 text-[11px] text-amber-300">
-    Snapshots can be taken at any time inside the announced window — if you’re not
-    holding when it hits, this wallet sits out that round.
-  </p>
-</div>
+                  <p className="mb-1">
+                    To be eligible, you must hold at least{' '}
+                    <span className="font-semibold text-emerald-300">
+                      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+                    </span>{' '}
+                    at the snapshot. When the claim window opens, click{' '}
+                    <span className="font-semibold text-emerald-300">
+                      LOCK IN MY SHARE
+                    </span>{' '}
+                    to register your wallet for that round. All registered wallets{' '}
+                    <span className="font-semibold text-emerald-300">
+                      split the reward pool equally.
+                    </span>{' '}
+                  </p>
+                </div>
               </div>
             </div>
 
