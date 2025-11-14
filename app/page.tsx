@@ -399,18 +399,18 @@ export default function ClaimPoolPage() {
   // Wallet + eligibility are checked in the handler.
   const canClaim = !isPreview && isLive;
 
-    const previewEligibilityTitle = effectiveWalletConnected
+    const eligibilityTitle = effectiveWalletConnected
   ? isEligible
-    ? 'Meets minimum for this round'
-    : 'Below minimum for this round'
+    ? 'Eligible this round'
+    : 'Not eligible this round'
   : 'Wallet not connected';
 
-const previewEligibilityBody = effectiveWalletConnected
+const eligibilityBody = effectiveWalletConnected
   ? isEligible
-    ? `This connected wallet met the ${MIN_HOLDING.toLocaleString(
+    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
         'en-US'
       )} CLAIM minimum at the snapshot used for this round.`
-    : `This connected wallet held less than ${MIN_HOLDING.toLocaleString(
+    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
         'en-US'
       )} CLAIM at the snapshot used for this round.`
   : 'Connect a Solana wallet to check eligibility for this round.';
@@ -820,19 +820,19 @@ const previewEligibilityBody = effectiveWalletConnected
     </p>
   </SoftCard>
 
-  {/* Your Preview Eligibility */}
-  <SoftCard>
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-  Your Round 1 Eligibility
-</p>
-    <p className="mt-2 text-xl font-bold text-slate-100">
-      {previewEligibilityTitle}
-    </p>
+  {/* Your Eligibility */}
+<SoftCard>
+  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Your Eligibility
+  </p>
+  <p className="mt-2 text-xl font-bold text-slate-100">
+    {eligibilityTitle}
+  </p>
 
-    <p className="text-sm text-slate-400">
-      {previewEligibilityBody}
-    </p>
-  </SoftCard>
+  <p className="text-sm text-slate-400">
+    {eligibilityBody}
+  </p>
+</SoftCard>
 
 </div>
 
