@@ -114,25 +114,31 @@ function formatCountdown(targetIso?: string | null): string | null {
   return parts.join(' ');
 }
 
-function useCountdown(targetIso?: string | null): string | null {
-  const [label, setLabel] = useState<string | null>(() =>
-    formatCountdown(targetIso)
-  );
+function formatCountdown(targetIso?: string | null): string | null {
+  if (!targetIso) return null;
 
-  useEffect(() => {
-    if (!targetIso) {
-      setLabel(null);
-      return;
-    }
+  const target = new Date(targetIso).getTime();
+  if (Number.isNaN(target)) return null;
 
-    const update = () => setLabel(formatCountdown(targetIso));
-    update();
+  const now = Date.now();
+  const diff = target - now;
 
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
-  }, [targetIso]);
+  // If we're basically at the target, treat as "now"
+  if (Math.abs(diff) < 1_000) return 'now';
 
-  return label;
+  const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+  const seconds = totalSeconds % 60;
+  const minutes = Math.floor(totalSeconds / 60) % 60;
+  const hours = Math.floor(totalSeconds / 3600);
+  const days = Math.floor(hours / 24);
+
+  const parts: string[] = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours % 24 > 0) parts.push(`${hours % 24}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  if (seconds > 0 && days === 0) parts.push(`${seconds}s`);
+
+  return parts.join(' ');
 }
 
 /* ───────────────────────────
@@ -426,17 +432,63 @@ export default function ClaimPoolPage() {
                 </div>
 
                 <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
-                  Next claim window
-                </h1>
+  Next claim window
+</h1>
 
-                <p className="max-w-xl text-[15px] leading-relaxed text-slate-300">
-                  Hold at least{' '}
-                  <span className="font-semibold text-slate-50">
-                    1,000,000&nbsp;$CLAIM
-                  </span>{' '}
-                  at snapshot and click once while the window is live to share
-                  the reward pool equally with everyone else who shows up.
-                </p>
+{/* Primary status + big countdown */}
+{(() => {
+  let primary: string | null = null;
+  let secondary: string | null = null;
+
+  if (isLive) {
+    primary = 'CLAIM WINDOW OPEN NOW';
+    if (countdownLabel && countdownLabel !== 'now') {
+      secondary = `Closes in ${countdownLabel}`;
+    }
+  } else if (isClosed) {
+    primary = 'Claim window closed';
+  } else if (countdownLabel) {
+    if (countdownLabel === 'now') {
+      primary = 'Opens any second';
+    } else {
+      primary = `Opens in ${countdownLabel}`;
+    }
+  } else {
+    primary = 'Next window scheduled';
+  }
+
+  return (
+    <div className="mt-2 space-y-1">
+      {primary && (
+        <p
+          className={`text-xs font-semibold uppercase tracking-[0.26em] ${
+            isLive
+              ? 'text-emerald-300'
+              : isClosed
+              ? 'text-slate-500'
+              : 'text-emerald-200'
+          }`}
+        >
+          {primary}
+        </p>
+      )}
+      {secondary && (
+        <p className="text-sm text-slate-300">
+          {secondary}
+        </p>
+      )}
+    </div>
+  );
+})()}
+
+<p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
+  Hold at least{' '}
+  <span className="font-semibold text-slate-50">
+    1,000,000&nbsp;$CLAIM
+  </span>{' '}
+  at snapshot and click once while the window is live to share
+  the reward pool equally with everyone else who shows up.
+</p>
               </div>
 
               {/* CLAIM button block */}
