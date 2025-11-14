@@ -487,7 +487,7 @@ export default function ClaimPoolPage() {
               {/* HERO: Claim window */}
 <SoftCard>
   <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-    {/* Left side */}
+    {/* LEFT COLUMN */}
     <div className="flex-1 space-y-6">
       {/* Breadcrumb */}
       <div className="space-y-2">
@@ -539,40 +539,85 @@ export default function ClaimPoolPage() {
         </div>
       </div>
 
-      {/* Reward pool – cleaner, inline */}
-      <div className="mt-1 space-x-2 text-sm text-slate-300">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-          Reward pool this window
+      {/* Reward pool line (compact, no big pill) */}
+      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        Reward pool this window{' '}
+        <span className="text-emerald-300">
+          {rewardAmountText} $CLAIM
+        </span>{' '}
+        <span className="text-slate-500">
+          ({rewardUsdText} USD)
         </span>
-        <span className="font-semibold text-emerald-300">
-          {rewardAmountText} <span className="text-xs font-normal text-emerald-200">$CLAIM</span>
-        </span>
-        {rewardUsdText && (
-          <span className="text-emerald-100">
-            · ${rewardUsdText}{' '}
-            <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-emerald-200/90">
-              USD
-            </span>
+      </p>
+
+      {/* CLAIM WINDOW CARD */}
+      <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+        {/* Top row: label + status */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Window closes in
+            </p>
+            <p className="text-base font-semibold text-slate-50">
+              {isLive ? (countdownValue || 'active now') : countdownValue}
+            </p>
+          </div>
+
+          <span
+            className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
+              isLive
+                ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
+                : 'border-slate-700 bg-slate-900 text-slate-400'
+            }`}
+          >
+            {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
           </span>
-        )}
+        </div>
+
+        {/* Big CTA bar */}
+        <button
+          type="button"
+          onClick={handleClaimClick}
+          disabled={!canClaim}
+          className={[
+            'mt-5 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+            'transition-all duration-300',
+            canClaim
+              ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+              : 'bg-slate-800 text-slate-500 cursor-not-allowed',
+            canClaim && isPulseOn ? 'animate-pulse' : '',
+          ].join(' ')}
+        >
+          {canClaim ? 'Claim tokens' : 'Claim button appears when live'}
+        </button>
+
+        {/* Footer: close time + snapshot */}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+          <p>{claimWindowStatus}</p>
+          <p>
+            Snapshot {snapshotBlock} · {networkLabel}
+          </p>
+        </div>
       </div>
 
-      {/* Description */}
-      <div className="space-y-2 max-w-xl text-[15px] leading-relaxed text-slate-300">
+      {/* Explanation under the card */}
+      <div className="mt-4 space-y-1 max-w-xl text-[14px] leading-relaxed text-slate-300">
         <p>
           Hold at least{' '}
           <span className="font-semibold text-emerald-300">
             {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
           </span>{' '}
           at snapshot and, once the window is live, click{' '}
-          <span className="font-semibold text-emerald-300">CLAIM TOKENS</span>{' '}
+          <span className="font-semibold text-emerald-300">
+            CLAIM TOKENS
+          </span>{' '}
           while the{' '}
           <span className="font-semibold text-emerald-300">
             claim window is open
           </span>{' '}
           to receive your share of this pool.
         </p>
-        <p className="text-[12px] text-slate-400">
+        <p className="text-[13px] text-slate-300">
           <span className="font-semibold text-emerald-300">
             Everyone who shows up and clicks shares the pool equally.
           </span>{' '}
@@ -582,75 +627,9 @@ export default function ClaimPoolPage() {
           </span>
         </p>
       </div>
-
-      {/* Claim window card – same structure, slightly calmer */}
-      <div
-        className={`mt-5 rounded-[32px] border bg-slate-950/95 p-4 sm:p-5 shadow-[0_18px_60px_rgba(0,0,0,0.85)] ${
-          isLive
-            ? 'border-emerald-400/60 shadow-[0_0_32px_rgba(16,185,129,0.45)]'
-            : 'border-slate-800/80'
-        }`}
-      >
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Left: window timing */}
-          <div className="space-y-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-              {isLive ? 'Window closes in' : 'Next window opens in'}
-            </p>
-            <p className="text-lg font-semibold text-slate-50 sm:text-xl">
-              {isLive
-                ? countdownValue ?? 'active now'
-                : countdownValue ?? 'Time to be announced'}
-            </p>
-          </div>
-
-          {/* Right: pill */}
-          <div className="flex items-center justify-start sm:justify-end">
-            <span
-              className={`inline-flex items-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] ${
-                isLive
-                  ? 'bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/70'
-                  : isClosed
-                  ? 'bg-slate-900/80 text-slate-400 ring-1 ring-slate-700/70'
-                  : 'bg-slate-900/80 text-slate-300 ring-1 ring-slate-600/70'
-              }`}
-            >
-              {isLive
-                ? 'Live window'
-                : isClosed
-                ? 'Window closed'
-                : 'Window scheduled'}
-            </span>
-          </div>
-        </div>
-
-        {/* Button row */}
-        <div className="mt-5">
-          <button
-            type="button"
-            onClick={canClaim ? handleClaimClick : undefined}
-            disabled={!canClaim}
-            className={`flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.32em] transition-all ${
-              canClaim
-                ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.7)] hover:bg-emerald-400 hover:shadow-[0_0_40px_rgba(16,185,129,0.9)]'
-                : 'cursor-not-allowed bg-slate-900 text-slate-500'
-            }`}
-          >
-            {isLive ? 'Claim tokens' : 'Claim button appears when live'}
-          </button>
-        </div>
-
-        {/* Footer line */}
-        <div className="mt-3 flex flex-col gap-1 text-[11px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <span>{claimWindowStatus}</span>
-          <span>
-            Snapshot {snapshotBlock} · {networkLabel}
-          </span>
-        </div>
-      </div>
     </div>
 
-    {/* Right side: claim control + system status (unchanged from your version) */}
+    {/* RIGHT COLUMN: Claim control + system status (unchanged) */}
     <div className="w-full max-w-xs space-y-4 md:w-auto">
       {/* Claim control */}
       <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-sm">
@@ -677,8 +656,48 @@ export default function ClaimPoolPage() {
         </div>
       </div>
 
-      {/* System status + all systems operational stays as in your current code */}
-      {/* ... keep your existing System status block here ... */}
+      {/* System status + “All systems operational” */}
+      <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+          System status
+        </p>
+
+        <div className="mt-3 space-y-1.5 text-[12px] leading-relaxed text-slate-300">
+          <p>
+            <span className="text-slate-400">Portal front-end</span>
+            <span className="text-slate-200">
+              {' · '}
+              {isPreview ? 'Preview only (not live)' : frontEndStatus}
+            </span>
+          </p>
+
+          <p>
+            <span className="text-slate-400">CLAIM contract</span>
+            <span className="text-slate-200">
+              {' · '}
+              {contractStatus === 'Deployed'
+                ? 'Deployed and ready for live rounds'
+                : contractStatus}
+            </span>
+          </p>
+
+          <p>
+            <span className="text-slate-400">Reward pool</span>
+            <span className="text-slate-200">
+              {' · '}
+              {firstPoolStatus === 'open'
+                ? 'First pool is currently open'
+                : firstPoolStatus === 'closed'
+                ? 'First pool has closed'
+                : 'First pool not opened yet'}
+            </span>
+          </p>
+
+          <p className="pt-1 text-[11px] font-medium text-emerald-300">
+            All systems operational
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </SoftCard>
