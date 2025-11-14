@@ -484,7 +484,7 @@ export default function ClaimPoolPage() {
 
       {/* Content */}
       <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-        {/* HERO: Next claim window */}
+              {/* HERO: Next claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             {/* Left side */}
@@ -500,20 +500,21 @@ export default function ClaimPoolPage() {
                 {/* Big live/scheduled heading */}
                 <div className="space-y-1">
                   {/* Top line: state */}
-                  <p
-                    className={`text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] ${
-                      isLive
-                        ? 'text-emerald-300'
-                        : isClosed
-                        ? 'text-slate-400'
-                        : 'text-emerald-200'
-                    }`}
-                  >
-                    {isLive
-                      ? 'CLAIM WINDOW OPEN NOW'
-                      : isClosed
-                      ? 'Claim window closed'
-                      : 'Next claim window'}
+                  <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em]">
+                    {isLive ? (
+                      <span className="inline-flex items-center gap-2 text-emerald-300">
+                        {/* live dot */}
+                        <span className="relative flex h-3 w-3">
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 animate-ping" />
+                          <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(74,222,128,0.9)]" />
+                        </span>
+                        <span>CLAIM WINDOW OPEN NOW</span>
+                      </span>
+                    ) : isClosed ? (
+                      <span className="text-slate-400">Claim window closed</span>
+                    ) : (
+                      <span className="text-emerald-200">Next claim window</span>
+                    )}
                   </p>
 
                   {/* Big line: countdown */}
@@ -579,9 +580,15 @@ export default function ClaimPoolPage() {
                     </div>
 
                     {isLive && (
-                      <span className="rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-200">
-                        Live window
-                      </span>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1">
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300" />
+                        </span>
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-200">
+                          Live window
+                        </span>
+                      </div>
                     )}
                   </div>
 
@@ -681,7 +688,7 @@ export default function ClaimPoolPage() {
               </div>
             </div>
           </div>
-        </SoftCard>
+        </SoftCard>  
 
         {/* Lower section: rules + snapshot */}
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
