@@ -181,9 +181,16 @@ export default function ClaimPoolPage() {
   const { addToast, ToastContainer } = useToast();
 
   const [state, setState] = useState<ClaimPortalState | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
-  const [isPulseOn, setIsPulseOn] = useState(false);
+const [error, setError] = useState<string | null>(null);
+const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
+const [isPulseOn, setIsPulseOn] = useState(false);
+
+// Inline message (shown under the CTA button)
+const [inlineMessage, setInlineMessage] = useState<{
+  type: 'error' | 'warning' | 'success';
+  title: string;
+  message: string;
+} | null>(null);
 
   const [connectedWallet, setConnectedWallet] = useState<{
     address: string;
