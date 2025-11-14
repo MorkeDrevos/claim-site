@@ -523,71 +523,59 @@ export default function ClaimPoolPage() {
               </div>
 
               {/* CLAIM button block */}
-              <div
-                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-                  isLive
-                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-                    : 'border-slate-800 bg-slate-950/80'
-                } ${isPulseOn ? 'animate-pulse' : ''}`}
-              >
-                <div className="space-y-4">
-                  <button
-                    type="button"
-                    onClick={handleClaimClick}
-                    disabled={!canClaim}
-                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                      canClaim
-                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
-                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
-                    }`}
-                  >
-                    {isLive
-                      ? isPreview
-                        ? 'Live window (preview only)'
-                        : 'Claim this window'
-                      : 'Claim button appears when live'}
-                  </button>
+<div
+  className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
+    isLive
+      ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+      : 'border-slate-800 bg-slate-950/80'
+  } ${isPulseOn ? 'animate-pulse' : ''}`}
+>
+  <div className="space-y-4">
+    {/* Countdown strip – no UTC, just time left */}
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
+      <div className="flex flex-col">
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+          {isLive ? 'Closes in' : 'Opens in'}
+        </span>
+        <span className="text-lg font-semibold text-slate-50">
+          {countdownLabel
+            ? countdownLabel === 'now'
+              ? isLive
+                ? 'any second'
+                : 'any second'
+              : countdownLabel
+            : 'TBA'}
+        </span>
+      </div>
+    </div>
 
-                  {/* Big countdown strip */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                        {isLive ? 'Closes on' : 'Opens on'}
-                      </span>
-                      <span className="font-medium text-slate-50">
-                        {isLive && closesAt
-                          ? new Date(closesAt)
-                              .toISOString()
-                              .slice(0, 16)
-                              .replace('T', ' · ') + ' UTC'
-                          : opensAt
-                          ? new Date(opensAt)
-                              .toISOString()
-                              .slice(0, 16)
-                              .replace('T', ' · ') + ' UTC'
-                          : 'TBA'}
-                      </span>
-                    </div>
+    {/* Button under the countdown */}
+    <button
+      type="button"
+      onClick={handleClaimClick}
+      disabled={!canClaim}
+      className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+        canClaim
+          ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
+          : 'cursor-not-allowed bg-slate-800 text-slate-500'
+      }`}
+    >
+      {isLive
+        ? isPreview
+          ? 'Live window (preview only)'
+          : 'Claim this window'
+        : 'Claim button appears when live'}
+    </button>
 
-                    {countdownLabel && !isClosed && (
-                      <span className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.26em] text-emerald-300 sm:text-sm">
-                        {countdownLabel === 'now'
-                          ? isLive
-                            ? 'CLOSES ANY SECOND'
-                            : 'OPENS ANY SECOND'
-                          : `${countdownPrefix}${countdownLabel}`}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-                    <span className="text-slate-400">{claimWindowStatus}</span>
-                    <span>
-                      Snapshot {snapshotBlock} · {networkLabel}
-                    </span>
-                  </div>
-                </div>
-              </div>
+    {/* Bottom status line */}
+    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+      <span className="text-slate-400">{claimWindowStatus}</span>
+      <span>
+        Snapshot {snapshotBlock} · {networkLabel}
+      </span>
+    </div>
+  </div>
+</div>
 
               {/* Stat strip */}
               <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
