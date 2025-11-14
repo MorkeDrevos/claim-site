@@ -546,16 +546,16 @@ export default function ClaimPoolPage() {
 
   {/* Connect wallet FOURTH */}
   <button
-    type="button"
-    onClick={handleConnectClick}
-    className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
-  >
-    {connectedWallet
-      ? `${connectedWallet.name} connected`
-      : effectiveWalletConnected
-      ? 'Wallet connected'
-      : 'Connect wallet'}
-  </button>
+  type="button"
+  onClick={handleConnectClick}
+  className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+>
+  {connectedWallet
+    ? `${connectedWallet.name} connected`
+    : effectiveWalletConnected
+    ? 'Wallet connected'
+    : 'Connect wallet'}
+</button>
 </div>
 
         </div>
@@ -667,7 +667,7 @@ export default function ClaimPoolPage() {
                     canClaim && isPulseOn ? 'animate-pulse' : '',
                   ].join(' ')}
                 >
-                  {canClaim ? 'Lock in my share' : 'Available when claim window is live'}
+                  {canClaim ? 'Lock in my share' : 'Available when live'}
                 </button>
 
                 {/* Footer: close time + snapshot */}
@@ -840,7 +840,7 @@ export default function ClaimPoolPage() {
                 <>
                   <p>
                     Each claim window is a fixed reward pool. Everyone who
-                    successfully clicks CLAIM during the live window shares that
+                    successfully clicks CLAIM MY SHARE during the live window shares that
                     pool equally.
                   </p>
                   <ul className="list-disc space-y-1 pl-5 text-[12px] text-slate-400">
