@@ -399,6 +399,22 @@ export default function ClaimPoolPage() {
   // Wallet + eligibility are checked in the handler.
   const canClaim = !isPreview && isLive;
 
+    const previewEligibilityTitle = effectiveWalletConnected
+    ? isEligible
+      ? 'Meets minimum in this preview'
+      : 'Below minimum in this preview'
+    : 'Wallet not connected';
+
+  const previewEligibilityBody = effectiveWalletConnected
+    ? isEligible
+      ? `This connected wallet met the ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM minimum at the snapshot used in this preview.`
+      : `This connected wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot used in this preview.`
+    : 'Connect a Solana wallet to preview this value.';
+
   /* ───────────────────────────
      CLAIM action handler
   ─────────────────────────── */
@@ -774,6 +790,52 @@ export default function ClaimPoolPage() {
             </div>
           </div>
         </SoftCard>
+
+        {/* === Preview Eligibility Cards === */}
+<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  
+  {/* Reward Pool */}
+  <SoftCard>
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Current Reward Pool
+    </p>
+    <p className="mt-2 text-xl font-bold text-slate-100">
+      {rewardAmountText} CLAIM
+    </p>
+    <p className="text-sm text-slate-400">
+      USD value: {rewardUsdText}
+    </p>
+  </SoftCard>
+
+  {/* Minimum Holding */}
+  <SoftCard>
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Minimum Holding
+    </p>
+    <p className="mt-2 text-xl font-bold text-slate-100">
+      {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+    </p>
+    <p className="text-sm text-slate-400">
+      Held in the connected wallet at snapshot.
+    </p>
+  </SoftCard>
+
+  {/* Your Preview Eligibility */}
+  <SoftCard>
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Your Preview Eligibility
+    </p>
+
+    <p className="mt-2 text-xl font-bold text-slate-100">
+      {previewEligibilityTitle}
+    </p>
+
+    <p className="text-sm text-slate-400">
+      {previewEligibilityBody}
+    </p>
+  </SoftCard>
+
+</div>
 
         {/* Lower section: rules + snapshot */}
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
