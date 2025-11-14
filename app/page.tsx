@@ -319,12 +319,10 @@ export default function ClaimPoolPage() {
 
       {/* Content */}
 <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-  {/* HERO: Next claim window + CLAIM button */}
   <SoftCard>
     <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-      {/* Left: window info + big CTA */}
+      {/* Left: window info */}
       <div className="flex-1 space-y-6">
-        {/* Label + title */}
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
             <span>Claim pool — Round 1</span>
@@ -368,14 +366,12 @@ export default function ClaimPoolPage() {
             </button>
 
             <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
-              {/* Status line */}
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-slate-200">
                   {claimWindowStatus}
                 </span>
               </div>
 
-              {/* Countdown + snapshot meta */}
               <div className="flex flex-wrap items-center gap-2">
                 {countdownLabel && !isClosed && (
                   <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
@@ -392,8 +388,8 @@ export default function ClaimPoolPage() {
         </div>
       </div>
 
-      {/* Right side of the hero (whatever you already have there) */}
-      {/* ... keep your existing right-hand cards / system status here ... */}
+      {/* Right side content stays the same */}
+      {rightSide}
     </div>
   </SoftCard>
 </div>
