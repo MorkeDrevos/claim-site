@@ -222,54 +222,53 @@ export default function ClaimPoolPage() {
   /* ── Initial load + polling ── */
 
   useEffect(() => {
-  let alive = true;
+    let alive = true;
 
-  const load = () => {
-  getClaimPortalState()
-    .then((data) => {
-      if (!alive) return;
+    const load = () => {
+      getClaimPortalState()
+        .then((data) => {
+          if (!alive) return;
 
-      // Derive phase same as your main render logic
-      const statusSafe = data.claimWindowStatus?.toLowerCase?.() ?? '';
-      const rawPhase = (data as any)?.windowPhase;
+          const statusSafe = data.claimWindowStatus?.toLowerCase?.() ?? '';
+          const rawPhase = (data as any)?.windowPhase;
 
-      let nextPhase: 'scheduled' | 'open' | 'closed' = 'scheduled';
-      if (rawPhase) {
-        nextPhase = rawPhase;
-      } else if (statusSafe.includes('closed')) {
-        nextPhase = 'closed';
-      } else if (statusSafe.includes('closes')) {
-        nextPhase = 'open';
-      } else {
-        nextPhase = 'scheduled';
-      }
+          let nextPhase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+          if (rawPhase) {
+            nextPhase = rawPhase;
+          } else if (statusSafe.includes('closed')) {
+            nextPhase = 'closed';
+          } else if (statusSafe.includes('closes')) {
+            nextPhase = 'open';
+          } else {
+            nextPhase = 'scheduled';
+          }
 
-      const prevPhase = lastWindowPhaseRef.current;
+          const prevPhase = lastWindowPhaseRef.current;
 
-      // 🔥 Fix: pulse on first-load-open + transitions
-      if (nextPhase === 'open' && prevPhase !== 'open') {
-        setIsPulseOn(true);
-        setTimeout(() => setIsPulseOn(false), 3500);
-      }
+          // Pulse whenever we *enter* OPEN (including first load)
+          if (nextPhase === 'open' && prevPhase !== 'open') {
+            setIsPulseOn(true);
+            setTimeout(() => setIsPulseOn(false), 3500);
+          }
 
-      lastWindowPhaseRef.current = nextPhase;
-      setState(data);
-      setError(null);
-    })
-    .catch((err) => {
-      console.error(err);
-      if (!alive) return;
-      setError('Unable to load portal data right now.');
-    });
-};
+          lastWindowPhaseRef.current = nextPhase;
+          setState(data);
+          setError(null);
+        })
+        .catch((err) => {
+          console.error(err);
+          if (!alive) return;
+          setError('Unable to load portal data right now.');
+        });
+    };
 
-  load();
-  const id = setInterval(load, 60_000);
-  return () => {
-    alive = false;
-    clearInterval(id);
-  };
-}, []);
+    load();
+    const id = setInterval(load, 60_000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
 
   /* ── Wallet connect / disconnect ── */
 
@@ -376,10 +375,19 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-  const countdownPrefix = isLive ? 'Closes in ' : 'Opens in ';
+  // Countdown label with safe fallbacks
+  const countdownValue =
+    countdownLabel && countdownLabel !== 'now'
+      ? countdownLabel
+      : countdownLabel === 'now'
+      ? 'any second'
+      : isLive
+      ? 'active now'
+      : 'TBA';
 
-  const canClaim =
-    !isPreview && isLive && effectiveWalletConnected && isEligible;
+  // For now: button is clickable whenever LIVE + not preview.
+  // Wallet + eligibility are checked in the handler.
+  const canClaim = !isPreview && isLive;
 
   /* ───────────────────────────
      CLAIM action handler
@@ -393,6 +401,15 @@ export default function ClaimPoolPage() {
 
     if (!effectiveWalletConnected || !connectedWallet) {
       alert('Connect a wallet before claiming.');
+      return;
+    }
+
+    if (!isEligible) {
+      alert(
+        `This wallet is below the minimum of ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at snapshot.`
+      );
       return;
     }
 
@@ -483,7 +500,7 @@ export default function ClaimPoolPage() {
                   Next claim window
                 </h1>
 
-                {/* Primary status + big countdown */}
+                {/* Primary status */}
                 {(() => {
                   let primary: string | null = null;
                   let secondary: string | null = null;
@@ -537,60 +554,56 @@ export default function ClaimPoolPage() {
                 </p>
               </div>
 
-              {/* CLAIM button block */}
-<div
-  className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-    isLive
-      ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-      : 'border-slate-800 bg-slate-950/80'
-  } ${isPulseOn ? 'animate-pulse' : ''}`}
->
-  <div className="space-y-4">
-    {/* Countdown strip – no UTC, just time left */}
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
-      <div className="flex flex-col">
-        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-          {isLive ? 'Closes in' : 'Opens in'}
-        </span>
-        <span className="text-lg font-semibold text-slate-50">
-          {countdownLabel
-            ? countdownLabel === 'now'
-              ? isLive
-                ? 'any second'
-                : 'any second'
-              : countdownLabel
-            : 'TBA'}
-        </span>
-      </div>
-    </div>
+              {/* CLAIM block */}
+              <div
+                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
+                  isLive
+                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+                    : 'border-slate-800 bg-slate-950/80'
+                } ${isPulseOn ? 'animate-pulse' : ''}`}
+              >
+                <div className="space-y-4">
+                  {/* Countdown strip */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        {isLive ? 'Closes in' : 'Opens in'}
+                      </span>
+                      <span className="text-lg font-semibold text-slate-50">
+                        {countdownValue}
+                      </span>
+                    </div>
+                  </div>
 
-    {/* Button under the countdown */}
-    <button
-      type="button"
-      onClick={handleClaimClick}
-      disabled={!canClaim}
-      className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-        canClaim
-          ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
-          : 'cursor-not-allowed bg-slate-800 text-slate-500'
-      }`}
-    >
-      {isLive
-        ? isPreview
-          ? 'Live window (preview only)'
-          : 'Claim this window'
-        : 'Claim button appears when live'}
-    </button>
+                  {/* Button */}
+                  <button
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+                      canClaim
+                        ? `bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 ${
+                            isPulseOn ? 'animate-pulse' : ''
+                          }`
+                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
+                    }`}
+                  >
+                    {isLive
+                      ? isPreview
+                        ? 'Live window (preview only)'
+                        : 'Claim this window'
+                      : 'Claim button appears when live'}
+                  </button>
 
-    {/* Bottom status line */}
-    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-      <span className="text-slate-400">{claimWindowStatus}</span>
-      <span>
-        Snapshot {snapshotBlock} · {networkLabel}
-      </span>
-    </div>
-  </div>
-</div>
+                  {/* Bottom status */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+                    <span className="text-slate-400">{claimWindowStatus}</span>
+                    <span>
+                      Snapshot {snapshotBlock} · {networkLabel}
+                    </span>
+                  </div>
+                </div>
+              </div>
 
               {/* Stat strip */}
               <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
