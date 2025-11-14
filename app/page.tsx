@@ -596,10 +596,10 @@ const [inlineMessage, setInlineMessage] = useState<{
       {/* Reward pool line (compact, no big pill) */}
       <p className="mt-3 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
   Reward pool this window{' '}
-  <span className="text-emerald-300 text-[22px] sm:text-[26px] font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.55)]">
+  <span className="text-emerald-300 text-[18px] sm:text-[26px] font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.55)]">
     {rewardAmountText} $CLAIM
   </span>{' '}
-  <span className="text-[10px] sm:text-[11px] text-slate-500">
+  <span className="text-[18px] sm:text-[11px] text-slate-500">
     ({rewardUsdText} USD)
   </span>
 </p>
@@ -671,8 +671,8 @@ const [inlineMessage, setInlineMessage] = useState<{
   </span>{' '}
   to register your wallet for this round.
 </p>
-  <p className="text-[13px] text-slate-300 whitespace-nowrap sm:whitespace-normal">
-  Everyone who shows up and clains, shares the pool equally. Fewer wallets claims →{' '}
+  <p className="text-[13px] text-slate-300 whitespace-nowrap">
+  Everyone who shows up and claims shares the pool equally. Fewer wallets claim →{' '}
   <span className="font-semibold text-emerald-300">
     larger share per wallet.
   </span>
