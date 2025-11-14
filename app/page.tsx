@@ -86,34 +86,7 @@ function SoftCard({ children }: { children: React.ReactNode }) {
    Countdown helpers
 ─────────────────────────── */
 
-function formatCountdown(targetIso?: string | null): string | null {
-  if (!targetIso) return null;
-
-  const target = new Date(targetIso).getTime();
-  if (Number.isNaN(target)) return null;
-
-  const now = Date.now();
-  const diff = target - now;
-
-  // ⛔️ Do NOT show “opens any second”
-  // When diff <= 0, countdown stops and UI flips to LIVE mode
-  if (diff <= 0) return null;
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const s = totalSeconds % 60;
-  const m = Math.floor(totalSeconds / 60) % 60;
-  const h = Math.floor(totalSeconds / 3600) % 24;
-  const d = Math.floor(totalSeconds / 86400);
-
-  const parts: string[] = [];
-  if (d > 0) parts.push(`${d}d`);
-  if (h > 0) parts.push(`${h}h`);
-  if (m > 0) parts.push(`${m}m`);
-  parts.push(`${s}s`);
-
-  return parts.join(' ');
-}
-
+// single, final version
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
 
@@ -141,6 +114,27 @@ function formatCountdown(targetIso?: string | null): string | null {
   return parts.join(' ');
 }
 
+function useCountdown(targetIso?: string | null): string | null {
+  const [label, setLabel] = useState<string | null>(() =>
+    formatCountdown(targetIso)
+  );
+
+  useEffect(() => {
+    if (!targetIso) {
+      setLabel(null);
+      return;
+    }
+
+    const update = () => setLabel(formatCountdown(targetIso));
+    update();
+
+    const id = setInterval(update, 1_000); // tick every second
+    return () => clearInterval(id);
+  }, [targetIso]);
+
+  return label;
+}
+
 /* ───────────────────────────
    Wallet detection (multi-wallet)
 ─────────────────────────── */
@@ -154,15 +148,19 @@ function detectWallet(): DetectedWallet | null {
   if (typeof window === 'undefined') return null;
   const w = window as any;
 
+  // Phantom
   if (w.solana?.isPhantom) {
     return { name: 'Phantom', provider: w.solana };
   }
+  // Backpack
   if (w.backpack?.solana) {
     return { name: 'Backpack', provider: w.backpack.solana };
   }
+  // Solflare
   if (w.solflare?.connect) {
     return { name: 'Solflare', provider: w.solflare };
   }
+  // Backpack xNFT
   if (w.xnft?.solana) {
     return { name: 'Backpack xNFT', provider: w.xnft.solana };
   }
@@ -222,7 +220,6 @@ export default function ClaimPoolPage() {
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
-
   const countdownTarget =
     phase === 'open' ? (closesAt ?? opensAt) : opensAt;
 
@@ -269,6 +266,7 @@ export default function ClaimPoolPage() {
 
   const handleConnectClick = async () => {
     try {
+      // disconnect if already connected
       if (connectedWallet && walletProviderRef.current?.disconnect) {
         await walletProviderRef.current.disconnect();
         walletProviderRef.current = null;
@@ -327,7 +325,7 @@ export default function ClaimPoolPage() {
     );
   }
 
-  /* ── Now we can safely destructure state ───────────────── */
+  /* ── Safe destructure ───────────────── */
 
   const {
     walletConnected,
@@ -432,63 +430,61 @@ export default function ClaimPoolPage() {
                 </div>
 
                 <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
-  Next claim window
-</h1>
+                  Next claim window
+                </h1>
 
-{/* Primary status + big countdown */}
-{(() => {
-  let primary: string | null = null;
-  let secondary: string | null = null;
+                {/* Primary status + big countdown */}
+                {(() => {
+                  let primary: string | null = null;
+                  let secondary: string | null = null;
 
-  if (isLive) {
-    primary = 'CLAIM WINDOW OPEN NOW';
-    if (countdownLabel && countdownLabel !== 'now') {
-      secondary = `Closes in ${countdownLabel}`;
-    }
-  } else if (isClosed) {
-    primary = 'Claim window closed';
-  } else if (countdownLabel) {
-    if (countdownLabel === 'now') {
-      primary = 'Opens any second';
-    } else {
-      primary = `Opens in ${countdownLabel}`;
-    }
-  } else {
-    primary = 'Next window scheduled';
-  }
+                  if (isLive) {
+                    primary = 'CLAIM WINDOW OPEN NOW';
+                    if (countdownLabel && countdownLabel !== 'now') {
+                      secondary = `Closes in ${countdownLabel}`;
+                    }
+                  } else if (isClosed) {
+                    primary = 'Claim window closed';
+                  } else if (countdownLabel) {
+                    if (countdownLabel === 'now') {
+                      primary = 'Opens any second';
+                    } else {
+                      primary = `Opens in ${countdownLabel}`;
+                    }
+                  } else {
+                    primary = 'Next window scheduled';
+                  }
 
-  return (
-    <div className="mt-2 space-y-1">
-      {primary && (
-        <p
-          className={`text-xs font-semibold uppercase tracking-[0.26em] ${
-            isLive
-              ? 'text-emerald-300'
-              : isClosed
-              ? 'text-slate-500'
-              : 'text-emerald-200'
-          }`}
-        >
-          {primary}
-        </p>
-      )}
-      {secondary && (
-        <p className="text-sm text-slate-300">
-          {secondary}
-        </p>
-      )}
-    </div>
-  );
-})()}
+                  return (
+                    <div className="mt-2 space-y-1">
+                      {primary && (
+                        <p
+                          className={`text-xs font-semibold uppercase tracking-[0.26em] ${
+                            isLive
+                              ? 'text-emerald-300'
+                              : isClosed
+                              ? 'text-slate-500'
+                              : 'text-emerald-200'
+                          }`}
+                        >
+                          {primary}
+                        </p>
+                      )}
+                      {secondary && (
+                        <p className="text-sm text-slate-300">{secondary}</p>
+                      )}
+                    </div>
+                  );
+                })()}
 
-<p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
-  Hold at least{' '}
-  <span className="font-semibold text-slate-50">
-    1,000,000&nbsp;$CLAIM
-  </span>{' '}
-  at snapshot and click once while the window is live to share
-  the reward pool equally with everyone else who shows up.
-</p>
+                <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
+                  Hold at least{' '}
+                  <span className="font-semibold text-slate-50">
+                    1,000,000&nbsp;$CLAIM
+                  </span>{' '}
+                  at snapshot and click once while the window is live to share
+                  the reward pool equally with everyone else who shows up.
+                </p>
               </div>
 
               {/* CLAIM button block */}
@@ -537,22 +533,21 @@ export default function ClaimPoolPage() {
 
                     {countdownLabel && !isClosed && (
                       <span className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.26em] text-emerald-300 sm:text-sm">
-                        {countdownPrefix}
-                        {countdownLabel === '0s'
-                          ? ' any second'
-                          : ` ${countdownLabel}`}
+                        {countdownLabel === 'now'
+                          ? isLive
+                            ? 'CLOSES ANY SECOND'
+                            : 'OPENS ANY SECOND'
+                          : `${countdownPrefix}${countdownLabel}`}
                       </span>
                     )}
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-  <span className="text-slate-400">
-    {claimWindowStatus}
-  </span>
-  <span>
-    Snapshot {snapshotBlock} · {networkLabel}
-  </span>
-</div>
+                    <span className="text-slate-400">{claimWindowStatus}</span>
+                    <span>
+                      Snapshot {snapshotBlock} · {networkLabel}
+                    </span>
+                  </div>
                 </div>
               </div>
 
