@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useToast } from './Toast';
 
 /* ───────────────────────────
    Types
@@ -177,6 +178,8 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
+  const { addToast, ToastContainer } = useToast();
+
   const [state, setState] = useState<ClaimPortalState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
@@ -394,34 +397,52 @@ export default function ClaimPoolPage() {
   ─────────────────────────── */
 
   const handleClaimClick = async () => {
-    if (!isLive) {
-      alert('Claim window is not open.');
-      return;
-    }
+  if (!isLive) {
+    addToast(
+      'warning',
+      'Claim window is not live',
+      'You can only lock your share once the live claim window is open.'
+    );
+    return;
+  }
 
-    if (!effectiveWalletConnected || !connectedWallet) {
-      alert('Connect a wallet before claiming.');
-      return;
-    }
+  if (!effectiveWalletConnected || !connectedWallet) {
+    addToast(
+      'warning',
+      'Connect a wallet first',
+      'Connect the wallet you used at snapshot before locking your share.'
+    );
+    return;
+  }
 
-    if (!isEligible) {
-      alert(
-        `This wallet is below the minimum of ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM at snapshot.`
-      );
-      return;
-    }
+  if (!isEligible) {
+    addToast(
+      'warning',
+      'Not eligible for this round',
+      `This wallet held less than ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM at the snapshot.`
+    );
+    return;
+  }
 
-    try {
-      // TODO: wire this to your real claim endpoint / program call
-      console.log('Claiming for wallet:', connectedWallet.address);
-      alert('Claim transaction hook goes here.');
-    } catch (err) {
-      console.error('Claim error', err);
-      alert('Something went wrong while claiming.');
-    }
-  };
+  try {
+    console.log('Claiming for wallet:', connectedWallet.address);
+    // TODO: wire to real transaction
+    addToast(
+      'success',
+      'Share locked in',
+      'Your wallet will be included when this reward pool is distributed.'
+    );
+  } catch (err) {
+    console.error('Claim error', err);
+    addToast(
+      'error',
+      'Something went wrong',
+      'We could not lock your share. Please try again in a moment.'
+    );
+  }
+};
 
   /* ─────────────────────────── */
 
@@ -865,6 +886,11 @@ export default function ClaimPoolPage() {
           </SoftCard>
         </div>
       </div>
+
+      </div> {/* end of content wrapper */}
+      <ToastContainer />
+    </main>
+      
     </main>
   );
 }
