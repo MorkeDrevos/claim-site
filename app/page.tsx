@@ -142,6 +142,41 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
   return res.json();
 }
 
+  // Local wallet connect (frontend only)
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+  const handleConnectWallet = async () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const provider = (window as any).solana;
+      if (!provider || !provider.isPhantom) {
+        alert('Please install or unlock Phantom to connect.');
+        return;
+      }
+
+      // if already connected, allow disconnect
+      if (walletAddress && provider.disconnect) {
+        await provider.disconnect();
+        setWalletAddress(null);
+        return;
+      }
+
+      const res = await provider.connect();
+      const pubkey = res?.publicKey?.toString?.();
+      if (pubkey) {
+        setWalletAddress(pubkey);
+      }
+    } catch (err) {
+      console.error('Wallet connect error', err);
+    }
+  };
+
+  // Helper for short display
+  const walletShortDisplay = walletAddress
+    ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+    : 'Wallet not connected';
+
 /* ───────────────────────────
    Page component
 ─────────────────────────── */
