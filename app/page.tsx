@@ -588,7 +588,7 @@ export default function ClaimPoolPage() {
             canClaim && isPulseOn ? 'animate-pulse' : '',
           ].join(' ')}
         >
-          {canClaim ? 'Claim tokens' : 'Claim button appears when live'}
+          {canClaim ? 'Lock in my share' : 'Available when window is live'}
         </button>
 
         {/* Footer: close time + snapshot */}
@@ -603,29 +603,29 @@ export default function ClaimPoolPage() {
       {/* Explanation under the card */}
       <div className="mt-4 space-y-1 max-w-xl text-[14px] leading-relaxed text-slate-300">
         <p>
-          Hold at least{' '}
-          <span className="font-semibold text-emerald-300">
-            {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-          </span>{' '}
-          at snapshot and, once the window is live, click{' '}
-          <span className="font-semibold text-emerald-300">
-            CLAIM TOKENS
-          </span>{' '}
-          while the{' '}
-          <span className="font-semibold text-emerald-300">
-            claim window is open
-          </span>{' '}
-          to receive your share of this pool.
-        </p>
+  Hold at least{' '}
+  <span className="font-semibold text-emerald-300">
+    {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+  </span>{' '}
+  at snapshot and, once the window is live, click{' '}
+  <span className="font-semibold text-emerald-300">
+    LOCK IN MY SHARE
+  </span>{' '}
+  while the{' '}
+  <span className="font-semibold text-emerald-300">
+    claim window is open
+  </span>{' '}
+  to register your wallet for this round.
+</p>
         <p className="text-[13px] text-slate-300">
-          <span className="font-semibold text-emerald-300">
-            Everyone who shows up and clicks shares the pool equally.
-          </span>{' '}
-          Fewer wallets click →{' '}
-          <span className="font-semibold text-emerald-300">
-            larger share per wallet.
-          </span>
-        </p>
+  <span className="font-semibold text-emerald-300">
+    Everyone who shows up and clicks shares the pool equally.
+  </span>{' '}
+  Fewer wallets click →{' '}
+  <span className="font-semibold text-emerald-300">
+    larger share per wallet.
+  </span>
+</p>
       </div>
     </div>
 
