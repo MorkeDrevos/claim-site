@@ -45,7 +45,7 @@ type ClaimPortalState = {
    Constants
 ─────────────────────────── */
 
-// ✅ 1,000,000 minimum holding
+// 1,000,000 minimum holding
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM'; // adjust once token is live
 
@@ -142,41 +142,6 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
   return res.json();
 }
 
-  // Local wallet connect (frontend only)
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
-
-  const handleConnectWallet = async () => {
-    if (typeof window === 'undefined') return;
-
-    try {
-      const provider = (window as any).solana;
-      if (!provider || !provider.isPhantom) {
-        alert('Please install or unlock Phantom to connect.');
-        return;
-      }
-
-      // if already connected, allow disconnect
-      if (walletAddress && provider.disconnect) {
-        await provider.disconnect();
-        setWalletAddress(null);
-        return;
-      }
-
-      const res = await provider.connect();
-      const pubkey = res?.publicKey?.toString?.();
-      if (pubkey) {
-        setWalletAddress(pubkey);
-      }
-    } catch (err) {
-      console.error('Wallet connect error', err);
-    }
-  };
-
-  // Helper for short display
-  const walletShortDisplay = walletAddress
-    ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
-    : 'Wallet not connected';
-
 /* ───────────────────────────
    Page component
 ─────────────────────────── */
@@ -187,7 +152,7 @@ export default function ClaimPoolPage() {
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
 
-  // Local wallet (Phantom) – overrides preview wallet if user connects
+  // Live Phantom wallet address (frontend only)
   const [localWallet, setLocalWallet] = useState<string | null>(null);
 
   const lastWindowPhaseRef = useRef<string | null>(null);
@@ -235,16 +200,24 @@ export default function ClaimPoolPage() {
   /* ── Wallet connect handler (Phantom) ───────────────── */
 
   const handleConnectClick = async () => {
+    if (typeof window === 'undefined') return;
+
     try {
       const w = window as any;
       if (w.solana && w.solana.isPhantom) {
+        // toggle connect / disconnect
+        if (localWallet && w.solana.disconnect) {
+          await w.solana.disconnect();
+          setLocalWallet(null);
+          return;
+        }
+
         const resp = await w.solana.connect();
         const pubkey = resp?.publicKey?.toString();
         if (pubkey) {
           setLocalWallet(pubkey);
         }
       } else {
-        // No provider – send them to Phantom
         window.open('https://phantom.app/', '_blank');
       }
     } catch (err) {
