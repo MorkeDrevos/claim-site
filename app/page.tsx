@@ -490,13 +490,13 @@ export default function ClaimPoolPage() {
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-                    <span className="font-semibold text-slate-300">
-                      {claimWindowStatus}
-                    </span>
-                    <span>
-                      Snapshot {snapshotBlock} · {networkLabel}
-                    </span>
-                  </div>
+  <span className="text-slate-400">
+    {claimWindowStatus}
+  </span>
+  <span>
+    Snapshot {snapshotBlock} · {networkLabel}
+  </span>
+</div>
                 </div>
               </div>
 
