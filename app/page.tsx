@@ -313,7 +313,7 @@ export default function ClaimPoolPage() {
     }
   };
 
-    /* ── Loading / error shells ───────────────── */
+   /* ── Loading / error shells ───────────────── */
 
   if (!state && !error) {
     return (
@@ -385,7 +385,7 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-    // Human-readable window timing text (used in the claim box)
+  // Human-readable window timing text (used in the claim box)
   const windowTimingText = (() => {
     if (isLive) {
       if (!countdownLabel) return 'Closes soon';
@@ -403,25 +403,24 @@ export default function ClaimPoolPage() {
     return `Opens in ${countdownLabel}`;
   })();
 
-  // For now: button is clickable whenever LIVE + not preview.
-  // Wallet + eligibility are checked in the handler.
+  // Button only active when LIVE + not preview.
   const canClaim = !isPreview && isLive;
 
-    const eligibilityTitle = effectiveWalletConnected
-  ? isEligible
-    ? 'Eligible this round'
-    : 'Not eligible this round'
-  : 'Wallet not connected';
+  const eligibilityTitle = effectiveWalletConnected
+    ? isEligible
+      ? 'Eligible this round'
+      : 'Not eligible this round'
+    : 'Wallet not connected';
 
-const eligibilityBody = effectiveWalletConnected
-  ? isEligible
-    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM minimum at the snapshot used for this round.`
-    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot used for this round.`
-  : 'Connect a Solana wallet to check eligibility for this round.';
+  const eligibilityBody = effectiveWalletConnected
+    ? isEligible
+      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM minimum at the snapshot used for this round.`
+      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot used for this round.`
+    : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
      CLAIM action handler
@@ -524,64 +523,55 @@ const eligibilityBody = effectiveWalletConnected
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           {/* Left: logo + title */}
-          <Link
-  href="/"
-  className="flex items-center gap-3 group"
->
-  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-slate-500/70">
-    <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-200 group-hover:text-white">
-      $
-    </span>
-  </div>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-slate-500/70">
+              <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-200 group-hover:text-white">
+                $
+              </span>
+            </div>
 
-  <div className="flex flex-col">
-    <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-      CLAIM PORTAL
-    </span>
-    <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-      CLAIM — Token of Timing
-    </span>
-  </div>
-</Link>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
+                CLAIM PORTAL
+              </span>
+              <span className="text-sm font-medium text-slate-100 group-hover:text-white">
+                CLAIM — Token of Timing
+              </span>
+            </div>
+          </Link>
 
           {/* Right: network + analytics + concept + connect */}
-<div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/concept"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            >
+              Concept
+            </Link>
 
-  {/* Concept FIRST */}
-  <Link
-    href="/concept"
-    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-  >
-    Concept
-  </Link>
+            <Link
+              href="/analytics"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            >
+              Analytics
+            </Link>
 
-  {/* Analytics SECOND */}
-  <Link
-    href="/analytics"
-    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-  >
-    Analytics
-  </Link>
+            <span className="hidden text-xs text-slate-500 sm:inline">
+              {networkLabel}
+            </span>
 
-  {/* Solana mainnet THIRD */}
-  <span className="hidden text-xs text-slate-500 sm:inline">
-    {networkLabel}
-  </span>
-
-  {/* Connect wallet FOURTH */}
-  <button
-  type="button"
-  onClick={handleConnectClick}
-  className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
->
-  {connectedWallet
-    ? `${connectedWallet.name} connected`
-    : effectiveWalletConnected
-    ? 'Wallet connected'
-    : 'Connect wallet'}
-</button>
-</div>
-
+            <button
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -595,14 +585,13 @@ const eligibilityBody = effectiveWalletConnected
               {/* Breadcrumb */}
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-3 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-600">
-  <span>Claim pool — Round 1</span>
-  <span className="h-px w-5 bg-slate-700/70" />
-  <span>{snapshotLabel}</span>
-</div>
+                  <span>Claim pool — Round 1</span>
+                  <span className="h-px w-5 bg-slate-700/70" />
+                  <span>{snapshotLabel}</span>
+                </div>
 
-                {/* Live / scheduled header + countdown */}
+                {/* Live / scheduled header */}
                 <div className="space-y-2">
-                  {/* Top line: state */}
                   {isLive ? (
                     <div className="flex items-center gap-2">
                       <span className="relative flex h-2.5 w-2.5">
@@ -623,8 +612,7 @@ const eligibilityBody = effectiveWalletConnected
                     </p>
                   )}
 
-                  {/* Big line: countdown */}
-                                    {/* Big line: title (no countdown here) */}
+                  {/* Title (no countdown here) */}
                   <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
                     {isLive
                       ? 'Live claim window'
@@ -646,86 +634,89 @@ const eligibilityBody = effectiveWalletConnected
                 </span>
               </p>
 
-            {/* CLAIM WINDOW CARD */}
-<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
-  {/* Top row: label + status */}
-  <div className="flex flex-wrap items-center justify-between gap-3">
-    <div className="space-y-1">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window closes in'
-          : isClosed
-          ? 'Window closed'
-          : 'Window opens in'}
-      </p>
-      <p className="text-base font-semibold text-slate-50">
-        {windowTimingText}
-      </p>
-    </div>
+              {/* CLAIM WINDOW CARD */}
+              <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+                {/* Top row: label + status */}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {isLive
+                        ? 'Window closes in'
+                        : isClosed
+                        ? 'Window closed'
+                        : 'Window opens in'}
+                    </p>
+                    <p className="text-base font-semibold text-slate-50">
+                      {windowTimingText}
+                    </p>
+                  </div>
 
-    <span
-      className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-        isLive
-          ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
-          : isClosed
-          ? 'border-slate-700 bg-slate-900 text-slate-400'
-          : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
-      }`}
-    >
-      {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
-    </span>
-  </div>
+                  <span
+                    className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
+                      isLive
+                        ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
+                        : isClosed
+                        ? 'border-slate-700 bg-slate-900 text-slate-400'
+                        : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
+                    }`}
+                  >
+                    {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
+                  </span>
+                </div>
 
-  {/* Big CTA bar */}
-  <button
-    type="button"
-    onClick={handleClaimClick}
-    disabled={!canClaim}
-    className={[
-      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-      'transition-all duration-300',
-      canClaim
-        ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-        : 'bg-slate-800 text-slate-500 cursor-not-allowed',
-      canClaim && isPulseOn ? 'animate-pulse' : '',
-    ].join(' ')}
-  >
-    {canClaim ? 'Lock in my share' : 'Available when live'}
-  </button>
+                {/* Big CTA bar */}
+                <button
+                  type="button"
+                  onClick={handleClaimClick}
+                  disabled={!canClaim}
+                  className={[
+                    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+                    'transition-all duration-300',
+                    canClaim
+                      ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+                      : 'bg-slate-800 text-slate-500 cursor-not-allowed',
+                    canClaim && isPulseOn ? 'animate-pulse' : '',
+                  ].join(' ')}
+                >
+                  {canClaim ? 'Lock in my share' : 'Available when live'}
+                </button>
 
-  {/* Footer: close time + snapshot */}
-  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-    <p>{claimWindowStatus}</p>
-    <p>
-      Snapshot {snapshotBlock} · {networkLabel}
-    </p>
-  </div>
+                {/* Footer: close time + snapshot */}
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+                  <p>{claimWindowStatus}</p>
+                  <p>
+                    Snapshot {snapshotBlock} · {networkLabel}
+                  </p>
+                </div>
 
-  {/* Explanation inside card */}
-  <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-    <p className="mb-1">
-      To be eligible, you must hold at least{' '}
-      <span className="font-semibold text-emerald-300">
-        {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-      </span>{' '}
-      at the snapshot. When the claim window opens, click{' '}
-      <span className="font-semibold text-emerald-300">
-        LOCK IN MY SHARE
-      </span>{' '}
-      to register your wallet for that round. All registered wallets{' '}
-      <span className="font-semibold text-emerald-300">
-        split the reward pool equally.
-      </span>{' '}
-    </p>
+                {/* Explanation inside card */}
+                <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
+                  <p className="mb-1">
+                    To be eligible, you must hold at least{' '}
+                    <span className="font-semibold text-emerald-300">
+                      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+                    </span>{' '}
+                    at the snapshot. When the claim window opens, click{' '}
+                    <span className="font-semibold text-emerald-300">
+                      LOCK IN MY SHARE
+                    </span>{' '}
+                    to register your wallet for that round. All registered
+                    wallets{' '}
+                    <span className="font-semibold text-emerald-300">
+                      split the reward pool equally.
+                    </span>{' '}
+                  </p>
 
-    <p className="mt-2 text-[11px] text-slate-500">
-      Snapshots for the next round can be taken at any time between the last
-      window closing and the next one opening — if you&apos;re not holding{' '}
-      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
-      sits out that round.
-    </p>
-  </div>
-</div>  
+                  <p className="mt-2 text-[11px] text-slate-500">
+                    Snapshots for the next round can be taken at any time
+                    between the last window closing and the next one opening —{' '}
+                    if you&apos;re not holding{' '}
+                    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
+                    your wallet sits out that round.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* RIGHT COLUMN: Claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
@@ -792,12 +783,12 @@ const eligibilityBody = effectiveWalletConnected
                   </p>
 
                   <p className="pt-1 flex items-center gap-1.5 text-[11px] font-medium text-emerald-300">
-  <span className="relative flex h-1.5 w-1.5">
-    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
-    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
-  </span>
-  All systems operational
-</p>
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                    </span>
+                    All systems operational
+                  </p>
                 </div>
               </div>
             </div>
@@ -805,49 +796,46 @@ const eligibilityBody = effectiveWalletConnected
         </SoftCard>
 
         {/* === Preview Eligibility Cards === */}
-<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-  
-  {/* Reward Pool */}
-  <SoftCard>
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Current Reward Pool
-    </p>
-    <p className="mt-2 text-xl font-bold text-slate-100">
-      {rewardAmountText} CLAIM
-    </p>
-    <p className="text-[11px] text-slate-400 leading-relaxed">
-  USD value: {rewardUsdText}
-</p>
-  </SoftCard>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Reward Pool */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Current Reward Pool
+            </p>
+            <p className="mt-2 text-xl font-bold text-slate-100">
+              {rewardAmountText} CLAIM
+            </p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              USD value: {rewardUsdText}
+            </p>
+          </SoftCard>
 
-  {/* Minimum Holding */}
-  <SoftCard>
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Minimum Holding
-    </p>
-    <p className="mt-2 text-xl font-bold text-slate-100">
-      {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-    </p>
-    <p className="text-[11px] text-slate-400 leading-relaxed">
-  Held in the connected wallet at snapshot.
-</p>
-  </SoftCard>
+          {/* Minimum Holding */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Minimum Holding
+            </p>
+            <p className="mt-2 text-xl font-bold text-slate-100">
+              {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+            </p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              Held in the connected wallet at snapshot.
+            </p>
+          </SoftCard>
 
-  {/* Your Eligibility */}
-<SoftCard>
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Your Eligibility
-  </p>
-  <p className="mt-2 text-xl font-bold text-slate-100">
-    {eligibilityTitle}
-  </p>
-
-  <p className="text-[11px] text-slate-400 leading-relaxed">
-  {eligibilityBody}
-</p>
-</SoftCard>
-
-</div>
+          {/* Your Eligibility */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Your Eligibility
+            </p>
+            <p className="mt-2 text-xl font-bold text-slate-100">
+              {eligibilityTitle}
+            </p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              {eligibilityBody}
+            </p>
+          </SoftCard>
+        </div>
 
         {/* Lower section: rules + snapshot */}
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -880,7 +868,6 @@ const eligibilityBody = effectiveWalletConnected
               )}
             </div>
 
-            {/* Content */}
             <div className="space-y-3 text-[13px] leading-relaxed text-slate-300">
               {activeTab === 'eligibility' && (
                 <>
@@ -911,34 +898,40 @@ const eligibilityBody = effectiveWalletConnected
               )}
 
               {activeTab === 'rewards' && (
-  <>
-    <p className="text-[13px] text-slate-300">
-      Each claim window is a fixed reward pool. Everyone who successfully clicks{' '}
-      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-      during the live window is included in the distribution.
-    </p>
+                <>
+                  <p className="text-[13px] text-slate-300">
+                    Each claim window is a fixed reward pool. Everyone who
+                    successfully clicks{' '}
+                    <span className="font-semibold text-emerald-300">
+                      LOCK IN MY SHARE
+                    </span>{' '}
+                    during the live window is included in the distribution.
+                  </p>
 
-    <p className="mt-2 text-[12px] font-semibold text-emerald-300">
-      All successful claimers split the pool equally once the window closes.
-    </p>
+                  <p className="mt-2 text-[12px] font-semibold text-emerald-300">
+                    All successful claimers split the pool equally once the
+                    window closes.
+                  </p>
 
-    <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-slate-400">
-      <li>One lock-in per eligible wallet per window.</li>
-      <li>Fewer claimers = larger share per wallet.</li>
-      <li>No gas wars, no race condition — just presence.</li>
-    </ul>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-slate-400">
+                    <li>One lock-in per eligible wallet per window.</li>
+                    <li>Fewer claimers = larger share per wallet.</li>
+                    <li>No gas wars, no race condition — just presence.</li>
+                  </ul>
 
-    <p className="mt-3 text-[11px] text-amber-300">
-      Snapshots can be taken at any time within the announced snapshot window.  
-      If you’re not holding when the snapshot lands, this wallet won’t count for that round.
-    </p>
+                  <p className="mt-3 text-[11px] text-amber-300">
+                    Snapshots can be taken at any time within the announced
+                    snapshot window. If you’re not holding when the snapshot
+                    lands, this wallet won’t count for that round.
+                  </p>
 
-    <p className="mt-2 text-[11px] text-slate-500">
-      Once the audited contract is wired, exact pool sizes and on-chain distribution
-      details will be mirrored automatically.
-    </p>
-  </>
-)}
+                  <p className="mt-2 text-[11px] text-slate-500">
+                    Once the audited contract is wired, exact pool sizes and
+                    on-chain distribution details will be mirrored
+                    automatically.
+                  </p>
+                </>
+              )}
 
               {activeTab === 'history' && (
                 <>
