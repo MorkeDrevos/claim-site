@@ -1,20 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Simple global styles */
 html,
 body {
   margin: 0;
   padding: 0;
-  background-color: #020617; /* dark navy */
-  color: #e5e7eb;           /* light gray text */
+  background-color: #020617;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     sans-serif;
 }
 
 html {
-  font-size: 17px; /* was 16 → improves legibility immediately */
+  font-size: 17px;
 }
 
 body {
