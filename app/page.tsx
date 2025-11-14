@@ -12,6 +12,8 @@ type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
 type Tone = 'neutral' | 'success' | 'warning' | 'muted';
 
+type WindowPhase = 'scheduled' | 'open' | 'closed' | 'snapshot' | 'distribution';
+
 type ClaimHistoryEntry = {
   round: number;
   amount: number;
@@ -40,8 +42,7 @@ type ClaimPortalState = {
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
 
-  // Phase & lifecycle meta
-  windowPhase?: 'scheduled' | 'open' | 'closed' | 'snapshot' | 'distribution';
+  windowPhase?: WindowPhase;
   snapshotTakenAt?: string | null;
   distributionCompletedAt?: string | null;
 };
@@ -207,11 +208,29 @@ export default function ClaimPoolPage() {
   /* ── Phase + countdown (state can be null here) ── */
 
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
-  const rawPhase = (state as any)?.windowPhase as
-    | 'scheduled'
-    | 'open'
-    | 'closed'
-    | undefined;
+
+const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
+
+const lowerStatus = claimWindowStatusSafe.toLowerCase();
+
+// Base phase just for countdown (scheduled / open / closed)
+let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+
+if (rawPhase === 'open') {
+  phase = 'open';
+} else if (
+  rawPhase === 'closed' ||
+  rawPhase === 'snapshot' ||
+  rawPhase === 'distribution'
+) {
+  phase = 'closed';
+} else if (lowerStatus.includes('closed')) {
+  phase = 'closed';
+} else if (lowerStatus.includes('closes')) {
+  phase = 'open';
+} else {
+  phase = 'scheduled';
+}
 
   const lowerStatus = claimWindowStatusSafe.toLowerCase();
   let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
@@ -349,23 +368,31 @@ export default function ClaimPoolPage() {
   /* ── Safe destructure (state is now non-null) ───────────────── */
 
   const {
-    walletConnected,
-    walletShort,
-    networkLabel,
-    snapshotLabel,
-    snapshotBlock,
-    claimWindowStatus,
-    frontEndStatus,
-    contractStatus,
-    firstPoolStatus,
-    eligibleAmount,
-    claimHistory,
-    rewardPoolAmountClaim,
-    rewardPoolAmountUsd,
-  } = state;
+  walletConnected,
+  walletShort,
+  networkLabel,
+  snapshotLabel,
+  snapshotBlock,
+  claimWindowStatus,
+  frontEndStatus,
+  contractStatus,
+  firstPoolStatus,
+  eligibleAmount,
+  claimHistory,
+  rewardPoolAmountClaim,
+  rewardPoolAmountUsd,
+  windowPhase,
+  snapshotTakenAt,
+  distributionCompletedAt,
+} = state;
 
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
+
+  // Full phase for UI progress bar
+  const currentPhase: WindowPhase =
+  windowPhase ??
+  (isLive ? 'open' : isClosed ? 'closed' : 'scheduled');
 
   /* LIVE vs PREVIEW toggle via env */
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
@@ -798,6 +825,79 @@ export default function ClaimPoolPage() {
             </div>
           </div>
         </SoftCard>
+
+        {/* Round progress bar */}
+<SoftCard>
+  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Round {state.roundNumber ?? 1} progress
+  </p>
+
+  {/* Steps line */}
+  <div className="mt-3 flex items-center gap-3">
+    {(
+      [
+        { id: 'scheduled', label: 'Window scheduled' },
+        { id: 'open', label: 'Live claim window' },
+        { id: 'snapshot', label: 'Snapshot & distribution' },
+        { id: 'distribution', label: 'Round complete' },
+      ] as { id: WindowPhase; label: string }[]
+    ).map((step, index, all) => {
+      const displayPhase =
+        currentPhase === 'closed' ? 'snapshot' : currentPhase;
+
+      const currentIndex = all.findIndex((s) => s.id === displayPhase);
+      const isDone = currentIndex > index;
+      const isActive = currentIndex === index;
+
+      return (
+        <div key={step.id} className="flex-1 flex items-center">
+          {/* Dot */}
+          <div className="flex flex-col items-center flex-none">
+            <div
+              className={[
+                'h-3 w-3 rounded-full border',
+                isActive
+                  ? 'border-emerald-400 bg-emerald-400'
+                  : isDone
+                  ? 'border-emerald-500 bg-emerald-500/70'
+                  : 'border-slate-700 bg-slate-900',
+              ].join(' ')}
+            />
+            <span className="mt-2 text-[10px] text-center text-slate-400 leading-snug">
+              {step.label}
+            </span>
+          </div>
+
+          {/* Connecting line (except after last step) */}
+          {index < all.length - 1 && (
+            <div className="ml-3 flex-1 h-px rounded-full bg-slate-800">
+              <div
+                className={[
+                  'h-px rounded-full',
+                  isDone ? 'bg-emerald-500' : 'bg-slate-800',
+                ].join(' ')}
+              />
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+
+  {/* Small explainer text */}
+  <p className="mt-3 text-[11px] text-slate-500">
+    {currentPhase === 'scheduled' &&
+      'Next claim window is scheduled. Once it opens, you will be able to lock in your share.'}
+    {currentPhase === 'open' &&
+      'Claim window is live. Lock in your share before the countdown hits zero.'}
+    {currentPhase === 'closed' &&
+      'Claim window closed. Waiting for the round snapshot to be taken.'}
+    {currentPhase === 'snapshot' &&
+      'Snapshot captured for this round. Distribution transactions are being prepared.'}
+    {currentPhase === 'distribution' &&
+      'Rewards for this round have been distributed. The next round will be announced soon.'}
+  </p>
+</SoftCard>
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
