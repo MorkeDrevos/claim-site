@@ -331,16 +331,43 @@ export default function ClaimPoolPage() {
                   <span>{snapshotLabel}</span>
                 </div>
                 <h1 className="text-2xl font-semibold tracking-tight sm:text-[28px]">
-                  Next claim window
-                </h1>
-                <p className="max-w-xl text-sm text-slate-400">
-                  Hold at least{' '}
-                  <span className="font-semibold text-slate-100">
-                    100,000 $CLAIM
-                  </span>{' '}
-                  at snapshot and click once while the window is live to share
-                  the reward pool equally with everyone else who shows up.
-                </p>
+  Next claim window
+</h1>
+
+<div className="mt-2 flex flex-wrap items-center gap-2">
+  <StatusPill
+    label={
+      phase === 'open'
+        ? 'Live now'
+        : phase === 'closed'
+        ? 'Closed'
+        : 'Scheduled'
+    }
+    tone={
+      phase === 'open'
+        ? 'success'
+        : phase === 'closed'
+        ? 'warning'
+        : 'muted'
+    }
+  />
+
+  {countdownLabel && !isClosed && (
+    <span className="rounded-full bg-slate-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+      {isLive ? 'Closes in ' : 'Opens in '}
+      {countdownLabel}
+    </span>
+  )}
+</div>
+
+<p className="mt-3 max-w-xl text-sm text-slate-400">
+  Hold at least{' '}
+  <span className="font-semibold text-slate-100">
+    1,000,000 $CLAIM
+  </span>{' '}
+  at snapshot and click once while the window is live to share
+  the reward pool equally with everyone else who shows up.
+</p>
               </div>
 
               {/* Big CLAIM button */}
