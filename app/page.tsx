@@ -696,15 +696,22 @@ export default function ClaimPoolPage() {
           ? 'First pool has closed'
           : 'First pool not opened yet'}
       </span>
-    </p>
-
-    {/* NEW: All systems operational */}
-    {(!isPreview &&
-      frontEndStatus === 'Online' &&
-      contractStatus === 'Deployed' &&
-      (firstPoolStatus === 'open' || firstPoolStatus === 'not-opened')) && (
-      <p className="pt-1 flex items-center gap-2 text-[12px] font-medium text-emerald-300">
-  <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+    <p className="pt-1 flex items-center gap-2 text-[12px] font-medium text-emerald-300">
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 20 20"
+    fill="none"
+    className="text-emerald-400"
+  >
+    <path
+      d="M4.5 10.5L8.5 14.5L15.5 6"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
   All systems operational
 </p>
     )}
