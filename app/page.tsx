@@ -695,22 +695,26 @@ const eligibilityBody = effectiveWalletConnected
                 </div>
 
                 {/* Explanation inside card */}
-                <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-                  <p className="mb-1">
-                    To be eligible, you must hold at least{' '}
-                    <span className="font-semibold text-emerald-300">
-                      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-                    </span>{' '}
-                    at the snapshot. When the claim window opens, click{' '}
-                    <span className="font-semibold text-emerald-300">
-                      LOCK IN MY SHARE
-                    </span>{' '}
-                    to register your wallet for that round. All registered wallets{' '}
-                    <span className="font-semibold text-emerald-300">
-                      split the reward pool equally.
-                    </span>{' '}
-                  </p>
-                </div>
+                <<div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
+  <p className="mb-1">
+    To be eligible, you must hold at least{' '}
+    <span className="font-semibold text-emerald-300">
+      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+    </span>{' '}
+    at the snapshot. When the claim window opens, click{' '}
+    <span className="font-semibold text-emerald-300">
+      LOCK IN MY SHARE
+    </span>{' '}
+    to register your wallet for that round. All registered wallets{' '}
+    <span className="font-semibold text-emerald-300">
+      split the reward pool equally.
+    </span>{' '}
+  </p>
+
+  <p className="mt-2 text-[11px] text-slate-500">
+    All successful claimers split the reward pool equally once the window closes, and snapshots can be taken at any time inside the announced window — so it’s safest to hold throughout.
+  </p>
+</div>
               </div>
             </div>
 
@@ -898,31 +902,34 @@ const eligibilityBody = effectiveWalletConnected
               )}
 
               {activeTab === 'rewards' && (
-                <>
-                  <p>
-                    Each claim window is a fixed reward pool. Everyone who
-                    successfully clicks CLAIM MY SHARE during the live window shares that
-                    pool equally.
-                  </p>
-                  <ul className="list-disc space-y-1 pl-5 text-[12px] text-slate-400">
-                    <li>
-                      One click per eligible wallet per window – no extra
-                      advantage for multiple clicks.
-                    </li>
-                    <li>
-                      Fewer claimers means a larger share per wallet.
-                    </li>
-                    <li>
-                      All successful claimers split the pool after the window
-                      closes.
-                    </li>
-                  </ul>
-                  <p className="text-[11px] text-slate-500">
-                    Once the audited contract is wired, the exact pool sizes and
-                    on-chain distribution will be mirrored automatically.
-                  </p>
-                </>
-              )}
+  <>
+    <p className="text-[13px] text-slate-300">
+      Each claim window is a fixed reward pool. Everyone who successfully clicks{' '}
+      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+      during the live window is included in the distribution.
+    </p>
+
+    <p className="mt-2 text-[12px] font-semibold text-emerald-300">
+      All successful claimers split the pool equally once the window closes.
+    </p>
+
+    <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-slate-400">
+      <li>One lock-in per eligible wallet per window.</li>
+      <li>Fewer claimers = larger share per wallet.</li>
+      <li>No gas wars, no race condition — just presence.</li>
+    </ul>
+
+    <p className="mt-3 text-[11px] text-amber-300">
+      Snapshots can be taken at any time within the announced snapshot window.  
+      If you’re not holding when the snapshot lands, this wallet won’t count for that round.
+    </p>
+
+    <p className="mt-2 text-[11px] text-slate-500">
+      Once the audited contract is wired, exact pool sizes and on-chain distribution
+      details will be mirrored automatically.
+    </p>
+  </>
+)}
 
               {activeTab === 'history' && (
                 <>
