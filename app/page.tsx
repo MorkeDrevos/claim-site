@@ -716,45 +716,44 @@ export default function ClaimPoolPage() {
               </div>
 
               {/* System status */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
-                <div className="mb-2 flex items-center justify-between">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    System status
-                  </p>
-                  <StatusPill
-                    label={isPreview ? 'Preview mode' : 'Live'}
-                    tone={isPreview ? 'muted' : 'success'}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-slate-400">Front-end</span>
-                    <StatusPill label={frontEndStatus} tone="success" />
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-slate-400">CLAIM contract</span>
-                    <StatusPill
-                      label={contractStatus}
-                      tone={
-                        contractStatus === 'In progress' ? 'warning' : 'success'
-                      }
-                    />
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-slate-400">First pool</span>
-                    <StatusPill
-                      label={
-                        firstPoolStatus === 'not-opened'
-                          ? 'Not opened'
-                          : firstPoolStatus === 'open'
-                          ? 'Open'
-                          : 'Closed'
-                      }
-                      tone={firstPoolStatus === 'open' ? 'success' : 'muted'}
-                    />
-                  </div>
-                </div>
-              </div>
+              {/* System status */}
+<div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
+  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+    System status
+  </p>
+
+  <div className="mt-3 space-y-1.5 text-[12px] leading-relaxed text-slate-300">
+    <p>
+      <span className="text-slate-400">Portal front-end</span>
+      <span className="text-slate-200">
+        {' · '}
+        {isPreview ? 'Preview only (not live)' : frontEndStatus}
+      </span>
+    </p>
+
+    <p>
+      <span className="text-slate-400">CLAIM contract</span>
+      <span className="text-slate-200">
+        {' · '}
+        {contractStatus === 'Deployed'
+          ? 'Deployed and ready for live rounds'
+          : contractStatus}
+      </span>
+    </p>
+
+    <p>
+      <span className="text-slate-400">Reward pool</span>
+      <span className="text-slate-200">
+        {' · '}
+        {firstPoolStatus === 'open'
+          ? 'First pool is currently open'
+          : firstPoolStatus === 'closed'
+          ? 'First pool has closed'
+          : 'First pool not opened yet'}
+      </span>
+    </p>
+  </div>
+</div>
             </div>
           </div>
         </SoftCard>
