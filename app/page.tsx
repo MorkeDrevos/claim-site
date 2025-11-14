@@ -385,15 +385,23 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-  // Countdown label with safe fallbacks
-  const countdownValue =
-    countdownLabel && countdownLabel !== 'now'
-      ? countdownLabel
-      : countdownLabel === 'now'
-      ? 'any second'
-      : isLive
-      ? 'active now'
-      : 'TBA';
+    // Human-readable window timing text (used in the claim box)
+  const windowTimingText = (() => {
+    if (isLive) {
+      if (!countdownLabel) return 'Closes soon';
+      if (countdownLabel === 'now') return 'Closes any second';
+      return `Closes in ${countdownLabel}`;
+    }
+
+    if (isClosed) {
+      return 'Waiting for the next round';
+    }
+
+    // Scheduled / upcoming
+    if (!countdownLabel) return 'Time to be announced';
+    if (countdownLabel === 'now') return 'Opens any second';
+    return `Opens in ${countdownLabel}`;
+  })();
 
   // For now: button is clickable whenever LIVE + not preview.
   // Wallet + eligibility are checked in the handler.
@@ -616,20 +624,13 @@ const eligibilityBody = effectiveWalletConnected
                   )}
 
                   {/* Big line: countdown */}
+                                    {/* Big line: title (no countdown here) */}
                   <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
                     {isLive
-                      ? countdownLabel
-                        ? countdownLabel === 'now'
-                          ? 'Closes any second'
-                          : `Closes in ${countdownLabel}`
-                        : 'Closes soon'
+                      ? 'Live claim window'
                       : isClosed
                       ? 'Waiting for the next round'
-                      : countdownLabel
-                      ? countdownLabel === 'now'
-                        ? 'Opens any second'
-                        : `Opens in ${countdownLabel}`
-                      : 'Time to be announced'}
+                      : 'Next claim window'}
                   </h1>
                 </div>
               </div>
@@ -648,7 +649,7 @@ const eligibilityBody = effectiveWalletConnected
               {/* CLAIM WINDOW CARD */}
               <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
                 {/* Top row: label + status */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
+                                <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="space-y-1">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                       Window closes in
@@ -657,17 +658,6 @@ const eligibilityBody = effectiveWalletConnected
                       {isLive ? (countdownValue || 'active now') : countdownValue}
                     </p>
                   </div>
-
-                  <span
-                    className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-                      isLive
-                        ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
-                        : 'border-slate-700 bg-slate-900 text-slate-400'
-                    }`}
-                  >
-                    {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
-                  </span>
-                </div>
 
                 {/* Big CTA bar */}
                 <button
