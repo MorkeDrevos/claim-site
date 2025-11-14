@@ -704,10 +704,21 @@ export default function ClaimPoolPage() {
       contractStatus === 'Deployed' &&
       (firstPoolStatus === 'open' || firstPoolStatus === 'not-opened')) && (
       <p className="pt-1 flex items-center gap-2 text-[12px] font-medium text-emerald-300">
-  <span className="relative flex h-2 w-2">
-    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
-    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-  </span>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 20 20"
+    fill="none"
+    className="text-emerald-400"
+  >
+    <path
+      d="M4.5 10.5L8.5 14.5L15.5 6"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
   All systems operational
 </p>
     )}
