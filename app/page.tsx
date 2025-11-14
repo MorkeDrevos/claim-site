@@ -618,9 +618,8 @@ export default function ClaimPoolPage() {
   to register your wallet for this round.
 </p>
         <p className="text-[13px] text-slate-300">
-  <span className="font-semibold text-emerald-300">
     Everyone who shows up and clicks shares the pool equally.
-  </span>{' '}
+  {' '}
   Fewer wallets click →{' '}
   <span className="font-semibold text-emerald-300">
     larger share per wallet.
