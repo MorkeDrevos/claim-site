@@ -554,11 +554,11 @@ export default function ClaimPoolPage() {
             <div className="flex-1 space-y-6">
               {/* Breadcrumb */}
               <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  <span>Claim pool — Round 1</span>
-                  <span className="h-px w-6 bg-slate-700" />
-                  <span>{snapshotLabel}</span>
-                </div>
+                <div className="flex flex-wrap items-center gap-3 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-600">
+  <span>Claim pool — Round 1</span>
+  <span className="h-px w-5 bg-slate-700/70" />
+  <span>{snapshotLabel}</span>
+</div>
 
                 {/* Live / scheduled header + countdown */}
                 <div className="space-y-2">
@@ -651,7 +651,7 @@ export default function ClaimPoolPage() {
                     canClaim && isPulseOn ? 'animate-pulse' : '',
                   ].join(' ')}
                 >
-                  {canClaim ? 'Lock in my share' : 'Available when window is live'}
+                  {canClaim ? 'Lock in my share' : 'Available when claim window is live'}
                 </button>
 
                 {/* Footer: close time + snapshot */}
