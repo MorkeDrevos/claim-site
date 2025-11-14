@@ -222,39 +222,54 @@ export default function ClaimPoolPage() {
   /* ── Initial load + polling ── */
 
   useEffect(() => {
-    let alive = true;
+  let alive = true;
 
-    const load = () => {
-      getClaimPortalState()
-        .then((data) => {
-          if (!alive) return;
+  const load = () => {
+  getClaimPortalState()
+    .then((data) => {
+      if (!alive) return;
 
-          const prevPhase = lastWindowPhaseRef.current;
-          const nextPhase = (data as any)?.windowPhase ?? null;
+      // Derive phase same as your main render logic
+      const statusSafe = data.claimWindowStatus?.toLowerCase?.() ?? '';
+      const rawPhase = (data as any)?.windowPhase;
 
-          if (nextPhase === 'open' && prevPhase && prevPhase !== 'open') {
-            setIsPulseOn(true);
-            setTimeout(() => setIsPulseOn(false), 3500);
-          }
+      let nextPhase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+      if (rawPhase) {
+        nextPhase = rawPhase;
+      } else if (statusSafe.includes('closed')) {
+        nextPhase = 'closed';
+      } else if (statusSafe.includes('closes')) {
+        nextPhase = 'open';
+      } else {
+        nextPhase = 'scheduled';
+      }
 
-          lastWindowPhaseRef.current = nextPhase;
-          setState(data);
-          setError(null);
-        })
-        .catch((err) => {
-          console.error(err);
-          if (!alive) return;
-          setError('Unable to load portal data right now.');
-        });
-    };
+      const prevPhase = lastWindowPhaseRef.current;
 
-    load();
-    const id = setInterval(load, 60_000);
-    return () => {
-      alive = false;
-      clearInterval(id);
-    };
-  }, []);
+      // 🔥 Fix: pulse on first-load-open + transitions
+      if (nextPhase === 'open' && prevPhase !== 'open') {
+        setIsPulseOn(true);
+        setTimeout(() => setIsPulseOn(false), 3500);
+      }
+
+      lastWindowPhaseRef.current = nextPhase;
+      setState(data);
+      setError(null);
+    })
+    .catch((err) => {
+      console.error(err);
+      if (!alive) return;
+      setError('Unable to load portal data right now.');
+    });
+};
+
+  load();
+  const id = setInterval(load, 60_000);
+  return () => {
+    alive = false;
+    clearInterval(id);
+  };
+}, []);
 
   /* ── Wallet connect / disconnect ── */
 
