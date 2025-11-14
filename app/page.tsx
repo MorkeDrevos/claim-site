@@ -646,68 +646,86 @@ const eligibilityBody = effectiveWalletConnected
                 </span>
               </p>
 
-              {/* CLAIM WINDOW CARD */}
-              <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
-                {/* Top row: label + status */}
-                                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      Window closes in
-                    </p>
-                    <p className="text-base font-semibold text-slate-50">
-                      {isLive ? (countdownValue || 'active now') : countdownValue}
-                    </p>
-                  </div>
+            {/* CLAIM WINDOW CARD */}
+<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+  {/* Top row: label + status */}
+  <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="space-y-1">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {isLive
+          ? 'Window closes in'
+          : isClosed
+          ? 'Window closed'
+          : 'Window opens in'}
+      </p>
+      <p className="text-base font-semibold text-slate-50">
+        {windowTimingText}
+      </p>
+    </div>
 
-                {/* Big CTA bar */}
-                <button
-                  type="button"
-                  onClick={handleClaimClick}
-                  disabled={!canClaim}
-                  className={[
-                    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-                    'transition-all duration-300',
-                    canClaim
-                      ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-                      : 'bg-slate-800 text-slate-500 cursor-not-allowed',
-                    canClaim && isPulseOn ? 'animate-pulse' : '',
-                  ].join(' ')}
-                >
-                  {canClaim ? 'Lock in my share' : 'Available when live'}
-                </button>
+    <span
+      className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
+        isLive
+          ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
+          : isClosed
+          ? 'border-slate-700 bg-slate-900 text-slate-400'
+          : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
+      }`}
+    >
+      {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
+    </span>
+  </div>
 
-                {/* Footer: close time + snapshot */}
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-                  <p>{claimWindowStatus}</p>
-                  <p>
-                    Snapshot {snapshotBlock} · {networkLabel}
-                  </p>
-                </div>
+  {/* Big CTA bar */}
+  <button
+    type="button"
+    onClick={handleClaimClick}
+    disabled={!canClaim}
+    className={[
+      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      'transition-all duration-300',
+      canClaim
+        ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+        : 'bg-slate-800 text-slate-500 cursor-not-allowed',
+      canClaim && isPulseOn ? 'animate-pulse' : '',
+    ].join(' ')}
+  >
+    {canClaim ? 'Lock in my share' : 'Available when live'}
+  </button>
 
-                {/* Explanation inside card */}
-                <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-  <p className="mb-1">
-    To be eligible, you must hold at least{' '}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-    </span>{' '}
-    at the snapshot. When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">
-      LOCK IN MY SHARE
-    </span>{' '}
-    to register your wallet for that round. All registered wallets{' '}
-    <span className="font-semibold text-emerald-300">
-      split the reward pool equally.
-    </span>{' '}
-  </p>
+  {/* Footer: close time + snapshot */}
+  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+    <p>{claimWindowStatus}</p>
+    <p>
+      Snapshot {snapshotBlock} · {networkLabel}
+    </p>
+  </div>
 
-  <p className="mt-2 text-[11px] text-slate-500">
-  Snapshots for the next round can be taken at any time between the last window closing and the next one opening — if you&apos;re not holding{' '}
-  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet sits out that round.
-</p>
-</div>
-              </div>
-            </div>
+  {/* Explanation inside card */}
+  <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
+    <p className="mb-1">
+      To be eligible, you must hold at least{' '}
+      <span className="font-semibold text-emerald-300">
+        {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+      </span>{' '}
+      at the snapshot. When the claim window opens, click{' '}
+      <span className="font-semibold text-emerald-300">
+        LOCK IN MY SHARE
+      </span>{' '}
+      to register your wallet for that round. All registered wallets{' '}
+      <span className="font-semibold text-emerald-300">
+        split the reward pool equally.
+      </span>{' '}
+    </p>
+
+    <p className="mt-2 text-[11px] text-slate-500">
+      Snapshots for the next round can be taken at any time between the last
+      window closing and the next one opening — if you&apos;re not holding{' '}
+      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
+      sits out that round.
+    </p>
+  </div>
+</div>  
 
             {/* RIGHT COLUMN: Claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
