@@ -665,22 +665,21 @@ export default function ClaimPoolPage() {
                 {/* Explanation inside card */}
                 <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
                   <p className="mb-1">
-                    Hold at least{' '}
+                    To be eligible, you must hold at least{' '}
                     <span className="font-semibold text-emerald-300">
                       {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
                     </span>{' '}
-                    at snapshot and, once the window is live, click{' '}
+                    at the snapshot. When the claim window opens, click{' '}
                     <span className="font-semibold text-emerald-300">
                       LOCK IN MY SHARE
                     </span>{' '}
-                    while the{' '}
+                    to register your wallet for that round. All registered wallets{' '}
                     <span className="font-semibold text-emerald-300">
-                      claim window is open
+                      split the reward pool equally,
                     </span>{' '}
-                    to register your wallet for this round. Everyone who shows up
-                    and claims shares the pool equally. Fewer wallets claim →{' '}
+                    so the fewer wallets that claim,{' '}
                     <span className="font-semibold text-emerald-300">
-                      larger share per wallet.
+                      the larger the share each wallet receives.
                     </span>
                   </p>
                 </div>
