@@ -95,7 +95,6 @@ function formatCountdown(targetIso?: string | null): string | null {
   const now = Date.now();
   const diff = target - now;
 
-  // Treat as "now" if we are within 1 second
   if (Math.abs(diff) < 1_000) return 'now';
 
   const totalSeconds = Math.max(0, Math.floor(diff / 1000));
@@ -115,7 +114,7 @@ function formatCountdown(targetIso?: string | null): string | null {
 
 function useCountdown(targetIso?: string | null): string | null {
   const [label, setLabel] = useState<string | null>(() =>
-    formatCountdown(targetIso),
+    formatCountdown(targetIso)
   );
 
   useEffect(() => {
@@ -346,7 +345,7 @@ export default function ClaimPoolPage() {
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
     ? `${connectedWallet.address.slice(0, 4)}…${connectedWallet.address.slice(
-        -4,
+        -4
       )}`
     : walletShort;
 
@@ -363,27 +362,6 @@ export default function ClaimPoolPage() {
       : 'Soon';
 
   const countdownPrefix = isLive ? 'Closes in ' : 'Opens in ';
-
-  // Primary status line
-  const primaryStatus = isLive
-    ? 'CLAIM WINDOW OPEN NOW'
-    : isClosed
-    ? 'Claim window closed'
-    : countdownLabel
-    ? countdownLabel === 'now'
-      ? 'Opens any second'
-      : `Opens in ${countdownLabel}`
-    : 'Next window scheduled';
-
-  // Secondary badge under the big strip
-  const countdownBadge =
-    !isClosed && countdownLabel
-      ? countdownLabel === 'now'
-        ? isLive
-          ? 'CLOSES ANY SECOND'
-          : 'OPENS ANY SECOND'
-        : `${countdownPrefix}${countdownLabel}`
-      : null;
 
   const canClaim =
     !isPreview && isLive && effectiveWalletConnected && isEligible;
@@ -404,7 +382,7 @@ export default function ClaimPoolPage() {
     }
 
     try {
-      // TODO: hook this into your real claim logic (API / program call)
+      // TODO: wire this to your real claim endpoint / program call
       console.log('Claiming for wallet:', connectedWallet.address);
       alert('Claim transaction hook goes here.');
     } catch (err) {
@@ -425,52 +403,52 @@ export default function ClaimPoolPage() {
 
       {/* Top nav */}
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
-  <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          {/* Left: logo + title */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80">
+              <span className="text-[11px] font-semibold tracking-[0.18em]">
+                $
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+                CLAIM PORTAL
+              </span>
+              <span className="text-sm font-medium text-slate-100">
+                CLAIM – Token of Timing
+              </span>
+            </div>
+          </div>
 
-    {/* Left side: Logo + Title */}
-    <div className="flex items-center gap-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80">
-        <span className="text-[11px] font-semibold tracking-[0.18em]">$</span>
-      </div>
+          {/* Right: network + analytics + connect */}
+          <div className="flex items-center gap-3">
+            <span className="hidden text-xs text-slate-500 sm:inline">
+              {networkLabel}
+            </span>
 
-      <div className="flex flex-col">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-          CLAIM PORTAL
-        </span>
-        <span className="text-sm font-medium text-slate-100">
-          CLAIM – Token of Timing
-        </span>
-      </div>
-    </div>
+            {/* Analytics pill (menu item) */}
+            <Link
+              href="/analytics"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            >
+              Analytics
+            </Link>
 
-    {/* Right side: network + analytics + connect button */}
-    <div className="flex items-center gap-3">
-      <span className="hidden text-xs text-slate-500 sm:inline">
-        {networkLabel}
-      </span>
-
-      {/* Analytics pill (THIS is what was missing) */}
-      <Link
-        href="/analytics"
-        className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-      >
-        Analytics
-      </Link>
-
-      <button
-        type="button"
-        onClick={handleConnectClick}
-        className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
-      >
-        {connectedWallet
-          ? `${connectedWallet.name} connected`
-          : effectiveWalletConnected
-          ? 'Wallet connected'
-          : 'Connect wallet'}
-      </button>
-    </div>
-  </div>
-</header>
+            <button
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* Content */}
       <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
@@ -490,25 +468,49 @@ export default function ClaimPoolPage() {
                   Next claim window
                 </h1>
 
-                {/* Primary status */}
-                <div className="mt-2 space-y-1">
-                  <p
-                    className={`text-xs font-semibold uppercase tracking-[0.26em] ${
-                      isLive
-                        ? 'text-emerald-300'
-                        : isClosed
-                        ? 'text-slate-500'
-                        : 'text-emerald-200'
-                    }`}
-                  >
-                    {primaryStatus}
-                  </p>
-                  {!isLive && countdownLabel && countdownLabel !== 'now' && (
-                    <p className="text-sm text-slate-300">
-                      Opens in {countdownLabel}
-                    </p>
-                  )}
-                </div>
+                {/* Primary status + big countdown */}
+                {(() => {
+                  let primary: string | null = null;
+                  let secondary: string | null = null;
+
+                  if (isLive) {
+                    primary = 'CLAIM WINDOW OPEN NOW';
+                    if (countdownLabel && countdownLabel !== 'now') {
+                      secondary = `Closes in ${countdownLabel}`;
+                    }
+                  } else if (isClosed) {
+                    primary = 'Claim window closed';
+                  } else if (countdownLabel) {
+                    if (countdownLabel === 'now') {
+                      primary = 'Opens any second';
+                    } else {
+                      primary = `Opens in ${countdownLabel}`;
+                    }
+                  } else {
+                    primary = 'Next window scheduled';
+                  }
+
+                  return (
+                    <div className="mt-2 space-y-1">
+                      {primary && (
+                        <p
+                          className={`text-xs font-semibold uppercase tracking-[0.26em] ${
+                            isLive
+                              ? 'text-emerald-300'
+                              : isClosed
+                              ? 'text-slate-500'
+                              : 'text-emerald-200'
+                          }`}
+                        >
+                          {primary}
+                        </p>
+                      )}
+                      {secondary && (
+                        <p className="text-sm text-slate-300">{secondary}</p>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
                   Hold at least{' '}
@@ -567,9 +569,13 @@ export default function ClaimPoolPage() {
                       </span>
                     </div>
 
-                    {countdownBadge && (
+                    {countdownLabel && !isClosed && (
                       <span className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.26em] text-emerald-300 sm:text-sm">
-                        {countdownBadge}
+                        {countdownLabel === 'now'
+                          ? isLive
+                            ? 'CLOSES ANY SECOND'
+                            : 'OPENS ANY SECOND'
+                          : `${countdownPrefix}${countdownLabel}`}
                       </span>
                     )}
                   </div>
@@ -742,7 +748,7 @@ export default function ClaimPoolPage() {
                       {labels[tab]}
                     </button>
                   );
-                },
+                }
               )}
             </div>
 
