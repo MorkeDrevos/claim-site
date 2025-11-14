@@ -545,65 +545,87 @@ export default function ClaimPoolPage() {
                 })()}
 
                 <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
-                  Hold at least{' '}
-                  <span className="font-semibold text-slate-50">
-                    1,000,000&nbsp;$CLAIM
-                  </span>{' '}
-                  at snapshot and click once while the window is live to share
-                  the reward pool equally with everyone else who shows up.
-                </p>
+  Hold at least{' '}
+  <span className="font-semibold text-slate-50">
+    1,000,000&nbsp;$CLAIM
+  </span>{' '}
+  <span className="font-semibold text-emerald-300">
+    at snapshot
+  </span>{' '}
+  and, once the window is live,{' '}
+  <span className="font-semibold text-emerald-300">
+    click “CLAIM THIS WINDOW”
+  </span>{' '}
+  <span className="font-semibold text-emerald-300">
+    while the claim window is open
+  </span>{' '}
+  to share the reward pool equally with everyone else who shows up.
+</p>
               </div>
 
-              {/* CLAIM block */}
-              <div
-                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-                  isLive
-                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-                    : 'border-slate-800 bg-slate-950/80'
-                } ${isPulseOn ? 'animate-pulse' : ''}`}
-              >
-                <div className="space-y-4">
-                  {/* Countdown strip */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                        {isLive ? 'Closes in' : 'Opens in'}
-                      </span>
-                      <span className="text-lg font-semibold text-slate-50">
-                        {countdownValue}
-                      </span>
-                    </div>
-                  </div>
+              {/* CLAIM button block */}
+<div
+  className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 transition-all duration-500 ${
+    isLive
+      ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+      : 'border-slate-800 bg-slate-950/80'
+  } ${isLive && isPulseOn ? 'animate-pulse' : ''}`}
+>
+  <div className="space-y-4">
+    {/* Status + countdown strip */}
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/90 px-4 py-3 text-sm">
+      <div className="flex flex-col">
+        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+          {isLive ? 'Window closes in' : 'Next window in'}
+        </span>
+        <span className="mt-1 text-lg font-semibold text-slate-50">
+          {countdownLabel
+            ? countdownLabel === 'now'
+              ? isLive
+                ? 'Closing now'
+                : 'Opening now'
+              : countdownLabel
+            : isLive
+              ? 'Active now'
+              : 'TBA'}
+        </span>
+      </div>
 
-                  {/* Button */}
-                  <button
-                    type="button"
-                    onClick={handleClaimClick}
-                    disabled={!canClaim}
-                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                      canClaim
-                        ? `bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 ${
-                            isPulseOn ? 'animate-pulse' : ''
-                          }`
-                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
-                    }`}
-                  >
-                    {isLive
-                      ? isPreview
-                        ? 'Live window (preview only)'
-                        : 'Claim this window'
-                      : 'Claim button appears when live'}
-                  </button>
+      {/* Live badge while window is open */}
+      {isLive && (
+        <span className="inline-flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-300">
+          Live window
+        </span>
+      )}
+    </div>
 
-                  {/* Bottom status */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-                    <span className="text-slate-400">{claimWindowStatus}</span>
-                    <span>
-                      Snapshot {snapshotBlock} · {networkLabel}
-                    </span>
-                  </div>
-                </div>
-              </div>
+    {/* Claim button */}
+    <button
+      type="button"
+      onClick={handleClaimClick}
+      disabled={!canClaim}
+      className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] transition-all duration-300 ${
+        canClaim
+          ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 hover:shadow-[0_0_44px_rgba(74,222,128,1)]'
+          : 'cursor-not-allowed bg-slate-800 text-slate-500'
+      }`}
+    >
+      {isLive
+        ? isPreview
+          ? 'Live window (preview only)'
+          : 'Claim this window'
+        : 'Claim button appears when live'}
+    </button>
+
+    {/* Bottom status line */}
+    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+      <span className="text-slate-400">{claimWindowStatus}</span>
+      <span>
+        Snapshot {snapshotBlock} · {networkLabel}
+      </span>
+    </div>
+  </div>
+</div>
 
               {/* Stat strip */}
               <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
