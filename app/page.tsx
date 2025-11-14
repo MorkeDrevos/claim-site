@@ -655,7 +655,7 @@ const [inlineMessage, setInlineMessage] = useState<{
 
         {/* Explanation inside card */}
 <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-  <p className="mb-2">
+  <p className="mb-1">
     Hold at least{' '}
     <span className="font-semibold text-emerald-300">
       {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
@@ -664,21 +664,16 @@ const [inlineMessage, setInlineMessage] = useState<{
     <span className="font-semibold text-emerald-300">
       LOCK IN MY SHARE
     </span>{' '}
-    while the{' '}
+    <b>>while the{' '}
     <span className="font-semibold text-emerald-300">
-      claim window is open
+      claim window is open</b>>
     </span>{' '}
-    to register your wallet for this round.
-  </p>
-
-  <p>
-    Everyone who shows up and claims shares the pool equally. Fewer wallets
-    claim →{' '}
+    to register your wallet for this round. Everyone who shows up and claims
+    <b>>shares the pool equally</b>>. Fewer wallets claim →{' '}
     <span className="font-semibold text-emerald-300">
       larger share per wallet.
     </span>
   </p>
-
 </div>
 
   </div>
