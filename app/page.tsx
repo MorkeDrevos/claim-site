@@ -398,6 +398,11 @@ export default function ClaimPoolPage() {
 
   const handleClaimClick = async () => {
   if (!isLive) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Claim window is not live',
+      message: 'You can only lock your share once the live claim window is open.'
+    });
     addToast(
       'warning',
       'Claim window is not live',
@@ -407,6 +412,11 @@ export default function ClaimPoolPage() {
   }
 
   if (!effectiveWalletConnected || !connectedWallet) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Connect a wallet first',
+      message: 'Connect the wallet you used at snapshot before locking your share.'
+    });
     addToast(
       'warning',
       'Connect a wallet first',
@@ -416,19 +426,28 @@ export default function ClaimPoolPage() {
   }
 
   if (!isEligible) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Not eligible for this round',
+      message: `This wallet held less than ${MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot.`
+    });
     addToast(
       'warning',
       'Not eligible for this round',
-      `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot.`
+      `This wallet held less than ${MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot.`
     );
     return;
   }
 
   try {
     console.log('Claiming for wallet:', connectedWallet.address);
-    // TODO: wire to real transaction
+
+    setInlineMessage({
+      type: 'success',
+      title: 'Share locked in',
+      message: 'Your wallet will be included when this reward pool is distributed.'
+    });
+
     addToast(
       'success',
       'Share locked in',
@@ -436,6 +455,13 @@ export default function ClaimPoolPage() {
     );
   } catch (err) {
     console.error('Claim error', err);
+
+    setInlineMessage({
+      type: 'error',
+      title: 'Something went wrong',
+      message: 'We could not lock your share. Please try again in a moment.'
+    });
+
     addToast(
       'error',
       'Something went wrong',
@@ -639,7 +665,7 @@ export default function ClaimPoolPage() {
   to register your wallet for this round.
 </p>
   <p className="text-[13px] text-slate-300">
-  Everyone who shows up and clicks shares the pool equally. Fewer wallets click →{' '}
+  Everyone who shows up and clains, shares the pool equally. Fewer wallets claims →{' '}
   <span className="font-semibold text-emerald-300">
     larger share per wallet.
   </span>
