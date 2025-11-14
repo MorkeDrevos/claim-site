@@ -4,7 +4,7 @@
   "snapshotLabel": "Snapshot — ROUND 1",
   "snapshotBlock": "219038421",
   "claimWindow": {
-    "status": "scheduled",
+    "status": "open",
     "opensAt": "2025-11-14T11:29:30.897Z",
     "closesAt": "2025-11-14T11:31:30.897Z"
   },
