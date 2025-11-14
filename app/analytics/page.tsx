@@ -114,6 +114,19 @@ export default function AnalyticsPage() {
       {/* Body */}
       <div className="mx-auto max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         <h1 className="text-3xl font-semibold tracking-tight">Snapshot overview</h1>
+
+<div className="mt-2 flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+  <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-900">
+    Overview
+  </span>
+  <span className="rounded-full bg-slate-900/60 px-3 py-1 text-slate-400">
+    Wallet explorer
+  </span>
+  <span className="rounded-full bg-slate-900/60 px-3 py-1 text-slate-400">
+    Round detail
+  </span>
+</div>
+        
         <p className="mt-1 text-sm text-slate-400">Preview analytics · Subject to change</p>
 
         {/* Top stats */}
