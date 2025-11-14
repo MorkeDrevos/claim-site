@@ -1,69 +1,130 @@
 // lib/claimState.ts
 
+// This matches the JSON you pasted
 export type RawPortalState = {
-  walletConnected?: boolean;
-  walletShort?: string;
+  round?: number;
 
   networkLabel?: string;
   snapshotLabel?: string;
   snapshotBlock?: string;
 
-  claimWindowStatus?: string;
-  claimWindowOpensAt?: string | null;
-  claimWindowClosesAt?: string | null;
-  windowPhase?: 'scheduled' | 'open' | 'closed';
+  claimWindow?: {
+    status?: 'scheduled' | 'open' | 'closed';
+    opensAt?: string | null;
+    closesAt?: string | null;
+  };
 
-  frontEndStatus?: string;
-  contractStatus?: string;
-  firstPoolStatus?: 'not-opened' | 'open' | 'closed';
+  contract?: {
+    status?: string;
+    address?: string;
+    auditUrl?: string | null;
+  };
 
-  eligibleAmount?: number;
-  claimHistory?: any[];
+  pool?: {
+    status?: 'not-opened' | 'open' | 'closed';
+    rewardTotal?: number;
+    eligibilityMinHold?: number;
+    eligibilityMinLP?: number;
+    rewardTotalUsd?: number;
+  };
 
-  rewardPoolAmountClaim?: number | null;
-  rewardPoolAmountUsd?: number | null;
+  wallet?: {
+    connected?: boolean;
+    addressShort?: string;
+    inSnapshot?: boolean;
+    eligibleAmount?: number;
+    claim?: {
+      alreadyClaimed?: boolean;
+      claimedAmount?: number;
+      claimTx?: string | null;
+    };
+  };
+
+  claimHistory?: Array<{
+    round: number;
+    amount: number;
+    tx?: string;
+    date?: string;
+  }>;
 };
 
+// Small helper for the grey status line
+function formatUtcLabel(iso?: string | null): string | null {
+  if (!iso) return null;
+  const t = new Date(iso);
+  if (Number.isNaN(t.getTime())) return null;
+  return (
+    t
+      .toISOString()
+      .slice(0, 16)
+      .replace('T', ' · ') + ' UTC'
+  );
+}
+
+/**
+ * Map raw JSON (your portalState.json) into the UI state
+ * that page.tsx expects.
+ */
 export function mapRawPortalState(raw: RawPortalState) {
+  const claimWindow = raw.claimWindow ?? {};
+  const pool = raw.pool ?? {};
+  const wallet = raw.wallet ?? {};
+  const history = raw.claimHistory ?? [];
+
   const phase: 'scheduled' | 'open' | 'closed' =
-    raw.windowPhase ?? 'scheduled';
+    claimWindow.status === 'open'
+      ? 'open'
+      : claimWindow.status === 'closed'
+      ? 'closed'
+      : 'scheduled';
+
+  const opensAt = claimWindow.opensAt ?? null;
+  const closesAt = claimWindow.closesAt ?? null;
+
+  // This is only used as the small grey line under the block
+  let claimWindowStatus: string;
+  if (phase === 'open') {
+    const label = formatUtcLabel(closesAt);
+    claimWindowStatus = label
+      ? `Closes on ${label}`
+      : 'Claim window open now';
+  } else if (phase === 'closed') {
+    claimWindowStatus = 'Claim window closed';
+  } else {
+    const label = formatUtcLabel(opensAt);
+    claimWindowStatus = label
+      ? `Opens on ${label}`
+      : 'Next window scheduled';
+  }
 
   return {
-    walletConnected: !!raw.walletConnected,
-    walletShort: raw.walletShort ?? '',
+    // ── Wallet / header info ─────────────────────────────
+    walletConnected: !!wallet.connected,
+    walletShort: wallet.addressShort ?? '',
 
     networkLabel: raw.networkLabel ?? 'Solana mainnet',
     snapshotLabel: raw.snapshotLabel ?? 'Snapshot — Round 1',
     snapshotBlock: raw.snapshotBlock ?? '',
 
-    claimWindowStatus:
-      raw.claimWindowStatus ??
-      (phase === 'open'
-        ? 'Claim window open now'
-        : phase === 'closed'
-        ? 'Claim window closed'
-        : 'Next window scheduled'),
-
-    claimWindowOpensAt:
-      raw.claimWindowOpensAt ?? null,
-    claimWindowClosesAt:
-      raw.claimWindowClosesAt ?? null,
+    // ── Claim window timing ──────────────────────────────
+    claimWindowStatus,
+    claimWindowOpensAt: opensAt,
+    claimWindowClosesAt: closesAt,
     windowPhase: phase,
 
-    frontEndStatus: raw.frontEndStatus ?? 'Online',
-    contractStatus: raw.contractStatus ?? 'Deployed',
-    firstPoolStatus: raw.firstPoolStatus ?? 'not-opened',
+    // ── System status ────────────────────────────────────
+    frontEndStatus: 'Online', // you can change this if you want
+    contractStatus: raw.contract?.status ?? 'Deployed',
+    firstPoolStatus: pool.status ?? 'not-opened',
 
-    eligibleAmount: raw.eligibleAmount ?? 0,
-    claimHistory: raw.claimHistory ?? [],
+    // ── Wallet eligibility / history ─────────────────────
+    eligibleAmount: wallet.eligibleAmount ?? 0,
+    claimHistory: history,
 
+    // ── Reward pool numbers ──────────────────────────────
     rewardPoolAmountClaim:
-      typeof raw.rewardPoolAmountClaim === 'number'
-        ? raw.rewardPoolAmountClaim
-        : null,
+      typeof pool.rewardTotal === 'number' ? pool.rewardTotal : null,
     rewardPoolAmountUsd:
-      typeof raw.rewardPoolAmountUsd === 'number'
-        ? raw.rewardPoolAmountUsd
-        : null
+      typeof pool.rewardTotalUsd === 'number' ? pool.rewardTotalUsd : null,
   };
 }
