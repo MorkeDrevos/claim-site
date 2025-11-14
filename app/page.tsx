@@ -557,69 +557,82 @@ export default function ClaimPoolPage() {
                 with everyone else who shows up.
               </p>
 
-              {/* Claim window card */}
-              <div
-                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-                  isLive
-                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-                    : 'border-slate-800 bg-slate-950/80'
-                } ${
-                  isPulseOn && isLive ? 'animate-pulse' : ''
-                } transition-all duration-500`}
-              >
-                <div className="space-y-4">
-                  {/* Countdown strip – no UTC, just time left */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                        {isLive ? 'Window closes in' : 'Next window opens in'}
-                      </span>
-                      <span className="text-lg font-semibold text-slate-50">
-                        {countdownValue}
-                      </span>
-                    </div>
+              {/* CLAIM WINDOW CARD */}
+<div
+  className={`mt-6 rounded-[28px] border ${
+    isLive
+      ? 'border-emerald-400/40 bg-emerald-500/5 shadow-[0_0_40px_rgba(16,185,129,0.25)]'
+      : 'border-slate-800 bg-slate-900/40'
+  } p-6`}
+>
 
-                    {isLive && (
-                      <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1">
-                        <span className="relative flex h-2.5 w-2.5">
-                          <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
-                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300" />
-                        </span>
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-200">
-                          Live window
-                        </span>
-                      </div>
-                    )}
-                  </div>
+  {/* Header */}
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+        {isLive ? 'Window closes in' : 'Next window opens in'}
+      </p>
 
-                  {/* Button under the countdown */}
-                  <button
-                    type="button"
-                    onClick={handleClaimClick}
-                    disabled={!canClaim}
-                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                      canClaim
-                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 transition-colors'
-                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
-                    }`}
-                  >
-                    {isLive
-                      ? isPreview
-                        ? 'Claim tokens (preview only)'
-                        : 'Claim tokens'
-                      : 'Claim button appears when live'}
-                  </button>
+      {/* COUNTDOWN OR “TIME TO BE ANNOUNCED” */}
+      <p className="mt-1 text-xl font-semibold text-slate-100">
+        {isLive
+          ? countdownLabel
+            ? countdownLabel === 'now'
+              ? 'Active now'
+              : countdownLabel
+            : 'Active now'
+          : countdownLabel
+          ? countdownLabel === 'now'
+            ? 'Opens any second'
+            : countdownLabel
+          : 'Time to be announced'}
+      </p>
+    </div>
 
-                  {/* Bottom status line */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-                    <span className="text-slate-400">{claimWindowStatus}</span>
-                    <span>
-                      Snapshot {snapshotBlock} · {networkLabel}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+    {/* LIVE / CLOSED badge */}
+    {isLive && (
+      <div className="rounded-full bg-emerald-500/15 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 ring-1 ring-emerald-500/40">
+        Live Window
+      </div>
+    )}
+
+    {isClosed && (
+      <div className="rounded-full bg-slate-800/40 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 ring-1 ring-slate-700/40">
+        Closed
+      </div>
+    )}
+  </div>
+
+  {/* Claim button */}
+  <button
+    type="button"
+    disabled={!isLive}
+    onClick={handleClaimClick}
+    className={`mt-6 w-full rounded-full px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-[0.22em] transition-all ${
+      isLive
+        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:bg-emerald-300'
+        : 'bg-slate-800/40 text-slate-500 cursor-not-allowed'
+    }`}
+  >
+    {isLive ? 'Claim Tokens' : 'Claim button appears when live'}
+  </button>
+
+  {/* Footer line */}
+  <div className="mt-4 flex items-center justify-between text-[11px] text-slate-500">
+    <span>
+      {isLive
+        ? `Closes on ${new Date(closesAt!).toISOString().slice(0, 16).replace('T', ' · ')} UTC`
+        : isClosed
+        ? 'Claim window closed'
+        : 'Next window opens soon'}
+    </span>
+
+    <span>
+      Snapshot {snapshotBlock} · {networkLabel}
+    </span>
+  </div>
+</div>
+</div>
 
             {/* Right side: claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
