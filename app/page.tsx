@@ -594,12 +594,12 @@ const [inlineMessage, setInlineMessage] = useState<{
       </div>
 
       {/* Reward pool line (compact, no big pill) */}
-      <p className="mt-3 text-[13px] sm:text-[15px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
   Reward pool this window{' '}
-  <span className="text-emerald-300 text-[16px] sm:text-[18px]">
+  <span className="text-emerald-300 text-[18px] sm:text-[20px] font-bold drop-shadow-[0_0_8px_rgba(16,185,129,0.45)]">
     {rewardAmountText} $CLAIM
   </span>{' '}
-  <span className="text-slate-500 text-[14px] sm:text-[16px]">
+  <span className="text-slate-500">
     ({rewardUsdText} USD)
   </span>
 </p>
