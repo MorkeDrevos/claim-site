@@ -200,7 +200,7 @@ export default function ClaimPoolPage() {
     return (
       <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
-          <p className="text-sm text-slate-400">Loading $CLAIM portal…</p>
+          <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
         </div>
       </main>
     );
@@ -210,7 +210,7 @@ export default function ClaimPoolPage() {
     return (
       <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-16 sm:px-6">
-          <h1 className="text-xl font-semibold">$CLAIM portal</h1>
+          <h1 className="text-xl font-semibold">CLAIM portal</h1>
           <p className="text-sm text-red-400">{error ?? 'No data available'}</p>
           <Link
             href="/"
@@ -298,7 +298,7 @@ export default function ClaimPoolPage() {
                 CLAIM PORTAL
               </span>
               <span className="text-sm font-medium text-slate-100">
-                $CLAIM – Token of Timing
+                CLAIM – Token of Timing
               </span>
             </div>
           </div>
@@ -318,99 +318,85 @@ export default function ClaimPoolPage() {
       </header>
 
       {/* Content */}
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-14 pt-10 sm:px-6">
-        {/* HERO: Next claim window + CLAIM button */}
-        <SoftCard>
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            {/* Left: window info + big CTA */}
-            <div className="flex-1 space-y-6">
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                  <span>Claim pool — Round 1</span>
-                  <span className="h-[1px] w-4 bg-slate-700" />
-                  <span>{snapshotLabel}</span>
-                </div>
-                <h1 className="text-2xl font-semibold tracking-tight sm:text-[28px]">
-  Next claim window
-</h1>
+<div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+  {/* HERO: Next claim window + CLAIM button */}
+  <SoftCard>
+    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+      {/* Left: window info + big CTA */}
+      <div className="flex-1 space-y-6">
+        {/* Label + title */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            <span>Claim pool — Round 1</span>
+            <span className="h-px w-6 bg-slate-700" />
+            <span>{snapshotLabel}</span>
+          </div>
 
-<div className="mt-2 flex flex-wrap items-center gap-2">
-  <StatusPill
-    label={
-      phase === 'open'
-        ? 'Live now'
-        : phase === 'closed'
-        ? 'Closed'
-        : 'Scheduled'
-    }
-    tone={
-      phase === 'open'
-        ? 'success'
-        : phase === 'closed'
-        ? 'warning'
-        : 'muted'
-    }
-  />
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
+            Next claim window
+          </h1>
 
-  {countdownLabel && !isClosed && (
-    <span className="rounded-full bg-slate-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      {isLive ? 'Closes in ' : 'Opens in '}
-      {countdownLabel}
-    </span>
-  )}
+          <p className="max-w-xl text-[15px] leading-relaxed text-slate-300">
+            Hold at least{' '}
+            <span className="font-semibold text-slate-50">
+              1,000,000&nbsp;$CLAIM
+            </span>{' '}
+            at snapshot and click once while the window is live to share the
+            reward pool equally with everyone else who shows up.
+          </p>
+        </div>
+
+        {/* Big CLAIM button */}
+        <div
+          className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
+            isLive
+              ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+              : 'border-slate-800 bg-slate-950/80'
+          } ${isPulseOn ? 'animate-pulse' : ''}`}
+        >
+          <div className="space-y-4">
+            <button
+              type="button"
+              disabled={!isLive}
+              className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+                isLive
+                  ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
+                  : 'cursor-not-allowed bg-slate-800 text-slate-500'
+              }`}
+            >
+              {isLive ? 'Claim this window' : 'Claim button appears when live'}
+            </button>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+              {/* Status line */}
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-slate-200">
+                  {claimWindowStatus}
+                </span>
+              </div>
+
+              {/* Countdown + snapshot meta */}
+              <div className="flex flex-wrap items-center gap-2">
+                {countdownLabel && !isClosed && (
+                  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                    {isLive ? 'Closes in ' : 'Opens in '}
+                    {countdownLabel}
+                  </span>
+                )}
+                <span className="text-[11px] text-slate-500">
+                  Snapshot {snapshotBlock} · {networkLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side of the hero (whatever you already have there) */}
+      {/* ... keep your existing right-hand cards / system status here ... */}
+    </div>
+  </SoftCard>
 </div>
-
-<p className="mt-3 max-w-xl text-sm text-slate-400">
-  Hold at least{' '}
-  <span className="font-semibold text-slate-100">
-    1,000,000 $CLAIM
-  </span>{' '}
-  at snapshot and click once while the window is live to share
-  the reward pool equally with everyone else who shows up.
-</p>
-              </div>
-
-              {/* Big CLAIM button */}
-              <div
-                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-                  isLive
-                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-                    : 'border-slate-800 bg-slate-950/80'
-                } ${isPulseOn ? 'animate-pulse' : ''}`}
-              >
-                <div className="space-y-4">
-                  <button
-                    type="button"
-                    disabled={!isLive}
-                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                      isLive
-                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
-                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
-                    }`}
-                  >
-                    {isLive ? 'Claim this window' : 'Claim button appears when live'}
-                  </button>
-
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-                    <div className="space-x-1">
-                      <span className="font-semibold text-slate-200">
-                        {claimWindowStatus}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {countdownLabel && !isClosed && (
-                        <span className="rounded-full bg-slate-900 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                          {isLive ? 'Closes in ' : 'Opens in '}
-                          {countdownLabel}
-                        </span>
-                      )}
-                      <span className="hidden text-[10px] text-slate-500 sm:inline">
-                        Snapshot {snapshotBlock} · {networkLabel}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               {/* Stat strip: reward pool + min holding + wallet */}
               <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
@@ -420,7 +406,7 @@ export default function ClaimPoolPage() {
                   </p>
                   <p className="mt-1 text-sm font-semibold text-slate-50">
                     {rewardAmountText}{' '}
-                    <span className="text-xs text-slate-400">$CLAIM</span>
+                    <span className="text-xs text-slate-400">CLAIM</span>
                   </p>
                   <p className="mt-1 text-[11px] text-slate-500">
                     USD value: {rewardUsdText}
@@ -432,7 +418,7 @@ export default function ClaimPoolPage() {
                   </p>
                   <p className="mt-1 text-sm font-semibold text-slate-50">
                     {MIN_HOLDING.toLocaleString('en-US')}{' '}
-                    <span className="text-xs text-slate-400">$CLAIM</span>
+                    <span className="text-xs text-slate-400">CLAIM</span>
                   </p>
                   <p className="mt-1 text-[11px] text-slate-500">
                     Held in the connected wallet at snapshot.
@@ -444,7 +430,7 @@ export default function ClaimPoolPage() {
                   </p>
                   <p className="mt-1 text-sm font-semibold text-slate-50">
                     {walletConnected
-                      ? `${eligibleAmount.toLocaleString('en-US')} $CLAIM`
+                      ? `${eligibleAmount.toLocaleString('en-US')} CLAIM`
                       : 'Wallet not connected'}
                   </p>
                   <p className="mt-1 text-[11px] text-slate-500">
@@ -461,7 +447,7 @@ export default function ClaimPoolPage() {
                       rel="noreferrer"
                       className="mt-2 inline-flex text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:text-emerald-200"
                     >
-                      Buy $CLAIM on Jupiter →
+                      Buy CLAIM on Jupiter →
                     </a>
                   )}
                 </div>
@@ -561,14 +547,14 @@ export default function ClaimPoolPage() {
               {activeTab === 'eligibility' && (
                 <>
                   <p>
-                    The $CLAIM pool is driven by proof-of-presence. Eligibility
+                    The CLAIM pool is driven by proof-of-presence. Eligibility
                     comes from balances at specific snapshot blocks, not random
                     forms.
                   </p>
                   <ul className="list-disc space-y-1 pl-5 text-slate-400">
                     <li>
                       Hold at least{' '}
-                      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM at the
+                      {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the
                       snapshot block.
                     </li>
                     <li>
@@ -638,7 +624,7 @@ export default function ClaimPoolPage() {
                               {typeof entry.amount === 'number'
                                 ? entry.amount.toLocaleString('en-US')
                                 : entry.amount}{' '}
-                              $CLAIM
+                              CLAIM
                             </p>
                           </div>
                           {entry.tx && (
@@ -682,7 +668,7 @@ export default function ClaimPoolPage() {
 
             <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
               <p>
-                © 2025 $CLAIM portal · Preview UI · Subject to change. Built for
+                © 2025 CLAIM portal · Preview UI · Subject to change. Built for
                 serious holders, not random forms.
               </p>
             </div>
