@@ -35,7 +35,7 @@ type ClaimPortalState = {
   eligibleAmount: number;
   claimHistory: ClaimHistoryEntry[];
 
-  // Optional extras – safe if backend doesn’t send them yet
+  // Optional extras
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
   windowPhase?: 'scheduled' | 'open' | 'closed';
@@ -45,7 +45,8 @@ type ClaimPortalState = {
    Constants
 ─────────────────────────── */
 
-const MIN_HOLDING = 100_000;
+// ✅ 1,000,000 minimum holding
+const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM'; // adjust once token is live
 
 /* ───────────────────────────
@@ -151,12 +152,15 @@ export default function ClaimPoolPage() {
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
 
+  // Local wallet (Phantom) – overrides preview wallet if user connects
+  const [localWallet, setLocalWallet] = useState<string | null>(null);
+
   const lastWindowPhaseRef = useRef<string | null>(null);
 
-  // Countdown must always be called, even while state is null
+  // Countdown always called
   const countdownLabel = useCountdown(state?.claimWindowOpensAt ?? null);
 
-  // Initial load + polling (for surprise windows)
+  // Initial load + polling
   useEffect(() => {
     let alive = true;
 
@@ -168,7 +172,7 @@ export default function ClaimPoolPage() {
           const prevPhase = lastWindowPhaseRef.current;
           const nextPhase = (data as any)?.windowPhase ?? null;
 
-          // Trigger a short pulse when we flip into OPEN
+          // Pulse when we flip into OPEN
           if (nextPhase === 'open' && prevPhase && prevPhase !== 'open') {
             setIsPulseOn(true);
             setTimeout(() => setIsPulseOn(false), 3500);
@@ -186,13 +190,32 @@ export default function ClaimPoolPage() {
     };
 
     load();
-    const id = setInterval(load, 60_000); // poll every 60s
-
+    const id = setInterval(load, 60_000);
     return () => {
       alive = false;
       clearInterval(id);
     };
   }, []);
+
+  /* ── Wallet connect handler (Phantom) ───────────────── */
+
+  const handleConnectClick = async () => {
+    try {
+      const w = window as any;
+      if (w.solana && w.solana.isPhantom) {
+        const resp = await w.solana.connect();
+        const pubkey = resp?.publicKey?.toString();
+        if (pubkey) {
+          setLocalWallet(pubkey);
+        }
+      } else {
+        // No provider – send them to Phantom
+        window.open('https://phantom.app/', '_blank');
+      }
+    } catch (err) {
+      console.error('Wallet connect error', err);
+    }
+  };
 
   /* ── Loading / error shells ───────────────── */
 
@@ -241,6 +264,12 @@ export default function ClaimPoolPage() {
     rewardPoolAmountUsd,
   } = state;
 
+  // Use live connected wallet if present
+  const effectiveWalletConnected = !!localWallet || walletConnected;
+  const effectiveWalletShort = localWallet
+    ? `${localWallet.slice(0, 4)}…${localWallet.slice(-4)}`
+    : walletShort;
+
   const rawPhase = (state as any).windowPhase as
     | 'scheduled'
     | 'open'
@@ -264,6 +293,7 @@ export default function ClaimPoolPage() {
   const isClosed = phase === 'closed';
 
   const isEligible = eligibleAmount >= MIN_HOLDING;
+
   const rewardAmountText =
     typeof rewardPoolAmountClaim === 'number'
       ? rewardPoolAmountClaim.toLocaleString('en-US')
@@ -309,93 +339,92 @@ export default function ClaimPoolPage() {
             </span>
             <button
               type="button"
+              onClick={handleConnectClick}
               className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
             >
-              Connect wallet
+              {effectiveWalletConnected ? 'Wallet connected' : 'Connect wallet'}
             </button>
           </div>
         </div>
       </header>
 
       {/* Content */}
-<div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-  <SoftCard>
-    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-      {/* Left: window info */}
-      <div className="flex-1 space-y-6">
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-            <span>Claim pool — Round 1</span>
-            <span className="h-px w-6 bg-slate-700" />
-            <span>{snapshotLabel}</span>
-          </div>
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+        {/* HERO: Next claim window */}
+        <SoftCard>
+          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+            {/* Left: window info + CLAIM button + stats */}
+            <div className="flex-1 space-y-6">
+              {/* Title + description */}
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  <span>Claim pool — Round 1</span>
+                  <span className="h-px w-6 bg-slate-700" />
+                  <span>{snapshotLabel}</span>
+                </div>
 
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
-            Next claim window
-          </h1>
+                <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
+                  Next claim window
+                </h1>
 
-          <p className="max-w-xl text-[15px] leading-relaxed text-slate-300">
-            Hold at least{' '}
-            <span className="font-semibold text-slate-50">
-              1,000,000&nbsp;$CLAIM
-            </span>{' '}
-            at snapshot and click once while the window is live to share the
-            reward pool equally with everyone else who shows up.
-          </p>
-        </div>
-
-        {/* Big CLAIM button */}
-        <div
-          className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
-            isLive
-              ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-              : 'border-slate-800 bg-slate-950/80'
-          } ${isPulseOn ? 'animate-pulse' : ''}`}
-        >
-          <div className="space-y-4">
-            <button
-              type="button"
-              disabled={!isLive}
-              className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
-                isLive
-                  ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
-                  : 'cursor-not-allowed bg-slate-800 text-slate-500'
-              }`}
-            >
-              {isLive ? 'Claim this window' : 'Claim button appears when live'}
-            </button>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-slate-200">
-                  {claimWindowStatus}
-                </span>
+                <p className="max-w-xl text-[15px] leading-relaxed text-slate-300">
+                  Hold at least{' '}
+                  <span className="font-semibold text-slate-50">
+                    1,000,000&nbsp;$CLAIM
+                  </span>{' '}
+                  at snapshot and click once while the window is live to share
+                  the reward pool equally with everyone else who shows up.
+                </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                {countdownLabel && !isClosed && (
-                  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                    {isLive ? 'Closes in ' : 'Opens in '}
-                    {countdownLabel}
-                  </span>
-                )}
-                <span className="text-[11px] text-slate-500">
-                  Snapshot {snapshotBlock} · {networkLabel}
-                </span>
+              {/* Big CLAIM button */}
+              <div
+                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
+                  isLive
+                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+                    : 'border-slate-800 bg-slate-950/80'
+                } ${isPulseOn ? 'animate-pulse' : ''}`}
+              >
+                <div className="space-y-4">
+                  <button
+                    type="button"
+                    disabled={!isLive}
+                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+                      isLive
+                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
+                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
+                    }`}
+                  >
+                    {isLive
+                      ? 'Claim this window'
+                      : 'Claim button appears when live'}
+                  </button>
+
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-slate-200">
+                        {claimWindowStatus}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      {countdownLabel && !isClosed && (
+                        <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                          {isLive ? 'Closes in ' : 'Opens in '}
+                          {countdownLabel}
+                        </span>
+                      )}
+                      <span className="text-[11px] text-slate-500">
+                        Snapshot {snapshotBlock} · {networkLabel}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Right side content stays the same */}
-      {rightSide}
-    </div>
-  </SoftCard>
-</div>
-
-              {/* Stat strip: reward pool + min holding + wallet */}
+              {/* Stat strip */}
               <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
+                {/* Reward pool */}
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                     Current reward pool
@@ -408,6 +437,8 @@ export default function ClaimPoolPage() {
                     USD value: {rewardUsdText}
                   </p>
                 </div>
+
+                {/* Minimum holding */}
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                     Minimum holding
@@ -420,23 +451,25 @@ export default function ClaimPoolPage() {
                     Held in the connected wallet at snapshot.
                   </p>
                 </div>
+
+                {/* Your preview eligibility */}
                 <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                     Your preview eligibility
                   </p>
                   <p className="mt-1 text-sm font-semibold text-slate-50">
-                    {walletConnected
+                    {effectiveWalletConnected
                       ? `${eligibleAmount.toLocaleString('en-US')} CLAIM`
                       : 'Wallet not connected'}
                   </p>
                   <p className="mt-1 text-[11px] text-slate-500">
-                    {walletConnected
+                    {effectiveWalletConnected
                       ? isEligible
                         ? 'At or above the minimum for this round.'
                         : 'Below minimum. Connect a different wallet or top up.'
                       : 'Connect a Solana wallet to preview this value.'}
                   </p>
-                  {walletConnected && !isEligible && (
+                  {effectiveWalletConnected && !isEligible && (
                     <a
                       href={JUPITER_BUY_URL}
                       target="_blank"
@@ -450,8 +483,9 @@ export default function ClaimPoolPage() {
               </div>
             </div>
 
-            {/* Right: small control / system status */}
+            {/* Right: claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
+              {/* Claim control */}
               <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-sm">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                   Claim control
@@ -459,9 +493,12 @@ export default function ClaimPoolPage() {
                 <div className="mt-3 space-y-2">
                   <button
                     type="button"
+                    onClick={handleConnectClick}
                     className="w-full rounded-2xl bg-slate-100/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-100 ring-1 ring-slate-700 hover:bg-slate-100/10"
                   >
-                    {walletConnected ? 'Wallet connected' : 'Connect wallet'}
+                    {effectiveWalletConnected
+                      ? effectiveWalletShort
+                      : 'Connect wallet'}
                   </button>
                   <p className="text-[11px] text-slate-500">
                     During live rounds this button will trigger the on-chain
@@ -470,6 +507,7 @@ export default function ClaimPoolPage() {
                 </div>
               </div>
 
+              {/* System status */}
               <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
                 <div className="mb-2 flex items-center justify-between">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -486,7 +524,9 @@ export default function ClaimPoolPage() {
                     <span className="text-slate-400">CLAIM contract</span>
                     <StatusPill
                       label={contractStatus}
-                      tone={contractStatus === 'In progress' ? 'warning' : 'success'}
+                      tone={
+                        contractStatus === 'In progress' ? 'warning' : 'success'
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between gap-3">
@@ -508,8 +548,8 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-        {/* Lower section: rules / tabs */}
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        {/* Lower section: rules + snapshot */}
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           {/* Rules + tabs */}
           <SoftCard>
             <div className="mb-3 flex flex-wrap items-center gap-3 border-b border-slate-800 pb-3">
@@ -642,7 +682,7 @@ export default function ClaimPoolPage() {
             </div>
           </SoftCard>
 
-          {/* Snapshot + footer mini */}
+          {/* Snapshot + footer */}
           <SoftCard>
             <div className="space-y-2 text-sm text-slate-300">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
