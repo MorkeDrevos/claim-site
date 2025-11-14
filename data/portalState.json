@@ -4,9 +4,9 @@
   "snapshotLabel": "Snapshot — ROUND 1",
   "snapshotBlock": "219038421",
   "claimWindow": {
-    "status": "scheduled",
-    "opensAt": "2025-11-13T23:12:19.193Z",
-    "closesAt": "2025-11-13T23:22:19.193Z"
+    "status": "open",
+    "opensAt": "2025-11-14T01:22:42.729Z",
+    "closesAt": "2025-11-14T01:32:42.729Z"
   },
   "contract": {
     "status": "Deployed",
