@@ -14,50 +14,54 @@ function SoftCard({ children }: { children: React.ReactNode }) {
 export default function ConceptPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Subtle glows */}
+      {/* Subtle moving glows (same vibe as portal) */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
         <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
       </div>
 
-      {/* Top nav – lighter version */}
+      {/* Header */}
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          {/* Left: logo + title */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80">
+          {/* Left: logo + title (clickable) */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 group"
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 group-hover:ring-emerald-400/70 transition">
               <span className="text-[11px] font-semibold tracking-[0.18em]">
                 $
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300 transition">
                 CLAIM
               </span>
               <span className="text-sm font-medium text-slate-100">
                 Token of Timing · Concept
               </span>
             </div>
-          </div>
+          </Link>
 
-          {/* Right: nav links */}
-          <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em]">
+          {/* Right: nav pills */}
+          <nav className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em]">
             <Link
               href="/"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+              className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:border-slate-600"
             >
               Portal
             </Link>
             <Link
               href="/analytics"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+              className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-slate-200 hover:bg-slate-800 hover:border-slate-600"
             >
               Analytics
             </Link>
-            <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-4 py-2 text-emerald-300 border border-emerald-400/60">
+            {/* Active pill */}
+            <span className="inline-flex items-center rounded-full bg-slate-100 px-4 py-2 text-slate-900">
               Concept
             </span>
-          </div>
+          </nav>
         </div>
       </header>
 
@@ -65,45 +69,51 @@ export default function ConceptPage() {
       <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10 sm:px-6">
         <SoftCard>
           <div className="space-y-8">
-            {/* Title */}
+            {/* Title + meta */}
             <div className="space-y-2">
               <h1 className="text-[26px] sm:text-[32px] font-semibold text-slate-50 tracking-tight">
                 $CLAIM — The Token of Timing
               </h1>
-              <p className="text-sm uppercase tracking-[0.22em] text-emerald-300 font-semibold">
-                Abstract
-              </p>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                <p className="uppercase tracking-[0.22em] text-emerald-300 font-semibold">
+                  Abstract
+                </p>
+                <span className="h-px w-6 bg-slate-700/70" />
+                <p>Concept draft · v1.0</p>
+              </div>
             </div>
 
             {/* Abstract */}
-            <p className="text-[15px] leading-relaxed text-slate-300 max-w-3xl">
-              $CLAIM introduces a new economic layer to the blockchain: a{' '}
-              <span className="text-emerald-300 font-semibold">
-                proof-of-presence
-              </span>{' '}
-              system where rewards are earned not by staking or locking tokens,
-              but by{' '}
-              <span className="text-emerald-300 font-semibold">
-                showing up at the right time
-              </span>
-              . At regular intervals, a live{' '}
-              <span className="text-emerald-300 font-semibold">
-                Claim Window
-              </span>{' '}
-              opens with a fixed Reward Pool. Anyone holding the required
-              minimum at snapshot can click{' '}
-              <span className="text-emerald-300 font-semibold">Claim</span>{' '}
-              during this window. Everyone who clicks shares the pool equally —
-              the fewer people who show up, the larger each share becomes.
-            </p>
+            <div className="space-y-4 text-[15px] leading-relaxed text-slate-300 max-w-3xl">
+              <p>
+                $CLAIM introduces a new economic layer to the blockchain: a{' '}
+                <span className="text-emerald-300 font-semibold">
+                  proof-of-presence
+                </span>{' '}
+                system where rewards are earned not by staking or locking tokens,
+                but by{' '}
+                <span className="text-emerald-300 font-semibold">
+                  showing up at the right time
+                </span>
+                . At regular intervals, a live{' '}
+                <span className="text-emerald-300 font-semibold">
+                  Claim Window
+                </span>{' '}
+                opens with a fixed Reward Pool. Anyone holding the required
+                minimum at snapshot can click{' '}
+                <span className="text-emerald-300 font-semibold">Claim</span>{' '}
+                during this window. Everyone who clicks shares the pool equally —
+                the fewer people who show up, the larger each share becomes.
+              </p>
 
-            <p className="text-[15px] leading-relaxed text-slate-300 max-w-3xl">
-              $CLAIM transforms{' '}
-              <span className="text-emerald-300 font-semibold">
-                timing, participation, and human presence
-              </span>{' '}
-              into economic value.
-            </p>
+              <p>
+                $CLAIM transforms{' '}
+                <span className="text-emerald-300 font-semibold">
+                  timing, participation, and human presence
+                </span>{' '}
+                into economic value.
+              </p>
+            </div>
 
             {/* Divider */}
             <div className="h-px w-full bg-slate-800/70" />
