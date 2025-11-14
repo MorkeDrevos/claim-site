@@ -638,10 +638,8 @@ export default function ClaimPoolPage() {
   </span>{' '}
   to register your wallet for this round.
 </p>
-        <p className="text-[13px] text-slate-300">
-    Everyone who shows up and clicks shares the pool equally.
-  {' '}
-  Fewer wallets click →{' '}
+  <p className="text-[13px] text-slate-300">
+  Everyone who shows up and clicks shares the pool equally. Fewer wallets click →{' '}
   <span className="font-semibold text-emerald-300">
     larger share per wallet.
   </span>
@@ -883,8 +881,8 @@ export default function ClaimPoolPage() {
                 Subject to change. Built for serious holders, not random forms.
               </p>
             </div>
-          </SoftCard>
-                </div>
+         </SoftCard>
+        </div>
       </div>
 
       {/* end of content wrapper */}
