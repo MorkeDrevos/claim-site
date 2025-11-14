@@ -802,9 +802,9 @@ const eligibilityBody = effectiveWalletConnected
     <p className="mt-2 text-xl font-bold text-slate-100">
       {rewardAmountText} CLAIM
     </p>
-    <p className="text-sm text-slate-400">
-      USD value: {rewardUsdText}
-    </p>
+    <p className="text-[11px] text-slate-400 leading-relaxed">
+  USD value: {rewardUsdText}
+</p>
   </SoftCard>
 
   {/* Minimum Holding */}
@@ -815,9 +815,9 @@ const eligibilityBody = effectiveWalletConnected
     <p className="mt-2 text-xl font-bold text-slate-100">
       {MIN_HOLDING.toLocaleString('en-US')} CLAIM
     </p>
-    <p className="text-sm text-slate-400">
-      Held in the connected wallet at snapshot.
-    </p>
+    <p className="text-[11px] text-slate-400 leading-relaxed">
+  Held in the connected wallet at snapshot.
+</p>
   </SoftCard>
 
   {/* Your Eligibility */}
@@ -829,9 +829,9 @@ const eligibilityBody = effectiveWalletConnected
     {eligibilityTitle}
   </p>
 
-  <p className="text-sm text-slate-400">
-    {eligibilityBody}
-  </p>
+  <p className="text-[11px] text-slate-400 leading-relaxed">
+  {eligibilityBody}
+</p>
 </SoftCard>
 
 </div>
