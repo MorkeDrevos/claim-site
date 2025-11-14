@@ -483,18 +483,14 @@ export default function ClaimPoolPage() {
                       </span>
                     </div>
 
-                    {/* Countdown or LIVE pill */}
-{!isLive && countdownLabel && (
-  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-    Opens in {countdownLabel}
-  </span>
-)}
-
-{isLive && (
-  <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 animate-pulse">
-    LIVE NOW
-  </span>
-)}
+                    {countdownLabel && !isClosed && (
+                      <span className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.26em] text-emerald-300 sm:text-sm">
+                        {countdownPrefix}
+                        {countdownLabel === '0s'
+                          ? ' any second'
+                          : ` ${countdownLabel}`}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
