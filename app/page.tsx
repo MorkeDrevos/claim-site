@@ -819,7 +819,7 @@ export default function ClaimPoolPage() {
         {/* Round progress bar */}
 <SoftCard>
   <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Round {roundNumber ?? 1} progress
+    Round {(state as any).roundNumber ?? 1} progress
   </p>
 
   {/* Steps line */}
@@ -827,15 +827,14 @@ export default function ClaimPoolPage() {
     {(
       [
         { id: 'scheduled',    label: 'Window scheduled' },
-        { id: 'open',         label: 'Live claim window' },
         { id: 'snapshot',     label: 'Snapshot taken' },
+        { id: 'open',         label: 'Live claim window' },
+        { id: 'closed',       label: 'Window closed' },
         { id: 'distribution', label: 'Rewards distributed' },
-      ] as { id: WindowPhase; label: string }[]
+      ] as { id: WindowPhase | 'closed'; label: string }[]
     ).map((step, index, all) => {
-      // Treat "closed" as "snapshot pending / taken" on the bar
-      const displayPhase =
-        currentPhase === 'closed' ? 'snapshot' : currentPhase;
-
+      // currentPhase already comes from your JSON (windowPhase)
+      const displayPhase = currentPhase;
       const currentIndex = all.findIndex((s) => s.id === displayPhase);
       const isDone = currentIndex > index;
       const isActive = currentIndex === index;
@@ -875,20 +874,21 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
-    {/* Small explainer text */}
+  {/* Small explainer text */}
   <p className="mt-3 text-[11px] text-slate-500">
     {currentPhase === 'scheduled' &&
       'Next claim window is scheduled. Once it opens, you will be able to lock in your share.'}
+    {currentPhase === 'snapshot' &&
+      'Snapshot for this round has been taken. Eligibility is locked; the live claim window is coming up next.'}
     {currentPhase === 'open' &&
       'Claim window is live. Lock in your share before the countdown hits zero.'}
     {currentPhase === 'closed' &&
-      'Claim window closed. Waiting for the round snapshot to be taken.'}
-    {currentPhase === 'snapshot' &&
-      'Snapshot has been taken for this round. Distribution transactions are being prepared.'}
+      'Claim window closed. No new wallets can lock in for this round.'}
     {currentPhase === 'distribution' &&
-      'Rewards for this round have been distributed. This round is complete; the next one will be announced soon.'}
+      'Rewards for this round are being distributed / have been distributed. This round is complete.'}
   </p>
 </SoftCard>
+
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
