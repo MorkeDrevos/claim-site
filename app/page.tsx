@@ -655,16 +655,20 @@ export default function ClaimPoolPage() {
 
                 {/* Big CTA bar */}
                 <button
-  type="button"
-  onClick={handleConnectClick}
-  className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
->
-  {connectedWallet
-    ? `${connectedWallet.name} connected`
-    : effectiveWalletConnected
-    ? 'Wallet connected'
-    : 'Connect wallet'}
-</button>
+                  type="button"
+                  onClick={handleClaimClick}
+                  disabled={!canClaim}
+                  className={[
+                    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+                    'transition-all duration-300',
+                    canClaim
+                      ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+                      : 'bg-slate-800 text-slate-500 cursor-not-allowed',
+                    canClaim && isPulseOn ? 'animate-pulse' : '',
+                  ].join(' ')}
+                >
+                  {canClaim ? 'Lock in my share' : 'Available when claim window is live'}
+                </button>
 
                 {/* Footer: close time + snapshot */}
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
