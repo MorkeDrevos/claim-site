@@ -712,8 +712,9 @@ const eligibilityBody = effectiveWalletConnected
   </p>
 
   <p className="mt-2 text-[11px] text-slate-500">
-    All successful claimers split the reward pool equally once the window closes, and snapshots can be taken at any time inside the announced window — so it’s safest to hold throughout.
-  </p>
+  Snapshots for the next round can be taken at any time between the last window closing and the next one opening — if you&apos;re not holding{' '}
+  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet sits out that round.
+</p>
 </div>
               </div>
             </div>
