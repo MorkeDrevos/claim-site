@@ -86,7 +86,6 @@ function SoftCard({ children }: { children: React.ReactNode }) {
    Countdown helpers
 ─────────────────────────── */
 
-// single, final version
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
 
@@ -96,7 +95,6 @@ function formatCountdown(targetIso?: string | null): string | null {
   const now = Date.now();
   const diff = target - now;
 
-  // If we're basically at the target, treat as "now"
   if (Math.abs(diff) < 1_000) return 'now';
 
   const totalSeconds = Math.max(0, Math.floor(diff / 1000));
@@ -128,7 +126,7 @@ function useCountdown(targetIso?: string | null): string | null {
     const update = () => setLabel(formatCountdown(targetIso));
     update();
 
-    const id = setInterval(update, 1_000); // tick every second
+    const id = setInterval(update, 1_000);
     return () => clearInterval(id);
   }, [targetIso]);
 
@@ -148,19 +146,15 @@ function detectWallet(): DetectedWallet | null {
   if (typeof window === 'undefined') return null;
   const w = window as any;
 
-  // Phantom
   if (w.solana?.isPhantom) {
     return { name: 'Phantom', provider: w.solana };
   }
-  // Backpack
   if (w.backpack?.solana) {
     return { name: 'Backpack', provider: w.backpack.solana };
   }
-  // Solflare
   if (w.solflare?.connect) {
     return { name: 'Solflare', provider: w.solflare };
   }
-  // Backpack xNFT
   if (w.xnft?.solana) {
     return { name: 'Backpack xNFT', provider: w.xnft.solana };
   }
@@ -196,7 +190,7 @@ export default function ClaimPoolPage() {
   const walletProviderRef = useRef<any | null>(null);
   const lastWindowPhaseRef = useRef<string | null>(null);
 
-  /* ── Phase + countdown derived from (possibly null) state ── */
+  /* ── Phase + countdown (state can be null here) ── */
 
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
   const rawPhase = (state as any)?.windowPhase as
@@ -266,7 +260,6 @@ export default function ClaimPoolPage() {
 
   const handleConnectClick = async () => {
     try {
-      // disconnect if already connected
       if (connectedWallet && walletProviderRef.current?.disconnect) {
         await walletProviderRef.current.disconnect();
         walletProviderRef.current = null;
@@ -295,32 +288,6 @@ export default function ClaimPoolPage() {
       console.error('Wallet connect error', err);
     }
   };
-
-  // ─────────────────────────────────────
-// CLAIM action handler (live mode only)
-// ─────────────────────────────────────
-const handleClaimClick = async () => {
-  if (!isLive) {
-    alert('Claim window is not open.');
-    return;
-  }
-
-  if (!effectiveWalletConnected || !connectedWallet) {
-    alert('Connect a wallet before claiming.');
-    return;
-  }
-
-  try {
-    // TODO: Replace this with your real claim logic
-    // Example: call API route, RPC, program method, etc.
-    console.log('Claiming for wallet:', connectedWallet.address);
-
-    alert('Claim transaction hook goes here.');
-  } catch (err) {
-    console.error('Claim error', err);
-    alert('Something went wrong while claiming.');
-  }
-};
 
   /* ── Loading / error shells ───────────────── */
 
@@ -351,7 +318,7 @@ const handleClaimClick = async () => {
     );
   }
 
-  /* ── Safe destructure ───────────────── */
+  /* ── Safe destructure (state is now non-null) ───────────────── */
 
   const {
     walletConnected,
@@ -372,10 +339,8 @@ const handleClaimClick = async () => {
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
 
-  /* ───────────────────────────
-   LIVE vs PREVIEW toggle
-─────────────────────────── */
-const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
+  /* LIVE vs PREVIEW toggle via env */
+  const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
@@ -397,6 +362,34 @@ const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
       : 'Soon';
 
   const countdownPrefix = isLive ? 'Closes in ' : 'Opens in ';
+
+  const canClaim =
+    !isPreview && isLive && effectiveWalletConnected && isEligible;
+
+  /* ───────────────────────────
+     CLAIM action handler
+  ─────────────────────────── */
+
+  const handleClaimClick = async () => {
+    if (!isLive) {
+      alert('Claim window is not open.');
+      return;
+    }
+
+    if (!effectiveWalletConnected || !connectedWallet) {
+      alert('Connect a wallet before claiming.');
+      return;
+    }
+
+    try {
+      // TODO: wire this to your real claim endpoint / program call
+      console.log('Claiming for wallet:', connectedWallet.address);
+      alert('Claim transaction hook goes here.');
+    } catch (err) {
+      console.error('Claim error', err);
+      alert('Something went wrong while claiming.');
+    }
+  };
 
   /* ─────────────────────────── */
 
@@ -528,11 +521,21 @@ const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
               >
                 <div className="space-y-4">
                   <button
-  type="button"
-  onClick={handleClaimClick}
-  disabled={!canClaim}
-  className="..."
->
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+                      canClaim
+                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300'
+                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
+                    }`}
+                  >
+                    {isLive
+                      ? isPreview
+                        ? 'Live window (preview only)'
+                        : 'Claim this window'
+                      : 'Claim button appears when live'}
+                  </button>
 
                   {/* Big countdown strip */}
                   <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
@@ -656,10 +659,10 @@ const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
                       : 'Connect wallet'}
                   </button>
                   <p className="text-[11px] text-slate-500">
-  {isPreview
-    ? 'During live rounds this button will trigger the on-chain claim call. In the preview, it’s visual only.'
-    : 'This button triggers the on-chain claim call during live windows.'}
-</p>
+                    {isPreview
+                      ? 'During live rounds this button will trigger the on-chain claim call. In the preview, it’s visual only.'
+                      : 'This button triggers the on-chain claim call during live windows.'}
+                  </p>
                 </div>
               </div>
 
@@ -670,9 +673,9 @@ const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
                     System status
                   </p>
                   <StatusPill
-  label={isPreview ? 'Preview mode' : 'Live'}
-  tone={isPreview ? 'muted' : 'success'}
-/>
+                    label={isPreview ? 'Preview mode' : 'Live'}
+                    tone={isPreview ? 'muted' : 'success'}
+                  />
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
@@ -864,9 +867,9 @@ const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
             <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
               <p>
-  © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
-  Subject to change. Built for serious holders, not random forms.
-</p>
+                © 2025 CLAIM portal · {isPreview ? 'Preview UI · ' : ''}
+                Subject to change. Built for serious holders, not random forms.
+              </p>
             </div>
           </SoftCard>
         </div>
