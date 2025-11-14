@@ -313,7 +313,7 @@ export default function ClaimPoolPage() {
     }
   };
 
-  /* ── Loading / error shells ───────────────── */
+    /* ── Loading / error shells ───────────────── */
 
   if (!state && !error) {
     return (
