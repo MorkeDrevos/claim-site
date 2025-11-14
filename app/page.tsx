@@ -489,204 +489,67 @@ export default function ClaimPoolPage() {
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             {/* Left side */}
             <div className="flex-1 space-y-6">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-                  <span>Claim pool — Round 1</span>
-                  <span className="h-px w-6 bg-slate-700" />
-                  <span>{snapshotLabel}</span>
-                </div>
-
-                <h1 className="text-3xl font-semibold tracking-tight text-slate-50 sm:text-[32px]">
-                  Next claim window
-                </h1>
-
-                {/* Primary status */}
-                {(() => {
-                  let primary: string | null = null;
-                  let secondary: string | null = null;
-
-                  if (isLive) {
-                    primary = 'CLAIM WINDOW OPEN NOW';
-                    if (countdownLabel && countdownLabel !== 'now') {
-                      secondary = `Closes in ${countdownLabel}`;
-                    }
-                  } else if (isClosed) {
-                    primary = 'Claim window closed';
-                  } else if (countdownLabel) {
-                    if (countdownLabel === 'now') {
-                      primary = 'Opens any second';
-                    } else {
-                      primary = `Opens in ${countdownLabel}`;
-                    }
-                  } else {
-                    primary = 'Next window scheduled';
-                  }
-
-                  return (
-                    <div className="mt-2 space-y-1">
-                      {primary && (
-                        <p
-                          className={`text-xs font-semibold uppercase tracking-[0.26em] ${
-                            isLive
-                              ? 'text-emerald-300'
-                              : isClosed
-                              ? 'text-slate-500'
-                              : 'text-emerald-200'
-                          }`}
-                        >
-                          {primary}
-                        </p>
-                      )}
-                      {secondary && (
-                        <p className="text-sm text-slate-300">{secondary}</p>
-                      )}
-                    </div>
-                  );
-                })()}
-
-                <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-slate-300">
-  Hold at least{' '}
-  <span className="font-semibold text-slate-50">
-    1,000,000&nbsp;$CLAIM
-  </span>{' '}
-  <span className="font-semibold text-emerald-300">
-    at snapshot
-  </span>{' '}
-  and, once the window is live,{' '}
-  <span className="font-semibold text-emerald-300">
-    click “CLAIM THIS WINDOW”
-  </span>{' '}
-  <span className="font-semibold text-emerald-300">
-    while the claim window is open
-  </span>{' '}
-  to share the reward pool equally with everyone else who shows up.
-</p>
-              </div>
-
-              {/* CLAIM button block */}
-<div
-  className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 transition-all duration-500 ${
-    isLive
-      ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
-      : 'border-slate-800 bg-slate-950/80'
-  } ${isLive && isPulseOn ? 'animate-pulse' : ''}`}
->
-  <div className="space-y-4">
-    {/* Status + countdown strip */}
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/90 px-4 py-3 text-sm">
-      <div className="flex flex-col">
-        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-          {isLive ? 'Window closes in' : 'Next window in'}
-        </span>
-        <span className="mt-1 text-lg font-semibold text-slate-50">
-          {countdownLabel
-            ? countdownLabel === 'now'
-              ? isLive
-                ? 'Closing now'
-                : 'Opening now'
-              : countdownLabel
-            : isLive
-              ? 'Active now'
-              : 'TBA'}
-        </span>
-      </div>
-
-      {/* Live badge while window is open */}
-      {isLive && (
-        <span className="inline-flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-300">
-          Live window
-        </span>
-      )}
+  {/* Breadcrumb */}
+  <div className="space-y-2">
+    <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+      <span>Claim pool — Round 1</span>
+      <span className="h-px w-6 bg-slate-700" />
+      <span>{snapshotLabel}</span>
     </div>
 
-    {/* Claim button */}
-    <button
-      type="button"
-      onClick={handleClaimClick}
-      disabled={!canClaim}
-      className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] transition-all duration-300 ${
-        canClaim
-          ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 hover:shadow-[0_0_44px_rgba(74,222,128,1)]'
-          : 'cursor-not-allowed bg-slate-800 text-slate-500'
-      }`}
-    >
-      {isLive
-        ? isPreview
-          ? 'Live window (preview only)'
-          : 'Claim this window'
-        : 'Claim button appears when live'}
-    </button>
+    {/* Big live/scheduled heading */}
+    <div className="space-y-1">
+      {/* Top line: state */}
+      <p
+        className={`text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] ${
+          isLive
+            ? 'text-emerald-300'
+            : isClosed
+            ? 'text-slate-400'
+            : 'text-emerald-200'
+        }`}
+      >
+        {isLive
+          ? 'CLAIM WINDOW OPEN NOW'
+          : isClosed
+          ? 'Claim window closed'
+          : 'Next claim window'}
+      </p>
 
-    {/* Bottom status line */}
-    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-      <span className="text-slate-400">{claimWindowStatus}</span>
-      <span>
-        Snapshot {snapshotBlock} · {networkLabel}
-      </span>
+      {/* Big line: countdown */}
+      <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
+        {isLive
+          ? countdownLabel
+            ? countdownLabel === 'now'
+              ? 'Closes any second'
+              : `Closes in ${countdownLabel}`
+            : 'Closes soon'
+          : isClosed
+          ? 'Waiting for the next round'
+          : countdownLabel
+          ? countdownLabel === 'now'
+            ? 'Opens any second'
+            : `Opens in ${countdownLabel}`
+          : 'Next window scheduled'}
+      </h1>
     </div>
   </div>
+
+  {/* Description with highlighted key phrases */}
+  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-slate-300">
+    Hold at least{' '}
+    <span className="font-semibold text-emerald-300">
+      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+    </span>{' '}
+    at snapshot and, once the window is live, click{' '}
+    <span className="font-semibold text-emerald-300">CLAIM THIS WINDOW</span>{' '}
+    while the{' '}
+    <span className="font-semibold text-emerald-300">
+      claim window is open
+    </span>{' '}
+    to share the reward pool equally with everyone else who shows up.
+  </p>
 </div>
-
-              {/* Stat strip */}
-              <div className="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
-                {/* Reward pool */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Current reward pool
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-slate-50">
-                    {rewardAmountText}{' '}
-                    <span className="text-xs text-slate-400">CLAIM</span>
-                  </p>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    USD value: {rewardUsdText}
-                  </p>
-                </div>
-
-                {/* Minimum holding */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Minimum holding
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-slate-50">
-                    {MIN_HOLDING.toLocaleString('en-US')}{' '}
-                    <span className="text-xs text-slate-400">CLAIM</span>
-                  </p>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    Held in the connected wallet at snapshot.
-                  </p>
-                </div>
-
-                {/* Your preview eligibility */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    Your preview eligibility
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-slate-50">
-                    {effectiveWalletConnected
-                      ? `${eligibleAmount.toLocaleString('en-US')} CLAIM`
-                      : 'Wallet not connected'}
-                  </p>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    {effectiveWalletConnected
-                      ? isEligible
-                        ? 'At or above the minimum for this round.'
-                        : 'Below minimum. Connect a different wallet or top up.'
-                      : 'Connect a Solana wallet to preview this value.'}
-                  </p>
-                  {effectiveWalletConnected && !isEligible && (
-                    <a
-                      href={JUPITER_BUY_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-2 inline-flex text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:text-emerald-200"
-                    >
-                      Buy CLAIM on Jupiter →
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
 
             {/* Right side: claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
