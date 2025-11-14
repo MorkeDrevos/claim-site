@@ -518,19 +518,8 @@ export default function ClaimPoolPage() {
 
           {/* Right: network + analytics + concept + connect */}
 <div className="flex items-center gap-3">
-  <span className="hidden text-xs text-slate-500 sm:inline">
-    {networkLabel}
-  </span>
 
-  {/* Analytics pill (menu item) */}
-  <Link
-    href="/analytics"
-    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-  >
-    Analytics
-  </Link>
-
-  {/* New: Concept page */}
+  {/* Concept FIRST */}
   <Link
     href="/concept"
     className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
@@ -538,18 +527,33 @@ export default function ClaimPoolPage() {
     Concept
   </Link>
 
-            <button
-              type="button"
-              onClick={handleConnectClick}
-              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
-            >
-              {connectedWallet
-                ? `${connectedWallet.name} connected`
-                : effectiveWalletConnected
-                ? 'Wallet connected'
-                : 'Connect wallet'}
-            </button>
-          </div>
+  {/* Analytics SECOND */}
+  <Link
+    href="/analytics"
+    className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+  >
+    Analytics
+  </Link>
+
+  {/* Solana mainnet THIRD */}
+  <span className="hidden text-xs text-slate-500 sm:inline">
+    {networkLabel}
+  </span>
+
+  {/* Connect wallet FOURTH */}
+  <button
+    type="button"
+    onClick={handleConnectClick}
+    className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.75)] hover:bg-emerald-400"
+  >
+    {connectedWallet
+      ? `${connectedWallet.name} connected`
+      : effectiveWalletConnected
+      ? 'Wallet connected'
+      : 'Connect wallet'}
+  </button>
+</div>
+
         </div>
       </header>
 
