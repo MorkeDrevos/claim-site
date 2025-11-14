@@ -904,34 +904,31 @@ const eligibilityBody = effectiveWalletConnected
               )}
 
               {activeTab === 'rewards' && (
-  <>
-    <p className="text-[13px] text-slate-300">
-      Each claim window is a fixed reward pool. Everyone who successfully clicks{' '}
-      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-      during the live window is included in the distribution.
-    </p>
-
-    <p className="mt-2 text-[12px] font-semibold text-emerald-300">
-      All successful claimers split the pool equally once the window closes.
-    </p>
-
-    <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-slate-400">
-      <li>One lock-in per eligible wallet per window.</li>
-      <li>Fewer claimers = larger share per wallet.</li>
-      <li>No gas wars, no race condition — just presence.</li>
-    </ul>
-
-    <p className="mt-3 text-[11px] text-amber-300">
-      Snapshots can be taken at any time within the announced snapshot window.  
-      If you’re not holding when the snapshot lands, this wallet won’t count for that round.
-    </p>
-
-    <p className="mt-2 text-[11px] text-slate-500">
-      Once the audited contract is wired, exact pool sizes and on-chain distribution
-      details will be mirrored automatically.
-    </p>
-  </>
-)}
+                <>
+                  <p>
+                    Each claim window is a fixed reward pool. Everyone who
+                    successfully clicks CLAIM MY SHARE during the live window shares that
+                    pool equally.
+                  </p>
+                  <ul className="list-disc space-y-1 pl-5 text-[12px] text-slate-400">
+                    <li>
+                      One click per eligible wallet per window – no extra
+                      advantage for multiple clicks.
+                    </li>
+                    <li>
+                      Fewer claimers means a larger share per wallet.
+                    </li>
+                    <li>
+                      All successful claimers split the pool after the window
+                      closes.
+                    </li>
+                  </ul>
+                  <p className="text-[11px] text-slate-500">
+                    Once the audited contract is wired, the exact pool sizes and
+                    on-chain distribution will be mirrored automatically.
+                  </p>
+                </>
+              )}
 
               {activeTab === 'history' && (
                 <>
