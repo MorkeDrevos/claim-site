@@ -25,19 +25,19 @@ export default function AnalyticsPage() {
       </div>
 
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link
-            href="/"
-            className="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-100 ring-1 ring-slate-700 hover:bg-slate-800"
-          >
-            ← Back to portal
-          </Link>
+  <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+    <Link
+      href="/"
+      className="inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-100 ring-1 ring-slate-700 hover:bg-slate-800"
+    >
+      ← Back to portal
+    </Link>
 
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Analytics preview
-          </span>
-        </div>
-      </header>
+    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Analytics preview
+    </span>
+  </div>
+</header>
 
       <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
