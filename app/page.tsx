@@ -703,9 +703,10 @@ export default function ClaimPoolPage() {
       frontEndStatus === 'Online' &&
       contractStatus === 'Deployed' &&
       (firstPoolStatus === 'open' || firstPoolStatus === 'not-opened')) && (
-      <p className="pt-1 text-[12px] font-medium text-emerald-300">
-        ✓ All systems operational
-      </p>
+      <p className="pt-1 flex items-center gap-2 text-[12px] font-medium text-emerald-300">
+  <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+  All systems operational
+</p>
     )}
   </div>
 </div>
