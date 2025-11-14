@@ -210,36 +210,36 @@ export default function ClaimPoolPage() {
     /* ── Phase + countdown (state can be null here) ── */
 
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
-
-  const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
-
   const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
-  // Base phase just for countdown (scheduled / open / closed)
-  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+  // Raw phase directly from JSON, if present
+  const rawWindowPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 
-  if (rawPhase === 'open') {
-    phase = 'open';
+  // Base phase only for countdown (we don’t need snapshot/distribution here)
+  let phaseForCountdown: 'scheduled' | 'open' | 'closed' = 'scheduled';
+
+  if (rawWindowPhase === 'open') {
+    phaseForCountdown = 'open';
   } else if (
-    rawPhase === 'closed' ||
-    rawPhase === 'snapshot' ||
-    rawPhase === 'distribution'
+    rawWindowPhase === 'closed' ||
+    rawWindowPhase === 'snapshot' ||
+    rawWindowPhase === 'distribution'
   ) {
-    phase = 'closed';
+    phaseForCountdown = 'closed';
   } else if (lowerStatus.includes('closed')) {
-    phase = 'closed';
+    phaseForCountdown = 'closed';
   } else if (lowerStatus.includes('closes')) {
-    phase = 'open';
+    phaseForCountdown = 'open';
   } else {
-    phase = 'scheduled';
+    phaseForCountdown = 'scheduled';
   }
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
   const countdownTarget =
-    phase === 'open' ? (closesAt ?? opensAt) : opensAt;
+    phaseForCountdown === 'open' ? (closesAt ?? opensAt) : opensAt;
 
-  const countdownLabel = useCountdown(countdownTarget);
+  const countdownLabel = useCountdown(countdownTarget);  
 
   /* ── Initial load + polling ── */
 
@@ -376,13 +376,32 @@ export default function ClaimPoolPage() {
     roundNumber,
   } = state;
 
-  const isLive = phase === 'open';
-  const isClosed = phase === 'closed';
+    const isLive = phaseForCountdown === 'open';
+  const isClosed = phaseForCountdown === 'closed';
 
-  // Full phase for UI progress bar
+  /**
+   * currentPhase drives the progress bar:
+   *  - "scheduled"
+   *  - "snapshot"
+   *  - "open"
+   *  - "closed"
+   *  - "distribution"
+   *
+   * Priority:
+   * 1. Use windowPhase from JSON if present
+   * 2. Otherwise derive from snapshotTakenAt / distributionCompletedAt / countdown phase
+   */
   const currentPhase: WindowPhase =
-    windowPhase ??
-    (isLive ? 'open' : isClosed ? 'closed' : 'scheduled');
+    (windowPhase as WindowPhase | undefined) ??
+    (snapshotTakenAt
+      ? distributionCompletedAt
+        ? 'distribution'
+        : 'snapshot'
+      : isLive
+      ? 'open'
+      : isClosed
+      ? 'closed'
+      : 'scheduled');
 
   /* LIVE vs PREVIEW toggle via env */
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
