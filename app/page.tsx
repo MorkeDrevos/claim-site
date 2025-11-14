@@ -678,7 +678,7 @@ export default function ClaimPoolPage() {
                       split the reward pool equally,
                     </span>{' '}
                     so the fewer wallets that claim,{' '}
-                    <span className="font-semibold text-emerald-300">
+                    <span className="font-semibold ">
                       the larger the share each wallet receives.
                     </span>
                   </p>
@@ -750,13 +750,13 @@ export default function ClaimPoolPage() {
                     </span>
                   </p>
 
-                  <p className="pt-1 flex items-center gap-2 text-[11px] font-medium text-emerald-300">
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
-                    </span>
-                    All systems operational
-                  </p>
+                  <p className="pt-1 flex items-center gap-1.5 text-[11px] font-medium text-emerald-300">
+  <span className="relative flex h-1.5 w-1.5">
+    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
+  </span>
+  All systems operational
+</p>
                 </div>
               </div>
             </div>
