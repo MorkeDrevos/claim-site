@@ -88,24 +88,28 @@ function SoftCard({ children }: { children: React.ReactNode }) {
 
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
+
   const target = new Date(targetIso).getTime();
   if (Number.isNaN(target)) return null;
 
   const now = Date.now();
   const diff = target - now;
-  if (diff <= 0) return '0s';
+
+  // ⛔️ Do NOT show “opens any second”
+  // When diff <= 0, countdown stops and UI flips to LIVE mode
+  if (diff <= 0) return null;
 
   const totalSeconds = Math.floor(diff / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+  const s = totalSeconds % 60;
+  const m = Math.floor(totalSeconds / 60) % 60;
+  const h = Math.floor(totalSeconds / 3600) % 24;
+  const d = Math.floor(totalSeconds / 86400);
 
   const parts: string[] = [];
-  if (days > 0) parts.push(`${days}d`);
-  if (hours > 0 || days > 0) parts.push(`${hours}h`);
-  if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
-  parts.push(`${seconds}s`);
+  if (d > 0) parts.push(`${d}d`);
+  if (h > 0) parts.push(`${h}h`);
+  if (m > 0) parts.push(`${m}m`);
+  parts.push(`${s}s`);
 
   return parts.join(' ');
 }
@@ -479,14 +483,18 @@ export default function ClaimPoolPage() {
                       </span>
                     </div>
 
-                    {countdownLabel && !isClosed && (
-                      <span className="inline-flex items-center rounded-full bg-slate-900 px-4 py-1.5 text-[13px] font-semibold uppercase tracking-[0.26em] text-emerald-300 sm:text-sm">
-                        {countdownPrefix}
-                        {countdownLabel === '0s'
-                          ? ' any second'
-                          : ` ${countdownLabel}`}
-                      </span>
-                    )}
+                    {/* Countdown or LIVE pill */}
+{!isLive && countdownLabel && (
+  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    Opens in {countdownLabel}
+  </span>
+)}
+
+{isLive && (
+  <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 animate-pulse">
+    LIVE NOW
+  </span>
+)}
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
