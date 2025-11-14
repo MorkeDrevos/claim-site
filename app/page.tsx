@@ -489,67 +489,130 @@ export default function ClaimPoolPage() {
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             {/* Left side */}
             <div className="flex-1 space-y-6">
-  {/* Breadcrumb */}
-  <div className="space-y-2">
-    <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-      <span>Claim pool — Round 1</span>
-      <span className="h-px w-6 bg-slate-700" />
-      <span>{snapshotLabel}</span>
-    </div>
+              {/* Breadcrumb */}
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  <span>Claim pool — Round 1</span>
+                  <span className="h-px w-6 bg-slate-700" />
+                  <span>{snapshotLabel}</span>
+                </div>
 
-    {/* Big live/scheduled heading */}
-    <div className="space-y-1">
-      {/* Top line: state */}
-      <p
-        className={`text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] ${
-          isLive
-            ? 'text-emerald-300'
-            : isClosed
-            ? 'text-slate-400'
-            : 'text-emerald-200'
-        }`}
-      >
-        {isLive
-          ? 'CLAIM WINDOW OPEN NOW'
-          : isClosed
-          ? 'Claim window closed'
-          : 'Next claim window'}
-      </p>
+                {/* Big live/scheduled heading */}
+                <div className="space-y-1">
+                  {/* Top line: state */}
+                  <p
+                    className={`text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] ${
+                      isLive
+                        ? 'text-emerald-300'
+                        : isClosed
+                        ? 'text-slate-400'
+                        : 'text-emerald-200'
+                    }`}
+                  >
+                    {isLive
+                      ? 'CLAIM WINDOW OPEN NOW'
+                      : isClosed
+                      ? 'Claim window closed'
+                      : 'Next claim window'}
+                  </p>
 
-      {/* Big line: countdown */}
-      <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
-        {isLive
-          ? countdownLabel
-            ? countdownLabel === 'now'
-              ? 'Closes any second'
-              : `Closes in ${countdownLabel}`
-            : 'Closes soon'
-          : isClosed
-          ? 'Waiting for the next round'
-          : countdownLabel
-          ? countdownLabel === 'now'
-            ? 'Opens any second'
-            : `Opens in ${countdownLabel}`
-          : 'Next window scheduled'}
-      </h1>
-    </div>
-  </div>
+                  {/* Big line: countdown */}
+                  <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
+                    {isLive
+                      ? countdownLabel
+                        ? countdownLabel === 'now'
+                          ? 'Closes any second'
+                          : `Closes in ${countdownLabel}`
+                        : 'Closes soon'
+                      : isClosed
+                      ? 'Waiting for the next round'
+                      : countdownLabel
+                      ? countdownLabel === 'now'
+                        ? 'Opens any second'
+                        : `Opens in ${countdownLabel}`
+                      : 'Next window scheduled'}
+                  </h1>
+                </div>
+              </div>
 
-  {/* Description with highlighted key phrases */}
-  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-slate-300">
-    Hold at least{' '}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-    </span>{' '}
-    at snapshot and, once the window is live, click{' '}
-    <span className="font-semibold text-emerald-300">CLAIM THIS WINDOW</span>{' '}
-    while the{' '}
-    <span className="font-semibold text-emerald-300">
-      claim window is open
-    </span>{' '}
-    to share the reward pool equally with everyone else who shows up.
-  </p>
-</div>
+              {/* Description with highlighted key phrases */}
+              <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-slate-300">
+                Hold at least{' '}
+                <span className="font-semibold text-emerald-300">
+                  {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+                </span>{' '}
+                at snapshot and, once the window is live, click{' '}
+                <span className="font-semibold text-emerald-300">
+                  CLAIM TOKENS
+                </span>{' '}
+                while the{' '}
+                <span className="font-semibold text-emerald-300">
+                  claim window is open
+                </span>{' '}
+                to receive{' '}
+                <span className="font-semibold text-emerald-300">
+                  your share of the reward pool
+                </span>{' '}
+                with everyone else who shows up.
+              </p>
+
+              {/* Claim window card */}
+              <div
+                className={`relative overflow-hidden rounded-2xl border px-4 py-4 sm:px-6 sm:py-5 ${
+                  isLive
+                    ? 'border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-slate-950 to-slate-950 shadow-[0_0_40px_rgba(34,197,94,0.55)]'
+                    : 'border-slate-800 bg-slate-950/80'
+                } ${
+                  isPulseOn && isLive ? 'animate-pulse' : ''
+                } transition-all duration-500`}
+              >
+                <div className="space-y-4">
+                  {/* Countdown strip – no UTC, just time left */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-950/80 px-4 py-3 text-sm">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        {isLive ? 'Window closes in' : 'Next window opens in'}
+                      </span>
+                      <span className="text-lg font-semibold text-slate-50">
+                        {countdownValue}
+                      </span>
+                    </div>
+
+                    {isLive && (
+                      <span className="rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-200">
+                        Live window
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Button under the countdown */}
+                  <button
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={`w-full rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.26em] ${
+                      canClaim
+                        ? 'bg-emerald-400 text-emerald-950 shadow-[0_0_36px_rgba(74,222,128,0.8)] hover:bg-emerald-300 transition-colors'
+                        : 'cursor-not-allowed bg-slate-800 text-slate-500'
+                    }`}
+                  >
+                    {isLive
+                      ? isPreview
+                        ? 'Claim tokens (preview only)'
+                        : 'Claim tokens'
+                      : 'Claim button appears when live'}
+                  </button>
+
+                  {/* Bottom status line */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+                    <span className="text-slate-400">{claimWindowStatus}</span>
+                    <span>
+                      Snapshot {snapshotBlock} · {networkLabel}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Right side: claim control + system status */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
@@ -579,44 +642,43 @@ export default function ClaimPoolPage() {
               </div>
 
               {/* System status */}
-              {/* System status */}
-<div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
-  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-    System status
-  </p>
+              <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  System status
+                </p>
 
-  <div className="mt-3 space-y-1.5 text-[12px] leading-relaxed text-slate-300">
-    <p>
-      <span className="text-slate-400">Portal front-end</span>
-      <span className="text-slate-200">
-        {' · '}
-        {isPreview ? 'Preview only (not live)' : frontEndStatus}
-      </span>
-    </p>
+                <div className="mt-3 space-y-1.5 text-[12px] leading-relaxed text-slate-300">
+                  <p>
+                    <span className="text-slate-400">Portal front-end</span>
+                    <span className="text-slate-200">
+                      {' · '}
+                      {isPreview ? 'Preview only (not live)' : frontEndStatus}
+                    </span>
+                  </p>
 
-    <p>
-      <span className="text-slate-400">CLAIM contract</span>
-      <span className="text-slate-200">
-        {' · '}
-        {contractStatus === 'Deployed'
-          ? 'Deployed and ready for live rounds'
-          : contractStatus}
-      </span>
-    </p>
+                  <p>
+                    <span className="text-slate-400">CLAIM contract</span>
+                    <span className="text-slate-200">
+                      {' · '}
+                      {contractStatus === 'Deployed'
+                        ? 'Deployed and ready for live rounds'
+                        : contractStatus}
+                    </span>
+                  </p>
 
-    <p>
-      <span className="text-slate-400">Reward pool</span>
-      <span className="text-slate-200">
-        {' · '}
-        {firstPoolStatus === 'open'
-          ? 'First pool is currently open'
-          : firstPoolStatus === 'closed'
-          ? 'First pool has closed'
-          : 'First pool not opened yet'}
-      </span>
-    </p>
-  </div>
-</div>
+                  <p>
+                    <span className="text-slate-400">Reward pool</span>
+                    <span className="text-slate-200">
+                      {' · '}
+                      {firstPoolStatus === 'open'
+                        ? 'First pool is currently open'
+                        : firstPoolStatus === 'closed'
+                        ? 'First pool has closed'
+                        : 'First pool not opened yet'}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </SoftCard>
