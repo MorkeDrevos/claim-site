@@ -45,6 +45,8 @@ type ClaimPortalState = {
   windowPhase?: WindowPhase;
   snapshotTakenAt?: string | null;
   distributionCompletedAt?: string | null;
+
+  roundNumber?: number; // 👈 add this
 };
 
 /* ───────────────────────────
@@ -205,38 +207,25 @@ export default function ClaimPoolPage() {
   const walletProviderRef = useRef<any | null>(null);
   const lastWindowPhaseRef = useRef<string | null>(null);
 
-  /* ── Phase + countdown (state can be null here) ── */
+    /* ── Phase + countdown (state can be null here) ── */
 
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 
-const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
-
-const lowerStatus = claimWindowStatusSafe.toLowerCase();
-
-// Base phase just for countdown (scheduled / open / closed)
-let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
-
-if (rawPhase === 'open') {
-  phase = 'open';
-} else if (
-  rawPhase === 'closed' ||
-  rawPhase === 'snapshot' ||
-  rawPhase === 'distribution'
-) {
-  phase = 'closed';
-} else if (lowerStatus.includes('closed')) {
-  phase = 'closed';
-} else if (lowerStatus.includes('closes')) {
-  phase = 'open';
-} else {
-  phase = 'scheduled';
-}
+  const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 
   const lowerStatus = claimWindowStatusSafe.toLowerCase();
+
+  // Base phase just for countdown (scheduled / open / closed)
   let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
-  if (rawPhase) {
-    phase = rawPhase;
+  if (rawPhase === 'open') {
+    phase = 'open';
+  } else if (
+    rawPhase === 'closed' ||
+    rawPhase === 'snapshot' ||
+    rawPhase === 'distribution'
+  ) {
+    phase = 'closed';
   } else if (lowerStatus.includes('closed')) {
     phase = 'closed';
   } else if (lowerStatus.includes('closes')) {
@@ -367,32 +356,33 @@ if (rawPhase === 'open') {
 
   /* ── Safe destructure (state is now non-null) ───────────────── */
 
-  const {
-  walletConnected,
-  walletShort,
-  networkLabel,
-  snapshotLabel,
-  snapshotBlock,
-  claimWindowStatus,
-  frontEndStatus,
-  contractStatus,
-  firstPoolStatus,
-  eligibleAmount,
-  claimHistory,
-  rewardPoolAmountClaim,
-  rewardPoolAmountUsd,
-  windowPhase,
-  snapshotTakenAt,
-  distributionCompletedAt,
-} = state;
+    const {
+    walletConnected,
+    walletShort,
+    networkLabel,
+    snapshotLabel,
+    snapshotBlock,
+    claimWindowStatus,
+    frontEndStatus,
+    contractStatus,
+    firstPoolStatus,
+    eligibleAmount,
+    claimHistory,
+    rewardPoolAmountClaim,
+    rewardPoolAmountUsd,
+    windowPhase,
+    snapshotTakenAt,
+    distributionCompletedAt,
+    roundNumber,
+  } = state;
 
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
 
   // Full phase for UI progress bar
   const currentPhase: WindowPhase =
-  windowPhase ??
-  (isLive ? 'open' : isClosed ? 'closed' : 'scheduled');
+    windowPhase ??
+    (isLive ? 'open' : isClosed ? 'closed' : 'scheduled');
 
   /* LIVE vs PREVIEW toggle via env */
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
@@ -829,7 +819,7 @@ if (rawPhase === 'open') {
         {/* Round progress bar */}
 <SoftCard>
   <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Round {state.roundNumber ?? 1} progress
+    Round {roundNumber ?? 1} progress
   </p>
 
   {/* Steps line */}
