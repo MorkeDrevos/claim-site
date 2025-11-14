@@ -12,3 +12,12 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     sans-serif;
 }
+
+html {
+  font-size: 17px; /* was 16 → improves legibility immediately */
+}
+
+body {
+  font-weight: 400;
+  color: #e2e8f0;
+}
