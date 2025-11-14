@@ -1,12 +1,14 @@
 {
   "roundNumber": 1,
+
   "walletConnected": false,
   "walletShort": "Wallet not connected",
   "networkLabel": "Solana mainnet",
+
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "Round 1 rewards distributed",
+  "claimWindowStatus": "Rewards distributed",
   "claimWindowOpensAt": "2025-11-14T22:16:00Z",
   "claimWindowClosesAt": "2025-11-14T23:16:00Z",
 
@@ -15,28 +17,12 @@
   "firstPoolStatus": "closed",
 
   "eligibleAmount": 0,
-
-  "claimHistory": [
-    {
-      "round": 1,
-      "amount": 420000,
-      "tx": "https://solscan.io/tx/EXAMPLE_CLAIM_TX",
-      "date": "2025-11-14T23:25:00Z"
-    }
-  ],
+  "claimHistory": [],
 
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "closed",
-
-  "snapshotTakenAt": "2025-11-14T19:45:00Z",
-  "snapshotTx": "https://solscan.io/tx/XXXX_SNAPSHOT_TX",
-
-  "distributionSummary": {
-    "totalClaimers": 123,
-    "totalSentClaim": 9325670,
-    "distributionTx": "https://solscan.io/tx/XXXX_DISTRIBUTION_TX",
-    "notes": "All eligible wallets received equal shares for Round 1."
-  }
+  "windowPhase": "distribution",
+  "snapshotTakenAt": "2025-11-14T23:20:00Z",
+  "distributionCompletedAt": "2025-11-15T01:00:00Z"
 }
