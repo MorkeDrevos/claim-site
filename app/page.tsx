@@ -730,12 +730,6 @@ export default function ClaimPoolPage() {
             </span>
           </p>
 
-          <p className="mt-3 text-[13px] text-slate-300">
-            Snapshots for the next round can be taken at any time between the
-            last window closing and the next one opening — if you&apos;re not
-            holding {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
-            your wallet sits out that round.
-          </p>
         </div>
 
         </SoftCard>
