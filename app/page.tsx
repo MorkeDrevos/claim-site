@@ -738,7 +738,7 @@ export default function ClaimPoolPage() {
             your wallet sits out that round.
           </p>
         </div>
-        
+
         </SoftCard>
 
         {/* Round progress bar */}
@@ -949,13 +949,7 @@ export default function ClaimPoolPage() {
                     <li>Fewer claimers = larger share per wallet.</li>
                     <li>No gas wars, no race condition — just presence.</li>
                   </ul>
-
-                  <p className="mt-3 text-[11px] text-amber-300">
-                    Snapshots can be taken at any time within the announced
-                    snapshot window. If you’re not holding when the snapshot
-                    lands, this wallet won’t count for that round.
-                  </p>
-
+                  
                   <p className="mt-2 text-[11px] text-slate-500">
                     Once the audited contract is wired, exact pool sizes and
                     on-chain distribution details will be mirrored
@@ -1025,10 +1019,11 @@ export default function ClaimPoolPage() {
                 · {networkLabel}
               </p>
               <p className="text-xs text-slate-500">
-                Eligibility is based on balances recorded in this snapshot set.
-                When the audited contract is live, this card will also show
-                links to Merkle proofs or other verification tools.
-              </p>
+  Snapshots can be taken at any time between the last window being
+  scheduled and the next live claim window opening. If you’re not holding{' '}
+  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
+  sits out that round.
+</p>
             </div>
 
             <div className="mt-6 border-t border-slate-800 pt-4 text-[11px] text-slate-500">
