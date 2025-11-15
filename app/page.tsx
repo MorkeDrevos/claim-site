@@ -192,6 +192,31 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
    Page component
 ─────────────────────────── */
 
+function parseCountdownLabel(label: string | null) {
+  // Default zeroed-out values
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+
+  if (!label || !label.trim()) {
+    return { hours, minutes, seconds };
+  }
+
+  // Expected formats like:
+  // "4h 7m 30s", "12m 05s", "9s"
+  const match = label.match(/(?:(\d+)h)\s*)?(?:(\d+)m)\s*)?(?:(\d+)s)?/);
+
+  if (!match) return { hours, minutes, seconds };
+
+  const [, h, m, s] = match;
+
+  if (h) hours = Number(h);
+  if (m) minutes = Number(m);
+  if (s) seconds = Number(s);
+
+  return { hours, minutes, seconds };
+}
+
 export default function ClaimPoolPage() {
   const { addToast, ToastContainer } = useToast();
 
@@ -461,13 +486,22 @@ if (opensAtMs && closesAtMs) {
     return `Opens in ${countdownLabel}`;
   })();
 
-  // Numbers-only countdown for the big display
-  const numericCountdown =
-    countdownLabel && countdownLabel !== 'now'
-      ? countdownLabel          // e.g. "1d 3h 21m"
-      : isLive
-      ? '0s'                    // basically at zero when live
-      : '';                     // nothing yet when not known
+  // 👉 Numbers-only countdown used in the big UI
+const numericCountdown =
+  countdownLabel && countdownLabel !== 'now'
+    ? countdownLabel        // e.g. "4h 7m 30s"
+    : isLive
+    ? '0s'
+    : '';
+
+const { hours, minutes, seconds } = parseCountdownLabel(
+  numericCountdown || null
+);
+
+// 👉 Split into HH / MM / SS for glass–style countdown UI
+const { hours, minutes, seconds } = parseCountdownLabel(
+  numericCountdown || null
+);
 
   const canClaim = !isPreview && isLive;
 
