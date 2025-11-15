@@ -798,7 +798,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </p>
 
     <div className="text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
-      {rewardPoolAmountText}
+      {rewardAmountText}
       <span className="text-[18px] sm:text-[20px] text-emerald-400"> $CLAIM</span>
       <span className="ml-2 text-slate-500 text-[16px] sm:text-[16px] font-medium">
         ({rewardPoolAmountUsd.toLocaleString('en-US')} USD)
@@ -929,7 +929,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Reward Pool */}
 <SoftCard>
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+  <p className="text-[15px] font-semibold uppercase tracking-[0.22em] text-slate-500">
     Current Reward Pool
   </p>
 
@@ -937,7 +937,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     {rewardAmountText} CLAIM
   </p>
 
-  <p className="text-[11px] text-slate-400 leading-relaxed">
+  <p className="text-[15px] text-slate-400 leading-relaxed">
     USD value: {rewardUsdText}
   </p>
 </SoftCard>
