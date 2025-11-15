@@ -765,7 +765,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
           ? 'Next window in'
           : 'Window opens in'}
       </p>
-      <p className="text-2xl sm:text-1xl font-semibold tracking-tight text-slate-50">
+      <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
         {numericCountdown}
       </p>
     </div>
@@ -900,28 +900,29 @@ const { hours, minutes, seconds } = parseCountdownLabel(
           </SoftCard>
         </div>
 
-        {/* Current Reward Pool */}
-<SoftCard>
-  {/* Title */}
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Current Reward Pool
-  </p>
-
-  <div className="mt-3 space-y-1">
-    {/* CLAIM amount */}
-    <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-      {rewardAmountText}
-      <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-        $CLAIM
-      </span>
+        {/* === Preview Eligibility Cards === */}
+<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  {/* Current Reward Pool */}
+  <SoftCard>
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Current reward pool
     </p>
 
-    {/* USD value (cleaner + more premium) */}
-    <p className="text-[10px] font-medium text-slate-500">
-      ≈ <span className="text-slate-300 font-semibold">${rewardUsdText}</span>
-    </p>
-  </div>
-</SoftCard>
+    <div className="mt-3 space-y-1">
+      {/* CLAIM amount */}
+      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+        {rewardAmountText}
+        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+          $CLAIM
+        </span>
+      </p>
+
+      {/* USD estimate */}
+      <p className="text-xs font-medium text-slate-400">
+        ≈ <span className="text-slate-200">{rewardUsdText}</span>
+      </p>
+    </div>
+  </SoftCard>
 
           {/* Minimum Holding */}
           <SoftCard>
