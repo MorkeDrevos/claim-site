@@ -764,12 +764,12 @@ export default function ClaimPoolPage() {
 
         {/* Round progress bar */}
 <SoftCard>
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+  <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
     Round {(state as any).roundNumber ?? 1} progress
   </p>
 
   {/* Steps line */}
-  <div className="mt-3 flex items-center gap-3">
+  <div className="mt-4 flex items-center gap-3">
     {(
       [
         { id: 'scheduled',    label: 'Window scheduled' },
@@ -779,7 +779,6 @@ export default function ClaimPoolPage() {
         { id: 'distribution', label: 'Rewards distributed' },
       ] as { id: WindowPhase | 'closed'; label: string }[]
     ).map((step, index, all) => {
-      // currentPhase already comes from your JSON (windowPhase)
       const displayPhase = currentPhase;
       const currentIndex = all.findIndex((s) => s.id === displayPhase);
       const isDone = currentIndex > index;
@@ -787,19 +786,29 @@ export default function ClaimPoolPage() {
 
       return (
         <div key={step.id} className="flex-1 flex items-center">
-          {/* Dot */}
+          {/* Dot + label */}
           <div className="flex flex-col items-center flex-none">
-            <div
+            <div className="relative">
+              {isActive && (
+                <span className="absolute inset-0 rounded-full bg-emerald-400/40 animate-ping" />
+              )}
+              <div
+                className={[
+                  'relative h-3.5 w-3.5 rounded-full border',
+                  isActive
+                    ? 'border-emerald-400 bg-emerald-400'
+                    : isDone
+                    ? 'border-emerald-500 bg-emerald-500/70'
+                    : 'border-slate-700 bg-slate-900',
+                ].join(' ')}
+              />
+            </div>
+            <span
               className={[
-                'h-3 w-3 rounded-full border',
-                isActive
-                  ? 'border-emerald-400 bg-emerald-400'
-                  : isDone
-                  ? 'border-emerald-500 bg-emerald-500/70'
-                  : 'border-slate-700 bg-slate-900',
+                'mt-2 text-[11px] sm:text-[12px] text-center leading-snug',
+                isActive ? 'text-slate-100' : 'text-slate-400',
               ].join(' ')}
-            />
-            <span className="mt-2 text-[10px] text-center text-slate-400 leading-snug">
+            >
               {step.label}
             </span>
           </div>
@@ -820,8 +829,37 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
+  {/* "You are here" indicator */}
+  {(() => {
+    const steps = [
+      { id: 'scheduled',    label: 'Window scheduled' },
+      { id: 'snapshot',     label: 'Snapshot taken' },
+      { id: 'open',         label: 'Live claim window' },
+      { id: 'closed',       label: 'Window closed' },
+      { id: 'distribution', label: 'Rewards distributed' },
+    ] as { id: WindowPhase | 'closed'; label: string }[];
+
+    const currentStep =
+      steps.find((s) => s.id === currentPhase) ?? steps[0];
+
+    return (
+      <p className="mt-4 text-[11px] sm:text-[12px] text-emerald-300 flex items-center gap-2">
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
+        </span>
+        <span className="uppercase tracking-[0.18em]">
+          You are here:
+        </span>
+        <span className="font-semibold text-emerald-100">
+          {currentStep.label}
+        </span>
+      </p>
+    );
+  })()}
+
   {/* Small explainer text */}
-  <p className="mt-3 text-[11px] text-slate-500">
+  <p className="mt-2 text-[11px] sm:text-[12px] text-slate-500">
     {currentPhase === 'scheduled' &&
       'Next claim window is scheduled. Once it opens, you will be able to lock in your share.'}
     {currentPhase === 'snapshot' &&
@@ -834,7 +872,6 @@ export default function ClaimPoolPage() {
       'Rewards for this round are being distributed / have been distributed. This round is complete.'}
   </p>
 </SoftCard>
-
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -1130,7 +1167,7 @@ export default function ClaimPoolPage() {
               </div>
             </div>
 
-      
+
     </main>
   );
 }
