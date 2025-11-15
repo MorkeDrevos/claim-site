@@ -596,16 +596,24 @@ export default function ClaimPoolPage() {
             </span>
 
             <button
-              type="button"
-              onClick={handleConnectClick}
-              className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-            >
-              {connectedWallet
-                ? `${connectedWallet.name} connected`
-                : effectiveWalletConnected
-                ? 'Wallet connected'
-                : 'Connect wallet'}
-            </button>
+  type="button"
+  onClick={handleConnectClick}
+  className="inline-flex items-center rounded-full 
+             border border-emerald-400/40 
+             bg-emerald-500/10 
+             px-4 py-2 
+             text-[10px] font-semibold uppercase tracking-[0.22em] 
+             text-emerald-300 
+             hover:bg-emerald-500/20 hover:border-emerald-400 
+             transition-all"
+>
+  {connectedWallet
+    ? `${connectedWallet.name} connected`
+    : effectiveWalletConnected
+    ? 'Wallet connected'
+    : 'Connect wallet'}
+</button>
+
           </div>
         </div>
       </header>
