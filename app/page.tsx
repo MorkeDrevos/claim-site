@@ -676,6 +676,9 @@ export default function ClaimPoolPage() {
                         ? 'Window closed'
                         : 'Window opens in'}
                     </p>
+                    <p className="text-base font-semibold text-slate-50">
+  {windowTimingText?.replace(/^Closes in\s+/i, '')}
+</p>
                   </div>
 
                   <span
