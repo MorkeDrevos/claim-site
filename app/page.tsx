@@ -189,7 +189,7 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 }
 
 /* ───────────────────────────
-   Page component
+   Page helpers
 ─────────────────────────── */
 
 function parseCountdownLabel(label: string | null) {
@@ -221,6 +221,10 @@ function parseCountdownLabel(label: string | null) {
   return { hours, minutes, seconds };
 }
 
+/* ───────────────────────────
+   Page component
+─────────────────────────── */
+
 export default function ClaimPoolPage() {
   const { addToast, ToastContainer } = useToast();
 
@@ -247,14 +251,14 @@ export default function ClaimPoolPage() {
   /* ── Phase + countdown (safe when state is null) ── */
 
   // 🔥 force a re-render every second so the phase naturally flips
-// scheduled → open → closed without needing manual refresh
-const [, forceTick] = useState(0);
-useEffect(() => {
-  const id = setInterval(() => {
-    forceTick((x) => x + 1);
-  }, 1000);
-  return () => clearInterval(id);
-}, []);
+  // scheduled → open → closed without needing manual refresh
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      forceTick((x) => x + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   // ── Contract address (TEMP: SOL mint) ──
   const CLAIM_CA = 'So11111111111111111111111111111111111111112';
@@ -278,58 +282,61 @@ useEffect(() => {
     }
   };
 
-const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
-const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
-const lowerStatus = claimWindowStatusSafe.toLowerCase();
+  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
+  const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
+  const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
-// Parse open/close timestamps (if present)
-const opensAtMs =
-  state?.claimWindowOpensAt ? new Date(state.claimWindowOpensAt).getTime() : null;
-const closesAtMs =
-  state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
-const nowMs = Date.now();
+  // Parse open/close timestamps (if present)
+  const opensAtMs =
+    state?.claimWindowOpensAt
+      ? new Date(state.claimWindowOpensAt).getTime()
+      : null;
+  const closesAtMs =
+    state?.claimWindowClosesAt
+      ? new Date(state.claimWindowClosesAt).getTime()
+      : null;
+  const nowMs = Date.now();
 
-// Base phase used for countdown (scheduled / open / closed)
-let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+  // Base phase used for countdown (scheduled / open / closed)
+  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
-// 1) Prefer automatic timing based on opens/closes
-if (opensAtMs && closesAtMs) {
-  if (nowMs < opensAtMs) {
-    // before open
-    phase = 'scheduled';
-  } else if (nowMs >= opensAtMs && nowMs < closesAtMs) {
-    // during live window
-    phase = 'open';
+  // 1) Prefer automatic timing based on opens/closes
+  if (opensAtMs && closesAtMs) {
+    if (nowMs < opensAtMs) {
+      // before open
+      phase = 'scheduled';
+    } else if (nowMs >= opensAtMs && nowMs < closesAtMs) {
+      // during live window
+      phase = 'open';
+    } else {
+      // after close
+      phase = 'closed';
+    }
+  } else if (opensAtMs && !closesAtMs) {
+    // only open time known: before = scheduled, after = open
+    phase = nowMs < opensAtMs ? 'scheduled' : 'open';
   } else {
-    // after close
-    phase = 'closed';
+    // 2) Fallback to your old text/manual logic
+    if (rawPhase === 'open') {
+      phase = 'open';
+    } else if (
+      rawPhase === 'closed' ||
+      rawPhase === 'snapshot' ||
+      rawPhase === 'distribution'
+    ) {
+      phase = 'closed';
+    } else if (lowerStatus.includes('closed')) {
+      phase = 'closed';
+    } else if (lowerStatus.includes('closes')) {
+      phase = 'open';
+    } else {
+      phase = 'scheduled';
+    }
   }
-} else if (opensAtMs && !closesAtMs) {
-  // only open time known: before = scheduled, after = open
-  phase = nowMs < opensAtMs ? 'scheduled' : 'open';
-} else {
-  // 2) Fallback to your old text/manual logic
-  if (rawPhase === 'open') {
-    phase = 'open';
-  } else if (
-    rawPhase === 'closed' ||
-    rawPhase === 'snapshot' ||
-    rawPhase === 'distribution'
-  ) {
-    phase = 'closed';
-  } else if (lowerStatus.includes('closed')) {
-    phase = 'closed';
-  } else if (lowerStatus.includes('closes')) {
-    phase = 'open';
-  } else {
-    phase = 'scheduled';
-  }
-}
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
-  const countdownTarget =
-    phase === 'open' ? (closesAt ?? opensAt) : opensAt;
+  const countdownTarget = phase === 'open' ? (closesAt ?? opensAt) : opensAt;
 
   const countdownLabel = useCountdown(countdownTarget);
 
@@ -454,44 +461,45 @@ if (opensAtMs && closesAtMs) {
   /* ── Safe destructure (state is now non-null) ── */
 
   const {
-  walletConnected,
-  walletShort,
-  networkLabel,
-  snapshotLabel,
-  snapshotBlock,
-  claimWindowStatus,
-  frontEndStatus,
-  contractStatus,
-  firstPoolStatus,
-  eligibleAmount,
-  claimHistory,
-  rewardPoolAmountClaim,
-  rewardPoolAmountUsd,
-  windowPhase,
-  snapshotTakenAt,
-  distributionCompletedAt,
-  roundNumber,
-} = state;
+    walletConnected,
+    walletShort,
+    networkLabel,
+    snapshotLabel,
+    snapshotBlock,
+    claimWindowStatus,
+    frontEndStatus,
+    contractStatus,
+    firstPoolStatus,
+    eligibleAmount,
+    claimHistory,
+    rewardPoolAmountClaim,
+    rewardPoolAmountUsd,
+    windowPhase,
+    snapshotTakenAt,
+    distributionCompletedAt,
+    roundNumber,
+  } = state;
 
-// Derived from opens/closes
-const isLive = phase === 'open';
-const isClosed = phase === 'closed';
+  // Derived from opens/closes
+  const isLive = phase === 'open';
+  const isClosed = phase === 'closed';
 
-let currentPhase: WindowPhase;
+  let currentPhase: WindowPhase;
 
-// 1) Time-based phases win once the window is actually open/closed
-if (isLive) {
-  currentPhase = 'open';
-} else if (isClosed) {
-  // If backend marks distribution as done, show that instead of generic "closed"
-  currentPhase = windowPhase === 'distribution' ? 'distribution' : 'closed';
-} else if (windowPhase === 'snapshot') {
-  // 2) Only show "Eligibility locked" while we're between snapshot and open
-  currentPhase = 'snapshot';
-} else {
-  // 3) Default before snapshot
-  currentPhase = 'scheduled';
-}
+  // 1) Time-based phases win once the window is actually open/closed
+  if (isLive) {
+    currentPhase = 'open';
+  } else if (isClosed) {
+    // If backend marks distribution as done, show that instead of generic "closed"
+    currentPhase =
+      windowPhase === 'distribution' ? 'distribution' : 'closed';
+  } else if (windowPhase === 'snapshot') {
+    // 2) Only show "Eligibility locked" while we're between snapshot and open
+    currentPhase = 'snapshot';
+  } else {
+    // 3) Default before snapshot
+    currentPhase = 'scheduled';
+  }
 
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
@@ -514,7 +522,7 @@ if (isLive) {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-    const windowTimingText = (() => {
+  const windowTimingText = (() => {
     // Live window → countdown to close
     if (isLive) {
       if (!countdownLabel) return 'Closes soon';
@@ -536,38 +544,38 @@ if (isLive) {
   })();
 
   // 👉 Numbers-only countdown used in the big UI
-const numericCountdown =
-  countdownLabel && countdownLabel !== 'now'
-    ? countdownLabel        // e.g. "4h 7m 30s"
-    : isLive
-    ? '0s'
-    : '';
+  const numericCountdown =
+    countdownLabel && countdownLabel !== 'now'
+      ? countdownLabel // e.g. "4h 7m 30s"
+      : isLive
+      ? '0s'
+      : '';
 
-// 🔔 Flash green 3 seconds before stage changes
-useEffect(() => {
-  if (!countdownTarget) return;
+  // 🔔 Flash green 3 seconds before stage changes
+  useEffect(() => {
+    if (!countdownTarget) return;
 
-  const target = new Date(countdownTarget).getTime();
-  if (!target) return;
+    const target = new Date(countdownTarget).getTime();
+    if (!target) return;
 
-  const check = () => {
-    const diff = target - Date.now();
-    // between 0 and 3 seconds remaining
-    if (diff <= 3000 && diff > 0) {
-      setPreFlash(true);
-      // stop flashing 3s after it starts
-      setTimeout(() => setPreFlash(false), 3000);
-    }
-  };
+    const check = () => {
+      const diff = target - Date.now();
+      // between 0 and 3 seconds remaining
+      if (diff <= 3000 && diff > 0) {
+        setPreFlash(true);
+        // stop flashing 3s after it starts
+        setTimeout(() => setPreFlash(false), 3000);
+      }
+    };
 
-  check();
-  const id = setInterval(check, 500);
-  return () => clearInterval(id);
-}, [countdownTarget]);
+    check();
+    const id = setInterval(check, 500);
+    return () => clearInterval(id);
+  }, [countdownTarget]);
 
-const { hours, minutes, seconds } = parseCountdownLabel(
-  numericCountdown || null
-);
+  const { hours, minutes, seconds } = parseCountdownLabel(
+    numericCountdown || null
+  );
 
   const canClaim = !isPreview && isLive;
 
@@ -661,7 +669,8 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       setInlineMessage({
         type: 'error',
         title: 'Something went wrong',
-        message: 'We could not lock your share. Please try again in a moment.',
+        message:
+          'We could not lock your share. Please try again in a moment.',
       });
 
       addToast(
@@ -676,26 +685,26 @@ const { hours, minutes, seconds } = parseCountdownLabel(
      Render
   ─────────────────────────── */
 
-const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-  { id: 'scheduled', label: 'Upcoming window' },
-  { id: 'snapshot',  label: 'Snapshot complete' },
-  { id: 'open',      label: 'Claim window open' },
-  { id: 'closed',    label: 'Claim window closed' },
-  { id: 'distribution', label: 'Rewards distributed' },
-];
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    { id: 'scheduled', label: 'Upcoming window' },
+    { id: 'snapshot', label: 'Snapshot complete' },
+    { id: 'open', label: 'Claim window open' },
+    { id: 'closed', label: 'Claim window closed' },
+    { id: 'distribution', label: 'Rewards distributed' },
+  ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   return (
-  <main className="min-h-screen bg-slate-950 text-slate-50">
-    {/* Subtle moving glows */}
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
-      <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
-    </div>
+    <main className="min-h-screen bg-slate-950 text-slate-50">
+      {/* Subtle moving glows */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
+        <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
+      </div>
 
-            {/* Top nav – sticky */}
+      {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           {/* Left: logo + title */}
@@ -748,25 +757,25 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
 
             {/* Contract address pill */}
             <button
-  type="button"
-  onClick={handleCopyCa}
-  className="inline-flex items-center gap-2 rounded-full 
-             border border-slate-700/70 
-             bg-slate-900/70 
-             px-4 py-1.5
-             text-[10px] font-semibold uppercase tracking-[0.22em]
-             text-slate-200
-             hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
-             transition-all"
->
-  <span className="text-[10px] tracking-[0.22em] text-slate-400">
-    CA
-  </span>
+              type="button"
+              onClick={handleCopyCa}
+              className="inline-flex items-center gap-2 rounded-full 
+                         border border-slate-700/70 
+                         bg-slate-900/70 
+                         px-4 py-1.5
+                         text-[10px] font-semibold uppercase tracking-[0.22em]
+                         text-slate-200
+                         hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+                         transition-all"
+            >
+              <span className="text-[10px] tracking-[0.22em] text-slate-400">
+                CA
+              </span>
 
-  <span className="font-mono text-[11px] text-slate-100">
-    {shortCa}
-  </span>
-</button>
+              <span className="font-mono text-[11px] text-slate-100">
+                {shortCa}
+              </span>
+            </button>
 
             {/* Network label */}
             <span className="hidden text-xs text-slate-500 sm:inline">
@@ -775,26 +784,26 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
 
             {/* Wallet button */}
             <button
-  type="button"
-  onClick={handleConnectClick}
-  className="inline-flex items-center rounded-full
-             px-5 py-2
-             bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-             border border-emerald-400/40
-             text-[11px] font-semibold uppercase tracking-[0.22em]
-             text-emerald-200
-             shadow-[0_0_18px_rgba(16,185,129,0.25)]
-             hover:from-emerald-400/35 hover:to-emerald-500/40
-             hover:border-emerald-400
-             hover:text-white
-             transition-all"
->
-  {connectedWallet
-    ? `${connectedWallet.name} connected`
-    : effectiveWalletConnected
-    ? 'Wallet connected'
-    : 'Connect wallet'}
-</button>
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex items-center rounded-full
+                         px-5 py-2
+                         bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+                         border border-emerald-400/40
+                         text-[11px] font-semibold uppercase tracking-[0.22em]
+                         text-emerald-200
+                         shadow-[0_0_18px_rgba(16,185,129,0.25)]
+                         hover:from-emerald-400/35 hover:to-emerald-500/40
+                         hover:border-emerald-400
+                         hover:text-white
+                         transition-all"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
           </div>
         </div>
       </header>
@@ -808,104 +817,108 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
             <div className="flex-1 space-y-6">
               {/* Breadcrumb */}
               <div className="space-y-2">
-
                 {/* Live / scheduled header */}
                 <div className="space-y-2">
-                  
-
                   {/* h1 */}
-                 <h1 className="pl-2 sm:pl-3 text-[20px] sm:text-[34px] font-semibold leading-snug 
-               bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
-  Rewards earned by presence – show up, click, get your share.
-</h1>
+                  <h1
+                    className="pl-2 sm:pl-3 text-[20px] sm:text-[34px] font-semibold leading-snug 
+                               bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent"
+                  >
+                    Rewards earned by presence – show up, click, get your share.
+                  </h1>
                 </div>
               </div>
 
-         {/* CLAIM WINDOW CARD */}
-<div
-  className={[
-    "mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)] transition-all duration-500",
-    preFlash ? "animate-[flashGreen_0.4s_ease-in-out_6]" : ""
-  ].join(" ")}
->
-  {/* Top row – Countdown left, reward pool right */}
-  <div className="flex flex-wrap items-start justify-between gap-6">
-    {/* Countdown (dominant, left) */}
-    <div className="space-y-2">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window closes in'
-          : isClosed
-          ? 'Next window in'
-          : 'Window opens in'}
-      </p>
-      <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50">
-        {numericCountdown}
-      </p>
-    </div>
+              {/* CLAIM WINDOW CARD */}
+              <div
+                className={[
+                  'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)] transition-all duration-500',
+                  preFlash ? 'animate-[flashGreen_0.4s_ease-in-out_6]' : '',
+                ].join(' ')}
+              >
+                {/* Top row – Countdown left, reward pool right */}
+                <div className="flex flex-wrap items-start justify-between gap-6">
+                  {/* Countdown (dominant, left) */}
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {isLive
+                        ? 'Window closes in'
+                        : isClosed
+                        ? 'Next window in'
+                        : 'Window opens in'}
+                    </p>
+                    <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50">
+                      {numericCountdown}
+                    </p>
+                  </div>
 
-    {/* Reward pool (right) */}
-    <div className="space-y-1 text-left sm:text-right">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Reward pool this window
-      </p>
+                  {/* Reward pool (right) */}
+                  <div className="space-y-1 text-left sm:text-right">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                      Reward pool this window
+                    </p>
 
-      <p className="mt-1 text-[22px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[22px] sm:text-[22px] text-emerald-400">
-          $CLAIM
-        </span>
-      </p>
+                    <p className="mt-1 text-[22px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+                      {rewardAmountText}
+                      <span className="ml-1 text-[22px] sm:text-[22px] text-emerald-400">
+                        $CLAIM
+                      </span>
+                    </p>
 
-      <p className="text-[13px] font-medium text-slate-300">
-        ≈ <span className="text-slate-100">{rewardUsdText}</span>
-      </p>
-    </div>
-  </div>
+                    <p className="text-[13px] font-medium text-slate-300">
+                      ≈ <span className="text-slate-100">{rewardUsdText}</span>
+                    </p>
+                  </div>
+                </div>
 
-  {/* Big CTA bar */}
-  <button
-    type="button"
-    onClick={handleClaimClick}
-    disabled={!canClaim}
-    className={[
-      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-      'transition-all duration-300 border',
-      canClaim
-        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-        : isClosed
-        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-      canClaim && isPulseOn ? 'animate-pulse' : '',
-    ].join(' ')}
-  >
-    {canClaim
-      ? 'Lock in my share'
-      : isClosed
-      ? 'Window closed'
-      : 'Available when live'}
-  </button>
+                {/* Big CTA bar */}
+                <button
+                  type="button"
+                  onClick={handleClaimClick}
+                  disabled={!canClaim}
+                  className={[
+                    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+                    'transition-all duration-300 border',
+                    canClaim
+                      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+                      : isClosed
+                      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+                      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+                    canClaim && isPulseOn ? 'animate-pulse' : '',
+                  ].join(' ')}
+                >
+                  {canClaim
+                    ? 'Lock in my share'
+                    : isClosed
+                    ? 'Window closed'
+                    : 'Available when live'}
+                </button>
 
-  {/* Eligibility text */}
-  <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
-      i
-    </span>
-    To be eligible, you must hold at least{' '}
-    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-    <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
-    When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-    to register your wallet’s share for that round.
-  </div>
-</div>
-{/* end CLAIM WINDOW CARD */}     
+                {/* Eligibility text */}
+                <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
+                    i
+                  </span>
+                  To be eligible, you must hold at least{' '}
+                  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+                  <span className="font-semibold text-emerald-300">
+                    at the snapshot.
+                  </span>{' '}
+                  When the claim window opens, click{' '}
+                  <span className="font-semibold text-emerald-300">
+                    LOCK IN MY SHARE
+                  </span>{' '}
+                  to register your wallet’s share for that round.
+                </div>
+              </div>
+              {/* end CLAIM WINDOW CARD */}
+            </div>
+            {/* end LEFT column */}
+          </div>
+          {/* end flex row wrapper */}
+        </SoftCard>
 
-    </div>   {/* end LEFT column */}
-  </div>     {/* end flex row wrapper */}
-</SoftCard>
-
-                {/* Round progress bar */}
+        {/* Round progress bar */}
         <div className="mt-14">
           <SoftCard>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -913,133 +926,136 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
             </p>
 
             <div className="mt-3 grid grid-cols-5 gap-6">
-  {steps.map((step, index) => {
-    const isDone = activeIndex > index;
-    const isActive = activeIndex === index;
+              {steps.map((step, index) => {
+                const isDone = activeIndex > index;
+                const isActive = activeIndex === index;
 
-    return (
-      <div
-        key={step.id}
-        className="flex flex-col items-center text-center"
-      >
-        {/* Dot */}
-        <div className="relative flex h-4 w-4 items-center justify-center">
-          {isActive && (
-            <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
-          )}
-          <span
-            className={[
-              'relative block h-3 w-3 rounded-full border',
-              isActive
-                ? 'border-emerald-400 bg-emerald-400'
-                : isDone
-                ? 'border-emerald-500 bg-emerald-500/60'
-                : 'border-slate-700 bg-slate-900',
-            ].join(' ')}
-          />
-        </div>
+                return (
+                  <div
+                    key={step.id}
+                    className="flex flex-col items-center text-center"
+                  >
+                    {/* Dot */}
+                    <div className="relative flex h-4 w-4 items-center justify-center">
+                      {isActive && (
+                        <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
+                      )}
+                      <span
+                        className={[
+                          'relative block h-3 w-3 rounded-full border',
+                          isActive
+                            ? 'border-emerald-400 bg-emerald-400'
+                            : isDone
+                            ? 'border-emerald-500 bg-emerald-500/60'
+                            : 'border-slate-700 bg-slate-900',
+                        ].join(' ')}
+                      />
+                    </div>
 
-        {/* Label */}
-        <span className="mt-2 text-[13px] leading-snug text-slate-300 font-medium">
-          {step.label}
-        </span>
-      </div>
-    );
-  })}
-</div>
+                    {/* Label */}
+                    <span className="mt-2 text-[13px] leading-snug text-slate-300 font-medium">
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
 
             {/* Divider above status sentence */}
             <div className="mt-6 border-t border-slate-800/60" />
 
-
             {/* Phase explanation */}
             <p className="mt-4 text-[12px] font-medium">
-  {currentPhase === 'scheduled' && (
-    <span className="text-[13px] text-slate-400 leading-relaxed">
-  Upcoming window is scheduled. Once it opens, you will be able to lock in your share.
-</span>
-  )}
+              {currentPhase === 'scheduled' && (
+                <span className="text-[13px] text-slate-400 leading-relaxed">
+                  Upcoming window is scheduled. Once it opens, you will be able
+                  to lock in your share.
+                </span>
+              )}
 
-  {currentPhase === 'snapshot' && (
-    <span className="text-slate-300">
-      Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.
-    </span>
-  )}
+              {currentPhase === 'snapshot' && (
+                <span className="text-slate-300">
+                  Eligibility is locked for this round. Next up is the live
+                  claim window where eligible wallets lock in their share.
+                </span>
+              )}
 
-  {currentPhase === 'open' && (
-    <>
-      <span className="font-semibold text-emerald-300">
-        Claim window open.
-      </span>
-      <span className="text-slate-300">
-        {' '}Lock in your share before the countdown hits zero.
-      </span>
-    </>
-  )}
+              {currentPhase === 'open' && (
+                <>
+                  <span className="font-semibold text-emerald-300">
+                    Claim window open.
+                  </span>
+                  <span className="text-slate-300">
+                    {' '}
+                    Lock in your share before the countdown hits zero.
+                  </span>
+                </>
+              )}
 
-  {currentPhase === 'closed' && (
-    <span className="text-slate-300">
-      Claim window closed. No new wallets can lock in for this round.
-    </span>
-  )}
+              {currentPhase === 'closed' && (
+                <span className="text-slate-300">
+                  Claim window closed. No new wallets can lock in for this
+                  round.
+                </span>
+              )}
 
-  {currentPhase === 'distribution' && (
-    <span className="text-slate-300">
-      Round complete. Rewards have been distributed.
-    </span>
-  )}
-</p>
+              {currentPhase === 'distribution' && (
+                <span className="text-slate-300">
+                  Round complete. Rewards have been distributed.
+                </span>
+              )}
+            </p>
           </SoftCard>
         </div>
 
         {/* === Preview Eligibility Cards === */}
-<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-  {/* Current Reward Pool */}
-  <SoftCard>
-    {/* Heading */}
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Current reward pool
-    </p>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Current Reward Pool */}
+          <SoftCard>
+            {/* Heading */}
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Current reward pool
+            </p>
 
-    {/* Amounts */}
-    <div className="mt-1.5 space-y-1">
-      {/* CLAIM amount */}
-      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-          $CLAIM
-        </span>
-      </p>
+            {/* Amounts */}
+            <div className="mt-1.5 space-y-1">
+              {/* CLAIM amount */}
+              <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+                {rewardAmountText}
+                <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+                  $CLAIM
+                </span>
+              </p>
 
-      {/* USD estimate */}
-      <p className="text-xs font-medium text-slate-400">
-        ≈ <span className="text-slate-200">{rewardUsdText}</span>
-      </p>
-    </div>
+              {/* USD estimate */}
+              <p className="text-xs font-medium text-slate-400">
+                ≈ <span className="text-slate-200">{rewardUsdText}</span>
+              </p>
+            </div>
 
-    {/* Contract address + Copy */}
-    <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Contract address
-      </p>
+            {/* Contract address + Copy */}
+            <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Contract address
+              </p>
 
-      <button
-        type="button"
-        onClick={handleCopyCa}
-        className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
-                   text-[11px] font-medium text-slate-200 border border-slate-700/80
-                   hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
-                   transition-colors"
-      >
-        <span className="font-mono text-[11px] text-slate-300">
-          {shortCa}
-        </span>
-        <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
-          Copy CA
-        </span>
-      </button>
-    </div>
-  </SoftCard>
+              <button
+                type="button"
+                onClick={handleCopyCa}
+                className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+                           text-[11px] font-medium text-slate-200 border border-slate-700/80
+                           hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
+                           transition-colors"
+              >
+                <span className="font-mono text-[11px] text-slate-300">
+                  {shortCa}
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
+                  Copy CA
+                </span>
+              </button>
+            </div>
+          </SoftCard>
 
           {/* Minimum Holding */}
           <SoftCard>
