@@ -805,6 +805,7 @@ export default function ClaimPoolPage() {
               'Rewards for this round are being distributed / have been distributed. This round is complete.'}
           </p>
         </SoftCard>
+        </div>
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
