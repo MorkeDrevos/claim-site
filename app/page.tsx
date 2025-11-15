@@ -763,9 +763,9 @@ export default function ClaimPoolPage() {
                         />
                       </div>
 
-                      <span className="mt-2 text-center text-[11px] leading-snug text-slate-300">
-                        {step.label}
-                      </span>
+                      <span className="mt-2 text-[13px] text-center text-slate-300 leading-snug">
+  {step.label}
+</span>
                     </div>
 
                     {/* Connecting line */}
