@@ -792,21 +792,8 @@ export default function ClaimPoolPage() {
               })}
             </div>
 
-            {activeStep && (
-  <div className="mt-4 flex items-center gap-2">
-    <span className="relative flex h-3 w-3 items-center justify-center">
-      <span className="absolute h-3 w-3 rounded-full bg-emerald-400/60 animate-ping" />
-      <span className="relative h-2 w-2 rounded-full bg-emerald-300" />
-    </span>
-
-    <span className="text-[10px] font-semibold tracking-[0.22em] text-emerald-300 uppercase">
-      YOU ARE HERE:
-    </span>
-  </div>
-)}
-
             {/* Phase explanation */}
-            <p className="mt-3 text-[11px] text-slate-500">
+            <p className="mt-4 text-[13px] text-slate-400">
               {currentPhase === 'scheduled' &&
                 'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
               {currentPhase === 'snapshot' &&
