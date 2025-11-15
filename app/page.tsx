@@ -407,13 +407,11 @@ export default function ClaimPoolPage() {
       : 'Soon';
 
   const windowTimingText = (() => {
-  if (!countdownLabel) return ''; 
-
-  // Remove “now” or “soon”
-  if (countdownLabel === 'now') return '0s';
-
-  return countdownLabel;
-})();
+    if (isLive) {
+      if (!countdownLabel) return 'Closes soon';
+      if (countdownLabel === 'now') return 'Closes any second';
+      return `Closes in ${countdownLabel}`;
+    }
 
     if (isClosed) {
       return 'Waiting for the next round';
@@ -662,15 +660,16 @@ export default function ClaimPoolPage() {
                 {/* Top row */}
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2 whitespace-nowrap">
-  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    {isLive ? 'Window closes in' : isClosed ? 'Window closed' : 'Window opens in'}
-  </span>
-
-  <span className="text-base font-semibold text-slate-50">
-    {windowTimingText}
-  </span>
-</div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {isLive
+                        ? 'Window closes in'
+                        : isClosed
+                        ? 'Window closed'
+                        : 'Window opens in'}
+                    </p>
+                    <p className="text-base font-semibold text-slate-50">
+                      {windowTimingText}
+                    </p>
                   </div>
 
                   <span
