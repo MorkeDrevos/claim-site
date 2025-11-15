@@ -806,22 +806,25 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
   <div className="flex flex-wrap items-start justify-between gap-6">
     {/* Reward pool (top-left) */}
     <div className="space-y-1">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Reward pool this window
-      </p>
+  {/* Top label */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Reward pool this window
+  </p>
 
-      <p className="mt-1 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
-        {rewardAmountText}
-        <span className="text-[18px] sm:text-[20px] text-emerald-400">
-          {' '}
-          $CLAIM
-        </span>
-      </p>
+  {/* CLAIM amount (number + token same size) */}
+  <p className="mt-1 font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] 
+                text-[24px] sm:text-[28px]">
+    {rewardAmountText}
+    <span className="ml-2 text-emerald-400">
+      $CLAIM
+    </span>
+  </p>
 
-      <p className="text-[11px] text-slate-400">
-        ≈ <span className="font-medium text-slate-200">{rewardUsdText}</span>
-      </p>
-    </div>
+  {/* USD estimate — slightly bigger */}
+  <p className="font-medium text-slate-400 text-sm sm:text-base">
+    ≈ <span className="text-slate-200">{rewardUsdText}</span>
+  </p>
+</div>
 
     {/* Countdown (top-right) */}
 {!isClosed && (
