@@ -765,7 +765,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
           ? 'Next window in'
           : 'Window opens in'}
       </p>
-      <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+      <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
         {numericCountdown}
       </p>
     </div>
