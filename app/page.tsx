@@ -454,18 +454,19 @@ if (opensAtMs && closesAtMs) {
 const isLive = phase === 'open';
 const isClosed = phase === 'closed';
 
-// Use auto phase for the 3 main stages,
-// but let you manually override to snapshot / distribution.
 let currentPhase: WindowPhase;
 
-if (windowPhase === 'snapshot' || windowPhase === 'distribution') {
-  // manual phases you set in JSON
-  currentPhase = windowPhase;
-} else if (isLive) {
+// 1) Time-based phases win once the window is actually open/closed
+if (isLive) {
   currentPhase = 'open';
 } else if (isClosed) {
-  currentPhase = 'closed';
+  // If backend marks distribution as done, show that instead of generic "closed"
+  currentPhase = windowPhase === 'distribution' ? 'distribution' : 'closed';
+} else if (windowPhase === 'snapshot') {
+  // 2) Only show "Eligibility locked" while we're between snapshot and open
+  currentPhase = 'snapshot';
 } else {
+  // 3) Default before snapshot
   currentPhase = 'scheduled';
 }
 
