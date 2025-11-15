@@ -217,12 +217,36 @@ export default function ClaimPoolPage() {
   /* ── Phase + countdown (safe when state is null) ── */
 
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
-  const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
-  const lowerStatus = claimWindowStatusSafe.toLowerCase();
+const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
+const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
-  // Base phase used for countdown (scheduled / open / closed)
-  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+// Parse open/close timestamps (if present)
+const opensAtMs =
+  state?.claimWindowOpensAt ? new Date(state.claimWindowOpensAt).getTime() : null;
+const closesAtMs =
+  state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
+const nowMs = Date.now();
 
+// Base phase used for countdown (scheduled / open / closed)
+let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
+
+// 1) Prefer automatic timing based on opens/closes
+if (opensAtMs && closesAtMs) {
+  if (nowMs < opensAtMs) {
+    // before open
+    phase = 'scheduled';
+  } else if (nowMs >= opensAtMs && nowMs < closesAtMs) {
+    // during live window
+    phase = 'open';
+  } else {
+    // after close
+    phase = 'closed';
+  }
+} else if (opensAtMs && !closesAtMs) {
+  // only open time known: before = scheduled, after = open
+  phase = nowMs < opensAtMs ? 'scheduled' : 'open';
+} else {
+  // 2) Fallback to your old text/manual logic
   if (rawPhase === 'open') {
     phase = 'open';
   } else if (
@@ -238,6 +262,7 @@ export default function ClaimPoolPage() {
   } else {
     phase = 'scheduled';
   }
+}
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
