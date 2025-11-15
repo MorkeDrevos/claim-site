@@ -744,7 +744,28 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                   )}
 
                   {/* REMOVE CLAIM WINDOW TITLE */}
-                 <h1 className="text-[20px] sm:text-[34px] font-semibold leading-snug 
+
+                  {isLive ? (
+  <div className="flex items-center gap-2">
+    <span className="relative flex h-2.5 w-2.5">
+      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300" />
+    </span>
+    <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">
+      CLAIM WINDOW LIVE NOW
+    </span>
+  </div>
+) : (
+  <p
+    className={`text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] ${
+      isClosed ? 'text-slate-400' : 'text-emerald-200'
+    }`}
+  >
+    {isClosed ? 'Claim window closed' : 'Next claim window'}
+  </p>
+)}
+               
+               <h1 className="text-[20px] sm:text-[34px] font-semibold leading-snug 
                bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
   A time-based reward pool — lock in your wallet when the window opens.
 </h1>
