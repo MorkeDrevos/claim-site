@@ -22,7 +22,7 @@
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "closed",
+  "windowPhase": "distribution",
   "snapshotTakenAt": null,
-  "distributionCompletedAt": null
+  "distributionCompletedAt": "2025-11-15T23:30:00Z"
 }
