@@ -414,71 +414,36 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-  const windowTimingText = (() => {
-  // Live window → countdown to close
-  if (isLive) {
-    if (!countdownLabel) return 'Closes soon';
-    if (countdownLabel === 'now') return 'Closes any second';
-    return `Closes in ${countdownLabel}`;
-  }
+    const windowTimingText = (() => {
+    // Live window → countdown to close
+    if (isLive) {
+      if (!countdownLabel) return 'Closes soon';
+      if (countdownLabel === 'now') return 'Closes any second';
+      return `Closes in ${countdownLabel}`;
+    }
 
-  // Closed → next round
-  if (isClosed) {
-    if (!countdownLabel) return 'Waiting for the next round';
-    if (countdownLabel === 'now') return 'Next window opens any second';
-    return `Next window opens in ${countdownLabel}`;
-  }
+    // Closed → next round
+    if (isClosed) {
+      if (!countdownLabel) return 'Waiting for the next round';
+      if (countdownLabel === 'now') return 'Next window opens any second';
+      return `Next window opens in ${countdownLabel}`;
+    }
 
-  // Scheduled → upcoming window
-  if (!countdownLabel) return 'Time to be announced';
-  if (countdownLabel === 'now') return 'Opens any second';
-  return `Opens in ${countdownLabel}`;
-})();
+    // Scheduled → upcoming window
+    if (!countdownLabel) return 'Time to be announced';
+    if (countdownLabel === 'now') return 'Opens any second';
+    return `Opens in ${countdownLabel}`;
+  })();
 
-// 👉 Numbers-only countdown for the BIG DISPLAY
-const numericCountdown =
-  countdownLabel && countdownLabel !== 'now'
-    ? countdownLabel
-    : isLive
-    ? '0s'
-    : '';
-
-  // ✅ Pure numeric countdown for the big line (no words)
+  // Numbers-only countdown for the big display
   const numericCountdown =
     countdownLabel && countdownLabel !== 'now'
-      ? countdownLabel           // e.g. "1d 3h 21m"
+      ? countdownLabel          // e.g. "1d 3h 21m"
       : isLive
-      ? '0s'                     // window is basically at zero
-      : '';                      // nothing yet when not known
+      ? '0s'                    // basically at zero when live
+      : '';                     // nothing yet when not known
 
-  const countdownParts = (() => {
-  // when we don't have a countdown yet
-  if (!countdownLabel || countdownLabel === 'now') {
-    return {
-      primary: isLive ? 'Now' : 'Soon',
-      secondary: '',
-    };
-  }
-
-  const [primary, ...rest] = countdownLabel.split(' ');
-  return {
-    primary,                // e.g. "13h"
-    secondary: rest.join(' '), // e.g. "2m 54s"
-  };
-})();
-
-  // Closed window → countdown to next open (if we know it)
-  if (isClosed) {
-    if (!countdownLabel) return 'Waiting for the next round';
-    if (countdownLabel === 'now') return 'Next window opens any second';
-    return `Next window opens in ${countdownLabel}`;
-  }
-
-  // Scheduled (future) window → normal “Opens in …”
-  if (!countdownLabel) return 'Time to be announced';
-  if (countdownLabel === 'now') return 'Opens any second';
-  return `Opens in ${countdownLabel}`;
-})();
+  const canClaim = !isPreview && isLive;
 
   const canClaim = !isPreview && isLive;
 
