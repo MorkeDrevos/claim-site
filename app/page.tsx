@@ -798,7 +798,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   {/* CLAIM amount */}
   <span>
     {rewardAmountText}
-    <span className="ml-1 text-[20px] sm:text-[22px] text-emerald-400 font-semibold">
+    <span className="ml-1 text-[16px] sm:text-[22px] text-emerald-400 font-semibold">
       $CLAIM
     </span>
   </span>
@@ -841,7 +841,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
 
     {/* Eligibility Text */}
-    <p className="text-[13px] leading-relaxed text-slate-400">
+    <p className="text-[12px] leading-relaxed text-slate-400">
       To be eligible, you must hold at least{' '}
       {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
       <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
