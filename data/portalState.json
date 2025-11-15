@@ -8,7 +8,7 @@
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "Closed on 2025-11-15 · 21:00 UTC",
+  "claimWindowStatus": "Round 1 complete — rewards have been distributed.",
   "claimWindowOpensAt": "2025-11-15T20:00:00Z",
   "claimWindowClosesAt": "2025-11-15T21:00:00Z",
 
@@ -22,7 +22,7 @@
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "closed",
-  "snapshotTakenAt": null,
-  "distributionCompletedAt": null
+  "windowPhase": "distribution",
+  "snapshotTakenAt": "2025-11-15T21:05:00Z",
+  "distributionCompletedAt": "2025-11-15T22:00:00Z"
 }
