@@ -715,31 +715,6 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-        {/* Eligibility explanation (outside card, above progress) */}
-        <div className="mt-6 text-[13px] leading-relaxed text-slate-300">
-          <p>
-            To be eligible, you must hold at least{' '}
-            <span className="font-semibold text-emerald-300">
-              {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-            </span>{' '}
-            at the snapshot. When the claim window opens, click{' '}
-            <span className="font-semibold text-emerald-300">
-              LOCK IN MY SHARE
-            </span>{' '}
-            to register your wallet for that round. All registered wallets{' '}
-            <span className="font-semibold text-emerald-300">
-              split the reward pool equally.
-            </span>
-          </p>
-
-          <p className="mt-3 text-[13px] text-slate-400">
-            Snapshots for the next round can be taken at any time between the
-            last window closing and the next one opening — if you&apos;re not
-            holding {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
-            your wallet sits out that round.
-          </p>
-        </div>
-
         {/* Round progress bar */}
         <SoftCard>
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -1038,10 +1013,31 @@ export default function ClaimPoolPage() {
             </div>
           </SoftCard>
 
-          To be eligible, you must hold at least 1,000,000 $CLAIM at the snapshot. When the claim window opens, click LOCK IN MY SHARE to register your wallet for that round. All registered wallets split the reward pool equally.
 
-Snapshots for the next round can be taken at any time between the last window closing and the next one opening — if you're not holding 1,000,000 $CLAIM when it hits, your wallet sits out that round.
+          {/* Eligibility explanation (outside card, above progress) */}
+        <div className="mt-6 text-[13px] leading-relaxed text-slate-300">
+          <p>
+            To be eligible, you must hold at least{' '}
+            <span className="font-semibold text-emerald-300">
+              {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+            </span>{' '}
+            at the snapshot. When the claim window opens, click{' '}
+            <span className="font-semibold text-emerald-300">
+              LOCK IN MY SHARE
+            </span>{' '}
+            to register your wallet for that round. All registered wallets{' '}
+            <span className="font-semibold text-emerald-300">
+              split the reward pool equally.
+            </span>
+          </p>
 
+          <p className="mt-3 text-[13px] text-slate-400">
+            Snapshots for the next round can be taken at any time between the
+            last window closing and the next one opening — if you&apos;re not
+            holding {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
+            your wallet sits out that round.
+          </p>
+        </div>
 
         </div>
       </div>
