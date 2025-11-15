@@ -224,9 +224,6 @@ function parseCountdownLabel(label: string | null) {
 export default function ClaimPoolPage() {
   const { addToast, ToastContainer } = useToast();
 
-  const [isPulseOn, setIsPulseOn] = useState(false);
-  const [preFlash, setPreFlash] = useState(false); // 👈 add this
-
   const [state, setState] = useState<ClaimPortalState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
