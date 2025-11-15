@@ -422,6 +422,22 @@ export default function ClaimPoolPage() {
     return `Closes in ${countdownLabel}`;
   }
 
+  const countdownParts = (() => {
+  // when we don't have a countdown yet
+  if (!countdownLabel || countdownLabel === 'now') {
+    return {
+      primary: isLive ? 'Now' : 'Soon',
+      secondary: '',
+    };
+  }
+
+  const [primary, ...rest] = countdownLabel.split(' ');
+  return {
+    primary,                // e.g. "13h"
+    secondary: rest.join(' '), // e.g. "2m 54s"
+  };
+})();
+
   // Closed window → countdown to next open (if we know it)
   if (isClosed) {
     if (!countdownLabel) return 'Waiting for the next round';
@@ -678,34 +694,52 @@ export default function ClaimPoolPage() {
               </p>
 
               {/* CLAIM WINDOW CARD */}
-              <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
-                {/* Top row */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  {isLive
-    ? 'Window closes in'
-    : isClosed
-    ? 'Next window in'
-    : 'Window opens in'}
-</p>
-                    <p className="text-base font-semibold text-slate-50">
-  {windowTimingText?.replace(/^Closes in\s+/i, '')}
-</p>
-                  </div>
+<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+  {/* Top row – label + countdown + status */}
+  <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-2">
+      {/* Small label */}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {isLive
+          ? 'Window closes in'
+          : isClosed
+          ? 'Next window in'
+          : 'Window opens in'}
+      </p>
 
-                  <span
-                    className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-                      isLive
-                        ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
-                        : isClosed
-                        ? 'border-slate-700 bg-slate-900 text-slate-400'
-                        : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
-                    }`}
-                  >
-                    {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
-                  </span>
-                </div>
+      {/* Countdown pill */}
+      <div className="inline-flex items-baseline gap-3 rounded-full bg-slate-900/70 px-4 py-2 ring-1 ring-slate-700/60">
+        <span className="text-2xl sm:text-3xl font-semibold text-slate-50 tracking-tight">
+          {countdownParts.primary}
+        </span>
+        {countdownParts.secondary && (
+          <span className="text-xs sm:text-sm text-slate-400">
+            {countdownParts.secondary}
+          </span>
+        )}
+      </div>
+
+      {/* Optional helper text when we *don’t* have a countdown yet */}
+      {!countdownLabel && (
+        <p className="text-[11px] text-slate-500">
+          Exact timing will be announced here once scheduled.
+        </p>
+      )}
+    </div>
+
+    {/* Status pill on the right, same logic as before */}
+    <span
+      className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
+        isLive
+          ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
+          : isClosed
+          ? 'border-slate-700 bg-slate-900 text-slate-400'
+          : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
+      }`}
+    >
+      {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
+    </span>
+  </div>
 
                 {/* Big CTA bar */}
                 <button
