@@ -798,18 +798,11 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </span>
 
   {/* USD value */}
-  <span className="text-[16px] sm:text-[18px] text-slate-300 font-medium tracking-tight">
-    ≈ {rewardUsdText}
+  <span className="text-[16px] sm:text-[18px] text-slate-300 font-medium">
+    ≈ {rewardUsdText} USD
   </span>
 </p>
     </div>
-
-    <p className="text-[11px] text-slate-400">
-      ≈{' '}
-      <span className="font-medium text-slate-200">
-        {rewardUsdText}
-      </span>
-    </p>
   </div>
 
   {/* Big CTA bar */}
