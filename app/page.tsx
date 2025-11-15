@@ -780,18 +780,16 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </div>
 
     {/* Countdown (top-right) */}
-    <div className="space-y-1 text-right">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window closes in'
-          : isClosed
-          ? 'Next window in'
-          : 'Window opens in'}
-      </p>
-      <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-        {numericCountdown}
-      </p>
-    </div>
+{!isClosed && (
+  <div className="space-y-1 text-right">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive ? 'Window closes in' : 'Window opens in'}
+    </p>
+    <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+      {numericCountdown}
+    </p>
+  </div>
+)}
   </div>
 
   {/* Big CTA bar */}
