@@ -723,27 +723,9 @@ const { hours, minutes, seconds } = parseCountdownLabel(
 
                 {/* Live / scheduled header */}
                 <div className="space-y-2">
-                  {isLive ? (
-                    <div className="flex items-center gap-2">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300" />
-                      </span>
-                      <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">
-                        CLAIM WINDOW LIVE NOW
-                      </span>
-                    </div>
-                  ) : (
-                    <p
-                      className={`text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] ${
-                        isClosed ? 'text-slate-400' : 'text-emerald-200'
-                      }`}
-                    >
-                      {isClosed ? 'Claim window closed' : 'Next claim window'}
-                    </p>
-                  )}
+                  
 
-                  {/* REMOVE CLAIM WINDOW TITLE */}
+                  {/* h1 */}
                  <h1 className="text-[20px] sm:text-[34px] font-semibold leading-snug 
                bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
   A time-based reward pool — lock in your wallet when the window opens.
@@ -753,10 +735,29 @@ const { hours, minutes, seconds } = parseCountdownLabel(
 
               {/* CLAIM WINDOW CARD */}
 <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
-  {/* Top row */}
-  <div className="flex flex-wrap items-center justify-between gap-3">
+  {/* Top row – Reward left, countdown right */}
+  <div className="flex flex-wrap items-start justify-between gap-6">
+    {/* Reward pool (top-left) */}
     <div className="space-y-1">
-      {/* Small label */}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+        Reward pool this window
+      </p>
+
+      <p className="mt-1 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
+        {rewardAmountText}
+        <span className="text-[18px] sm:text-[20px] text-emerald-400">
+          {' '}
+          $CLAIM
+        </span>
+      </p>
+
+      <p className="text-[11px] text-slate-400">
+        ≈ <span className="font-medium text-slate-200">{rewardUsdText}</span>
+      </p>
+    </div>
+
+    {/* Countdown (top-right) */}
+    <div className="space-y-1 text-right">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         {isLive
           ? 'Window closes in'
@@ -764,52 +765,9 @@ const { hours, minutes, seconds } = parseCountdownLabel(
           ? 'Next window in'
           : 'Window opens in'}
       </p>
-
-      {/* Big countdown: numbers only */}
       <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
         {numericCountdown}
       </p>
-    </div>
-
-    <span
-      className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
-        isLive
-          ? 'border-emerald-400/70 bg-emerald-500/10 text-emerald-200'
-          : isClosed
-          ? 'border-slate-700 bg-slate-900 text-slate-400'
-          : 'border-emerald-400/40 bg-emerald-500/5 text-emerald-200'
-      }`}
-    >
-      {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
-    </span>
-  </div>
-
-  {/* Reward Pool summary – moved ABOVE the button */}
-  <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Reward pool this window
-      </p>
-
-      <p className="mt-0 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] flex items-baseline gap-3">
-  <p className="mt-1 flex items-baseline gap-2
-  text-[28px] sm:text-[30px] font-bold tracking-tight
-  text-emerald-300 drop-shadow-[0_0_6px_rgba(16,185,129,0.20)]">
-
-  {/* CLAIM amount */}
-  <span>
-    {rewardAmountText}
-    <span className="ml-1 text-[16px] sm:text-[22px] text-emerald-400 font-semibold">
-      $CLAIM
-    </span>
-  </span>
-
-  {/* USD value */}
-  <span className="text-[22px] text-slate-400 font-medium">
-    ≈ {rewardUsdText}
-  </span>
-</p>
-</p>
     </div>
   </div>
 
@@ -836,26 +794,20 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       : 'Available when live'}
   </button>
 
-  {/* Footer – divider + eligibility text */}
-  <div className="mt-6 space-y-4 text-[11px] text-slate-500">
-    {/* Soft divider */}
-    <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
-
-    {/* Eligibility Text */}
-    <p className="text-[12px] leading-relaxed text-slate-400 flex items-start gap-1.5">
-  <span>
-    <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-slate-600/40 mr-2">
-  <span className="h-1.5 w-1.5 rounded-full bg-slate-400/70" />
-</span>To be eligible, you must hold at least{' '}
+  {/* Eligibility text */}
+  <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
+      i
+    </span>
+    To be eligible, you must hold at least{' '}
     {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
     <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
     When the claim window opens, click{' '}
     <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
     to register your wallet’s share for that round.
-  </span>
-</p>
   </div>
 </div>
+{/* end CLAIM WINDOW CARD */}
 
     </div>   {/* end LEFT column */}
   </div>     {/* end flex row wrapper */}
