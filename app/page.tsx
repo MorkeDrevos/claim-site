@@ -818,20 +818,21 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </div>
 
     {/* Eligibility Text */}
-  <p className="text-[12px] leading-relaxed text-slate-400">
-    To be eligible, you must hold at least{' '}
-    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-    <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
-    When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-    to register your wallet’s share for that round. 
-    <span className="font-semibold text-emerald-300">Snapshots can be taken at any time between the last window being
-  scheduled and the next live claim window opening. </span>{' '}
+<p className="text-[12px] leading-relaxed text-slate-400">
+  To be eligible, you must hold at least{' '}
+  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+  <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
+  When the claim window opens, click{' '}
+  <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+  to register your wallet’s share for that round.{' '}
+  <span className="font-semibold text-emerald-300">
+    Snapshots can be taken at any time between the last window being
+    scheduled and the next live claim window opening.
+  </span>{' '}
   If you’re not holding{' '}
   {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
   sits out that round.
-    </span>
-  </p>
+</p>
 
 </div>   {/* end Footer */}
 </div>   {/* end CLAIM WINDOW CARD */}
@@ -951,7 +952,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     {rewardAmountText} CLAIM
   </p>
 
-  <p className="text-[15px] text-slate-400 leading-relaxed">
+  <p className="text-xl text-slate-400 leading-relaxed">
     USD value: {rewardUsdText}
   </p>
 </SoftCard>
