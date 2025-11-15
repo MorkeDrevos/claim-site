@@ -774,48 +774,53 @@ export default function ClaimPoolPage() {
         { id: 'distribution', label: 'Round complete' },
       ] as { id: WindowPhase | 'closed'; label: string }[]
     ).map((step, index, all) => {
-      const displayPhase = currentPhase; // from earlier logic
+      const displayPhase = currentPhase;
       const currentIndex = all.findIndex((s) => s.id === displayPhase);
       const isDone = currentIndex > index;
       const isActive = currentIndex === index;
 
       return (
         <div key={step.id} className="flex-1 flex items-center">
-          {/* Dot + "You are here" */}
+          {/* Dot area */}
           <div className="flex flex-col items-center flex-none">
-            <div className="relative h-3 w-3">
+            
+            {/* PING animation */}
+            <div className="relative h-4 w-4 flex items-center justify-center">
               {isActive && (
-                <span className="absolute inset-0 rounded-full bg-emerald-400/60 animate-ping" />
+                <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
               )}
+
               <span
                 className={[
                   'relative block h-3 w-3 rounded-full border',
                   isActive
                     ? 'border-emerald-400 bg-emerald-400'
                     : isDone
-                    ? 'border-emerald-500 bg-emerald-500/70'
+                    ? 'border-emerald-500 bg-emerald-500/60'
                     : 'border-slate-700 bg-slate-900',
                 ].join(' ')}
               />
             </div>
 
+            {/* Step label */}
             <span className="mt-2 text-[11px] text-center text-slate-300 leading-snug">
               {step.label}
             </span>
 
+            {/* YOU ARE HERE + stage name */}
             {isActive && (
-              <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                You are here
+              <span className="mt-1 text-[10px] text-emerald-300 font-semibold tracking-[0.22em] uppercase">
+                YOU ARE HERE · {step.label}
               </span>
             )}
           </div>
 
-          {/* Connecting line (except after last step) */}
+          {/* Connecting line */}
           {index < all.length - 1 && (
             <div className="ml-3 flex-1 h-px rounded-full bg-slate-800">
               <div
                 className={[
-                  'h-px rounded-full',
+                  'h-px rounded-full transition-colors',
                   isDone ? 'bg-emerald-500' : 'bg-slate-800',
                 ].join(' ')}
               />
@@ -826,18 +831,18 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
-  {/* Small explainer text */}
+  {/* Explanation text */}
   <p className="mt-3 text-[11px] text-slate-500">
     {currentPhase === 'scheduled' &&
       'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
     {currentPhase === 'snapshot' &&
-      'Eligibility is locked for this round. Next up: the live claim window where eligible wallets can lock in their share.'}
+      'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
     {currentPhase === 'open' &&
       'Claim window open. Lock in your share before the countdown hits zero.'}
     {currentPhase === 'closed' &&
       'Claim window closed. No new wallets can lock in for this round.'}
     {currentPhase === 'distribution' &&
-      'Round complete. Rewards for this round have been distributed.'}
+      'Round complete. Rewards have been distributed.'}
   </p>
 </SoftCard>
 
