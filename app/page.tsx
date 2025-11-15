@@ -820,7 +820,6 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </p>
 
 </div>
-</div>
 
         </SoftCard>
 
