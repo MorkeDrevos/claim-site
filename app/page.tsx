@@ -729,17 +729,6 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                 </div>
               </div>
 
-              {/* Reward pool line */}
-              <p className="mt-3 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Reward pool{' '}
-                <span className="text-emerald-300 text-[18px] sm:text-[26px] font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.55)]">
-                  {rewardAmountText} $CLAIM
-                </span>{' '}
-                <span className="text-[18px] sm:text-[11px] text-slate-500">
-                  ({rewardUsdText} USD)
-                </span>
-              </p>
-
               {/* CLAIM WINDOW CARD */}
 <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
   {/* Top row */}
@@ -799,20 +788,38 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     : 'Available when live'}
 </button>
 
-  {/* Footer (unchanged) */}
-  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
-    <p className="mt-6 text-[12px] leading-relaxed text-slate-400">
-      To be eligible, you must hold at least{' '}
-      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-      <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
-      When the claim window opens, click{' '}
-      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-      to register your wallet’s share for that round. All registered wallets{' '}
-      <span className="font-semibold text-emerald-300">
-        split the reward pool equally.
-      </span>
+  {/* Footer */}
+<div className="mt-6 flex flex-col gap-4 text-[11px] text-slate-500">
+
+  {/* Reward Pool */}
+  <div>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Reward Pool
     </p>
+
+    <div className="text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
+      {rewardPoolAmountText}
+      <span className="text-[18px] sm:text-[20px] text-emerald-400"> $CLAIM</span>
+      <span className="ml-2 text-slate-500 text-[14px] sm:text-[15px] font-medium">
+        ({rewardPoolAmountUsd.toLocaleString('en-US')} USD)
+      </span>
+    </div>
   </div>
+
+  {/* Eligibility Text */}
+  <p className="text-[12px] leading-relaxed text-slate-400">
+    To be eligible, you must hold at least{' '}
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+    <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
+    When the claim window opens, click{' '}
+    <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+    to register your wallet’s share for that round. All registered wallets{' '}
+    <span className="font-semibold text-emerald-300">
+      split the reward pool equally.
+    </span>
+  </p>
+
+</div>
 </div>
             </div>
 
