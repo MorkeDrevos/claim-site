@@ -932,19 +932,15 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
             <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
           )}
           <span
-            <div
-  className={[
-    // Base container styles
-    'mt-3 rounded-3xl border bg-gradient-to-b',
-    'from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-    'p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-
-    // Flashing state
-    preFlash
-      ? 'border-emerald-400 ring-2 ring-emerald-400/60 bg-emerald-500/15 transition-all duration-300'
-      : 'border-emerald-500/40'
-  ].join(' ')}
->
+            className={[
+              'relative block h-3 w-3 rounded-full border',
+              isActive
+                ? 'border-emerald-400 bg-emerald-400'
+                : isDone
+                ? 'border-emerald-500 bg-emerald-500/60'
+                : 'border-slate-700 bg-slate-900',
+            ].join(' ')}
+          />
         </div>
 
         {/* Label */}
