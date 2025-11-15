@@ -717,7 +717,10 @@ export default function ClaimPoolPage() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN */}
+          </div>
+        </SoftCard>
+
+        {/* RIGHT COLUMN */}
             <div className="w-full max-w-xs space-y-4 md:w-auto">
               {/* Claim control */}
               <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-sm">
@@ -791,8 +794,6 @@ export default function ClaimPoolPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </SoftCard>
 
         {/* Eligibility explanation (outside card, above progress) */}
         <div className="mt-6 text-[13px] leading-relaxed text-slate-300">
