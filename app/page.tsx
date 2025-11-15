@@ -868,53 +868,41 @@ const { hours, minutes, seconds } = parseCountdownLabel(
               Round {(state as any).roundNumber ?? 1} progress
             </p>
 
-            {/* Steps line */}
-            <div className="mt-3 flex items-center justify-between gap-3">
-              {steps.map((step, index, all) => {
-                const currentIndex = all.findIndex((s) => s.id === currentPhase);
-                const isDone = currentIndex > index;
-                const isActive = currentIndex === index;
+            <div className="mt-3 grid grid-cols-5 gap-6">
+  {steps.map((step, index) => {
+    const isDone = activeIndex > index;
+    const isActive = activeIndex === index;
 
-                return (
-                  <div key={step.id} className="flex flex-1 items-center">
-                    {/* Dot + label */}
-                    <div className="flex flex-none flex-col items-center">
-                      <div className="relative flex h-4 w-4 items-center justify-center">
-                        {isActive && (
-                          <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
-                        )}
-                        <span
-                          className={[
-                            'relative block h-3 w-3 rounded-full border',
-                            isActive
-                              ? 'border-emerald-400 bg-emerald-400'
-                              : isDone
-                              ? 'border-emerald-500 bg-emerald-500/60'
-                              : 'border-slate-700 bg-slate-900',
-                          ].join(' ')}
-                        />
-                      </div>
+    return (
+      <div
+        key={step.id}
+        className="flex flex-col items-center text-center"
+      >
+        {/* Dot */}
+        <div className="relative flex h-4 w-4 items-center justify-center">
+          {isActive && (
+            <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
+          )}
+          <span
+            className={[
+              'relative block h-3 w-3 rounded-full border',
+              isActive
+                ? 'border-emerald-400 bg-emerald-400'
+                : isDone
+                ? 'border-emerald-500 bg-emerald-500/60'
+                : 'border-slate-700 bg-slate-900',
+            ].join(' ')}
+          />
+        </div>
 
-                      <span className="mt-2 text-[13px] font-semibold text-center text-slate-200 leading-snug">
-  {step.label}
-</span>
-                    </div>
-
-                    {/* Connecting line */}
-                    {index < all.length - 1 && (
-                      <div className="ml-3 flex h-px flex-1 rounded-full bg-slate-800">
-                        <div
-                          className={[
-                            'h-px flex-1 rounded-full transition-colors',
-                            isDone ? 'bg-emerald-500' : 'bg-slate-800',
-                          ].join(' ')}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+        {/* Label */}
+        <span className="mt-2 text-[13px] leading-snug text-slate-300 font-medium">
+          {step.label}
+        </span>
+      </div>
+    );
+  })}
+</div>
 
             {/* Divider above status sentence */}
             <div className="mt-6 border-t border-slate-800/60" />
