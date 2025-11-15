@@ -265,6 +265,17 @@ const opensAtMs =
 const closesAtMs =
   state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
 const nowMs = Date.now();
+
+// === Last-3-seconds detection ===
+const secondsLeft =
+  phase === 'open'
+    ? Math.max(0, Math.floor((closesAtMs - nowMs) / 1000))
+    : phase === 'scheduled'
+    ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
+    : 0;
+
+const isLast3 = secondsLeft <= 3 && secondsLeft > 0;
+
 // Base phase used for countdown (scheduled / open / closed)
 let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
@@ -301,21 +312,6 @@ if (opensAtMs && closesAtMs) {
     phase = 'scheduled';
   }
 }
-
-// === Last-3-seconds detection ===
-const secondsLeft = (() => {
-  if (phase === 'open' && closesAtMs != null) {
-    return Math.max(0, Math.floor((closesAtMs - nowMs) / 1000));
-  }
-
-  if (phase === 'scheduled' && opensAtMs != null) {
-    return Math.max(0, Math.floor((opensAtMs - nowMs) / 1000));
-  }
-
-  return 0;
-})();
-
-const isLast3 = secondsLeft <= 3 && secondsLeft >= 0;
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
@@ -528,10 +524,10 @@ if (windowPhase === 'snapshot' || windowPhase === 'distribution') {
   // 👉 Numbers-only countdown used in the big UI
 const numericCountdown =
   countdownLabel && countdownLabel !== 'now'
-    ? countdownLabel
+    ? countdownLabel        // e.g. "4h 7m 30s"
     : isLive
     ? '0s'
-    : 'TBA';
+    : '';
 
 const { hours, minutes, seconds } = parseCountdownLabel(
   numericCountdown || null
@@ -761,7 +757,13 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                  <h1 className="text-[28px] sm:text-[34px] font-medium tracking-tight text-slate-300">
   A time-based reward pool — lock in your wallet when the window opens.
 </h1>
-
+<span className="font-semibold">
+    Snapshots can be taken at any time between the last window being
+    scheduled and the next live claim window opening.
+  </span>{' '}
+  If you’re not holding{' '}
+  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
+  sits out that round.
                 </div>
               </div>
 
