@@ -22,7 +22,7 @@
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "scheduled",
+  "windowPhase": "snapshot",
   "snapshotTakenAt": null,
   "distributionCompletedAt": null
 }
