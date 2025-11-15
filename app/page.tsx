@@ -676,9 +676,6 @@ export default function ClaimPoolPage() {
                         ? 'Window closed'
                         : 'Window opens in'}
                     </p>
-                    <p className="text-base font-semibold text-slate-50">
-                      {windowTimingText}
-                    </p>
                   </div>
 
                   <span
@@ -715,7 +712,7 @@ export default function ClaimPoolPage() {
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                   <p className="mt-6 text-[12px] leading-relaxed text-slate-400">
   To be eligible, you must hold at least{' '} 
-    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM  
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM  {' '}
   <span className="font-semibold text-emerald-300">at the snapshot. </span>{' '}When the claim window opens, click{' '}
   <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
   to register your wallet’s share for that round. All registered wallets{' '}
