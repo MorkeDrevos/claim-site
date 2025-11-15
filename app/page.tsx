@@ -705,11 +705,9 @@ export default function ClaimPoolPage() {
                 {/* Footer */}
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                   <p className="mt-6 text-[12px] leading-relaxed text-slate-400">
-  To be eligible, you must hold at least{' '}
-  <span className="font-semibold text-emerald-300">
-    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-  </span>{' '}
-  at the snapshot. When the claim window opens, click{' '}
+  To be eligible, you must hold at least{' '} 
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM  
+  <span className="font-semibold text-emerald-300">at the snapshot. </span>{' '}When the claim window opens, click{' '}
   <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
   to register your wallet’s share for that round. All registered wallets{' '}
   <span className="font-semibold text-emerald-300">split the reward pool equally.</span>
@@ -723,10 +721,11 @@ export default function ClaimPoolPage() {
         </SoftCard>
 
         {/* Round progress bar */}
-        <SoftCard>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Round {(state as any).roundNumber ?? 1} progress
-          </p>
+<div className="mt-16 w-full px-6">  {/* FULL WIDTH WRAPPER */}
+  <SoftCard className="w-full">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Round {(state as any).roundNumber ?? 1} progress
+    </p>
 
           {/* Steps line */}
           <div className="mt-3 flex items-center gap-3">
