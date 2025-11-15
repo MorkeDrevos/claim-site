@@ -857,29 +857,6 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       : 'Available when live'}
   </button>
 
-    {/* Contract address (hero) */}
-  <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[11px]">
-    <span className="font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Contract address
-    </span>
-
-    <button
-      type="button"
-      onClick={handleCopyCa}
-      className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
-                 text-[11px] font-medium text-slate-200 border border-slate-700/80
-                 hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
-                 transition-colors"
-    >
-      <span className="font-mono text-[11px] text-slate-300">
-        {shortCa}
-      </span>
-      <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
-        Copy CA
-      </span>
-    </button>
-  </div>
-
   {/* Eligibility text */}
   <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
