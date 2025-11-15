@@ -642,13 +642,14 @@ export default function ClaimPoolPage() {
                     </p>
                   )}
 
-                  <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
-                    {isLive
-                      ? 'Live claim window'
-                      : isClosed
-                      ? 'Waiting for the next round'
-                      : 'Next claim window'}
-                  </h1>
+                  {/* REMOVE CLAIM WINDOW TITLE */}
+{/* <h1 className="text-[26px] leading-tight font-semibold tracking-tight text-slate-50 sm:text-[34px]">
+  {isLive
+    ? 'Live claim window'
+    : isClosed
+    ? 'Waiting for the next round'
+    : 'Next claim window'}
+</h1> */}
                 </div>
               </div>
 
