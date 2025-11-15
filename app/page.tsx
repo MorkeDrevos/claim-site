@@ -837,32 +837,13 @@ const { hours, minutes, seconds } = parseCountdownLabel(
 
   {/* Eligibility Text */}
   <p className="text-[12px] leading-relaxed text-slate-400">
-    <span className="block">
-      To be eligible, you must hold at least{' '}
-      <span className="font-semibold text-emerald-300">
-        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-      </span>{' '}
-      at the snapshot.
-    </span>
-      When the claim window opens, click{' '}
-      <span className="font-semibold text-emerald-300">
-        LOCK IN MY SHARE
-      </span>{' '}
-      to register your wallet’s share for that round.
-
-    <span className="mt-1 block text-slate-500">
-      Snapshots can be taken any time between the last window being
-      scheduled and the next live claim window opening.
-    </span>
-
-    <span className="mt-1 block">
-      If you’re not holding{' '}
-      <span className="font-semibold text-emerald-300">
-        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-      </span>{' '}
-      when it hits, your wallet sits out that round.
-    </span>
-  </p>
+  To be eligible, you must hold at least{' '}
+  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+  <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
+  When the claim window opens, click{' '}
+  <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+  to register your wallet’s share for that round.{' '}
+</p>
 </div>
 </div>   {/* end CLAIM WINDOW CARD */}
 
