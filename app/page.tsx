@@ -584,7 +584,7 @@ export default function ClaimPoolPage() {
                 CLAIM PORTAL
               </span>
               <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-                CLAIM — Token of Timing
+                $CLAIM — Token of Timing
               </span>
             </div>
           </Link>
