@@ -660,16 +660,15 @@ export default function ClaimPoolPage() {
                 {/* Top row */}
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="space-y-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      {isLive
-                        ? 'Window closes in'
-                        : isClosed
-                        ? 'Window closed'
-                        : 'Window opens in'}
-                    </p>
-                    <p className="text-base font-semibold text-slate-50">
-                      {windowTimingText}
-                    </p>
+                    <div className="flex items-center gap-2 whitespace-nowrap">
+  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    {isLive ? 'Window closes in' : isClosed ? 'Window closed' : 'Window opens in'}
+  </span>
+
+  <span className="text-base font-semibold text-slate-50">
+    {windowTimingText}
+  </span>
+</div>
                   </div>
 
                   <span
