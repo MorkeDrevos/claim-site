@@ -738,79 +738,94 @@ export default function ClaimPoolPage() {
         </SoftCard>
 
                 {/* Round progress bar */}
-        <div className="mt-14">
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Round {(state as any).roundNumber ?? 1} progress
-            </p>
+<SoftCard className="mt-10">
+  {/* Header row: title + current step pill */}
+  <div className="flex items-center justify-between gap-3">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Round {(state as any).roundNumber ?? 1} progress
+    </p>
 
-            {/* Steps line */}
-            <div className="mt-3 flex items-center gap-3">
-              {steps.map((step, index, all) => {
-                const currentIndex = all.findIndex((s) => s.id === currentPhase);
-                const isDone = currentIndex > index;
-                const isActive = currentIndex === index;
+    {activeStep && (
+      <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+        <span className="mr-2 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+        {activeStep.label}
+      </span>
+    )}
+  </div>
 
-                return (
-                  <div key={step.id} className="flex flex-1 items-center">
-                    {/* Dot + label */}
-                    <div className="flex flex-none flex-col items-center">
-                      <div className="relative flex h-4 w-4 items-center justify-center">
-                        {isActive && (
-                          <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
-                        )}
-                        <span
-                          className={[
-                            'relative block h-3 w-3 rounded-full border',
-                            isActive
-                              ? 'border-emerald-400 bg-emerald-400'
-                              : isDone
-                              ? 'border-emerald-500 bg-emerald-500/60'
-                              : 'border-slate-700 bg-slate-900',
-                          ].join(' ')}
-                        />
-                      </div>
+  {/* Steps line */}
+  <div className="mt-4 flex items-center gap-3">
+    {steps.map((step, index, all) => {
+      const currentIndex = all.findIndex((s) => s.id === currentPhase);
+      const isDone = currentIndex > index;
+      const isActive = currentIndex === index;
 
-                      <span className="mt-2 text-[13px] text-center text-slate-300 leading-snug">
-  {step.label}
-</span>
-                    </div>
-
-                    {/* Connecting line */}
-                    {index < all.length - 1 && (
-                      <div className="ml-3 flex h-px flex-1 rounded-full bg-slate-800">
-                        <div
-                          className={[
-                            'h-px flex-1 rounded-full transition-colors',
-                            isDone ? 'bg-emerald-500' : 'bg-slate-800',
-                          ].join(' ')}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+      return (
+        <div key={step.id} className="flex flex-1 items-center">
+          {/* Dot + label */}
+          <div className="flex flex-none flex-col items-center">
+            <div className="relative flex h-4 w-4 items-center justify-center">
+              {isActive && (
+                <span className="absolute h-4 w-4 rounded-full bg-emerald-400/40 animate-ping" />
+              )}
+              <span
+                className={[
+                  'relative block h-3 w-3 rounded-full border',
+                  isActive
+                    ? 'border-emerald-400 bg-emerald-400'
+                    : isDone
+                    ? 'border-emerald-500 bg-emerald-500/60'
+                    : 'border-slate-700 bg-slate-900',
+                ].join(' ')}
+              />
             </div>
 
-            {/* Divider above status sentence */}
-            <div className="mt-6 border-t border-slate-800/60" />
+            <span className="mt-2 text-[12px] text-center text-slate-200 leading-snug">
+              {step.label}
+            </span>
+          </div>
 
-
-            {/* Phase explanation */}
-            <p className="mt-4 text-[14px] text-amber-300/90 font-medium">
-              {currentPhase === 'scheduled' &&
-                'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
-              {currentPhase === 'snapshot' &&
-                'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
-              {currentPhase === 'open' &&
-                'Claim window open. Lock in your share before the countdown hits zero.'}
-              {currentPhase === 'closed' &&
-                'Claim window closed. No new wallets can lock in for this round.'}
-              {currentPhase === 'distribution' &&
-                'Round complete. Rewards have been distributed.'}
-            </p>
-          </SoftCard>
+          {/* Connecting line */}
+          {index < all.length - 1 && (
+            <div className="ml-3 flex-1">
+              <div className="h-px w-full rounded-full bg-slate-800">
+                <div
+                  className={[
+                    'h-px rounded-full transition-colors',
+                    isDone ? 'bg-emerald-500' : 'bg-slate-800',
+                  ].join(' ')}
+                />
+              </div>
+            </div>
+          )}
         </div>
+      );
+    })}
+  </div>
+
+  {/* Divider + phase explanation */}
+  <div className="mt-5 border-t border-slate-800 pt-3">
+    <p
+      className={
+        'text-[12px] ' +
+        (currentPhase === 'open'
+          ? 'text-amber-200'
+          : 'text-slate-400')
+      }
+    >
+      {currentPhase === 'scheduled' &&
+        'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
+      {currentPhase === 'snapshot' &&
+        'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
+      {currentPhase === 'open' &&
+        'Claim window open. Lock in your share before the countdown hits zero.'}
+      {currentPhase === 'closed' &&
+        'Claim window closed. No new wallets can lock in for this round.'}
+      {currentPhase === 'distribution' &&
+        'Round complete. Rewards for this round have been distributed.'}
+    </p>
+  </div>
+</SoftCard>
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
