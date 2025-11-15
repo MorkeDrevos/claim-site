@@ -791,7 +791,7 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
                   
 
                   {/* h1 */}
-                 <<h1 className="text-[18px] sm:text-[30px] font-semibold 
+                 <h1 className="text-[18px] sm:text-[30px] font-semibold 
                leading-[1.25]
                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                bg-clip-text text-transparent">
