@@ -8,8 +8,8 @@
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "Opens on 2025-11-15 · 20:00 UTC",
-  "claimWindowOpensAt": "2025-11-15T20:00:00Z",
+  "claimWindowOpensAt": "2025-11-15T10:48:00Z",
+  "claimWindowClosesAt": "2025-11-15T10:50:00Z",
   "claimWindowClosesAt": "2025-11-15T21:00:00Z",
 
   "frontEndStatus": "Online",
