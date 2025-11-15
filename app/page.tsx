@@ -303,12 +303,17 @@ if (opensAtMs && closesAtMs) {
 }
 
 // === Last-3-seconds detection ===
-const secondsLeft =
-  phase === 'open'
-    ? Math.max(0, Math.floor((closesAtMs - nowMs) / 1000))
-    : phase === 'scheduled'
-    ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
-    : 0;
+const secondsLeft = (() => {
+  if (phase === 'open' && closesAtMs != null) {
+    return Math.max(0, Math.floor((closesAtMs - nowMs) / 1000));
+  }
+
+  if (phase === 'scheduled' && opensAtMs != null) {
+    return Math.max(0, Math.floor((opensAtMs - nowMs) / 1000));
+  }
+
+  return 0;
+})();
 
 const isLast3 = secondsLeft <= 3 && secondsLeft >= 0;
 
