@@ -413,6 +413,7 @@ if (opensAtMs && closesAtMs) {
 
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
+  const isScheduled = !isLive && !isClosed;
 
   const currentPhase: WindowPhase =
     windowPhase ??
@@ -744,21 +745,30 @@ if (opensAtMs && closesAtMs) {
   </div>
 
   {/* Big CTA bar */}
-  <button
-    type="button"
-    onClick={handleClaimClick}
-    disabled={!canClaim}
-    className={[
-      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-      'transition-all duration-300',
-      canClaim
-        ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-        : 'bg-slate-800 text-slate-500 cursor-not-allowed',
-      canClaim && isPulseOn ? 'animate-pulse' : '',
-    ].join(' ')}
-  >
-    {canClaim ? 'Lock in my share' : 'Available when live'}
-  </button>
+<button
+  type="button"
+  onClick={handleClaimClick}
+  disabled={!canClaim}
+  className={[
+    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+    'transition-all duration-300 border',
+    canClaim
+      // 🔥 LIVE – full green, pulsing
+      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+      : isClosed
+      // 🧊 CLOSED – muted, clearly dead
+      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+      // 🌱 SCHEDULED – disabled, but with emerald “coming soon” glow
+      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+    canClaim && isPulseOn ? 'animate-pulse' : '',
+  ].join(' ')}
+>
+  {canClaim
+    ? 'Lock in my share'
+    : isClosed
+    ? 'Window closed'
+    : 'Available when live'}
+</button>
 
   {/* Footer (unchanged) */}
   <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
