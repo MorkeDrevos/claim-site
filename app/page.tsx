@@ -445,8 +445,6 @@ export default function ClaimPoolPage() {
 
   const canClaim = !isPreview && isLive;
 
-  const canClaim = !isPreview && isLive;
-
   const eligibilityTitle = effectiveWalletConnected
     ? isEligible
       ? 'Eligible this round'
