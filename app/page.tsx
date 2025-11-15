@@ -498,11 +498,6 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   numericCountdown || null
 );
 
-// 👉 Split into HH / MM / SS for glass–style countdown UI
-const { hours, minutes, seconds } = parseCountdownLabel(
-  numericCountdown || null
-);
-
   const canClaim = !isPreview && isLive;
 
   const eligibilityTitle = effectiveWalletConnected
