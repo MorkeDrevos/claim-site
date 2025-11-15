@@ -653,12 +653,12 @@ const { hours, minutes, seconds } = parseCountdownLabel(
      Render
   ─────────────────────────── */
 
- const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+const steps: { id: WindowPhase | 'closed'; label: string }[] = [
   { id: 'scheduled', label: 'Upcoming window' },
   { id: 'snapshot',  label: 'Eligibility locked' },
   { id: 'open',      label: 'Claim window open' },
   { id: 'closed',    label: 'Claim window closed' },
-  { id: 'distribution', label: 'Round complete' },
+  { id: 'distribution', label: 'Rewards distributed' },
 ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
