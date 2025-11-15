@@ -245,6 +245,16 @@ export default function ClaimPoolPage() {
 
   /* ── Phase + countdown (safe when state is null) ── */
 
+  // 🔥 force a re-render every second so the phase naturally flips
+// scheduled → open → closed without needing manual refresh
+const [, forceTick] = useState(0);
+useEffect(() => {
+  const id = setInterval(() => {
+    forceTick((x) => x + 1);
+  }, 1000);
+  return () => clearInterval(id);
+}, []);
+
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 const lowerStatus = claimWindowStatusSafe.toLowerCase();
