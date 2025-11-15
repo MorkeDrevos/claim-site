@@ -193,26 +193,30 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 function parseCountdownLabel(label: string | null) {
-  // Default zeroed-out values
-  let hours = 0;
-  let minutes = 0;
-  let seconds = 0;
+  // Default 00:00:00
+  let hours = '00';
+  let minutes = '00';
+  let seconds = '00';
 
   if (!label || !label.trim()) {
     return { hours, minutes, seconds };
   }
 
-  // Expected formats like:
-  // "4h 7m 30s", "12m 05s", "9s"
-  const match = label.match(/(?:(\d+)h)\s*)?(?:(\d+)m)\s*)?(?:(\d+)s)?/);
+  // label examples: "4h 7m 30s", "12m 05s", "9s"
+  const parts = label.split(/\s+/);
 
-  if (!match) return { hours, minutes, seconds };
-
-  const [, h, m, s] = match;
-
-  if (h) hours = Number(h);
-  if (m) minutes = Number(m);
-  if (s) seconds = Number(s);
+  for (const part of parts) {
+    if (part.endsWith('h')) {
+      const n = part.slice(0, -1);
+      if (!Number.isNaN(Number(n))) hours = n.padStart(2, '0');
+    } else if (part.endsWith('m')) {
+      const n = part.slice(0, -1);
+      if (!Number.isNaN(Number(n))) minutes = n.padStart(2, '0');
+    } else if (part.endsWith('s')) {
+      const n = part.slice(0, -1);
+      if (!Number.isNaN(Number(n))) seconds = n.padStart(2, '0');
+    }
+  }
 
   return { hours, minutes, seconds };
 }
