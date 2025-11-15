@@ -790,13 +790,18 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         Reward pool this window
       </p>
 
-      <p className="mt-1 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
-        {rewardAmountText}
-        <span className="text-[18px] sm:text-[20px] text-emerald-400">
-          {' '}
-          $CLAIM
-        </span>
-      </p>
+      <p className="mt-1 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] flex items-baseline gap-3">
+  {/* CLAIM amount */}
+  <span>
+    {rewardAmountText}
+    <span className="text-[18px] sm:text-[20px] text-emerald-400"> $CLAIM</span>
+  </span>
+
+  {/* USD value */}
+  <span className="text-[16px] sm:text-[18px] text-slate-300 font-medium tracking-tight">
+    ≈ {rewardUsdText}
+  </span>
+</p>
     </div>
 
     <p className="text-[11px] text-slate-400">
