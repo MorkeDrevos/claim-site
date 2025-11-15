@@ -274,8 +274,6 @@ const secondsLeft =
     ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
     : 0;
 
-const isLast3 = secondsLeft <= 3 && secondsLeft > 0;
-
 // Base phase used for countdown (scheduled / open / closed)
 let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
@@ -312,6 +310,16 @@ if (opensAtMs && closesAtMs) {
     phase = 'scheduled';
   }
 }
+
+// === Last-3-seconds detection ===
+const secondsLeft =
+  phase === 'open'
+    ? Math.max(0, Math.floor((closesAtMs - nowMs) / 1000))
+    : phase === 'scheduled'
+    ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
+    : 0;
+
+const isLast3 = secondsLeft <= 3 && secondsLeft >= 0;
 
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
