@@ -784,7 +784,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </div>
 
   {/* Reward Pool summary – moved ABOVE the button */}
-  <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
+  <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
         Reward pool this window
@@ -842,7 +842,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
 
     {/* Eligibility Text */}
     <p className="text-[12px] leading-relaxed text-slate-400">
-      To be eligible, you must hold at least{' '}
+      <span className="text-emerald-300 mt-[2px]">🛡️</span>To be eligible, you must hold at least{' '}
       {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
       <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
       When the claim window opens, click{' '}
