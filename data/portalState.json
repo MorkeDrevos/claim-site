@@ -8,13 +8,13 @@
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "Closes on 2025-11-15 · 23:16 UTC",
+  "claimWindowStatus": "Opens on 2025-11-15 · 16:16 UTC",
   "claimWindowOpensAt": "2025-11-15T22:16:00Z",
-  "claimWindowClosesAt": "2025-11-15T23:16:00Z",
+  "claimWindowClosesAt": "2025-11-15T22:16:05Z",
 
   "frontEndStatus": "Online",
   "contractStatus": "Deployed",
-  "firstPoolStatus": "open",
+  "firstPoolStatus": "not-opened",
 
   "eligibleAmount": 0,
   "claimHistory": [],
@@ -22,7 +22,7 @@
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
-  "windowPhase": "open",
+  "windowPhase": "scheduled",
   "snapshotTakenAt": null,
   "distributionCompletedAt": null
 }
