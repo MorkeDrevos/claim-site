@@ -788,7 +788,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     : 'Available when live'}
 </button>
 
-  {/* Footer */}
+{/* Footer */}
 <div className="mt-6 flex flex-col gap-4 text-[11px] text-slate-500">
 
   {/* Reward Pool */}
