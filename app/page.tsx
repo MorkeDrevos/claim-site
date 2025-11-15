@@ -720,81 +720,6 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-        {/* RIGHT COLUMN */}
-            <div className="w-full max-w-xs space-y-4 md:w-auto">
-              {/* Claim control */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-sm">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  Claim control
-                </p>
-                <div className="mt-3 space-y-2">
-                  <button
-                    type="button"
-                    onClick={handleConnectClick}
-                    className="w-full rounded-2xl bg-slate-100/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-100 ring-1 ring-slate-700 hover:bg-slate-100/10"
-                  >
-                    {connectedWallet
-                      ? `${connectedWallet.name}: ${effectiveWalletShort}`
-                      : effectiveWalletConnected
-                      ? effectiveWalletShort
-                      : 'Connect wallet'}
-                  </button>
-                  <p className="text-[11px] text-slate-500">
-                    {isPreview
-                      ? 'During live rounds this button will trigger the on-chain claim call. In this preview version it is visual only.'
-                      : 'During live rounds this button will trigger the on-chain claim transaction for this wallet.'}
-                  </p>
-                </div>
-              </div>
-
-              {/* System status */}
-              <div className="rounded-3xl border border-slate-800 bg-slate-950/70 px-4 py-4 text-xs">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  System status
-                </p>
-
-                <div className="mt-3 space-y-1.5 text-[12px] leading-relaxed text-slate-300">
-                  <p>
-                    <span className="text-slate-400">Portal front-end</span>
-                    <span className="text-slate-200">
-                      {' · '}
-                      {isPreview ? 'Preview only (not live)' : frontEndStatus}
-                    </span>
-                  </p>
-
-                  <p>
-                    <span className="text-slate-400">CLAIM contract</span>
-                    <span className="text-slate-200">
-                      {' · '}
-                      {contractStatus === 'Deployed'
-                        ? 'Deployed and ready for live rounds'
-                        : contractStatus}
-                    </span>
-                  </p>
-
-                  <p>
-                    <span className="text-slate-400">Reward pool</span>
-                    <span className="text-slate-200">
-                      {' · '}
-                      {firstPoolStatus === 'open'
-                        ? 'First pool is currently open'
-                        : firstPoolStatus === 'closed'
-                        ? 'First pool has closed'
-                        : 'First pool not opened yet'}
-                    </span>
-                  </p>
-
-                  <p className="pt-1 flex items-center gap-1.5 text-[11px] font-medium text-emerald-300">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                    </span>
-                    All systems operational
-                  </p>
-                </div>
-              </div>
-            </div>
-
         {/* Eligibility explanation (outside card, above progress) */}
         <div className="mt-6 text-[13px] leading-relaxed text-slate-300">
           <p>
@@ -1117,6 +1042,12 @@ export default function ClaimPoolPage() {
               </p>
             </div>
           </SoftCard>
+
+          To be eligible, you must hold at least 1,000,000 $CLAIM at the snapshot. When the claim window opens, click LOCK IN MY SHARE to register your wallet for that round. All registered wallets split the reward pool equally.
+
+Snapshots for the next round can be taken at any time between the last window closing and the next one opening — if you're not holding 1,000,000 $CLAIM when it hits, your wallet sits out that round.
+
+
         </div>
       </div>
 
