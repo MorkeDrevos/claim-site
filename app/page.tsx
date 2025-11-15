@@ -845,13 +845,11 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       at the snapshot.
     </span>
 
-    <span className="mt-1 block">
       When the claim window opens, click{' '}
       <span className="font-semibold text-emerald-300">
         LOCK IN MY SHARE
       </span>{' '}
       to register your wallet’s share for that round.
-    </span>
 
     <span className="mt-1 block text-slate-500">
       Snapshots can be taken any time between the last window being
