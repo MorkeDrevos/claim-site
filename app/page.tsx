@@ -783,7 +783,6 @@ export default function ClaimPoolPage() {
         <div key={step.id} className="flex-1 flex items-center">
           {/* Dot area */}
           <div className="flex flex-col items-center flex-none">
-            
             {/* PING animation */}
             <div className="relative h-4 w-4 flex items-center justify-center">
               {isActive && (
@@ -806,13 +805,6 @@ export default function ClaimPoolPage() {
             <span className="mt-2 text-[11px] text-center text-slate-300 leading-snug">
               {step.label}
             </span>
-
-            {/* YOU ARE HERE + stage name */}
-            {isActive && (
-              <span className="mt-1 text-[10px] text-emerald-300 font-semibold tracking-[0.22em] uppercase">
-                YOU ARE HERE · {step.label}
-              </span>
-            )}
           </div>
 
           {/* Connecting line */}
@@ -831,19 +823,27 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
-  {/* Explanation text */}
-  <p className="mt-3 text-[11px] text-slate-500">
-    {currentPhase === 'scheduled' &&
-      'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
-    {currentPhase === 'snapshot' &&
-      'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
-    {currentPhase === 'open' &&
-      'Claim window open. Lock in your share before the countdown hits zero.'}
-    {currentPhase === 'closed' &&
-      'Claim window closed. No new wallets can lock in for this round.'}
-    {currentPhase === 'distribution' &&
-      'Round complete. Rewards have been distributed.'}
-  </p>
+  {/* YOU ARE HERE + explanation text */}
+  <div className="mt-3 text-left">
+    {currentPhase === 'distribution' && (
+      <p className="text-[11px] text-emerald-300 font-semibold tracking-[0.22em] uppercase mb-1">
+        YOU ARE HERE · ROUND COMPLETE
+      </p>
+    )}
+
+    <p className="text-[11px] text-slate-500">
+      {currentPhase === 'scheduled' &&
+        'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
+      {currentPhase === 'snapshot' &&
+        'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
+      {currentPhase === 'open' &&
+        'Claim window open. Lock in your share before the countdown hits zero.'}
+      {currentPhase === 'closed' &&
+        'Claim window closed. No new wallets can lock in for this round.'}
+      {currentPhase === 'distribution' &&
+        'Round complete. Rewards have been distributed.'}
+    </p>
+  </div>
 </SoftCard>
 
         {/* === Preview Eligibility Cards === */}
