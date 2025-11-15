@@ -895,7 +895,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                         />
                       </div>
 
-                      <span className="mt-2 text-[13px] text-center text-slate-300 leading-snug">
+                      <span className="mt-2 text-[13px] font-semibold text-center text-slate-200 leading-snug">
   {step.label}
 </span>
                     </div>
