@@ -728,7 +728,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                   {/* h1 */}
                  <h1 className="text-[20px] sm:text-[34px] font-semibold leading-snug 
                bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
-  A time-based reward pool — lock in your wallet when the window opens.
+  A time-based reward pool. Lock in your wallet when the window opens.
 </h1>
                 </div>
               </div>
@@ -904,7 +904,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Reward Pool */}
 <SoftCard>
-  <p className="text-[15px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
     Current Reward Pool
   </p>
 
