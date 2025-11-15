@@ -912,9 +912,8 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     {rewardAmountText} CLAIM
   </p>
 
-  <p className="text-[13px] text-slate-500 mt-1">
-  <span className="text-slate-400">≈</span>{' '}
-  <span className="font-medium text-slate-300">${rewardUsdText}</span>
+  <p className="text-[11px] font-medium text-slate-500 bg-slate-900/40 px-2 py-0.5 rounded-md inline-block mt-1">
+  ≈ ${rewardUsdText} USD
 </p>
 </SoftCard>
 
