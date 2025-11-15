@@ -82,9 +82,17 @@ function StatusPill({ label, tone = 'neutral' }: StatusPillProps) {
   );
 }
 
-function SoftCard({ children }: { children: React.ReactNode }) {
+function SoftCard({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur">
+    <div
+      className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
+    >
       {children}
     </div>
   );
