@@ -764,7 +764,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
           : 'Window opens in'}
       </p>
 
-      {/* ✅ Big countdown: numbers only */}
+      {/* Big countdown: numbers only */}
       <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
         {numericCountdown}
       </p>
@@ -783,36 +783,8 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </span>
   </div>
 
-  {/* Big CTA bar */}
-<button
-  type="button"
-  onClick={handleClaimClick}
-  disabled={!canClaim}
-  className={[
-    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-    'transition-all duration-300 border',
-    canClaim
-      // 🔥 LIVE – full green, pulsing
-      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-      : isClosed
-      // 🧊 CLOSED – muted, clearly dead
-      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-      // 🌱 SCHEDULED – disabled, but with emerald “coming soon” glow
-      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-    canClaim && isPulseOn ? 'animate-pulse' : '',
-  ].join(' ')}
->
-  {canClaim
-    ? 'Lock in my share'
-    : isClosed
-    ? 'Window closed'
-    : 'Available when live'}
-</button>
-
-{/* Footer */}
-<div className="mt-6 space-y-4 text-[11px] text-slate-500">
-  {/* Reward Pool summary */}
-  <div className="flex flex-wrap items-end justify-between gap-3">
+  {/* Reward Pool summary – moved ABOVE the button */}
+  <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
         Reward pool this window
@@ -835,20 +807,45 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </p>
   </div>
 
-  {/* Soft divider */}
-  <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
+  {/* Big CTA bar */}
+  <button
+    type="button"
+    onClick={handleClaimClick}
+    disabled={!canClaim}
+    className={[
+      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      'transition-all duration-300 border',
+      canClaim
+        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+        : isClosed
+        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+      canClaim && isPulseOn ? 'animate-pulse' : '',
+    ].join(' ')}
+  >
+    {canClaim
+      ? 'Lock in my share'
+      : isClosed
+      ? 'Window closed'
+      : 'Available when live'}
+  </button>
 
-  {/* Eligibility Text */}
-  <p className="text-[12px] leading-relaxed text-slate-400">
-  To be eligible, you must hold at least{' '}
-  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-  <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
-  When the claim window opens, click{' '}
-  <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-  to register your wallet’s share for that round.{' '}
-</p>
+  {/* Footer – divider + eligibility text */}
+  <div className="mt-6 space-y-4 text-[11px] text-slate-500">
+    {/* Soft divider */}
+    <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
+
+    {/* Eligibility Text */}
+    <p className="text-[12px] leading-relaxed text-slate-400">
+      To be eligible, you must hold at least{' '}
+      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+      <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
+      When the claim window opens, click{' '}
+      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+      to register your wallet’s share for that round.
+    </p>
+  </div>
 </div>
-</div>   {/* end CLAIM WINDOW CARD */}
 
     </div>   {/* end LEFT column */}
   </div>     {/* end flex row wrapper */}
