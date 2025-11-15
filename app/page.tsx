@@ -901,21 +901,28 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         </div>
 
         {/* === Preview Eligibility Cards === */}
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* Reward Pool */}
-<SoftCard>
-  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Current Reward Pool
-  </p>
+<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  {/* Current Reward Pool */}
+  <SoftCard>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Current reward pool
+    </p>
 
-  <p className="mt-2 text-xl font-bold text-slate-100">
-    {rewardAmountText} CLAIM
-  </p>
+    <div className="mt-3 space-y-1">
+      {/* CLAIM amount */}
+      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+        {rewardAmountText}
+        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+          $CLAIM
+        </span>
+      </p>
 
-  <p className="text-[11px] font-medium text-slate-500 bg-slate-900/40 px-2 py-0.5 rounded-md inline-block mt-1">
-  ≈ ${rewardUsdText} USD
-</p>
-</SoftCard>
+      {/* USD estimate */}
+      <p className="text-xs font-medium text-slate-400">
+        ≈ <span className="text-slate-200">{rewardUsdText}</span>
+      </p>
+    </div>
+  </SoftCard>
 
           {/* Minimum Holding */}
           <SoftCard>
