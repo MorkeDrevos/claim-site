@@ -734,10 +734,10 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                   )}
 
                   {/* REMOVE CLAIM WINDOW TITLE */}
-                 <h1 className="text-[11px] sm:text-[34px] font-medium tracking-tight text-slate-300">
+                 <h1 className="text-[11px] sm:text-[44px] font-medium tracking-tight text-slate-300">
   A time-based reward pool — lock in your wallet when the window opens.
 </h1>
-<span className="font-semibold text-emerald-300">
+<span className="font-semibold">
     Snapshots can be taken at any time between the last window being
     scheduled and the next live claim window opening.
   </span>{' '}
@@ -844,7 +844,6 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       </span>{' '}
       at the snapshot.
     </span>
-
       When the claim window opens, click{' '}
       <span className="font-semibold text-emerald-300">
         LOCK IN MY SHARE
