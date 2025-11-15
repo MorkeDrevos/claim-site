@@ -869,7 +869,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
             </p>
 
             {/* Steps line */}
-            <div className="mt-3 flex items-center gap-3">
+            <div className="mt-3 flex items-center justify-between gap-3">
               {steps.map((step, index, all) => {
                 const currentIndex = all.findIndex((s) => s.id === currentPhase);
                 const isDone = currentIndex > index;
