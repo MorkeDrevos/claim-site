@@ -797,7 +797,7 @@ export default function ClaimPoolPage() {
 
 
             {/* Phase explanation */}
-            <p className="mt-4 text-[13px] text-slate-400">
+            <p className="mt-4 text-[14px] text-amber-300/90 font-medium">
               {currentPhase === 'scheduled' &&
                 'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
               {currentPhase === 'snapshot' &&
