@@ -422,21 +422,26 @@ export default function ClaimPoolPage() {
     return `Closes in ${countdownLabel}`;
   }
 
-    const windowTimingText = (() => {
-    if (isLive) {
-      if (!countdownLabel) return 'Closes soon';
-      if (countdownLabel === 'now') return 'Closes any second';
-      return `Closes in ${countdownLabel}`;
-    }
+  // Closed → next round
+  if (isClosed) {
+    if (!countdownLabel) return 'Waiting for the next round';
+    if (countdownLabel === 'now') return 'Next window opens any second';
+    return `Next window opens in ${countdownLabel}`;
+  }
 
-    if (isClosed) {
-      return 'Waiting for the next round';
-    }
+  // Scheduled → upcoming window
+  if (!countdownLabel) return 'Time to be announced';
+  if (countdownLabel === 'now') return 'Opens any second';
+  return `Opens in ${countdownLabel}`;
+})();
 
-    if (!countdownLabel) return 'Time to be announced';
-    if (countdownLabel === 'now') return 'Opens any second';
-    return `Opens in ${countdownLabel}`;
-  })();
+// 👉 Numbers-only countdown for the BIG DISPLAY
+const numericCountdown =
+  countdownLabel && countdownLabel !== 'now'
+    ? countdownLabel
+    : isLive
+    ? '0s'
+    : '';
 
   // ✅ Pure numeric countdown for the big line (no words)
   const numericCountdown =
