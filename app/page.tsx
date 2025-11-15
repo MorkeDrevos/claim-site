@@ -841,14 +841,17 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
 
     {/* Eligibility Text */}
-   <p className="text-[12px] leading-relaxed text-slate-400 flex items-start gap-2">
-  <span className="mt-[3px] h-1.5 w-1.5 rounded-full bg-emerald-400/60"></span> To be eligible, you must hold at least{' '}
-      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-      <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
-      When the claim window opens, click{' '}
-      <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-      to register your wallet’s share for that round.
-    </p>
+    <p className="text-[12px] leading-relaxed text-slate-400 flex items-start gap-1.5">
+  <span className="text-emerald-300 text-[14px] mt-[2px]">🛡️</span>
+  <span>
+    To be eligible, you must hold at least{' '}
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+    <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
+    When the claim window opens, click{' '}
+    <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+    to register your wallet’s share for that round.
+  </span>
+</p>
   </div>
 </div>
 
@@ -963,7 +966,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     Current Reward Pool
   </p>
 
-  <p className="mt-2 text-xl font-bold text-slate-100">
+  <p className="mt-1 text-xl font-bold text-slate-100">
     {rewardAmountText} CLAIM
   </p>
 
