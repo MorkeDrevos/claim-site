@@ -9,8 +9,8 @@
   "snapshotBlock": "219038421",
 
   "claimWindowStatus": "Snapshot taken — rewards are being prepared.",
-  "claimWindowOpensAt": "2025-11-15T20:00:00Z",
-  "claimWindowClosesAt": "2025-11-15T21:00:00Z",
+  "claimWindowOpensAt": "2025-11-15T20:57:00Z",
+  "claimWindowClosesAt": "2025-11-15T20:60:00Z",
 
   "frontEndStatus": "Online",
   "contractStatus": "Deployed",
