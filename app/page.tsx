@@ -575,7 +575,7 @@ export default function ClaimPoolPage() {
                 CLAIM PORTAL
               </span>
               <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-                CLAIM — Token of Timing
+                $CLAIM — Token of Timing
               </span>
             </div>
           </Link>
@@ -724,32 +724,30 @@ export default function ClaimPoolPage() {
                   </p>
                 </div>
 
-                {/* Explanation inside card */}
-                <div className="mt-5 border-t border-slate-800/60 pt-4 text-[12px] leading-relaxed text-slate-400">
-                  <p className="mb-1">
-                    To be eligible, you must hold at least{' '}
-                    <span className="font-semibold text-emerald-300">
-                      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-                    </span>{' '}
-                    at the snapshot. When the claim window opens, click{' '}
-                    <span className="font-semibold text-emerald-300">
-                      LOCK IN MY SHARE
-                    </span>{' '}
-                    to register your wallet for that round. All registered
-                    wallets{' '}
-                    <span className="font-semibold text-emerald-300">
-                      split the reward pool equally.
-                    </span>{' '}
-                  </p>
+                {/* Eligibility + rules text (moved outside the claim window box) */}
+<div className="mt-6 text-[13px] leading-relaxed text-slate-300 space-y-3">
+  <p>
+    To be eligible, you must hold at least{" "}
+    <span className="font-semibold text-emerald-300">
+      {MIN_HOLDING.toLocaleString("en-US")} $CLAIM
+    </span>{" "}
+    at the snapshot. When the claim window opens, click{" "}
+    <span className="font-semibold text-emerald-300">
+      LOCK IN MY SHARE
+    </span>{" "}
+    to register your wallet for that round. All registered wallets{" "}
+    <span className="font-semibold text-emerald-300">
+      split the reward pool equally.
+    </span>
+  </p>
 
-                  <p className="mt-2 text-[11px] text-slate-500">
-                    Snapshots for the next round can be taken at any time
-                    between the last window closing and the next one opening —{' '}
-                    if you&apos;re not holding{' '}
-                    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
-                    your wallet sits out that round.
-                  </p>
-                </div>
+  <p className="text-slate-400">
+    Snapshots for the next round can be taken at any time between the last
+    window closing and the next one opening — if you're not holding{" "}
+    {MIN_HOLDING.toLocaleString("en-US")} $CLAIM when it hits, your wallet
+    sits out that round.
+  </p>
+</div>
               </div>
             </div>
 
