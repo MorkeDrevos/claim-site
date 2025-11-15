@@ -699,6 +699,29 @@ export default function ClaimPoolPage() {
                   </span>
                 </div>
 
+                {/* ⬇️ NEW LOCATION FOR THE EXPLANATION TEXT ⬇️ */}
+<div className="mt-6 text-[13px] leading-relaxed text-slate-300">
+  <p>
+    To be eligible, you must hold at least{' '}
+    <span className="font-semibold text-emerald-300">
+      {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
+    </span>{' '}
+    at the snapshot. When the claim window opens, click{' '}
+    <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+    to register your wallet for that round. All registered wallets{' '}
+    <span className="font-semibold text-emerald-300">
+      split the reward pool equally.
+    </span>
+  </p>
+
+  <p className="mt-3 text-[13px] text-slate-400">
+    Snapshots for the next round can be taken at any time between the last
+    window closing and the next one opening — if you're not holding{' '}
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your
+    wallet sits out that round.
+  </p>
+</div>
+
                 {/* Big CTA bar */}
                 <button
                   type="button"
@@ -722,32 +745,7 @@ export default function ClaimPoolPage() {
                   <p>
                     Snapshot {snapshotBlock} · {networkLabel}
                   </p>
-                </div>
-
-                {/* Eligibility + rules text (moved outside the claim window box) */}
-<div className="mt-6 text-[13px] leading-relaxed text-slate-300 space-y-3">
-  <p>
-    To be eligible, you must hold at least{" "}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString("en-US")} $CLAIM
-    </span>{" "}
-    at the snapshot. When the claim window opens, click{" "}
-    <span className="font-semibold text-emerald-300">
-      LOCK IN MY SHARE
-    </span>{" "}
-    to register your wallet for that round. All registered wallets{" "}
-    <span className="font-semibold text-emerald-300">
-      split the reward pool equally.
-    </span>
-  </p>
-
-  <p className="text-slate-400">
-    Snapshots for the next round can be taken at any time between the last
-    window closing and the next one opening — if you're not holding{" "}
-    {MIN_HOLDING.toLocaleString("en-US")} $CLAIM when it hits, your wallet
-    sits out that round.
-  </p>
-</div>
+                </div>                
               </div>
             </div>
 
