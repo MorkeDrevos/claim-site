@@ -229,6 +229,8 @@ export default function ClaimPoolPage() {
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
 
+  const [preFlash, setPreFlash] = useState(false);
+
   const [inlineMessage, setInlineMessage] = useState<{
     type: 'error' | 'warning' | 'success';
     title: string;
@@ -277,7 +279,7 @@ useEffect(() => {
     }
   };
 
-  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
+const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
@@ -542,6 +544,26 @@ const numericCountdown =
     ? '0s'
     : '';
 
+    // Flash green 3 seconds before stage changes
+useEffect(() => {
+  if (!countdownTarget) return;
+
+  const target = new Date(countdownTarget).getTime();
+  if (!target) return;
+
+  const check = () => {
+    const diff = target - Date.now();
+    if (diff <= 3000 && diff > 0) {
+      setPreFlash(true);
+      setTimeout(() => setPreFlash(false), 3500);
+    }
+  };
+
+  check();
+  const id = setInterval(check, 500);
+  return () => clearInterval(id);
+}, [countdownTarget]);
+
 const { hours, minutes, seconds } = parseCountdownLabel(
   numericCountdown || null
 );
@@ -801,7 +823,12 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
               </div>
 
          {/* CLAIM WINDOW CARD */}
-<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+<div
+  className={[
+    "mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)] transition-all duration-500",
+    preFlash ? "animate-[flashGreen_0.4s_ease-in-out_6]" : ""
+  ].join(" ")}
+>
   {/* Top row – Countdown left, reward pool right */}
   <div className="flex flex-wrap items-start justify-between gap-6">
     {/* Countdown (dominant, left) */}
