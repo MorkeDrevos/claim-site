@@ -806,7 +806,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </div>
   </div>
 
-  {/* Eligibility Text */}
+    {/* Eligibility Text */}
   <p className="text-[12px] leading-relaxed text-slate-400">
     To be eligible, you must hold at least{' '}
     {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
@@ -819,9 +819,12 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </span>
   </p>
 
-</div>
+</div>   {/* end Footer */}
+</div>   {/* end CLAIM WINDOW CARD */}
 
-        </SoftCard>
+    </div>   {/* end LEFT column */}
+  </div>     {/* end flex row wrapper */}
+</SoftCard>
 
                 {/* Round progress bar */}
         <div className="mt-14">
