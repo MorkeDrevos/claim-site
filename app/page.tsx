@@ -266,8 +266,6 @@ const closesAtMs =
   state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
 const nowMs = Date.now();
 
-const nowMs = Date.now();
-
 // === Last-3-seconds detection ===
 const secondsLeft =
   phase === 'open'
