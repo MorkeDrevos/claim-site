@@ -843,7 +843,9 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     {/* Eligibility Text */}
     <p className="text-[12px] leading-relaxed text-slate-400 flex items-start gap-1.5">
   <span>
-    © To be eligible, you must hold at least{' '}
+    <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-slate-600/40 mr-2">
+  <span className="h-1.5 w-1.5 rounded-full bg-slate-400/70" />
+</span>To be eligible, you must hold at least{' '}
     {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
     <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
     When the claim window opens, click{' '}
