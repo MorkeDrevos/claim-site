@@ -834,7 +834,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     <div className="h-px w-full bg-gradient-to-r from-emerald-500/40 via-emerald-500/10 to-transparent" />
 
     {/* Eligibility Text */}
-    <p className="text-[12px] leading-relaxed text-slate-400">
+    <p className="text-[13px] leading-relaxed text-slate-400">
       To be eligible, you must hold at least{' '}
       {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
       <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
