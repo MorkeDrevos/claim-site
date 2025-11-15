@@ -654,7 +654,7 @@ export default function ClaimPoolPage() {
 
               {/* Reward pool line */}
               <p className="mt-3 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Reward pool this window{' '}
+                Reward pool{' '}
                 <span className="text-emerald-300 text-[18px] sm:text-[26px] font-bold drop-shadow-[0_0_10px_rgba(16,185,129,0.55)]">
                   {rewardAmountText} $CLAIM
                 </span>{' '}
@@ -728,87 +728,88 @@ export default function ClaimPoolPage() {
 
         </SoftCard>
 
-        {/* Round progress bar */}
-<SoftCard className="mt-12">
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Round {(state as any).roundNumber ?? 1} progress
-  </p>
+        {/* Round progress bar – full-width */}
+<div className="mt-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] px-4 sm:px-6">
+  <SoftCard className="w-full">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Round {(state as any).roundNumber ?? 1} progress
+    </p>
 
-  {/* Steps line */}
-  <div className="mt-3 flex items-center gap-3">
-    {steps.map((step, index, all) => {
-      const currentIndex = all.findIndex((s) => s.id === currentPhase);
-      const isDone = currentIndex > index;
-      const isActive = currentIndex === index;
+    {/* Steps line */}
+    <div className="mt-3 flex items-center gap-3">
+      {steps.map((step, index, all) => {
+        const currentIndex = all.findIndex((s) => s.id === currentPhase);
+        const isDone = currentIndex > index;
+        const isActive = currentIndex === index;
 
-      return (
-        <div key={step.id} className="flex-1 flex items-center">
-          {/* Dot + label */}
-          <div className="flex flex-col items-center flex-none">
-            <div className="relative h-4 w-4 flex items-center justify-center">
-              {isActive && (
-                <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
-              )}
-              <span
-                className={[
-                  'relative block h-3 w-3 rounded-full border',
-                  isActive
-                    ? 'border-emerald-400 bg-emerald-400'
-                    : isDone
-                    ? 'border-emerald-500 bg-emerald-500/60'
-                    : 'border-slate-700 bg-slate-900',
-                ].join(' ')}
-              />
+        return (
+          <div key={step.id} className="flex-1 flex items-center">
+            <div className="flex flex-col items-center flex-none">
+              <div className="relative h-4 w-4 flex items-center justify-center">
+                {isActive && (
+                  <span className="absolute h-4 w-4 rounded-full bg-emerald-400/50 animate-ping" />
+                )}
+                <span
+                  className={[
+                    'relative block h-3 w-3 rounded-full border',
+                    isActive
+                      ? 'border-emerald-400 bg-emerald-400'
+                      : isDone
+                      ? 'border-emerald-500 bg-emerald-500/60'
+                      : 'border-slate-700 bg-slate-900',
+                  ].join(' ')}
+                />
+              </div>
+
+              <span className="mt-2 text-[11px] text-center text-slate-300 leading-snug">
+                {step.label}
+              </span>
             </div>
 
-            <span className="mt-2 text-[11px] text-center text-slate-300 leading-snug">
-              {step.label}
-            </span>
+            {index < all.length - 1 && (
+              <div className="ml-3 flex-1 h-px rounded-full bg-slate-800">
+                <div
+                  className={[
+                    'h-px rounded-full transition-colors',
+                    isDone ? 'bg-emerald-500' : 'bg-slate-800',
+                  ].join(' ')}
+                />
+              </div>
+            )}
           </div>
-
-          {index < all.length - 1 && (
-            <div className="ml-3 flex-1 h-px rounded-full bg-slate-800">
-              <div
-                className={[
-                  'h-px rounded-full transition-colors',
-                  isDone ? 'bg-emerald-500' : 'bg-slate-800',
-                ].join(' ')}
-              />
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-
-  {activeStep && (
-    <div className="mt-4 flex items-center gap-2">
-      <span className="relative flex h-3 w-3 items-center justify-center">
-        <span className="absolute h-3 w-3 rounded-full bg-emerald-400/60 animate-ping" />
-        <span className="relative h-2 w-2 rounded-full bg-emerald-300" />
-      </span>
-      <span className="text-[10px] font-semibold tracking-[0.22em] text-emerald-300 uppercase">
-        YOU ARE HERE:
-      </span>
-      <span className="text-[13px] font-semibold text-slate-100">
-        {activeStep.label}
-      </span>
+        );
+      })}
     </div>
-  )}
 
-  <p className="mt-3 text-[11px] text-slate-500">
-    {currentPhase === 'scheduled' &&
-      'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
-    {currentPhase === 'snapshot' &&
-      'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
-    {currentPhase === 'open' &&
-      'Claim window open. Lock in your share before the countdown hits zero.'}
-    {currentPhase === 'closed' &&
-      'Claim window closed. No new wallets can lock in for this round.'}
-    {currentPhase === 'distribution' &&
-      'Rewards for this round are being distributed / have been distributed. This round is complete.'}
-  </p>
-</SoftCard>
+    {activeStep && (
+      <div className="mt-4 flex items-center gap-2">
+        <span className="relative flex h-3 w-3 items-center justify-center">
+          <span className="absolute h-3 w-3 rounded-full bg-emerald-400/60 animate-ping" />
+          <span className="relative h-2 w-2 rounded-full bg-emerald-300" />
+        </span>
+        <span className="text-[10px] font-semibold tracking-[0.22em] text-emerald-300 uppercase">
+          YOU ARE HERE:
+        </span>
+        <span className="text-[13px] font-semibold text-slate-100">
+          {activeStep.label}
+        </span>
+      </div>
+    )}
+
+    <p className="mt-3 text-[11px] text-slate-500">
+      {currentPhase === 'scheduled' &&
+        'Upcoming window is scheduled. Once it opens, you will be able to lock in your share.'}
+      {currentPhase === 'snapshot' &&
+        'Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.'}
+      {currentPhase === 'open' &&
+        'Claim window open. Lock in your share before the countdown hits zero.'}
+      {currentPhase === 'closed' &&
+        'Claim window closed. No new wallets can lock in for this round.'}
+      {currentPhase === 'distribution' &&
+        'Rewards for this round are being distributed / have been distributed. This round is complete.'}
+    </p>
+  </SoftCard>
+</div>
 
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
