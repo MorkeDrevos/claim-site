@@ -8,9 +8,9 @@
   "snapshotLabel": "Snapshot — Round 1",
   "snapshotBlock": "219038421",
 
-  "claimWindowStatus": "2025-11-15T14:10:00Z",
-  "claimWindowOpensAt": "2025-11-15T14:10:00Z",
-  "claimWindowClosesAt": "2025-11-15T14:12:00Z",
+  "claimWindowStatus": "2025-11-15T15:20:00Z",
+  "claimWindowOpensAt": "2025-11-15T15:20:00Z",
+  "claimWindowClosesAt": "2025-11-15T15:22:00Z",
 
   "frontEndStatus": "Online",
   "contractStatus": "Deployed",
