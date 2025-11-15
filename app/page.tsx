@@ -433,7 +433,7 @@ if (opensAtMs && closesAtMs) {
   eligibleAmount,
   claimHistory,
   rewardPoolAmountClaim,
-  rewardUsdText,
+  rewardPoolAmountUsd,
   windowPhase,
   snapshotTakenAt,
   distributionCompletedAt,
@@ -812,8 +812,8 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       {rewardAmountText}
       <span className="text-[18px] sm:text-[20px] text-emerald-400"> $CLAIM</span>
       <span className="ml-2 text-slate-500 text-[16px] sm:text-[16px] font-medium">
-        ({rewardPoolAmountUsd.toLocaleString('en-US')} USD)
-      </span>
+  ({rewardUsdText})
+</span>
     </div>
   </div>
 
