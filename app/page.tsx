@@ -912,9 +912,10 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     {rewardAmountText} CLAIM
   </p>
 
-  <p className="text-xl text-slate-400 leading-relaxed">
-    USD value: {rewardUsdText}
-  </p>
+  <p className="text-[13px] text-slate-500 mt-1">
+  <span className="text-slate-400">≈</span>{' '}
+  <span className="font-medium text-slate-300">${rewardUsdText}</span>
+</p>
 </SoftCard>
 
           {/* Minimum Holding */}
