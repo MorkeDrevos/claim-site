@@ -537,13 +537,13 @@ export default function ClaimPoolPage() {
      Render
   ─────────────────────────── */
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Window scheduled' },
-    { id: 'snapshot', label: 'Snapshot taken' },
-    { id: 'open', label: 'Live claim window' },
-    { id: 'closed', label: 'Window closed' },
-    { id: 'distribution', label: 'Rewards distributed' },
-  ];
+ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+  { id: 'scheduled', label: 'Upcoming window' },
+  { id: 'snapshot',  label: 'Eligibility locked' },
+  { id: 'open',      label: 'Claim window open' },
+  { id: 'closed',    label: 'Claim window closed' },
+  { id: 'distribution', label: 'Round complete' },
+];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
@@ -819,7 +819,7 @@ export default function ClaimPoolPage() {
               {currentPhase === 'closed' &&
                 'Claim window closed. No new wallets can lock in for this round.'}
               {currentPhase === 'distribution' &&
-                'Rewards for this round are being distributed / have been distributed. This round is complete.'}
+                'Round complete. Rewards have been distributed.'}
             </p>
           </SoftCard>
         </div>
