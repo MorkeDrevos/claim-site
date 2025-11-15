@@ -266,6 +266,18 @@ const closesAtMs =
   state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
 const nowMs = Date.now();
 
+const nowMs = Date.now();
+
+// === Last-3-seconds detection ===
+const secondsLeft =
+  phase === 'open'
+    ? Math.max(0, Math.floor((closesAtMs - nowMs) / 1000))
+    : phase === 'scheduled'
+    ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
+    : 0;
+
+const isLast3 = secondsLeft <= 3 && secondsLeft > 0;
+
 // Base phase used for countdown (scheduled / open / closed)
 let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
@@ -772,9 +784,14 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       </p>
 
       {/* ✅ Big countdown: numbers only */}
-      <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-        {numericCountdown}
-      </p>
+      <div
+  className={
+    'text-[36px] sm:text-[44px] font-bold transition-all duration-200 ' +
+    (isLast3 ? 'text-emerald-300 animate-pulse' : 'text-white')
+  }
+>
+  {numericCountdown}
+</div>
     </div>
 
     <span
@@ -789,6 +806,16 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       {isLive ? 'Live window' : isClosed ? 'Closed' : 'Scheduled'}
     </span>
   </div>
+
+  {/* Flashing countdown bar (glow) */}
+<div
+  className={`
+    w-full h-[38px] rounded-full
+    bg-slate-900/40
+    transition-all duration-200
+    ${isLast3 ? 'ring-2 ring-emerald-400 animate-pulse' : ''}
+  `}
+/>
 
   {/* Big CTA bar */}
 <button
