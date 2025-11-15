@@ -800,7 +800,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     <div className="text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)]">
       {rewardPoolAmountText}
       <span className="text-[18px] sm:text-[20px] text-emerald-400"> $CLAIM</span>
-      <span className="ml-2 text-slate-500 text-[14px] sm:text-[15px] font-medium">
+      <span className="ml-2 text-slate-500 text-[16px] sm:text-[16px] font-medium">
         ({rewardPoolAmountUsd.toLocaleString('en-US')} USD)
       </span>
     </div>
@@ -928,17 +928,19 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         {/* === Preview Eligibility Cards === */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Reward Pool */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Current Reward Pool
-            </p>
-            <p className="mt-2 text-xl font-bold text-slate-100">
-              {rewardAmountText} CLAIM
-            </p>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              USD value: {rewardUsdText}
-            </p>
-          </SoftCard>
+<SoftCard>
+  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Current Reward Pool
+  </p>
+
+  <p className="mt-2 text-xl font-bold text-slate-100">
+    {rewardAmountText} CLAIM
+  </p>
+
+  <p className="text-[11px] text-slate-400 leading-relaxed">
+    USD value: {rewardUsdText}
+  </p>
+</SoftCard>
 
           {/* Minimum Holding */}
           <SoftCard>
