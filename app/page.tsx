@@ -824,10 +824,10 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
     When the claim window opens, click{' '}
     <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
-    to register your wallet’s share for that round. All registered wallets{' '}
-    <span className="font-semibold text-emerald-300">
-      split the reward pool equally. Snapshots can be taken at any time between the last window being
-  scheduled and the next live claim window opening. If you’re not holding{' '}
+    to register your wallet’s share for that round. 
+    <span className="font-semibold text-emerald-300">Snapshots can be taken at any time between the last window being
+  scheduled and the next live claim window opening. </span>{' '}
+  If you’re not holding{' '}
   {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
   sits out that round.
     </span>
