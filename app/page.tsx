@@ -795,7 +795,7 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
                leading-[1.25]
                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                bg-clip-text text-transparent">
-  A time-based reward pool - lock in your wallet when the window opens.
+  Rewards earned by presence - show up, click, get your share.
 </h1>
                 </div>
               </div>
