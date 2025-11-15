@@ -656,6 +656,7 @@ export default function ClaimPoolPage() {
               </p>
 
               {/* CLAIM WINDOW CARD */}
+              <div className="w-full">
               <div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
                 {/* Top row */}
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -711,7 +712,8 @@ export default function ClaimPoolPage() {
                 </div>
               </div>
             </div>
-
+            </div>
+            
           </div>
 
           {/* Eligibility explanation (outside card, above progress) */}
