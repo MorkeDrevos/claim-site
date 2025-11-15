@@ -800,13 +800,13 @@ export default function ClaimPoolPage() {
             <p className="mt-4 text-[14px] font-medium">
   {currentPhase === 'scheduled' && (
     <span className="text-slate-300">
-      Upcoming window is scheduled. Once it opens, you will be able to lock in your share.
+      <span className="font-semibold text-emerald-300">Upcoming window is scheduled. </span>Once it opens, you will be able to lock in your share.
     </span>
   )}
 
   {currentPhase === 'snapshot' && (
     <span className="text-slate-300">
-      Eligibility is locked for this round. Next up is the live claim window where eligible wallets lock in their share.
+      <span className="text-slate-300">Eligibility is locked for this round. </span>Next up is the live claim window where eligible wallets lock in their share.
     </span>
   )}
 
