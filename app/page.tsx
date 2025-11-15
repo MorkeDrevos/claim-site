@@ -744,7 +744,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                   )}
 
                   {/* REMOVE CLAIM WINDOW TITLE */}
-                 <<h1 className="text-[20px] sm:text-[36px] font-semibold tracking-tight 
+                 <h1 className="text-[20px] sm:text-[36px] font-semibold tracking-tight 
                text-slate-200 leading-snug drop-shadow-[0_0_8px_rgba(16,185,129,0.15)]">
   A time-based reward pool — lock in your wallet when the window opens.
 </h1>
