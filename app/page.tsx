@@ -255,6 +255,28 @@ useEffect(() => {
   return () => clearInterval(id);
 }, []);
 
+  // ── Contract address (TEMP: SOL mint) ──
+  const CLAIM_CA = 'So11111111111111111111111111111111111111112';
+  const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
+
+  const handleCopyCa = async () => {
+    try {
+      await navigator.clipboard.writeText(CLAIM_CA);
+      addToast(
+        'success',
+        'Contract copied',
+        'Token contract address has been copied to your clipboard.'
+      );
+    } catch (err) {
+      console.error('Clipboard error', err);
+      addToast(
+        'error',
+        'Unable to copy',
+        'Please copy the contract address manually for now.'
+      );
+    }
+  };
+
   const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 const lowerStatus = claimWindowStatusSafe.toLowerCase();
@@ -904,26 +926,49 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         {/* === Preview Eligibility Cards === */}
 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
   {/* Current Reward Pool */}
-  <SoftCard>
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Current reward pool
+<SoftCard>
+  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Current reward pool
+  </p>
+
+  <div className="mt-3 space-y-1">
+    {/* CLAIM amount */}
+    <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+      {rewardAmountText}
+      <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+        $CLAIM
+      </span>
     </p>
 
-    <div className="mt-1.5 space-y-1">
-      {/* CLAIM amount */}
-      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-          $CLAIM
-        </span>
-      </p>
+    {/* USD estimate */}
+    <p className="text-xs font-medium text-slate-400">
+      ≈ <span className="text-slate-200">{rewardUsdText}</span>
+    </p>
+  </div>
 
-      {/* USD estimate */}
-      <p className="text-xs font-medium text-slate-400">
-        ≈ <span className="text-slate-200">{rewardUsdText}</span>
-      </p>
-    </div>
-  </SoftCard>
+  {/* Contract address + Copy */}
+  <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Contract address
+    </p>
+
+    <button
+      type="button"
+      onClick={handleCopyCa}
+      className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+                 text-[11px] font-medium text-slate-200 border border-slate-700/80
+                 hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
+                 transition-colors"
+    >
+      <span className="font-mono text-[11px] text-slate-300">
+        {shortCa}
+      </span>
+      <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
+        Copy CA
+      </span>
+    </button>
+  </div>
+</SoftCard>
 
           {/* Minimum Holding */}
           <SoftCard>
