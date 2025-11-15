@@ -641,13 +641,17 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Subtle moving glows */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
-        <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
-      </div>
+return (
+  <main className="min-h-screen bg-slate-950 text-slate-50">
+    {/* Subtle moving glows */}
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
+      <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
+    </div>
+
+    {/* ...rest of your JSX... */}
+  </main>
+);
 
       {/* Top nav */}
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
