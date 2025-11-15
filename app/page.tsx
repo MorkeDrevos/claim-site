@@ -611,11 +611,6 @@ export default function ClaimPoolPage() {
             <div className="flex-1 space-y-6">
               {/* Breadcrumb */}
               <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-3 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-600">
-                  <span>Claim pool — Round {roundNumber ?? 1}</span>
-                  <span className="h-px w-5 bg-slate-700/70" />
-                  <span>{snapshotLabel}</span>
-                </div>
 
                 {/* Live / scheduled header */}
                 <div className="space-y-2">
