@@ -277,7 +277,7 @@ useEffect(() => {
     }
   };
 
-  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
+const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
