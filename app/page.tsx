@@ -784,7 +784,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </div>
 
   {/* Reward Pool summary – moved ABOVE the button */}
-  <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
+  <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
         Reward pool this window
