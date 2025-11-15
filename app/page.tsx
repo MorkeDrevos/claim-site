@@ -792,6 +792,10 @@ export default function ClaimPoolPage() {
               })}
             </div>
 
+            {/* Divider above status sentence */}
+            <div className="mt-6 border-t border-slate-800/60" />
+
+
             {/* Phase explanation */}
             <p className="mt-4 text-[13px] text-slate-400">
               {currentPhase === 'scheduled' &&
