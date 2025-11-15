@@ -433,7 +433,7 @@ if (opensAtMs && closesAtMs) {
   eligibleAmount,
   claimHistory,
   rewardPoolAmountClaim,
-  rewardPoolAmountUsd,
+  rewardUsdText,
   windowPhase,
   snapshotTakenAt,
   distributionCompletedAt,
