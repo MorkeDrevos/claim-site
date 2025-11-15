@@ -923,9 +923,9 @@ const { hours, minutes, seconds } = parseCountdownLabel(
             {/* Phase explanation */}
             <p className="mt-4 text-[14px] font-medium">
   {currentPhase === 'scheduled' && (
-    <span className="text-slate-300">
-      Upcoming window is scheduled. Once it opens, you will be able to lock in your share.
-    </span>
+    <span className="text-[13px] text-slate-400 leading-relaxed">
+  Upcoming window is scheduled. Once it opens, you will be able to lock in your share.
+</span>
   )}
 
   {currentPhase === 'snapshot' && (
