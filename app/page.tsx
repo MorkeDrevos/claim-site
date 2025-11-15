@@ -415,20 +415,25 @@ export default function ClaimPoolPage() {
       : 'Soon';
 
   const windowTimingText = (() => {
-    if (isLive) {
-      if (!countdownLabel) return 'Closes soon';
-      if (countdownLabel === 'now') return 'Closes any second';
-      return `Closes in ${countdownLabel}`;
-    }
+  // Live window → countdown to close
+  if (isLive) {
+    if (!countdownLabel) return 'Closes soon';
+    if (countdownLabel === 'now') return 'Closes any second';
+    return `Closes in ${countdownLabel}`;
+  }
 
-    if (isClosed) {
-      return 'Waiting for the next round';
-    }
+  // Closed window → countdown to next open (if we know it)
+  if (isClosed) {
+    if (!countdownLabel) return 'Waiting for the next round';
+    if (countdownLabel === 'now') return 'Next window opens any second';
+    return `Next window opens in ${countdownLabel}`;
+  }
 
-    if (!countdownLabel) return 'Time to be announced';
-    if (countdownLabel === 'now') return 'Opens any second';
-    return `Opens in ${countdownLabel}`;
-  })();
+  // Scheduled (future) window → normal “Opens in …”
+  if (!countdownLabel) return 'Time to be announced';
+  if (countdownLabel === 'now') return 'Opens any second';
+  return `Opens in ${countdownLabel}`;
+})();
 
   const canClaim = !isPreview && isLive;
 
@@ -684,6 +689,10 @@ export default function ClaimPoolPage() {
     ? 'Next window in'
     : 'Window opens in'}
 </p>
+                    <p className="text-base font-semibold text-slate-50">
+  {windowTimingText?.replace(/^Closes in\s+/i, '')}
+</p>
+                  </div>
 
                   <span
                     className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
