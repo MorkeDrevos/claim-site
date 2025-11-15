@@ -718,10 +718,9 @@ export default function ClaimPoolPage() {
         <div className="mt-6 text-[13px] leading-relaxed text-slate-300">
           <p>
             To be eligible, you must hold at least{' '}
-            <span className="font-semibold text-emerald-300">
               {MIN_HOLDING.toLocaleString('en-US')}&nbsp;$CLAIM
-            </span>{' '}
-            at the snapshot. When the claim window opens, click{' '}
+            <span className="font-semibold text-emerald-300">at the snapshot. </span>{' '}
+            When the claim window opens, click{' '}
             <span className="font-semibold text-emerald-300">
               LOCK IN MY SHARE
             </span>{' '}
@@ -731,7 +730,7 @@ export default function ClaimPoolPage() {
             </span>
           </p>
 
-          <p className="mt-3 text-[13px] text-slate-400">
+          <p className="mt-3 text-[13px] text-slate-300">
             Snapshots for the next round can be taken at any time between the
             last window closing and the next one opening — if you&apos;re not
             holding {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits,
@@ -949,7 +948,7 @@ export default function ClaimPoolPage() {
                     <li>Fewer claimers = larger share per wallet.</li>
                     <li>No gas wars, no race condition — just presence.</li>
                   </ul>
-                  
+
                   <p className="mt-2 text-[11px] text-slate-500">
                     Once the audited contract is wired, exact pool sizes and
                     on-chain distribution details will be mirrored
