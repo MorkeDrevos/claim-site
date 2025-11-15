@@ -672,11 +672,12 @@ const { hours, minutes, seconds } = parseCountdownLabel(
       <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
     </div>
 
-      {/* Top nav */}
-      <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+            {/* Top nav – sticky */}
+      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          {/* Left: logo + title */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-slate-500/70">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-emerald-400/70">
               <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-200 group-hover:text-white">
                 $
               </span>
@@ -692,44 +693,77 @@ const { hours, minutes, seconds } = parseCountdownLabel(
             </div>
           </Link>
 
+          {/* Right: nav items */}
           <div className="flex items-center gap-3">
+            {/* Concept */}
             <Link
               href="/concept"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
             >
               Concept
             </Link>
 
-            <Link
-              href="/analytics"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            {/* X / Twitter */}
+            <a
+              href="https://x.com/yourhandle"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
             >
-              Analytics
-            </Link>
+              X
+            </a>
 
+            {/* Telegram */}
+            <a
+              href="https://t.me/yourtelegram"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+            >
+              TG
+            </a>
+
+            {/* Contract address pill */}
+            <button
+              type="button"
+              onClick={handleCopyCa}
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+                         text-[10px] font-medium text-slate-200 border border-slate-700/80
+                         hover:border-emerald-400/70 hover:text-emerald-200 hover:bg-slate-900/90
+                         transition-colors"
+            >
+              <span className="text-[9px] uppercase tracking-[0.18em] text-slate-500">
+                CA
+              </span>
+              <span className="font-mono text-[11px] text-slate-300">
+                {shortCa}
+              </span>
+            </button>
+
+            {/* Network label */}
             <span className="hidden text-xs text-slate-500 sm:inline">
               {networkLabel}
             </span>
 
+            {/* Wallet button */}
             <button
-  type="button"
-  onClick={handleConnectClick}
-  className="inline-flex items-center rounded-full 
-             border border-emerald-400/40 
-             bg-emerald-500/10 
-             px-4 py-2 
-             text-[10px] font-semibold uppercase tracking-[0.22em] 
-             text-emerald-300 
-             hover:bg-emerald-500/20 hover:border-emerald-400 
-             transition-all"
->
-  {connectedWallet
-    ? `${connectedWallet.name} connected`
-    : effectiveWalletConnected
-    ? 'Wallet connected'
-    : 'Connect wallet'}
-</button>
-
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex items-center rounded-full 
+                         border border-emerald-400/40 
+                         bg-emerald-500/10 
+                         px-4 py-2 
+                         text-[10px] font-semibold uppercase tracking-[0.22em] 
+                         text-emerald-300 
+                         hover:bg-emerald-500/20 hover:border-emerald-400 
+                         transition-all"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
           </div>
         </div>
       </header>
