@@ -931,7 +931,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
     </p>
 
     {/* Amounts */}
-    <div className="mt-3 space-y-1">
+    <div className="mt-1.5 space-y-1">
       {/* CLAIM amount */}
       <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
         {rewardAmountText}
