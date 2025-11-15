@@ -229,8 +229,6 @@ export default function ClaimPoolPage() {
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
 
-  const [preFlash, setPreFlash] = useState(false);
-
   const [inlineMessage, setInlineMessage] = useState<{
     type: 'error' | 'warning' | 'success';
     title: string;
@@ -279,7 +277,7 @@ useEffect(() => {
     }
   };
 
-const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
+  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
 const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
 const lowerStatus = claimWindowStatusSafe.toLowerCase();
 
@@ -544,26 +542,6 @@ const numericCountdown =
     ? '0s'
     : '';
 
-    // Flash green 3 seconds before stage changes
-useEffect(() => {
-  if (!countdownTarget) return;
-
-  const target = new Date(countdownTarget).getTime();
-  if (!target) return;
-
-  const check = () => {
-    const diff = target - Date.now();
-    if (diff <= 3000 && diff > 0) {
-      setPreFlash(true);
-      setTimeout(() => setPreFlash(false), 3500);
-    }
-  };
-
-  check();
-  const id = setInterval(check, 500);
-  return () => clearInterval(id);
-}, [countdownTarget]);
-
 const { hours, minutes, seconds } = parseCountdownLabel(
   numericCountdown || null
 );
@@ -822,46 +800,43 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
                 </div>
               </div>
 
-         {/* CLAIM WINDOW CARD */}
-<div
-  className={[
-    "mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)] transition-all duration-500",
-    preFlash ? "animate-[flashGreen_0.4s_ease-in-out_6]" : ""
-  ].join(" ")}
->
-  {/* Top row – Countdown left, reward pool right */}
+              {/* CLAIM WINDOW CARD */}
+<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+  {/* Top row – Reward left, countdown right */}
   <div className="flex flex-wrap items-start justify-between gap-6">
-    {/* Countdown (dominant, left) */}
-    <div className="space-y-2">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window closes in'
-          : isClosed
-          ? 'Next window in'
-          : 'Window opens in'}
-      </p>
-      <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50">
-        {numericCountdown}
-      </p>
-    </div>
+    {/* Reward pool (top-left) */}
+    <div className="space-y-1">
+  {/* Top label */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Reward pool this window
+  </p>
 
-    {/* Reward pool (right) */}
-    <div className="space-y-1 text-left sm:text-right">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Reward pool this window
-      </p>
+  {/* CLAIM amount (number + token same size) */}
+  <p className="mt-1 font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] 
+                text-[24px] sm:text-[28px]">
+    {rewardAmountText}
+    <span className="ml-2 text-emerald-400">
+      $CLAIM
+    </span>
+  </p>
 
-      <p className="mt-1 text-[22px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[22px] sm:text-[22px] text-emerald-400">
-          $CLAIM
-        </span>
-      </p>
+  {/* USD estimate — slightly bigger */}
+  <p className="font-medium text-slate-400 text-sm sm:text-base">
+    ≈ <span className="text-slate-200">{rewardUsdText}</span>
+  </p>
+</div>
 
-      <p className="text-[13px] font-medium text-slate-300">
-        ≈ <span className="text-slate-100">{rewardUsdText}</span>
-      </p>
-    </div>
+    {/* Countdown (top-right) */}
+{!isClosed && (
+  <div className="space-y-1 text-right">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive ? 'Window closes in' : 'Window opens in'}
+    </p>
+    <p className="text-lg sm:text-2xl font-semibold tracking-tight text-slate-50">
+  {numericCountdown}
+</p>
+  </div>
+)}
   </div>
 
   {/* Big CTA bar */}
@@ -900,7 +875,7 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     to register your wallet’s share for that round.
   </div>
 </div>
-{/* end CLAIM WINDOW CARD */}     
+{/* end CLAIM WINDOW CARD */}
 
     </div>   {/* end LEFT column */}
   </div>     {/* end flex row wrapper */}
