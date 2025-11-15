@@ -790,7 +790,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         Reward pool this window
       </p>
 
-      <p className="mt-1 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] flex items-baseline gap-3">
+      <p className="mt-0 text-[22px] sm:text-[26px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] flex items-baseline gap-3">
   <p className="mt-1 flex items-baseline gap-2
   text-[28px] sm:text-[30px] font-bold tracking-tight
   text-emerald-300 drop-shadow-[0_0_6px_rgba(16,185,129,0.20)]">
@@ -804,7 +804,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
   </span>
 
   {/* USD value */}
-  <span className="text-[16px] text-slate-400 font-medium">
+  <span className="text-[22px] text-slate-400 font-medium">
     ≈ {rewardUsdText}
   </span>
 </p>
@@ -842,9 +842,8 @@ const { hours, minutes, seconds } = parseCountdownLabel(
 
     {/* Eligibility Text */}
     <p className="text-[12px] leading-relaxed text-slate-400 flex items-start gap-1.5">
-  <span className="text-emerald-300 text-[14px] mt-[2px]">·</span>
   <span>
-    To be eligible, you must hold at least{' '}
+    © To be eligible, you must hold at least{' '}
     {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
     <span className="font-semibold text-emerald-300">at the snapshot.</span>{' '}
     When the claim window opens, click{' '}
@@ -959,7 +958,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
         </div>
 
         {/* === Preview Eligibility Cards === */}
-        <div className="mt-0 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Reward Pool */}
 <SoftCard>
   <p className="text-[15px] font-semibold uppercase tracking-[0.22em] text-slate-500">
