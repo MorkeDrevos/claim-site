@@ -685,33 +685,6 @@ export default function ClaimPoolPage() {
                   </span>
                 </div>
 
-                {/* Eligibility explanation (outside card, above progress) */}
-        <div className="mt-6 text-[13px] leading-relaxed text-slate-300 px-1">
-  <p className="mb-3">
-    To be eligible, you must hold at least{' '}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-    </span>{' '}
-    at the snapshot. When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">
-      LOCK IN MY SHARE
-    </span>{' '}
-    to register your wallet’s share for that round. All registered wallets{' '}
-    <span className="font-semibold text-emerald-300">
-      split the reward pool equally.
-    </span>
-  </p>
-
-  <p className="mt-4 text-[12px] leading-relaxed text-slate-400">
-    Snapshots can be taken at any time between the last window being scheduled
-    and the next live claim window opening. If you’re not holding{' '}
-    <span className="font-semibold text-emerald-300">
-      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
-    </span>{' '}
-    when it hits, your wallet sits out that round.
-  </p>
-</div>
-
                 {/* Big CTA bar */}
                 <button
                   type="button"
@@ -732,9 +705,16 @@ export default function ClaimPoolPage() {
                 {/* Footer */}
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                   <p>{claimWindowStatus}</p>
-                  <p>
-                    Snapshot {snapshotBlock} · {networkLabel}
-                  </p>
+                  <p className="mt-6 text-[12px] leading-relaxed text-slate-400">
+  To be eligible, you must hold at least{' '}
+  <span className="font-semibold text-emerald-300">
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM
+  </span>{' '}
+  at the snapshot. When the claim window opens, click{' '}
+  <span className="font-semibold text-emerald-300">LOCK IN MY SHARE</span>{' '}
+  to register your wallet’s share for that round. All registered wallets{' '}
+  <span className="font-semibold text-emerald-300">split the reward pool equally.</span>
+</p>
                 </div>
               </div>
             </div>
