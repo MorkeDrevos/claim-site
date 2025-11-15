@@ -265,14 +265,8 @@ const opensAtMs =
 const closesAtMs =
   state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
 const nowMs = Date.now();
-
-// === Last-3-seconds detection ===
-const secondsLeft =
-  phase === 'open'
-    ? Math.max(0, Math.floor((closesAtMs - nowMs) / 1000))
-    : phase === 'scheduled'
-    ? Math.max(0, Math.floor((opensAtMs - nowMs) / 1000))
-    : 0;
+// Base phase used for countdown (scheduled / open / closed)
+let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
 // 1) Prefer automatic timing based on opens/closes
 if (opensAtMs && closesAtMs) {
