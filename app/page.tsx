@@ -421,32 +421,43 @@ if (opensAtMs && closesAtMs) {
   /* ── Safe destructure (state is now non-null) ── */
 
   const {
-    walletConnected,
-    walletShort,
-    networkLabel,
-    snapshotLabel,
-    snapshotBlock,
-    claimWindowStatus,
-    frontEndStatus,
-    contractStatus,
-    firstPoolStatus,
-    eligibleAmount,
-    claimHistory,
-    rewardPoolAmountClaim,
-    rewardPoolAmountUsd,
-    windowPhase,
-    snapshotTakenAt,
-    distributionCompletedAt,
-    roundNumber,
-  } = state;
+  walletConnected,
+  walletShort,
+  networkLabel,
+  snapshotLabel,
+  snapshotBlock,
+  claimWindowStatus,
+  frontEndStatus,
+  contractStatus,
+  firstPoolStatus,
+  eligibleAmount,
+  claimHistory,
+  rewardPoolAmountClaim,
+  rewardPoolAmountUsd,
+  windowPhase,
+  snapshotTakenAt,
+  distributionCompletedAt,
+  roundNumber,
+} = state;
 
-  const isLive = phase === 'open';
-  const isClosed = phase === 'closed';
-  const isScheduled = !isLive && !isClosed;
+// Derived from opens/closes
+const isLive = phase === 'open';
+const isClosed = phase === 'closed';
 
-  const currentPhase: WindowPhase =
-    windowPhase ??
-    (isLive ? 'open' : isClosed ? 'closed' : 'scheduled');
+// Use auto phase for the 3 main stages,
+// but let you manually override to snapshot / distribution.
+let currentPhase: WindowPhase;
+
+if (windowPhase === 'snapshot' || windowPhase === 'distribution') {
+  // manual phases you set in JSON
+  currentPhase = windowPhase;
+} else if (isLive) {
+  currentPhase = 'open';
+} else if (isClosed) {
+  currentPhase = 'closed';
+} else {
+  currentPhase = 'scheduled';
+}
 
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
