@@ -829,9 +829,9 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       {isLive ? 'Window closes in' : 'Window opens in'}
     </p>
-    <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-      {numericCountdown}
-    </p>
+    <p className="text-lg sm:text-2xl font-semibold tracking-tight text-slate-50">
+  {numericCountdown}
+</p>
   </div>
 )}
   </div>
