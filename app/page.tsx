@@ -547,7 +547,7 @@ const numericCountdown =
     ? '0s'
     : '';
 
-// 🔔 Flash green 3 seconds before stage changes
+    // Flash green 3 seconds before stage changes
 useEffect(() => {
   if (!countdownTarget) return;
 
@@ -556,11 +556,9 @@ useEffect(() => {
 
   const check = () => {
     const diff = target - Date.now();
-    // between 0 and 3 seconds remaining
     if (diff <= 3000 && diff > 0) {
       setPreFlash(true);
-      // stop flashing 3s after it starts
-      setTimeout(() => setPreFlash(false), 3000);
+      setTimeout(() => setPreFlash(false), 3500);
     }
   };
 
