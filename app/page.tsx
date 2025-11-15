@@ -728,7 +728,7 @@ const { hours, minutes, seconds } = parseCountdownLabel(
                   {/* h1 */}
                  <h1 className="text-[20px] sm:text-[34px] font-semibold leading-snug 
                bg-gradient-to-r from-slate-200 to-slate-300 bg-clip-text text-transparent">
-  A time-based reward pool. Lock in your wallet when the window opens.
+  A time-based reward pool - lock in your wallet when the window opens.
 </h1>
                 </div>
               </div>
