@@ -422,6 +422,30 @@ export default function ClaimPoolPage() {
     return `Closes in ${countdownLabel}`;
   }
 
+    const windowTimingText = (() => {
+    if (isLive) {
+      if (!countdownLabel) return 'Closes soon';
+      if (countdownLabel === 'now') return 'Closes any second';
+      return `Closes in ${countdownLabel}`;
+    }
+
+    if (isClosed) {
+      return 'Waiting for the next round';
+    }
+
+    if (!countdownLabel) return 'Time to be announced';
+    if (countdownLabel === 'now') return 'Opens any second';
+    return `Opens in ${countdownLabel}`;
+  })();
+
+  // ✅ Pure numeric countdown for the big line (no words)
+  const numericCountdown =
+    countdownLabel && countdownLabel !== 'now'
+      ? countdownLabel           // e.g. "1d 3h 21m"
+      : isLive
+      ? '0s'                     // window is basically at zero
+      : '';                      // nothing yet when not known
+
   const countdownParts = (() => {
   // when we don't have a countdown yet
   if (!countdownLabel || countdownLabel === 'now') {
@@ -707,15 +731,12 @@ export default function ClaimPoolPage() {
           : 'Window opens in'}
       </p>
 
-      {/* Big countdown text – no duplicate "Closes in" */}
+      {/* ✅ Big countdown: numbers only */}
       <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-        {windowTimingText
-          ? windowTimingText.replace(/^Closes in\s+/i, '')
-          : ''}
+        {numericCountdown}
       </p>
     </div>
 
-    {/* Status pill */}
     <span
       className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
         isLive
@@ -746,7 +767,7 @@ export default function ClaimPoolPage() {
     {canClaim ? 'Lock in my share' : 'Available when live'}
   </button>
 
-  {/* Footer */}
+  {/* Footer (unchanged) */}
   <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
     <p className="mt-6 text-[12px] leading-relaxed text-slate-400">
       To be eligible, you must hold at least{' '}
