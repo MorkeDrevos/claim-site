@@ -821,13 +821,17 @@ export default function ClaimPoolPage() {
     })}
   </div>
 
-  {/* YOU ARE HERE + explanation text */}
-  <div className="mt-3 text-left">
-    {currentPhase === 'distribution' && (
-      <p className="text-[11px] text-emerald-300 font-semibold tracking-[0.22em] uppercase mb-1">
-        YOU ARE HERE · ROUND COMPLETE
-      </p>
-    )}
+  {/* YOU ARE HERE row (styled like screenshot) */}
+{isActive && (
+  <div className="mt-2 flex items-center gap-2">
+    <span className="text-[10px] uppercase tracking-[0.22em] text-emerald-300/80">
+      YOU ARE HERE:
+    </span>
+    <span className="text-[11px] font-semibold text-emerald-300">
+      {step.label}
+    </span>
+  </div>
+)}
 
     <p className="text-[11px] text-slate-500">
       {currentPhase === 'scheduled' &&
