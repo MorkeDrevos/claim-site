@@ -678,16 +678,12 @@ export default function ClaimPoolPage() {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="space-y-1">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      {isLive
-                        ? 'Window closes in'
-                        : isClosed
-                        ? 'Window closed'
-                        : 'Window opens in'}
-                    </p>
-                    <p className="text-base font-semibold text-slate-50">
-  {windowTimingText?.replace(/^Closes in\s+/i, '')}
+  {isLive
+    ? 'Window closes in'
+    : isClosed
+    ? 'Next window in'
+    : 'Window opens in'}
 </p>
-                  </div>
 
                   <span
                     className={`inline-flex items-center rounded-full border px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] ${
