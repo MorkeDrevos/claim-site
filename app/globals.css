@@ -37,3 +37,13 @@ body::before {
   mix-blend-mode: screen;
   z-index: -1;
 }
+@keyframes flashGreen {
+  0%, 100% {
+    background-color: rgba(16,185,129,0.08);
+    box-shadow: 0 0 40px rgba(16,185,129,0.5);
+  }
+  50% {
+    background-color: rgba(16,185,129,0.25);
+    box-shadow: 0 0 80px rgba(16,185,129,0.9);
+  }
+}
