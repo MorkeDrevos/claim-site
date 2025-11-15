@@ -528,10 +528,10 @@ if (windowPhase === 'snapshot' || windowPhase === 'distribution') {
   // 👉 Numbers-only countdown used in the big UI
 const numericCountdown =
   countdownLabel && countdownLabel !== 'now'
-    ? countdownLabel        // e.g. "4h 7m 30s"
+    ? countdownLabel
     : isLive
     ? '0s'
-    : '';
+    : 'TBA';
 
 const { hours, minutes, seconds } = parseCountdownLabel(
   numericCountdown || null
