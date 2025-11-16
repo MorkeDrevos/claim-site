@@ -791,17 +791,16 @@ export default function ClaimPoolPage() {
 
                   {/* Reward pool */}
                   <div className="space-y-1 text-right">
-  {/* Label */}
   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     Reward pool
   </p>
 
-  {/* USD — main */}
-  <p className="text-[26px] sm:text-[30px] font-bold text-slate-50">
+  {/* USD = primary */}
+  <p className="text-[24px] sm:text-[28px] font-bold text-slate-50">
     {rewardUsdText}
   </p>
 
-  {/* CLAIM — secondary */}
+  {/* CLAIM secondary */}
   <p className="text-[13px] font-medium text-emerald-300">
     ≈ {rewardAmountText}
     <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
