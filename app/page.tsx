@@ -815,26 +815,36 @@ const snapshotDateLabel = snapshotTakenAt
       Current round pool
     </p>
 
-    {/* Hover icon */}
-    <div className="group relative">
+    {/* Icon + tooltip wrapper */}
+    <div className="relative group">
       <button
         type="button"
-        className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-                   bg-slate-800/80 text-slate-300 text-[10px] font-bold
-                   border border-slate-700 
-                   hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+        className="inline-flex h-4 w-4 items-center justify-center 
+                   rounded-full bg-slate-900/60 border border-slate-700/70
+                   text-slate-300 text-[9px] font-bold
+                   hover:bg-slate-800 hover:text-white hover:border-slate-500
+                   transition-all"
       >
         ?
       </button>
 
       {/* Tooltip */}
       <div
-        className="pointer-events-none absolute right-0 top-6 w-64 opacity-0 group-hover:opacity-100 
-                   transition-opacity duration-200 z-50"
+        className="
+          pointer-events-none absolute left-full ml-3 top-1
+          w-72 opacity-0 group-hover:opacity-100 
+          transition-opacity duration-200 z-50
+        "
       >
-        <div className="rounded-2xl border border-slate-700/50 bg-gradient-to-b 
-                        from-slate-900/95 to-slate-900/80 
-                        p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+        <div
+          className="
+            rounded-2xl border border-slate-700/60 
+            bg-gradient-to-b from-slate-900/95 to-slate-900/85 
+            backdrop-blur-xl
+            shadow-[0_8px_40px_rgba(0,0,0,0.55)]
+            p-4
+          "
+        >
           <p className="text-[13px] text-slate-300 leading-relaxed">
             Rewards are auto-distributed on-chain and paid out in 
             <span className="text-emerald-300 font-medium"> $CLAIM</span> 
@@ -845,6 +855,7 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
   </div>
+</div>
 
   {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
