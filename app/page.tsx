@@ -926,7 +926,7 @@ export default function ClaimPoolPage() {
               })}
             </div>
 
-            <p className="mt-3 text-[11px] text-emerald-300">{progressMessage}</p>
+            <p className="mt-3 text-[12px] text-emerald-300">{progressMessage}</p>
           </div>
         </SoftCard>
 
