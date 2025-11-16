@@ -880,6 +880,183 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
+                </SoftCard>
+
+        {/* Info + rules section */}
+        <section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
+          {/* LEFT: Tabs – eligibility / reward logic / history */}
+          <SoftCard>
+            {/* Tabs */}
+            <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              {(['eligibility', 'rewards', 'history'] as PortalTab[]).map((tab) => {
+                const isActive = activeTab === tab;
+                const label =
+                  tab === 'eligibility'
+                    ? 'Eligibility rules'
+                    : tab === 'rewards'
+                    ? 'Reward logic'
+                    : 'Claim history';
+
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={[
+                      'rounded-full px-4 py-1.5 transition-colors',
+                      isActive
+                        ? 'bg-slate-50 text-slate-950'
+                        : 'text-slate-400 hover:text-slate-100',
+                    ].join(' ')}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <hr className="border-slate-800/80" />
+
+            {/* Tab content */}
+            <div className="mt-6 space-y-4 text-sm leading-relaxed text-slate-200">
+              {activeTab === 'eligibility' && (
+                <>
+                  <p className="text-slate-100">
+                    The CLAIM pool is driven by proof-of-presence. Eligibility
+                    comes from balances at specific snapshot blocks, not
+                    random forms.
+                  </p>
+                  <ul className="mt-3 space-y-2 list-disc list-inside text-slate-300">
+                    <li>
+                      Hold at least{' '}
+                      {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot
+                      block.
+                    </li>
+                    <li>
+                      Snapshot block and date are announced before each round.
+                    </li>
+                    <li>
+                      Optional bonus rules may reward long-term or early
+                      participants.
+                    </li>
+                  </ul>
+                  <p className="mt-4 text-[13px] text-slate-500">
+                    The final rule set for each round will be published before
+                    the snapshot and mirrored here inside the portal.
+                  </p>
+                </>
+              )}
+
+              {activeTab === 'rewards' && (
+                <>
+                  <p className="text-slate-100">
+                    Each round has a fixed reward pool. Everyone who shows up
+                    and locks in during the live window shares that pool
+                    equally.
+                  </p>
+                  <ul className="mt-3 space-y-2 list-disc list-inside text-slate-300">
+                    <li>
+                      Only wallets that were eligible at snapshot can lock in a
+                      share.
+                    </li>
+                    <li>
+                      Every eligible wallet that locks in receives the same
+                      fraction of the pool.
+                    </li>
+                    <li>
+                      Miss the window and your share for that round is skipped.
+                    </li>
+                  </ul>
+                  <p className="mt-4 text-[13px] text-slate-500">
+                    Future rounds may introduce weighted or bonus rules, but the
+                    core mechanic stays simple: show up, click, get your share.
+                  </p>
+                </>
+              )}
+
+              {activeTab === 'history' && (
+                <>
+                  {claimHistory.length === 0 ? (
+                    <p className="text-slate-400">
+                      No claim history yet. Once the first distribution is
+                      complete, you&apos;ll see past rounds and transactions
+                      listed here.
+                    </p>
+                  ) : (
+                    <div className="space-y-2 text-[13px]">
+                      {claimHistory.map((entry) => (
+                        <div
+                          key={`${entry.round}-${entry.tx ?? entry.date}`}
+                          className="flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2"
+                        >
+                          <div>
+                            <p className="text-slate-100">
+                              Round {entry.round}
+                            </p>
+                            {entry.date && (
+                              <p className="text-xs text-slate-500">
+                                {entry.date}
+                              </p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-semibold text-emerald-300">
+                              {entry.amount.toLocaleString('en-US')} CLAIM
+                            </p>
+                            {entry.tx && (
+                              <a
+                                href={`https://solscan.io/tx/${entry.tx}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-[11px] text-sky-400 hover:text-sky-300"
+                              >
+                                View tx
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </SoftCard>
+
+          {/* RIGHT: Snapshot info */}
+          <SoftCard>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Snapshot info
+            </p>
+
+            <div className="mt-4 space-y-3">
+              <p className="text-lg font-semibold text-slate-100">
+                {snapshotLabel || 'Snapshot TBD'}{' '}
+                {snapshotBlock && (
+                  <span className="font-mono text-sm text-slate-300">
+                    #{snapshotBlock}
+                  </span>
+                )}{' '}
+                <span className="text-slate-400">· {networkLabel}</span>
+              </p>
+
+              <p className="text-sm leading-relaxed text-slate-300">
+                Snapshots can be taken any time between the last window being
+                scheduled and the next live claim window opening. If you&apos;re
+                not holding {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it
+                hits, your wallet sits out that round.
+              </p>
+            </div>
+
+            <hr className="my-5 border-slate-800/80" />
+
+            <p className="text-[12px] leading-relaxed text-slate-500">
+              © 2025 CLAIM portal · Subject to change. Built for serious
+              holders, not random forms.
+            </p>
+          </SoftCard>
+        </section>
+
         {/* Round progress bar */}
         <SoftCard className="mt-6">
           <div className="flex flex-col gap-3">
