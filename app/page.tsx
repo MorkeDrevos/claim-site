@@ -793,14 +793,17 @@ if (countdownTarget) {
                     </p>
 
                     {/* Big numeric countdown */}
-                    <p
-  className={[
+                    <div className={isLive ? "relative" : ""}>
+  {isLive && (
+    <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+  )}
+  <p className={[
     "text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50",
     isFinalTen ? "animate-[pulse_0.35s_ease-in-out_infinite]" : ""
-  ].join(" ")}
->
-  {isClosed ? '' : countdownLabel || '--:--:--'}
-</p>
+  ].join(" ")}>
+    {isClosed ? '' : countdownLabel || '--:--:--'}
+  </p>
+</div>
                   </div>
 
                   {/* Reward pool */}
