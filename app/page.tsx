@@ -810,24 +810,19 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="flex flex-col items-end gap-1 text-right">
   {/* Label + info icon + tooltip */}
   <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <span>Current round pool</span>
+  <span>Current round pool</span>
 
-    {/* Info icon with hover tooltip */}
-    <span className="relative group inline-flex items-center">
-      <span className="i-heroicons-information-circle text-[13px] text-slate-500 group-hover:text-slate-200" />
-
-      {/* Tooltip */}
-      <span
-        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-64 -translate-x-1/2
-                   rounded-lg bg-slate-900/95 px-3 py-2 text-[11px] font-normal text-slate-200
-                   opacity-0 shadow-xl ring-1 ring-slate-700/80 transition-opacity
-                   group-hover:opacity-100"
-      >
-        Rewards are auto-distributed on-chain and paid out in $CLAIM after each
-        claim window closes. All claimers receive an equal share of the pool.
-      </span>
-    </span>
-  </p>
+  {/* Simple “i” tooltip */}
+  <button
+    type="button"
+    className="inline-flex h-4 w-4 items-center justify-center rounded-full 
+               border border-slate-500 text-[10px] text-slate-400 
+               hover:border-slate-200 hover:text-slate-200"
+    title="Rewards are auto-distributed on-chain and paid out in $CLAIM after each claim window closes. All claimers receive an equal share of the pool. Fewer claimers → larger share per wallet."
+  >
+    i
+  </button>
+</p>
 
   {/* Big USD – same line height as countdown */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
