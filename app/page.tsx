@@ -321,6 +321,15 @@ export default function ClaimPoolPage() {
     };
   }, [countdownTarget]);
 
+  // Final 10 second pulse trigger
+let isFinalTen = false;
+
+if (countdownTarget) {
+  const targetMs = new Date(countdownTarget).getTime();
+  const diff = targetMs - Date.now();
+  isFinalTen = diff > 0 && diff <= 10_000;
+}
+
   /* ── Initial load + polling ── */
 
   useEffect(() => {
@@ -784,9 +793,14 @@ export default function ClaimPoolPage() {
                     </p>
 
                     {/* Big numeric countdown */}
-                    <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-                      {isClosed ? '' : countdownLabel || '--:--:--'}
-                    </p>
+                    <p
+  className={[
+    "text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50",
+    isFinalTen ? "animate-[pulse_0.35s_ease-in-out_infinite]" : ""
+  ].join(" ")}
+>
+  {isClosed ? '' : countdownLabel || '--:--:--'}
+</p>
                   </div>
 
                   {/* Reward pool */}
