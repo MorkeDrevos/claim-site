@@ -773,57 +773,59 @@ if (countdownTarget) {
               </div>
 
               {/* CLAIM WINDOW CARD */}
-              <div
-                className={[
-                  'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-                  preFlash ? 'animate-pulse' : '',
-                ].join(' ')}
-              >
-                {/* Top row – Countdown left, reward pool right */}
-                <div className="flex flex-wrap items-center justify-between gap-6">
-                  {/* Countdown (dominant, left) */}
-                  <div className="space-y-2">
-                    {/* Header text ABOVE the timer */}
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      {isLive
-                        ? 'Window closes in'
-                        : isClosed
-                        ? 'Next window in'
-                        : 'Window opens in'}
-                    </p>
+<div
+  className={[
+    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+    preFlash ? 'animate-pulse' : '',
+  ].join(' ')}
+>
+  {/* Top: labels row */}
+  <div className="flex w-full items-baseline justify-between">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive
+        ? 'Window closes in'
+        : isClosed
+        ? 'Next window in'
+        : 'Window opens in'}
+    </p>
 
-                    {/* Big numeric countdown */}
-                    <div className={isLive ? "relative" : ""}>
-  {isLive && (
-    <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-  )}
-  <p className={[
-    "text-[32px] sm:text-[30px] font-semibold tracking-tight text-slate-50",
-    isFinalTen ? "animate-[pulse_0.35s_ease-in-out_infinite]" : ""
-  ].join(" ")}>
-    {isClosed ? '' : countdownLabel || '--:--:--'}
-  </p>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      Reward pool
+    </p>
+  </div>
+
+  {/* Second row: big numbers */}
+  <div className="mt-1.5 flex w-full items-end justify-between gap-6">
+    {/* Countdown (dominant, left) */}
+    <div className={isLive ? 'relative' : ''}>
+      {isLive && (
+        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+      )}
+      <p
+        className={[
+          'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
+          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+        ].join(' ')}
+      >
+        {isClosed ? '' : countdownLabel || '--:--:--'}
+      </p>
+    </div>
+
+    {/* Reward pool (right) */}
+    <div className="space-y-1 text-right">
+      <p className="text-[24px] sm:text-[28px] font-bold text-slate-50">
+        {rewardUsdText}
+      </p>
+      <p className="text-[13px] font-medium text-emerald-300">
+        ≈ {rewardAmountText}
+        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+      </p>
+    </div>
+  </div>
+
+  {/* CTA bar stays as you already have it below this */}
+  {/* ... keep your existing LOCK IN MY SHARE button + eligibility text here ... */}
 </div>
-                  </div>
-
-                  {/* Reward pool */}
-                  <div className="space-y-1 text-right">
-  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    Reward pool
-  </p>
-
-  {/* USD = primary */}
-  <p className="text-[24px] sm:text-[28px] font-bold text-slate-50">
-    {rewardUsdText}
-  </p>
-
-  {/* CLAIM secondary */}
-  <p className="text-[13px] font-medium text-emerald-300">
-    ≈ {rewardAmountText}
-    <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-  </p>
-</div>
-                </div>
 
                 {/* Big CTA bar */}
                 <button
@@ -955,7 +957,7 @@ if (countdownTarget) {
 })}  
             </div>
 
-            <p className="mt-3 text-[13px] text-slate-200">
+            <p className="mt-3 text-[12px] text-slate-200">
   {progressMessage}
 </p>
           </div>
