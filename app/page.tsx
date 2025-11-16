@@ -912,16 +912,14 @@ export default function ClaimPoolPage() {
       />
       <div className="mt-2 flex items-center gap-2">
         <div
-          className={[
-            'h-2.5 w-2.5 rounded-full border',
-            isDone
-              ? 'bg-emerald-400 border-emerald-300'
-              : 'bg-slate-800 border-slate-600',
-            isActiveStep
-  ? 'animate-[pulse_1.6s_ease-in-out_infinite] scale-[1.35] shadow-[0_0_12px_rgba(16,185,129,0.8)]'
-  : '',
-          ].join(' ')}
-        />
+  className={[
+    'h-2.5 w-2.5 rounded-full border',
+    isDone
+      ? 'bg-emerald-400 border-emerald-300'
+      : 'bg-slate-800 border-slate-600',
+    isActiveStep ? 'animate-[pulse_1.6s_ease-in-out_infinite]' : '',
+  ].join(' ')}
+/>
         <span
           className={[
             'tracking-wide',
