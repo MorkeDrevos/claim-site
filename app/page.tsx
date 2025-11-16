@@ -629,11 +629,11 @@ export default function ClaimPoolPage() {
   }
 
     const snapshotDateLabel = snapshotTakenAt
-    ? new Date(snapshotTakenAt).toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      })
-    : 'To be announced';
+  ? new Date(snapshotTakenAt).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    })
+  : '—';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
