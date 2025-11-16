@@ -784,18 +784,18 @@ export default function ClaimPoolPage() {
                   </div>
 
                   {/* Reward pool */}
-                  <div className="space-y-1 text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      Reward pool this window
-                    </p>
-                    <p className="text-xl sm:text-2xl font-bold text-emerald-300">
-                      {rewardAmountText}{' '}
-                      <span className="text-sm text-emerald-400">$CLAIM</span>
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      ≈ <span className="text-slate-200">{rewardUsdText}</span>
-                    </p>
-                  </div>
+<div className="space-y-1 text-right">
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    Reward pool
+  </p>
+  <p className="text-xl sm:text-2xl font-bold text-emerald-300">
+    {rewardAmountText}{' '}
+    <span className="text-sm text-emerald-400">$CLAIM</span>
+  </p>
+  <p className="text-xs text-slate-400">
+    ≈ <span className="text-slate-200">{rewardUsdText}</span>
+  </p>
+</div>
                 </div>
 
                 {/* Big CTA bar */}
