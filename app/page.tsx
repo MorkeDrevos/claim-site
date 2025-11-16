@@ -861,9 +861,9 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-    • <span className="text-emerald-300 font-medium">Eligibility:</span> hold
-    <span className="text-emerald-300 font-medium"> 1,000,000 $CLAIM</span> at snapshot —
-    wallets below minimum sit out that round.
+    • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below
+    minimum sit out that round.
   </p>
 </div>
 
