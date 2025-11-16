@@ -773,8 +773,8 @@ export default function ClaimPoolPage() {
                         : 'Window opens in'}
                     </p>
                     <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-                      {isClosed ? '' : numericCountdown || '--:--:--'}
-                    </p>
+  {isClosed ? '' : countdownLabel || '--:--:--'}
+</p>
                   </div>
 
                   {/* Reward pool */}
