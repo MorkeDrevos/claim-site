@@ -808,9 +808,20 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* RIGHT: label + USD + CLAIM */}
     <div className="flex flex-col items-end gap-1 text-right">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        Current Round Pool
-      </p>
+      <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  Current Round Pool
+  <button
+    type="button"
+    onClick={() =>
+  alert(
+    'Rewards are auto-distributed on-chain and paid out in $CLAIM after each claim window closes.\n\nAll claimers receive an equal share of the pool.'
+  )
+}
+    className="text-slate-500 hover:text-slate-300 transition"
+  >
+    <span className="i-heroicons-information-circle text-[14px]" />
+  </button>
+</p>
 
       {/* Big USD – same line height as countdown */}
       <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
@@ -821,19 +832,6 @@ const snapshotDateLabel = snapshotTakenAt
         ≈ {rewardAmountText}
         <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
       </p>
-      {/* Info button */}
-<button
-  type="button"
-  className="mt-1 flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-300 transition"
-  onClick={() => {
-    alert(
-      'Rewards are paid out in $CLAIM after each claim window closes.\n\nAll claimers receive an equal share.'
-    );
-  }}
->
-  <span className="i-heroicons-information-circle text-[14px]" />
-  <span>How rewards work?</span>
-</button>
     </div>
   </div>
 
