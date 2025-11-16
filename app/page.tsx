@@ -809,46 +809,50 @@ const snapshotDateLabel = snapshotTakenAt
     {/* RIGHT: label + USD + $CLAIM */}
 <div className="flex flex-col items-end gap-1 text-right">
 
-  {/* Label + info icon + tooltip */}
+  {/* Label + icon + tooltip */}
   <div className="relative flex items-center gap-2">
+
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       Current round pool
     </p>
 
-    {/* Info icon */}
-    <div className="relative group flex items-center">
+    {/* Icon + tooltip wrapper */}
+    <div className="relative group">
       <button
         type="button"
-        className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-                   bg-slate-800/80 text-slate-300 text-[10px] font-bold
-                   border border-slate-700 
-                   hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+        className="mt-[1px] inline-flex h-4 w-4 items-center justify-center 
+                   rounded-full bg-slate-800/80 text-slate-200 text-[10px] 
+                   border border-slate-700 font-bold
+                   hover:bg-slate-700 hover:text-white hover:border-slate-500 
+                   transition"
       >
         ?
       </button>
 
       {/* Tooltip */}
       <div
-        className="
-          pointer-events-none absolute 
-          left-full ml-3 top-1/2 -translate-y-1/2
-          w-72 opacity-0 group-hover:opacity-100 
-          transition-opacity duration-200 z-50
-        "
+        className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 
+                   w-72 opacity-0 group-hover:opacity-100 transition-opacity 
+                   duration-200 z-50"
       >
         <div className="rounded-2xl border border-slate-700/50 
                         bg-gradient-to-b from-slate-900/95 to-slate-900/80 
                         p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+          
           <p className="text-[13px] text-slate-300 leading-relaxed text-left">
-            Rewards are auto-distributed on-chain and paid out in 
-            <span className="text-emerald-300 font-medium"> $CLAIM</span> 
-            after each claim window closes. All claimers receive an equal share.
-            Fewer claimers → larger share per wallet.
+            Payouts are made automatically in 
+            <span className="text-emerald-300 font-semibold"> $CLAIM </span>
+            after each claim window closes. All claimers receive an equal share — 
+            fewer claimers means a 
+            <span className="text-emerald-300 font-semibold"> larger reward per wallet</span>.
           </p>
+
         </div>
       </div>
     </div>
   </div>
+
+  {/* Big USD continues… */}
 
   {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
