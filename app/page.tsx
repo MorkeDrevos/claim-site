@@ -857,7 +857,7 @@ const snapshotDateLabel = snapshotTakenAt
 
   <p>
     • Rewards are{' '}
-    <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — the system{' '}
+    <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> - the system{' '}
     <span className="text-emerald-300 font-medium">
       runs autonomously on smart contracts
     </span>
@@ -866,8 +866,8 @@ const snapshotDateLabel = snapshotTakenAt
 
   <p>
     • <span className="text-emerald-300 font-medium">Eligibility:</span> hold{' '}
-    <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at
-    snapshot — wallets below minimum sit out that round.
+    1,000,000 $CLAIM< <span className="text-emerald-300 font-medium">at
+    snapshot/span> - wallets below minimum sit out that round.
   </p>
 </div></div>
               {/* end CLAIM WINDOW CARD */}
