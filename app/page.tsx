@@ -780,7 +780,7 @@ if (countdownTarget) {
                 ].join(' ')}
               >
                 {/* Top row – Countdown left, reward pool right */}
-                <div className="flex flex-wrap items-start justify-between gap-6">
+                <div className="flex flex-wrap items-center justify-between gap-6">
                   {/* Countdown (dominant, left) */}
                   <div className="space-y-2">
                     {/* Header text ABOVE the timer */}
