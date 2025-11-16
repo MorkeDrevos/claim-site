@@ -855,13 +855,13 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
-      <span className="text-emerald-300 font-medium"> equal payout per wallet</span>.
+• Rewards are <span class="text-emerald-300 font-medium">auto-distributed on-chain</span> —  
+    the system <span class="text-emerald-300 font-medium">runs autonomously on smart contracts</span>.
   </p>
 
   <p>
     • <span className="text-emerald-300 font-medium">Eligibility:</span> hold 
-      <span className="text-emerald-300 font-medium"> 1,000,000 $CLAIM</span> at the snapshot — 
+      1,000,000 $CLAIM<span className="text-emerald-300 font-medium">  at the snapshot</span> — 
       wallets below minimum sit out that round.
   </p>
 </div>
