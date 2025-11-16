@@ -917,7 +917,9 @@ export default function ClaimPoolPage() {
             isDone
               ? 'bg-emerald-400 border-emerald-300'
               : 'bg-slate-800 border-slate-600',
-            isActiveStep ? 'animate-pulse' : '',
+            isActiveStep
+  ? 'animate-[pulse_0.8s_ease-in-out_infinite] scale-[1.35] shadow-[0_0_12px_rgba(16,185,129,0.8)]'
+  : '',
           ].join(' ')}
         />
         <span
