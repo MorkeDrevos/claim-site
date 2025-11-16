@@ -806,25 +806,9 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
 
-    {/* RIGHT: label + USD + $CLAIM */}
-<div className="flex flex-col items-end gap-1 text-right">
-  {/* Label + info icon + tooltip */}
-  <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  <span>Current round pool</span>
+    
 
-  {/* Simple “i” tooltip */}
-  <button
-    type="button"
-    className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-               border border-slate-500 text-[10px] text-slate-400 
-               hover:border-slate-200 hover:text-slate-200"
-    title="Rewards are auto-distributed on-chain and paid out in $CLAIM after each claim window closes. All claimers receive an equal share of the pool."
-  >
-    i
-  </button>
-</p>
-
-  {/* Big USD – same line height as countdown */}
+  {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
     {rewardUsdText} USD
   </p>
