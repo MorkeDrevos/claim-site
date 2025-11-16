@@ -629,7 +629,7 @@ export default function ClaimPoolPage() {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-    const snapshotDateLabel = snapshotTakenAt
+  const snapshotDateLabel = snapshotTakenAt
     ? new Date(snapshotTakenAt).toLocaleString('en-US', {
         dateStyle: 'medium',
         timeStyle: 'short',
