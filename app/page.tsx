@@ -102,6 +102,9 @@ function SoftCard({
    Countdown helpers
 ─────────────────────────── */
 
+// -------------------------------
+// Countdown helpers
+// -------------------------------
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
 
@@ -110,7 +113,6 @@ function formatCountdown(targetIso?: string | null): string | null {
 
   const diff = targetMs - Date.now();
 
-  // If we've passed the target time, freeze at 00:00:00
   if (diff <= 0) return '00:00:00';
 
   const totalSeconds = Math.floor(diff / 1000);
@@ -123,6 +125,27 @@ function formatCountdown(targetIso?: string | null): string | null {
   const ss = seconds.toString().padStart(2, '0');
 
   return `${hh}:${mm}:${ss}`;
+}
+
+function useCountdown(targetIso?: string | null): string | null {
+  const [label, setLabel] = React.useState<string | null>(() =>
+    formatCountdown(targetIso)
+  );
+
+  React.useEffect(() => {
+    if (!targetIso) {
+      setLabel(null);
+      return;
+    }
+
+    const update = () => setLabel(formatCountdown(targetIso));
+    update();
+
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [targetIso]);
+
+  return label;
 }
 
 /* ───────────────────────────
@@ -729,7 +752,7 @@ export default function ClaimPoolPage() {
                  bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                  bg-clip-text text-transparent"
                 >
-                  Rewards earned by presence - show up, click, get your share.
+                  Rewards earned by presence - show up, click and get your share.
                 </h1>
               </div>
 
