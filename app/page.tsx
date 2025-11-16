@@ -855,7 +855,6 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
   </div>
-</div>
 
   {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
