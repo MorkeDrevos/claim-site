@@ -782,43 +782,44 @@ if (countdownTarget) {
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  {/* Top: labels row */}
-  <div className="flex w-full items-baseline justify-between">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      {isLive
-        ? 'Window closes in'
-        : isClosed
-        ? 'Next window in'
-        : 'Window opens in'}
-    </p>
-
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      Reward pool
-    </p>
-  </div>
-
-  {/* Second row: big numbers */}
-  <div className="mt-1.5 flex w-full items-end justify-between gap-6">
-    {/* Countdown (dominant, left) */}
-    <div className={isLive ? 'relative' : ''}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
-      <p
-        className={[
-          'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {isClosed ? '' : countdownLabel || '--:--:--'}
+  {/* One row: countdown left, USD right */}
+  <div className="flex items-start justify-between gap-6">
+    {/* LEFT: label + countdown */}
+    <div className="flex flex-col gap-1">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {isLive
+          ? 'Window closes in'
+          : isClosed
+          ? 'Next window in'
+          : 'Window opens in'}
       </p>
+
+      <div className={isLive ? 'relative' : ''}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
+        <p
+          className={[
+            'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
+            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+          ].join(' ')}
+        >
+          {isClosed ? '' : countdownLabel || '--:--:--'}
+        </p>
+      </div>
     </div>
 
-    {/* Reward pool (right) */}
-    <div className="space-y-1 text-right">
-      <p className="text-[24px] sm:text-[28px] font-bold text-slate-50">
+    {/* RIGHT: label + USD + CLAIM */}
+    <div className="flex flex-col items-end gap-1 text-right">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        Reward pool
+      </p>
+
+      {/* Big USD – same line height as countdown */}
+      <p className="text-[32px] sm:text-[38px] font-bold text-slate-50">
         {rewardUsdText}
       </p>
+
       <p className="text-[13px] font-medium text-emerald-300">
         ≈ {rewardAmountText}
         <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
@@ -826,48 +827,46 @@ if (countdownTarget) {
     </div>
   </div>
 
-  {/* CTA bar stays as you already have it below this */}
-  {/* ... keep your existing LOCK IN MY SHARE button + eligibility text here ... */}
-                {/* Big CTA bar */}
-                <button
-                  type="button"
-                  onClick={handleClaimClick}
-                  disabled={!canClaim}
-                  className={[
-                    'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-                    'transition-all duration-300 border',
-                    canClaim
-                      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-                      : isClosed
-                      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-                      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-                    canClaim && isPulseOn ? 'animate-pulse' : '',
-                  ].join(' ')}
-                >
-                  {canClaim
-                    ? 'Lock in my share'
-                    : isClosed
-                    ? 'Window closed'
-                    : 'Available when live'}
-                </button>
+  {/* CTA bar – keep as you have it */}
+  <button
+    type="button"
+    onClick={handleClaimClick}
+    disabled={!canClaim}
+    className={[
+      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      'transition-all duration-300 border',
+      canClaim
+        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+        : isClosed
+        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+      canClaim && isPulseOn ? 'animate-pulse' : '',
+    ].join(' ')}
+  >
+    {canClaim
+      ? 'Lock in my share'
+      : isClosed
+      ? 'Window closed'
+      : 'Available when live'}
+  </button>
 
-                {/* Eligibility text */}
-                <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
-                    i
-                  </span>
-                  To be eligible, you must hold at least{' '}
-                  {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-                  <span className="font-semibold text-emerald-300">
-                    at the snapshot.
-                  </span>{' '}
-                  When the claim window opens, click{' '}
-                  <span className="font-semibold text-emerald-300">
-                    LOCK IN MY SHARE
-                  </span>{' '}
-                  to register your wallet’s share for that round.
-                </div>
-              </div>
+  {/* Eligibility text – unchanged */}
+  <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
+      i
+    </span>
+    To be eligible, you must hold at least{' '}
+    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
+    <span className="font-semibold text-emerald-300">
+      at the snapshot.
+    </span>{' '}
+    When the claim window opens, click{' '}
+    <span className="font-semibold text-emerald-300">
+      LOCK IN MY SHARE
+    </span>{' '}
+    to register your wallet’s share for that round.
+  </div>
+</div>
               {/* end CLAIM WINDOW CARD */}
             </div>
 
