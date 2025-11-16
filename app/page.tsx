@@ -968,7 +968,7 @@ if (countdownTarget) {
           {/* Current Reward Pool */}
           <SoftCard>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Current reward pool
+              Current Round Value
             </p>
 
             <div className="mt-2 space-y-1">
