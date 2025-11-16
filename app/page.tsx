@@ -503,7 +503,7 @@ if (countdownTarget) {
 
   const rewardUsdText =
     typeof rewardPoolAmountUsd === 'number'
-      ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
+      ? `${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
   const canClaim = !isPreview && isLive;
