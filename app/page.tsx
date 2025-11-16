@@ -861,10 +861,10 @@ export default function ClaimPoolPage() {
   </p>
 
   <p className="text-[13px] leading-relaxed text-slate-300">
-    Snapshots can be taken any time between the last window being
-    scheduled and the next live claim window opening. If you're not
-    holding 1,000,000 $CLAIM when it hits, your wallet sits out that round.
-  </p>
+  Snapshots can be taken any time between the last window being scheduled and 
+  the next live claim window opening. If you’re not holding 1,000,000 $CLAIM 
+  when it hits, your wallet sits out that round.
+</p>
 
   <hr className="border-slate-800/70" />
 
