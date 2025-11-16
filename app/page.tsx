@@ -639,13 +639,7 @@ if (countdownTarget) {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-  const snapshotDateLabel =
-    snapshotTakenAt
-      ? new Date(snapshotTakenAt).toLocaleString('en-US', {
-          dateStyle: 'medium',
-          timeStyle: 'short',
-        })
-      : 'To be announced';
+  const snapshotDateLabel = snapshotTakenAt ?? 'Not yet announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
