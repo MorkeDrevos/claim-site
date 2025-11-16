@@ -920,7 +920,7 @@ export default function ClaimPoolPage() {
                       <span
   className={[
     'tracking-wide',
-    isDone ? 'text-[10px] font-semibold text-slate-300' : 'text-sm font-medium text-slate-500'
+    isDone ? 'text-[12px] font-semibold text-slate-300' : 'text-sm font-medium text-slate-500'
   ].join(' ')}
 >
   {step.label}
@@ -931,7 +931,7 @@ export default function ClaimPoolPage() {
               })}
             </div>
 
-            <p className="mt-3 text-[12px] text-emerald-300">{progressMessage}</p>
+            <p className="mt-3 text-[11px] text-emerald-300">{progressMessage}</p>
           </div>
         </SoftCard>
 
