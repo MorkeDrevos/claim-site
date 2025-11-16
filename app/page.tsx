@@ -613,6 +613,7 @@ export default function ClaimPoolPage() {
   ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
+  const isActive = index === activeIndex;
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   let progressMessage = '';
@@ -908,15 +909,15 @@ export default function ClaimPoolPage() {
                         isDone ? 'bg-emerald-400' : 'bg-slate-800',
                       ].join(' ')}
                     />
-                    <div className="mt-2 flex items-center gap-2">
-                      <div
-                        className={[
-                          'h-2.5 w-2.5 rounded-full border',
-                          isDone
-                            ? 'bg-emerald-400 border-emerald-300'
-                            : 'bg-slate-800 border-slate-600',
-                        ].join(' ')}
-                      />
+                    <div
+  className={[
+    'h-2.5 w-2.5 rounded-full border transition-all',
+    isDone
+      ? 'bg-emerald-400 border-emerald-300'
+      : 'bg-slate-800 border-slate-600',
+    isActive ? 'animate-pulse' : ''
+  ].join(' ')}
+/>
                       <span
   className={[
     'tracking-wide',
