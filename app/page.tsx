@@ -827,6 +827,9 @@ if (countdownTarget) {
     </div>
   </div>
 
+  {/* Horizontal divider */}
+<div className="mt-4 mb-5 h-px w-full bg-slate-800/60" />
+
   {/* CTA bar – keep as you have it */}
   <button
     type="button"
