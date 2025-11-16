@@ -843,7 +843,7 @@ const snapshotDateLabel = snapshotTakenAt
     {canClaim
       ? 'Lock in my share'
       : isClosed
-      ? 'Window closed'
+      ? 'Next round announced soon'
       : 'Opens soon'}
   </button>
 
@@ -862,7 +862,7 @@ const snapshotDateLabel = snapshotTakenAt
 
   <p>
     • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below
+    <span className="text-emerald-300 font-medium">snapshot</span> - wallets below
     the minimum sit out that round.
   </p>
 
