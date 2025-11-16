@@ -255,6 +255,31 @@ useEffect(() => {
   return () => clearInterval(id);
 }, []);
 
+export default function ClaimPoolPage() {
+  const { addToast, ToastContainer } = useToast();
+
+  const [state, setState] = useState<ClaimPortalState | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
+  const [isPulseOn, setIsPulseOn] = useState(false);
+
+  const [inlineMessage, setInlineMessage] = useState<{
+    type: 'error' | 'warning' | 'success';
+    title: string;
+    message: string;
+  } | null>(null);
+
+  const [connectedWallet, setConnectedWallet] = useState<{
+    address: string;
+    name: string;
+  } | null>(null);
+
+  const walletProviderRef = useRef<any | null>(null);
+  const lastWindowPhaseRef = useRef<string | null>(null);
+
+  // 👉 ADD THIS LINE
+  const [preFlash, setPreFlash] = useState(false);
+
   // ── Contract address (TEMP: SOL mint) ──
   const CLAIM_CA = 'So11111111111111111111111111111111111111112';
   const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
