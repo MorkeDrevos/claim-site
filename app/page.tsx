@@ -821,8 +821,7 @@ const snapshotDateLabel = snapshotTakenAt
         ≈ {rewardAmountText}
         <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
       </p>
-
-      /* Info button */
+      {/* Info button */}
 <button
   type="button"
   className="mt-1 flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-300 transition"
@@ -833,9 +832,8 @@ const snapshotDateLabel = snapshotTakenAt
   }}
 >
   <span className="i-heroicons-information-circle text-[14px]" />
-  <span>How rewards work</span>
+  <span>How rewards work?</span>
 </button>
-
     </div>
   </div>
 
