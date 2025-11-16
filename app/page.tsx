@@ -951,22 +951,19 @@ export default function ClaimPoolPage() {
     </p>
 
     <div className="mt-1.5 space-y-1">
-      {/* USD primary */}
-      <p className="text-[20px] sm:text-[22px] font-bold text-slate-50">
-        {rewardUsdText}
-        <span className="ml-2 text-[11px] font-medium uppercase tracking-[0.2em] text-slate-400">
-          est. value
+      {/* CLAIM amount */}
+      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+        {rewardAmountText}
+        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+          $CLAIM
         </span>
       </p>
 
-      {/* CLAIM secondary */}
-      <p className="text-[13px] font-medium text-emerald-300">
-        ≈ {rewardAmountText}
-        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+      {/* USD estimate */}
+      <p className="text-[13px] font-medium text-slate-400">
+        ≈ <span className="text-slate-200">{rewardUsdText}</span>
       </p>
     </div>
-  </SoftCard>
-</div>
 
             <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
