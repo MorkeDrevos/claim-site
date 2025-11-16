@@ -1139,10 +1139,12 @@ const snapshotDateLabel = snapshotTakenAt
   {activeTab === 'rewards' && (
     <div className="space-y-4">
       <p>
-  • Show up during the live window and
-    <span className="text-emerald-300 font-medium"> lock in your share</span> -
-    every wallet that checks in receives an
-    <span className="text-emerald-300 font-medium"> equal amount</span>.
+  • <span className="text-emerald-300 font-medium">Show up</span> during the live window and
+    <span className="text-emerald-300 font-medium"> lock in your share</span>.
+    <br />
+    <span className="text-slate-400">
+      All claimers split the pool equally — fewer claimers means a larger share per wallet.
+    </span>
 </p>
 
       <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
