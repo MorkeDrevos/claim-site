@@ -125,7 +125,7 @@ function formatCountdown(targetIso?: string | null): string | null {
   if (minutes > 0) parts.push(`${minutes}m`);
   if (seconds > 0 && days === 0) parts.push(`${seconds}s`);
 
-  return `${hh}:${mm}:${ss}`;
+  return parts.join(' ');
 }
 
 function useCountdown(targetIso?: string | null): string | null {
