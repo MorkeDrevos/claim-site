@@ -853,6 +853,7 @@ const snapshotDateLabel = snapshotTakenAt
   <p>
     • <span className="text-emerald-300 font-medium">Show up</span> during the live
     window and <span className="text-emerald-300 font-medium">lock in your share</span>.
+    All claimers <span className="text-emerald-300 font-medium">split the pool equally</span>.
   </p>
 
   <p>
