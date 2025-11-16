@@ -827,9 +827,6 @@ if (countdownTarget) {
     </div>
   </div>
 
-  {/* Horizontal divider */}
-<div className="mt-4 mb-5 h-px w-full bg-slate-800/60" />
-
   {/* CTA bar – keep as you have it */}
   <button
     type="button"
@@ -854,7 +851,7 @@ if (countdownTarget) {
   </button>
 
   {/* Eligibility text – unchanged */}
-  <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
+  <div className="mt-6 text-[11px] leading-relaxed text-slate-400">
     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
       i
     </span>
