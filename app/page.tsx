@@ -781,9 +781,6 @@ export default function ClaimPoolPage() {
                     <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
                       {countdownLabel ?? '--:--:--'}
                     </p>
-                    <p className="text-[11px] text-slate-500">
-                      {windowTimingText}
-                    </p>
                   </div>
 
                   {/* Reward pool */}
