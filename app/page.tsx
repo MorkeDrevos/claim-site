@@ -812,7 +812,7 @@ if (countdownTarget) {
     {/* RIGHT: label + USD + CLAIM */}
     <div className="flex flex-col items-end gap-1 text-right">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        Reward pool
+        This Round’s Reward Pool
       </p>
 
       {/* Big USD – same line height as countdown */}
@@ -968,7 +968,7 @@ if (countdownTarget) {
           {/* Current Reward Pool */}
           <SoftCard>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Current Round Value
+              Current reward pool
             </p>
 
             <div className="mt-2 space-y-1">
