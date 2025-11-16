@@ -778,12 +778,12 @@ if (countdownTarget) {
               {/* CLAIM WINDOW CARD */}
 <div
   className={[
-    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-10 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
   {/* One row: countdown left, USD right */}
-  <div className="flex items-start justify-between gap-4">
+  <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col gap-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
