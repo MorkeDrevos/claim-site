@@ -243,6 +243,8 @@ export default function ClaimPoolPage() {
   const walletProviderRef = useRef<any | null>(null);
   const lastWindowPhaseRef = useRef<string | null>(null);
 
+  const [preFlash, setPreFlash] = useState(false);
+
   /* ── Phase + countdown (safe when state is null) ── */
 
   // 🔥 force a re-render every second so the phase naturally flips
@@ -254,31 +256,6 @@ useEffect(() => {
   }, 1000);
   return () => clearInterval(id);
 }, []);
-
-export default function ClaimPoolPage() {
-  const { addToast, ToastContainer } = useToast();
-
-  const [state, setState] = useState<ClaimPortalState | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
-  const [isPulseOn, setIsPulseOn] = useState(false);
-
-  const [inlineMessage, setInlineMessage] = useState<{
-    type: 'error' | 'warning' | 'success';
-    title: string;
-    message: string;
-  } | null>(null);
-
-  const [connectedWallet, setConnectedWallet] = useState<{
-    address: string;
-    name: string;
-  } | null>(null);
-
-  const walletProviderRef = useRef<any | null>(null);
-  const lastWindowPhaseRef = useRef<string | null>(null);
-
-  // 👉 ADD THIS LINE
-  const [preFlash, setPreFlash] = useState(false);
 
   // ── Contract address (TEMP: SOL mint) ──
   const CLAIM_CA = 'So11111111111111111111111111111111111111112';
@@ -356,6 +333,34 @@ if (opensAtMs && closesAtMs) {
     phase === 'open' ? (closesAt ?? opensAt) : opensAt;
 
   const countdownLabel = useCountdown(countdownTarget);
+
+    // 🔔 Flash highlight in the last 3 seconds before a phase change
+  useEffect(() => {
+    if (!countdownTarget) {
+      setPreFlash(false);
+      return;
+    }
+
+    const targetMs = new Date(countdownTarget).getTime();
+    if (!targetMs) return;
+
+    const check = () => {
+      const diff = targetMs - Date.now();
+      // inside last 3 seconds but not past zero
+      if (diff <= 3000 && diff >= 0) {
+        setPreFlash(true);
+      } else if (diff < 0 || diff > 3000) {
+        setPreFlash(false);
+      }
+    };
+
+    check();
+    const id = setInterval(check, 300);
+    return () => {
+      clearInterval(id);
+      setPreFlash(false);
+    };
+  }, [countdownTarget]);
 
   /* ── Initial load + polling ── */
 
@@ -826,7 +831,13 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
               </div>
 
          {/* CLAIM WINDOW CARD */}
-<div className="mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]">
+{/* CLAIM WINDOW CARD */}
+<div
+  className={[
+    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+    preFlash ? 'animate-pulse' : ''
+  ].join(' ')}
+>
   {/* Top row – Countdown left, reward pool right */}
   <div className="flex flex-wrap items-start justify-between gap-6">
     {/* Countdown (dominant, left) */}
