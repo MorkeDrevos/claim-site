@@ -856,9 +856,13 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-  • Rewards are auto-distributed and sent out in 
-  <span className="text-emerald-300 font-medium"> $CLAIM</span>, governed entirely by 
-  <span className="text-emerald-300 font-medium"> autonomous smart-contract execution</span>.
+  • Rewards are auto-distributed in
+  {' '}
+  <span className="text-emerald-300 font-medium">$CLAIM</span>,
+  {' '}
+  governed entirely by
+  {' '}
+  <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
 </p>
 
   <p>
@@ -1194,10 +1198,11 @@ const snapshotDateLabel = snapshotTakenAt
         Snapshot #{snapshotBlock}{' '}
         <span className="text-slate-400">• {networkLabel}</span>
       </p>
-      <p className="text-[13px] leading-relaxed text-slate-400">
-  Snapshots can occur any time between the previous window being scheduled and
-  the next claim window opening. If you’re not holding the minimum required
-  amount of $CLAIM when it hits, your wallet sits out that round.
+      <<p className="text-[13px] leading-relaxed text-slate-400">
+  Each round uses a single snapshot taken before the claim window opens.
+  Wallets holding at least the minimum required amount of $CLAIM at that
+  moment are eligible for that round — wallets below the minimum sit out
+  until the next snapshot.
 </p>
     </div>
 
