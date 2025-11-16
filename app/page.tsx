@@ -759,7 +759,7 @@ export default function ClaimPoolPage() {
                                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                                bg-clip-text text-transparent"
                 >
-                  Rewards earned by presence - show up, click and get your share.
+                  Rewards earned by presence - show up, click, get your share.
                 </h1>
               </div>
 
@@ -791,19 +791,22 @@ export default function ClaimPoolPage() {
 
                   {/* Reward pool */}
                   <div className="space-y-1 text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      Reward pool
-                    </p>
-                    <p className="text-xl sm:text-2xl font-bold text-slate-50">
-                      {rewardAmountText}
-                      <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-                        $CLAIM
-                      </span>
-                    </p>
-                    <p className="text-xs font-medium text-emerald-300">
-                      ≈ <span className="font-semibold">{rewardUsdText}</span>
-                    </p>
-                  </div>
+  {/* Label */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    Reward pool
+  </p>
+
+  {/* USD — main */}
+  <p className="text-[26px] sm:text-[30px] font-bold text-slate-50">
+    {rewardUsdText}
+  </p>
+
+  {/* CLAIM — secondary */}
+  <p className="text-[13px] font-medium text-emerald-300">
+    ≈ {rewardAmountText}
+    <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+  </p>
+</div>
                 </div>
 
                 {/* Big CTA bar */}
