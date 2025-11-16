@@ -125,7 +125,7 @@ function formatCountdown(targetIso?: string | null): string | null {
   if (minutes > 0) parts.push(`${minutes}m`);
   if (seconds > 0 && days === 0) parts.push(`${seconds}s`);
 
-  return parts.join(' ');
+  return `${hh}:${mm}:${ss}`;
 }
 
 function useCountdown(targetIso?: string | null): string | null {
@@ -244,7 +244,6 @@ export default function ClaimPoolPage() {
   const lastWindowPhaseRef = useRef<string | null>(null);
 
 const [preFlash, setPreFlash] = useState(false);
-const [numericCountdownText, setNumericCountdownText] = useState<string>('--:--:--');
 
   /* ── Phase + countdown (safe when state is null) ── */
 
@@ -905,22 +904,18 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     </div>
 
     {/* Reward pool (right) */}
-    <div className="space-y-1 text-left sm:text-right">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Reward pool this window
-      </p>
-
-      <p className="mt-1 text-[22px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[22px] sm:text-[22px] text-emerald-400">
-          $CLAIM
-        </span>
-      </p>
-
-      <p className="text-[13px] font-medium text-slate-300">
-        ≈ <span className="text-slate-100">{rewardUsdText}</span>
-      </p>
-    </div>
+    <<div className="space-y-1 text-right">
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    {isLive
+      ? 'Window closes in'
+      : isClosed
+      ? 'Next window in'
+      : 'Window opens in'}
+  </p>
+  <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+    {countdownLabel ?? '--:--:--'}
+  </p>
+</div>
   </div>
 
   {/* Big CTA bar */}
