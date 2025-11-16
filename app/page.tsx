@@ -848,7 +848,7 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
 {/* Eligibility text */}
-<div className="mt-6 space-y-1.5 text-[12px] text-slate-300 leading-relaxed">
+<div className="mt-6 space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
 
   <p>
     • <span className="text-emerald-300 font-medium">Show up</span> during the live
