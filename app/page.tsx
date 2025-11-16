@@ -778,7 +778,7 @@ if (countdownTarget) {
               {/* CLAIM WINDOW CARD */}
 <div
   className={[
-    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 p-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-10 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
