@@ -806,23 +806,45 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
 
-    {/* RIGHT: label + USD + $CLAIM */}
+  {/* RIGHT: label + USD + $CLAIM */}
 <div className="flex flex-col items-end gap-1 text-right">
-  {/* Label + info icon + tooltip */}
-  <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  <span>Current round pool</span>
+  {/* Label + info icon + custom tooltip */}
+  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    <span>Current round pool</span>
 
-  {/* Simple “i” tooltip */}
-  <button
-    type="button"
-    className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-               border border-slate-500 text-[10px] text-slate-400 
-               hover:border-slate-200 hover:text-slate-200"
-    title="Rewards are auto-distributed on-chain and paid out in $CLAIM after each claim window closes. All claimers receive an equal share of the pool. Fewer claimers → larger share per wallet."
-  >
-    i
-  </button>
-</p>
+    <div className="relative group">
+      {/* Icon */}
+      <button
+        type="button"
+        className="inline-flex h-5 w-5 items-center justify-center rounded-full 
+                   border border-slate-600/80 bg-slate-900/80 text-[10px] 
+                   text-slate-300 shadow-sm
+                   hover:border-emerald-400/70 hover:text-emerald-300
+                   focus:outline-none focus:ring-1 focus:ring-emerald-400/70"
+      >
+        i
+      </button>
+
+      {/* Tooltip */}
+      <div
+        className="pointer-events-none absolute right-0 top-full z-20 mt-2 w-72
+                   -translate-y-1 opacity-0
+                   rounded-2xl bg-slate-950/95 px-4 py-3
+                   text-[11px] leading-relaxed text-slate-200
+                   shadow-[0_18px_45px_rgba(0,0,0,0.85)]
+                   ring-1 ring-slate-800/90
+                   transition-all duration-150
+                   group-hover:translate-y-0 group-hover:opacity-100"
+      >
+        <p>
+          Rewards are auto-distributed on-chain in{' '}
+          <span className="font-medium text-emerald-300">$CLAIM</span> after each
+          claim window closes. All claimers receive an equal share of the pool —
+          fewer claimers means a larger share per wallet.
+        </p>
+      </div>
+    </div>
+  </div>
 
   {/* Big USD – same line height as countdown */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
@@ -833,7 +855,7 @@ const snapshotDateLabel = snapshotTakenAt
     ≈ {rewardAmountText}
     <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
   </p>
-</div>
+</div>  
   </div>
 
   {/* CTA bar – keep as you have it */}
