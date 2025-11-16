@@ -105,12 +105,12 @@ function SoftCard({
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
 
-  const target = new Date(targetIso).getTime();
-  if (Number.isNaN(target)) return null;
+  const targetMs = new Date(targetIso).getTime();
+  if (Number.isNaN(targetMs)) return null;
 
-  const now = Date.now();
-  const diff = target - now;
+  const diff = targetMs - Date.now();
 
+  // If we've passed the target time, freeze at 00:00:00
   if (diff <= 0) return '00:00:00';
 
   const totalSeconds = Math.floor(diff / 1000);
@@ -123,27 +123,6 @@ function formatCountdown(targetIso?: string | null): string | null {
   const ss = seconds.toString().padStart(2, '0');
 
   return `${hh}:${mm}:${ss}`;
-}
-
-function useCountdown(targetIso?: string | null): string | null {
-  const [label, setLabel] = useState<string | null>(() =>
-    formatCountdown(targetIso)
-  );
-
-  useEffect(() => {
-    if (!targetIso) {
-      setLabel(null);
-      return;
-    }
-
-    const update = () => setLabel(formatCountdown(targetIso));
-    update();
-
-    const id = setInterval(update, 1_000);
-    return () => clearInterval(id);
-  }, [targetIso]);
-
-  return label;
 }
 
 /* ───────────────────────────
