@@ -848,31 +848,18 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
   {/* Eligibility text – unchanged */}
-  {/* Key rules strip */}
-  <div className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
-    <p>
-      • <span className="text-emerald-300 font-medium">Show up</span> during the live
-      window and
-      <span className="text-emerald-300 font-medium"> lock in your share.</span>
-    </p>
-
-    <p>
-      • Rewards are
-      <span className="text-emerald-300 font-medium"> auto-distributed on-chain</span> — 
-      <span className="text-emerald-300 font-medium"> equal payout per wallet.</span>
-    </p>
-
-    <p>
-      • <span className="text-emerald-300 font-medium">Fewer claimers</span>
-      {' '}= <span className="text-emerald-300 font-medium">bigger share.</span>
-    </p>
-
-    <p>
-      • <span className="text-emerald-300 font-medium">Eligibility:</span>{' '}
-      hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at
-      the snapshot — wallets below minimum sit out that round.
-    </p>
-  </div>
+ <div className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
+  <p>
+    Hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at snapshot to join the round.
+  </p>
+  <p>
+    <span className="text-emerald-300 font-medium">Equal reward</span> per wallet. 
+    <span className="ml-1 text-emerald-300 font-medium">Fewer claimers = bigger share.</span>
+  </p>
+  <p>
+    <span className="text-emerald-300 font-medium">Autonomous</span> smart-contract distributions.
+  </p>
+</div>
 </div>
               {/* end CLAIM WINDOW CARD */}
             </div>
