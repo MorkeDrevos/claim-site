@@ -515,11 +515,6 @@ export default function ClaimPoolPage() {
       return `Next window opens in ${countdownLabel}`;
     }
 
-    if (!countdownLabel) return 'Time to be announced';
-    if (countdownLabel === '00:00:00') return 'Opens any second';
-    return `Opens in ${countdownLabel}`;
-  })();
-
   const canClaim = !isPreview && isLive;
 
   const eligibilityTitle = effectiveWalletConnected
