@@ -897,38 +897,43 @@ export default function ClaimPoolPage() {
             </div>
 
             <div className="mt-1 flex items-center justify-between gap-3">
-              {steps.map((step, index) => {
-                const isDone = activeIndex >= index;
-                return (
-                  <div key={step.id} className="flex flex-1 flex-col items-center">
-                    <div
-                      className={[
-                        'h-2 w-full rounded-full',
-                        index === 0 ? '' : 'ml-1',
-                        isDone ? 'bg-emerald-400' : 'bg-slate-800',
-                      ].join(' ')}
-                    />
-                    <div className="mt-2 flex items-center gap-2">
-                      <div
-                        className={[
-                          'h-2.5 w-2.5 rounded-full border',
-                          isDone
-                            ? 'bg-emerald-400 border-emerald-300'
-                            : 'bg-slate-800 border-slate-600',
-                        ].join(' ')}
-                      />
-                      <span
-  className={[
-    'tracking-wide',
-    isDone ? 'text-[14px] font-semibold text-slate-300' : 'text-[14px] font-medium text-slate-500'
-  ].join(' ')}
->
-  {step.label}
-</span>
-                    </div>
-                  </div>
-                );
-              })}
+            {steps.map((step, index) => {
+  const isDone = activeIndex >= index;
+  const isActiveStep = step.id === currentPhase;
+
+  return (
+    <div key={step.id} className="flex flex-1 flex-col items-center">
+      <div
+        className={[
+          'h-2 w-full rounded-full',
+          index === 0 ? '' : 'ml-1',
+          isDone ? 'bg-emerald-400' : 'bg-slate-800',
+        ].join(' ')}
+      />
+      <div className="mt-2 flex items-center gap-2">
+        <div
+          className={[
+            'h-2.5 w-2.5 rounded-full border',
+            isDone
+              ? 'bg-emerald-400 border-emerald-300'
+              : 'bg-slate-800 border-slate-600',
+            isActiveStep ? 'animate-pulse' : '',
+          ].join(' ')}
+        />
+        <span
+          className={[
+            'tracking-wide',
+            isDone
+              ? 'text-[13px] font-semibold text-slate-300'
+              : 'text-[13px] font-medium text-slate-500',
+          ].join(' ')}
+        >
+          {step.label}
+        </span>
+      </div>
+    </div>
+  );
+})}  
             </div>
 
             <p className="mt-3 text-[13px] text-slate-200">
