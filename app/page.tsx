@@ -897,7 +897,7 @@ export default function ClaimPoolPage() {
             </div>
 
             <div className="mt-1 flex items-center justify-between gap-3">
-              {•((step, index) => {
+              {steps.map((step, index) => {
                 const isDone = activeIndex >= index;
                 return (
                   <div key={step.id} className="flex flex-1 flex-col items-center">
