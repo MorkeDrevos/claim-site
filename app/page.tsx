@@ -1138,10 +1138,12 @@ const snapshotDateLabel = snapshotTakenAt
   {/* Reward logic */}
   {activeTab === 'rewards' && (
     <div className="space-y-4">
-      <p className="text-[13px]">
-        Rewards are earned by presence — if you show up during the live claim
-        window and lock your share, you receive an equal split of that round’s pool.
-      </p>
+      <p>
+  • Show up during the live window and
+    <span className="text-emerald-300 font-medium"> lock in your share</span> -
+    every wallet that checks in receives an
+    <span className="text-emerald-300 font-medium"> equal amount</span>.
+</p>
 
       <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
         <li>Everyone who locks in receives an equal share.</li>
