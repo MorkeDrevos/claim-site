@@ -1071,29 +1071,25 @@ export default function ClaimPoolPage() {
     <hr className="border-slate-800/80" />
 
     {/* TAB CONTENT */}
-<div className="mt-5 space-y-4 text-sm leading-relaxed text-slate-300">
+<div className="mt-5 space-y-4 leading-relaxed text-slate-300">
 
   {/* Eligibility rules */}
   {activeTab === 'eligibility' && (
     <div className="space-y-4">
-      <p>
+      <p className="text-[13px]">
         The CLAIM pool is driven by proof-of-presence. Eligibility comes from
         balances at specific snapshot blocks, not random forms.
       </p>
 
-      <ul className="list-disc pl-5 space-y-2 text-slate-400">
+      <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
         <li>
           Hold at least {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot block.
         </li>
-        <li>
-          Snapshot block and date are announced before each round.
-        </li>
-        <li>
-          Optional bonus rules may reward long-term or early participants.
-        </li>
+        <li>Snapshot block and date are announced before each round.</li>
+        <li>Optional bonus rules may reward long-term or early participants.</li>
       </ul>
 
-      <p className="text-slate-500 text-xs">
+      <p className="text-[11px] text-slate-500">
         The final rule set for each round will be published before the snapshot
         and mirrored here inside the portal.
       </p>
@@ -1103,18 +1099,18 @@ export default function ClaimPoolPage() {
   {/* Reward logic */}
   {activeTab === 'rewards' && (
     <div className="space-y-4">
-      <p>
-        Rewards are earned by presence — if you show up during the live claim window
-        and lock your share, you receive an equal split of that round’s pool.
+      <p className="text-[13px]">
+        Rewards are earned by presence — if you show up during the live claim
+        window and lock your share, you receive an equal split of that round’s pool.
       </p>
 
-      <ul className="list-disc pl-5 space-y-2 text-slate-400">
+      <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
         <li>Everyone who locks in receives an equal share.</li>
         <li>Fewer wallets claiming = larger share per wallet.</li>
         <li>Rewards are distributed automatically after the window closes.</li>
       </ul>
 
-      <p className="text-slate-500 text-xs">
+      <p className="text-[11px] text-slate-500">
         Claim windows follow strict timing via Solana timestamps.
       </p>
     </div>
@@ -1123,19 +1119,20 @@ export default function ClaimPoolPage() {
   {/* Claim history */}
   {activeTab === 'history' && (
     <div className="space-y-4">
-      <p>Past rounds and distributions will appear here.</p>
+      <p className="text-[13px]">Past rounds and distributions will appear here.</p>
 
       {claimHistory.length === 0 ? (
-        <p className="text-slate-500 text-xs">No claim history yet.</p>
+        <p className="text-[11px] text-slate-500">No claim history yet.</p>
       ) : (
-        <ul className="space-y-3 text-slate-400">
+        <ul className="space-y-3 text-[13px] text-slate-400">
           {claimHistory.map((entry, i) => (
-            <li key={i} className="rounded-lg bg-slate-900/50 p-3 text-sm">
+            <li key={i} className="rounded-lg bg-slate-900/50 p-3 text-[13px]">
               <p className="font-medium text-slate-200">
-                Round {entry.round} — {entry.amount.toLocaleString('en-US')} CLAIM
+                Round {entry.round} —{' '}
+                {entry.amount.toLocaleString('en-US')} CLAIM
               </p>
               {entry.date && (
-                <p className="text-xs text-slate-500">
+                <p className="text-[11px] text-slate-500">
                   {new Date(entry.date).toLocaleString()}
                 </p>
               )}
