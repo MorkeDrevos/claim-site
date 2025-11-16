@@ -917,9 +917,14 @@ export default function ClaimPoolPage() {
                             : 'bg-slate-800 border-slate-600',
                         ].join(' ')}
                       />
-                      <span className="text-[10px] text-slate-400">
-                        {step.label}
-                      </span>
+                      <span
+  className={[
+    'tracking-wide',
+    isDone ? 'text-sm font-semibold text-slate-200' : 'text-sm font-medium text-slate-500'
+  ].join(' ')}
+>
+  {step.label}
+</span>
                     </div>
                   </div>
                 );
@@ -996,7 +1001,7 @@ export default function ClaimPoolPage() {
                 rel="noreferrer"
                 className="inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:bg-emerald-500/25"
               >
-                Buy more on Jupiter
+                Buy $CLAIM on Jupiter
               </a>
             </div>
           </SoftCard>
