@@ -942,7 +942,7 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-        {/* Preview Eligibility Cards */}
+{/* Preview Eligibility Cards */}
 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
   {/* Current Reward Pool */}
   <SoftCard>
@@ -951,42 +951,21 @@ export default function ClaimPoolPage() {
     </p>
 
     <div className="mt-1.5 space-y-1">
-      {/* CLAIM amount */}
-      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-        {rewardAmountText}
-        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-          $CLAIM
+      {/* USD primary */}
+      <p className="text-[20px] sm:text-[22px] font-bold text-slate-50">
+        {rewardUsdText}
+        <span className="ml-2 text-[11px] font-medium uppercase tracking-[0.2em] text-slate-400">
+          est. value
         </span>
       </p>
 
-      {/* USD estimate */}
-      <p className="text-[13px] font-medium text-slate-400">
-        ≈ <span className="text-slate-200">{rewardUsdText}</span>
+      {/* CLAIM secondary */}
+      <p className="text-[13px] font-medium text-emerald-300">
+        ≈ {rewardAmountText}
+        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
       </p>
     </div>
-
-            <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Contract address
-              </p>
-
-              <button
-                type="button"
-                onClick={handleCopyCa}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
-                           text-[11px] font-medium text-slate-200 border border-slate-700/80
-                           hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
-                           transition-colors"
-              >
-                <span className="font-mono text-[11px] text-slate-300">
-                  {shortCa}
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
-                  Copy CA
-                </span>
-              </button>
-            </div>
-          </SoftCard>
+  </SoftCard>
 
           {/* Minimum holding */}
           <SoftCard>
