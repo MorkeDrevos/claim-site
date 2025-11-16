@@ -943,8 +943,8 @@ if (countdownTarget) {
           className={[
             'tracking-wide',
             isDone
-              ? 'text-[14px] font-semibold text-slate-300'
-              : 'text-[14px] font-medium text-slate-500',
+              ? 'text-[12px] font-semibold text-slate-300'
+              : 'text-[13px] font-medium text-slate-500',
           ].join(' ')}
         >
           {step.label}
