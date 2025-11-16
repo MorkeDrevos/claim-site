@@ -850,24 +850,19 @@ const snapshotDateLabel = snapshotTakenAt
   {/* Eligibility text – unchanged */}
 <div className="mt-6 space-y-2 text-[12px] text-slate-300 leading-relaxed">
   <p>
-    • <span className="text-emerald-300 font-medium">Show up</span> during the
-    live window and{' '}
-    <span className="text-emerald-300 font-medium">lock in your share</span>.
+    • <span class="text-emerald-300 font-medium">Show up</span> during the live window and 
+    <span class="text-emerald-300 font-medium">lock in your share</span>.
   </p>
 
   <p>
-    • Rewards are{' '}
-    <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> - the system{' '}
-    <span className="text-emerald-300 font-medium">
-      runs autonomously on smart contracts
-    </span>
-    .
+   • Rewards are <span class="text-emerald-300 font-medium">auto-distributed on-chain.</span>   
+    The system <span class="text-emerald-300 font-medium">runs autonomously on smart contracts</span>.
   </p>
 
   <p>
-    • <span className="text-emerald-300 font-medium">Eligibility:</span> hold{' '}
-    1,000,000 $CLAIM< <span className="text-emerald-300 font-medium">at
-    snapshot/span> - wallets below minimum sit out that round.
+  • <span class="text-emerald-300 font-medium">Eligibility:</span> hold 
+    <span class="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at snapshot — 
+    wallets below minimum sit out that round.
   </p>
 </div>
 </div>
