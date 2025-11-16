@@ -754,12 +754,12 @@ export default function ClaimPoolPage() {
               {/* Header text */}
               <div className="space-y-2">
                 <h1
-                  className="text-[18px] sm:text-[30px] font-semibold 
+                  className="text-[15px] sm:text-[30px] font-semibold 
                                leading-[1.25]
                                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                                bg-clip-text text-transparent"
                 >
-                  Rewards earned by presence - show up, click, get your share.
+                  Rewards earned by presence - show up, click and get your share.
                 </h1>
               </div>
 
