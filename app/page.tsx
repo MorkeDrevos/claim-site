@@ -638,12 +638,10 @@ if (countdownTarget) {
   } else if (currentPhase === 'distribution') {
     progressMessage = 'Rewards have been distributed for this round.';
   }
-
-// Simple, safe fallback snapshot label
+// Safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : "Not yet announced";
-
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
