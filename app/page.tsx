@@ -848,22 +848,23 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
 {/* Eligibility text */}
-<div className="mt-6 space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+<div className="mt-6 space-y-1.5 text-[12px] text-slate-400/80 leading-relaxed">
+  <p>
+    • <span className="text-emerald-300/70 font-medium">Show up</span> during the
+    live window and <span className="text-emerald-300/70 font-medium">lock in your share</span>.
+    All claimers <span className="text-emerald-300/70 font-medium">split the pool equally</span>.
+  </p>
 
   <p>
-  • <span className="text-emerald-300 font-medium">Show up</span> during the live window and 
-  <span className="text-emerald-300 font-medium"> lock in your share</span>. Claimers receive an equal split of the pool.
-</p>
+    • Rewards are auto-distributed in <span className="text-emerald-300/70 font-medium">$CLAIM</span>,
+    governed entirely by <span className="text-emerald-300/70 font-medium">autonomous smart-contract execution</span>.
+  </p>
 
-<p>
-  • Rewards are auto-distributed on-chain in <span className="text-emerald-300 font-medium">$CLAIM</span>, powered by 
-  <span className="text-emerald-300 font-medium"> smart-contract automation</span>.
-</p>
-
-<p>
-  • Eligibility: hold 1,000,000 $CLAIM at the <span className="text-emerald-300 font-medium">snapshot</span> — wallets below the minimum sit out that round.
-</p>
-
+  <p>
+    • Eligibility: hold 1,000,000 $CLAIM at the 
+    <span className="text-emerald-300/70 font-medium"> snapshot</span> — wallets below the minimum
+    sit out that round.
+  </p>
 </div>
 </div>
               {/* end CLAIM WINDOW CARD */}
