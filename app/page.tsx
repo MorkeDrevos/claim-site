@@ -763,19 +763,22 @@ export default function ClaimPoolPage() {
               >
                 {/* Top row – Countdown left, reward pool right */}
                 <div className="flex flex-wrap items-start justify-between gap-6">
-                  {/* Countdown */}
-                  <div className="space-y-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      {isLive
-                        ? 'Window closes in'
-                        : isClosed
-                        ? 'Next window in'
-                        : 'Window opens in'}
-                    </p>
-                    <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-  {isClosed ? '' : countdownLabel || '--:--:--'}
-</p>
-                  </div>
+                  {/* Countdown (dominant, left) */}
+<div className="space-y-2">
+  {/* Header text ABOVE the timer */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    {isLive
+      ? 'Window closes in'
+      : isClosed
+      ? 'Next window in'
+      : 'Window opens in'}
+  </p>
+
+  {/* Big numeric countdown */}
+  <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+    {isClosed ? '' : countdownLabel || '--:--:--'}
+  </p>
+</div>
 
                   {/* Reward pool */}
                   <div className="space-y-1 text-right">
