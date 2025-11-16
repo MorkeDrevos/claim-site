@@ -856,9 +856,10 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-    • Rewards are auto-distributed on-chain in <span className="text-emerald-300 font-medium">$CLAIM</span>, 
-    governed entirely by <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
-  </p>
+  • Rewards are auto-distributed and sent out in 
+  <span className="text-emerald-300 font-medium"> $CLAIM</span>, governed entirely by 
+  <span className="text-emerald-300 font-medium"> autonomous smart-contract execution</span>.
+</p>
 
   <p>
     • Eligibility: hold 1,000,000 $CLAIM at the{' '}
