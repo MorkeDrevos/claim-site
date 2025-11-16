@@ -798,7 +798,7 @@ if (countdownTarget) {
     <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
   )}
   <p className={[
-    "text-[32px] sm:text-[26px] font-bold tracking-tight text-slate-50",
+    "text-[32px] sm:text-[28px] font-bold tracking-tight text-slate-50",
     isFinalTen ? "animate-[pulse_0.35s_ease-in-out_infinite]" : ""
   ].join(" ")}>
     {isClosed ? '' : countdownLabel || '--:--:--'}
