@@ -847,26 +847,24 @@ const snapshotDateLabel = snapshotTakenAt
       : 'Opens soon'}
   </button>
 
+{/* Eligibility text */}
 <div className="mt-6 space-y-2 text-[12px] text-slate-300 leading-relaxed">
 
   <p>
-    • Snapshot decides eligibility — if your wallet is below the minimum $CLAIM
-    balance when the{' '}
-    <span className="text-emerald-300 font-medium">snapshot</span> hits, you sit
-    out that round.
-  </p>
-
-  <p>
-    • Rewards are 
-    <span className="text-emerald-300 font-medium"> auto-distributed on-chain</span> — 
-    the entire system{' '}
-    <span className="text-emerald-300 font-medium">runs autonomously on smart contracts</span>.
+    • Hold $CLAIM at the moment of{' '}
+    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below
+    the minimum sit out that round.
   </p>
 
   <p>
     • Show up during the live window and{' '}
-    <span className="text-emerald-300 font-medium">lock in your share</span> — 
-    every wallet that checks in receives an equal payout.
+    <span className="text-emerald-300 font-medium">lock in your share</span> — every
+    wallet that checks in receives an equal payout.
+  </p>
+
+  <p>
+    • Rewards are auto-distributed on-chain once the window closes — the system
+    <span className="text-emerald-300 font-medium"> runs fully autonomously on smart contracts</span>.
   </p>
 
 </div>
