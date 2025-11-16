@@ -243,8 +243,8 @@ export default function ClaimPoolPage() {
   const walletProviderRef = useRef<any | null>(null);
   const lastWindowPhaseRef = useRef<string | null>(null);
 
-  const [preFlash, setPreFlash] = useState(false);
-  const [numericCountdown, setNumericCountdown] = useState<string>('--:--:--');
+const [preFlash, setPreFlash] = useState(false);
+const [numericCountdownText, setNumericCountdownText] = useState<string>('--:--:--');
 
   /* ── Phase + countdown (safe when state is null) ── */
 
@@ -348,13 +348,13 @@ if (phase === 'scheduled') {
   // Numeric countdown (HH:MM:SS) based on countdownTarget
 useEffect(() => {
   if (!countdownTarget) {
-    setNumericCountdown('--:--:--');
+    setNumericCountdownText('--:--:--');
     return;
   }
 
   const targetMs = new Date(countdownTarget).getTime();
   if (!targetMs || Number.isNaN(targetMs)) {
-    setNumericCountdown('--:--:--');
+    setNumericCountdownText('--:--:--');
     return;
   }
 
@@ -362,7 +362,7 @@ useEffect(() => {
     const diff = targetMs - Date.now();
 
     if (diff <= 0) {
-      setNumericCountdown('00:00:00');
+      setNumericCountdownText('00:00:00');
       return;
     }
 
@@ -370,7 +370,7 @@ useEffect(() => {
     const m = Math.floor((diff / 1000 / 60) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
-    setNumericCountdown(
+    setNumericCountdownText(
       `${h.toString().padStart(2, '0')}:${m
         .toString()
         .padStart(2, '0')}:${s.toString().padStart(2, '0')}`
@@ -899,9 +899,9 @@ const steps: { id: WindowPhase | 'closed'; label: string }[] = [
           ? 'Next window in'
           : 'Window opens in'}
       </p>
-      <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50">
-        {numericCountdown}
-      </p>
+      <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+  {numericCountdownText}
+</p>
     </div>
 
     {/* Reward pool (right) */}
