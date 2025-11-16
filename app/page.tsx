@@ -628,18 +628,16 @@ export default function ClaimPoolPage() {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-    let snapshotDateLabel = '—';
+    const snapshotDateLabel = snapshotTakenAt
+    ? new Date(snapshotTakenAt).toLocaleString('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      })
+    : 'To be announced';
 
-if (snapshotTakenAt) {
-  snapshotDateLabel = new Date(snapshotTakenAt).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-}
-
-return (
-  <main className="min-h-screen bg-slate-950 text-slate-50">
-    {/* Subtle moving glows */}
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-50">
+      {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
         <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
@@ -944,6 +942,7 @@ return (
           </div>
         </SoftCard>
 
+        {/* Preview Eligibility Cards */}
 {/* Preview Eligibility Cards */}
 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
   {/* Current Reward Pool */}
@@ -968,7 +967,6 @@ return (
       </p>
     </div>
   </SoftCard>
-      </div>
 
           {/* Minimum holding */}
           <SoftCard>
