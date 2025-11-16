@@ -6,7 +6,7 @@
   "snapshotLabel": "Snapshot #1",
   "snapshotBlock": "247191921",
 
-  "claimWindowStatus": "distribution",
+  "claimWindowStatus": "snapshot",
 
   "claimWindowOpensAt": "2025-11-16T011:24:00Z",
   "claimWindowClosesAt": "2025-11-16T011:34:00Z",
