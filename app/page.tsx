@@ -330,16 +330,7 @@ if (opensAtMs && closesAtMs) {
   const opensAt = state?.claimWindowOpensAt ?? null;
   const closesAt = (state as any)?.claimWindowClosesAt ?? null;
   const countdownTarget =
-    let countdownTarget: string | null = null;
-
-if (phase === 'scheduled') {
-  countdownTarget = opensAt || null;
-} else if (phase === 'open') {
-  countdownTarget = closesAt || opensAt || null;
-} else if (phase === 'closed') {
-  // After closing, show countdown to *next* window if known, otherwise null
-  countdownTarget = opensAt || null;
-}
+    phase === 'open' ? (closesAt ?? opensAt) : opensAt;
 
   const countdownLabel = useCountdown(countdownTarget);
 
