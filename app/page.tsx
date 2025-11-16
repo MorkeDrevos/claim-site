@@ -800,7 +800,7 @@ if (countdownTarget) {
         )}
         <p
           className={[
-            'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
+            'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
@@ -816,7 +816,7 @@ if (countdownTarget) {
       </p>
 
       {/* Big USD – same line height as countdown */}
-      <p className="text-[32px] sm:text-[38px] font-bold text-slate-50">
+      <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
         {rewardUsdText}
       </p>
 
