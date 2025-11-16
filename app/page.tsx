@@ -1150,6 +1150,16 @@ export default function ClaimPoolPage() {
                       LOCK IN MY SHARE
                     </span>{' '}
                     during the live window is included in the distribution.
+
+              {activeTab === 'rewards' && (
+                <>
+                  <p className="text-[13px] text-slate-300">
+                    Each claim window is a fixed reward pool. Everyone who
+                    successfully clicks{' '}
+                    <span className="font-semibold text-emerald-300">
+                      LOCK IN MY SHARE
+                    </span>{' '}
+                    during the live window is included in the distribution.
                   </p>
 
                   <p className="mt-2 text-[12px] font-semibold text-emerald-300">
