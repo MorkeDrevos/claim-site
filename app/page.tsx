@@ -950,18 +950,18 @@ export default function ClaimPoolPage() {
               Current reward pool
             </p>
 
-            <div className="mt-1.5 space-y-1">
-              <p className="text-[20px] sm:text-[22px] font-bold text-slate-50 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-                {rewardAmountText}
-                <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-                  $CLAIM
-                </span>
-              </p>
+            <div className="mt-2 space-y-1">
+  <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+    {rewardAmountText}
+    <span className="ml-1 text-[15px] sm:text-[16px] text-emerald-400">
+      $CLAIM
+    </span>
+  </p>
 
-              <p className="text-xs font-medium text-emerald-300">
-                ≈ <span className="font-semibold">{rewardUsdText}</span>
-              </p>
-            </div>
+  <p className="text-[13px] text-slate-400">
+    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText}</span>
+  </p>
+</div>
 
             <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -993,13 +993,13 @@ export default function ClaimPoolPage() {
             </p>
 
             <div className="mt-2 space-y-1">
-              <p className="text-2xl font-bold text-slate-50">
-                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-              </p>
-              <p className="text-xs text-slate-400">
-                Held in the connected wallet at snapshot.
-              </p>
-            </div>
+  <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+    {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+  </p>
+  <p className="text-[13px] text-slate-400">
+    Held in the connected wallet at snapshot.
+  </p>
+</div>
 
             <div className="mt-4 border-t border-slate-800/70 pt-3">
               <a
@@ -1020,19 +1020,19 @@ export default function ClaimPoolPage() {
             </p>
 
             <div className="mt-2 space-y-1">
-              <p
-                className={
-                  eligibilityTitle === 'Wallet not connected'
-                    ? 'text-lg font-semibold text-emerald-300'
-                    : isEligible
-                    ? 'text-lg font-semibold text-emerald-300'
-                    : 'text-lg font-semibold text-amber-300'
-                }
-              >
-                {eligibilityTitle}
-              </p>
-              <p className="text-xs text-slate-400">{eligibilityBody}</p>
-            </div>
+  <p
+    className={
+      eligibilityTitle === 'Wallet not connected'
+        ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
+        : isEligible
+        ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
+        : 'text-[18px] sm:text-[20px] font-semibold text-amber-300'
+    }
+  >
+    {eligibilityTitle}
+  </p>
+  <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
+</div>
 
             {effectiveWalletConnected && (
               <div className="mt-4 border-t border-slate-800/70 pt-3">
