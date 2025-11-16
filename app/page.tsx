@@ -856,7 +856,7 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span>, 
+    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> in $CLAIM, 
     governed entirely by <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
   </p>
 
