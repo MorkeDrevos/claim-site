@@ -1062,10 +1062,6 @@ export default function ClaimPoolPage() {
             {/* ... keep the existing tab content block here exactly as it is ... */}
           </SoftCard>
 
-          {/* RIGHT: Snapshot info */}
-          <SoftCard>
-            {/* ... existing snapshot info content ... */}
-          </SoftCard>
         </section>
 
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
