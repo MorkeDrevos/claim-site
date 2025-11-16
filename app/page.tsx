@@ -850,21 +850,26 @@ if (countdownTarget) {
       : 'Available when live'}
   </button>
 
-   {/* High-impact CLAIM value block */}
-<div className="mt-6 space-y-1 text-[13px] leading-relaxed">
-  <p className="text-slate-300">
-    ⚡️ <span className="font-semibold text-emerald-300">Show up once</span> and secure your share of every round’s pool.
+   <div class="mt-5 space-y-1 text-[13px] leading-relaxed text-slate-300">
+
+  <p>
+    <span class="text-emerald-300 font-semibold">⚡ Show up</span> during the live window and lock in your share.
   </p>
 
-  <p className="text-slate-300">
-    💰 Rewards are <span className="font-semibold text-emerald-300">auto-distributed</span> on-chain — 
-    <span className="font-semibold text-emerald-300"> equal payout</span> for every wallet that locks in.
+  <p>
+    <span class="text-emerald-300 font-semibold">⛁ Auto-distributed on-chain</span> — equal payout per wallet.
   </p>
 
-  <p className="text-slate-300">
-    🔥 <span className="font-semibold text-emerald-300">Fewer claimers = bigger share.</span>  
-    Supply pressure grows every round.
+  <p>
+    <span class="text-emerald-300 font-semibold">△ Fewer claimers = bigger share.</span>
   </p>
+
+  <p class="pt-1">
+    <span class="text-emerald-300 font-semibold">• Eligibility:</span>
+    Hold <span class="text-emerald-300 font-semibold">1,000,000 $CLAIM</span> at the snapshot.
+    If you're below the minimum when the snapshot hits, your wallet sits out that round.
+  </p>
+
 </div>
 </div>
               {/* end CLAIM WINDOW CARD */}
