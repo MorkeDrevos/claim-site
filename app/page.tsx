@@ -806,33 +806,39 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
 
-    {/* RIGHT: label + USD + CLAIM */}
-    <div className="flex flex-col items-end gap-1 text-right">
-      <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  Current Round Pool
-  <button
-    type="button"
-    onClick={() =>
-  alert(
-    'Rewards are auto-distributed on-chain and paid out in $CLAIM after each claim window closes.\n\nAll claimers receive an equal share of the pool.'
-  )
-}
-    className="text-slate-500 hover:text-slate-300 transition"
-  >
-    <span className="i-heroicons-information-circle text-[14px]" />
-  </button>
-</p>
+    {/* RIGHT: label + USD + $CLAIM */}
+<div className="flex flex-col items-end gap-1 text-right">
+  {/* Label + info icon + tooltip */}
+  <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    <span>Current round pool</span>
 
-      {/* Big USD – same line height as countdown */}
-      <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
-  {rewardUsdText} USD
-</p>
+    {/* Info icon with hover tooltip */}
+    <span className="relative group inline-flex items-center">
+      <span className="i-heroicons-information-circle text-[13px] text-slate-500 group-hover:text-slate-200" />
 
-      <p className="text-[13px] font-medium text-emerald-300">
-        ≈ {rewardAmountText}
-        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-      </p>
-    </div>
+      {/* Tooltip */}
+      <span
+        className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-64 -translate-x-1/2
+                   rounded-lg bg-slate-900/95 px-3 py-2 text-[11px] font-normal text-slate-200
+                   opacity-0 shadow-xl ring-1 ring-slate-700/80 transition-opacity
+                   group-hover:opacity-100"
+      >
+        Rewards are auto-distributed on-chain and paid out in $CLAIM after each
+        claim window closes. All claimers receive an equal share of the pool.
+      </span>
+    </span>
+  </p>
+
+  {/* Big USD – same line height as countdown */}
+  <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
+    {rewardUsdText} USD
+  </p>
+
+  <p className="text-[13px] font-medium text-emerald-300">
+    ≈ {rewardAmountText}
+    <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+  </p>
+</div>
   </div>
 
   {/* CTA bar – keep as you have it */}
@@ -863,7 +869,6 @@ const snapshotDateLabel = snapshotTakenAt
   <p>
     • <span className="text-emerald-300/70 font-medium">Show up</span> during the
     live window and <span className="text-emerald-300/70 font-medium">lock in your share</span>.
-    All claimers <span className="text-emerald-300/70 font-medium">split the pool equally</span>.
   </p>
 
   <p>
