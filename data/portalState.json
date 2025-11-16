@@ -1,6 +1,5 @@
 {
   "roundNumber": 1,
-
   "walletConnected": false,
   "walletShort": "",
   "networkLabel": "Solana mainnet",
@@ -8,21 +7,22 @@
   "snapshotBlock": "247191921",
 
   "claimWindowStatus": "open",
-  "claimWindowOpensAt": "2025-11-16T00:48:00Z",
-  "claimWindowClosesAt": "2025-11-1600:59:00Z",
+
+  "claimWindowOpensAt": "2025-11-16T01:24:00Z",
+  "claimWindowClosesAt": "2025-11-16T01:34:00Z",
 
   "frontEndStatus": "ok",
   "contractStatus": "ok",
   "firstPoolStatus": "open",
 
   "eligibleAmount": 0,
-
   "claimHistory": [],
 
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
 
   "windowPhase": "open",
+
   "snapshotTakenAt": "2025-11-15T22:00:00Z",
   "distributionCompletedAt": null
 }
