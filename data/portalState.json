@@ -7,9 +7,9 @@
   "snapshotBlock": "247191921",
 
   "claimWindowStatus": "open",
-
-  "claimWindowOpensAt": "2025-11-16T11:24:00Z",
-  "claimWindowClosesAt": "2025-11-16T11:34:00Z",
+  "claimWindowOpensAt": "2025-11-16T11:40:00Z",
+  "claimWindowClosesAt": "2025-11-16T11:40:00Z",
+  "windowPhase": "open"
 
   "frontEndStatus": "ok",
   "contractStatus": "ok",
@@ -20,8 +20,6 @@
 
   "rewardPoolAmountClaim": 9325670,
   "rewardPoolAmountUsd": 1865.13,
-
-  "windowPhase": "open",
 
   "snapshotTakenAt": "2025-11-15T22:00:00Z",
   "distributionCompletedAt": null
