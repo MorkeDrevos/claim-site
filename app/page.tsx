@@ -869,7 +869,8 @@ const snapshotDateLabel = snapshotTakenAt
     1,000,000 $CLAIM< <span className="text-emerald-300 font-medium">at
     snapshot/span> - wallets below minimum sit out that round.
   </p>
-</div></div>
+</div>
+</div>
               {/* end CLAIM WINDOW CARD */}
             </div>
 
