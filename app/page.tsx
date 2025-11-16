@@ -857,14 +857,14 @@ const snapshotDateLabel = snapshotTakenAt
 
   <p>
     • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span>,  
-    governed entirely by <span className="text-emerald-300 font-medium">rautonomous smart-contract execution</span>.
+    governed entirely by <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
   </p>
 
   <p>
-    • Eligibility: hold $CLAIM at the{' '}
-    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below the
-    minimum sit out that round.
-  </p>
+  • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+  <span className="text-emerald-300 font-medium">snapshot</span> - wallets below
+  the minimum sit out that round.
+</p>
 
 </div>
 </div>
