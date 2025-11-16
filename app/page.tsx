@@ -1159,12 +1159,11 @@ export default function ClaimPoolPage() {
         Snapshot #{snapshotBlock}{' '}
         <span className="text-slate-400">• {networkLabel}</span>
       </p>
-      <p className="text-sm text-slate-400">
-        Snapshots can be taken any time between the last window being scheduled
-        and the next live claim window opening. If you’re not holding{' '}
-        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
-        sits out that round.
-      </p>
+      <p className="text-[12px] leading-relaxed text-slate-400">
+  Snapshots can occur any time between the previous window being scheduled and
+  the next claim window opening. If you’re not holding the minimum required
+  amount of $CLAIM when it hits, your wallet sits out that round.
+</p>
     </div>
 
     <div className="pt-2 border-t border-slate-800/70">
