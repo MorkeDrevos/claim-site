@@ -624,25 +624,28 @@ if (countdownTarget) {
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  let progressMessage = '';
+   let progressMessage = '';
   if (currentPhase === 'scheduled') {
     progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
     progressMessage = 'Snapshot complete. Next claim window coming soon.';
   } else if (currentPhase === 'open') {
-    progressMessage = 'Claim window open. Lock in your share before the countdown hits zero.';
+    progressMessage =
+      'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-    progressMessage = 'Claim window closed. No new wallets can lock in for this round.';
+    progressMessage =
+      'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-    const snapshotDateLabel = snapshotTakenAt
-    ? new Date(snapshotTakenAt).toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      })
-    : 'To be announced';
+  const snapshotDateLabel =
+    snapshotTakenAt
+      ? new Date(snapshotTakenAt).toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        })
+      : 'To be announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -825,8 +828,6 @@ if (countdownTarget) {
 
   {/* CTA bar stays as you already have it below this */}
   {/* ... keep your existing LOCK IN MY SHARE button + eligibility text here ... */}
-</div>
-
                 {/* Big CTA bar */}
                 <button
                   type="button"
