@@ -821,24 +821,23 @@ const snapshotDateLabel = snapshotTakenAt
         ≈ {rewardAmountText}
         <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
       </p>
+
+      /* Info button */
+<button
+  type="button"
+  className="mt-1 flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-300 transition"
+  onClick={() => {
+    alert(
+      'Rewards are paid out in $CLAIM after each claim window closes.\n\nAll claimers receive an equal share.'
+    );
+  }}
+>
+  <span className="i-heroicons-information-circle text-[14px]" />
+  <span>How rewards work</span>
+</button>
+
     </div>
   </div>
-
-  <div className="flex items-center gap-1">
-  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    Current Round Pool
-  </p>
-
-  <div className="relative group">
-    <span className="text-slate-500 hover:text-slate-300 cursor-pointer text-[14px]">
-      ⓘ
-    </span>
-    <div className="absolute left-0 mt-2 w-56 rounded-md bg-slate-900/90 p-3 text-[11px] text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-xl border border-slate-700/60 z-50">
-      Rewards are paid out in $CLAIM after the claim window closes.  
-      USD value is an approximate market conversion.
-    </div>
-  </div>
-</div>
 
   {/* CTA bar – keep as you have it */}
   <button
