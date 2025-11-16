@@ -848,18 +848,39 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
   {/* Eligibility text – unchanged */}
- <div className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
-  <p>
-    Hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at snapshot to join the round.
-  </p>
-  <p>
-    <span className="text-emerald-300 font-medium">Equal reward</span> per wallet. 
-    <span className="ml-1 text-emerald-300 font-medium">Fewer claimers = bigger share.</span>
-  </p>
-  <p>
-    <span className="text-emerald-300 font-medium">Autonomous</span> smart-contract distributions.
-  </p>
-</div>
+<ul className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
+    <span>
+      <span className="text-emerald-300 font-medium">Show up</span> during the live window and 
+      <span className="text-emerald-300 font-medium"> lock in your share.</span>
+    </span>
+  </li>
+
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
+    <span>
+      Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
+      <span className="text-emerald-300 font-medium"> equal payout per wallet.</span>
+    </span>
+  </li>
+
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
+    <span>
+      <span className="text-emerald-300 font-medium">Fewer claimers</span> = 
+      <span className="text-emerald-300 font-medium"> bigger share.</span>
+    </span>
+  </li>
+
+  <li className="flex items-start gap-2">
+    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
+    <span>
+      Eligibility: hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at snapshot — 
+      wallets below minimum sit out that round.
+    </span>
+  </li>
+</ul>
 </div>
               {/* end CLAIM WINDOW CARD */}
             </div>
