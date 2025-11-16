@@ -830,7 +830,7 @@ const snapshotDateLabel = snapshotTakenAt
     onClick={handleClaimClick}
     disabled={!canClaim}
     className={[
-      'mt-10 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      'mt-5 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
       'transition-all duration-300 border',
       canClaim
         ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
@@ -848,39 +848,28 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
   {/* Eligibility text – unchanged */}
-<ul className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
-  <li className="flex items-start gap-2">
-    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
-    <span>
-      <span className="text-emerald-300 font-medium">Show up</span> during the live window and 
-      <span className="text-emerald-300 font-medium"> lock in your share.</span>
-    </span>
-  </li>
+<div className="mt-6 space-y-2 text-[13px] text-slate-300 leading-relaxed">
+  <p>
+    • <span className="text-emerald-300 font-medium">Show up</span> during the live window and 
+      <span className="text-emerald-300 font-medium"> lock in your share</span>.
+  </p>
 
-  <li className="flex items-start gap-2">
-    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
-    <span>
-      Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
-      <span className="text-emerald-300 font-medium"> equal payout per wallet.</span>
-    </span>
-  </li>
+  <p>
+    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
+      <span className="text-emerald-300 font-medium"> equal payout per wallet</span>.
+  </p>
 
-  <li className="flex items-start gap-2">
-    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
-    <span>
-      <span className="text-emerald-300 font-medium">Fewer claimers</span> = 
-      <span className="text-emerald-300 font-medium"> bigger share.</span>
-    </span>
-  </li>
+  <p>
+    • <span className="text-emerald-300 font-medium">Fewer claimers</span> 
+      = <span className="text-emerald-300 font-medium">bigger share</span>.
+  </p>
 
-  <li className="flex items-start gap-2">
-    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
-    <span>
-      Eligibility: hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at snapshot — 
+  <p>
+    • <span className="text-emerald-300 font-medium">Eligibility:</span> hold 
+      <span className="text-emerald-300 font-medium"> 1,000,000 $CLAIM</span> at the snapshot — 
       wallets below minimum sit out that round.
-    </span>
-  </li>
-</ul>
+  </p>
+</div>
 </div>
               {/* end CLAIM WINDOW CARD */}
             </div>
