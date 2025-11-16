@@ -102,9 +102,6 @@ function SoftCard({
    Countdown helpers
 ─────────────────────────── */
 
-// -------------------------------
-// Countdown helpers
-// -------------------------------
 function formatCountdown(targetIso?: string | null): string | null {
   if (!targetIso) return null;
 
@@ -112,7 +109,6 @@ function formatCountdown(targetIso?: string | null): string | null {
   if (Number.isNaN(targetMs)) return null;
 
   const diff = targetMs - Date.now();
-
   if (diff <= 0) return '00:00:00';
 
   const totalSeconds = Math.floor(diff / 1000);
@@ -161,18 +157,10 @@ function detectWallet(): DetectedWallet | null {
   if (typeof window === 'undefined') return null;
   const w = window as any;
 
-  if (w.solana?.isPhantom) {
-    return { name: 'Phantom', provider: w.solana };
-  }
-  if (w.backpack?.solana) {
-    return { name: 'Backpack', provider: w.backpack.solana };
-  }
-  if (w.solflare?.connect) {
-    return { name: 'Solflare', provider: w.solflare };
-  }
-  if (w.xnft?.solana) {
-    return { name: 'Backpack xNFT', provider: w.xnft.solana };
-  }
+  if (w.solana?.isPhantom) return { name: 'Phantom', provider: w.solana };
+  if (w.backpack?.solana) return { name: 'Backpack', provider: w.backpack.solana };
+  if (w.solflare?.connect) return { name: 'Solflare', provider: w.solflare };
+  if (w.xnft?.solana) return { name: 'Backpack xNFT', provider: w.xnft.solana };
 
   return null;
 }
@@ -217,8 +205,7 @@ export default function ClaimPoolPage() {
 
   /* ── Phase + countdown (safe when state is null) ── */
 
-  // 🔥 force a re-render every second so the phase naturally flips
-  // scheduled → open → closed without needing manual refresh
+  // Force small re-render every second so phase naturally flips
   const [, forceTick] = useState(0);
   useEffect(() => {
     const id = setInterval(() => {
@@ -227,7 +214,7 @@ export default function ClaimPoolPage() {
     return () => clearInterval(id);
   }, []);
 
-  // ── Contract address (TEMP: SOL mint) ──
+  // Contract address (TEMP: SOL mint)
   const CLAIM_CA = 'So11111111111111111111111111111111111111112';
   const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
 
@@ -263,7 +250,7 @@ export default function ClaimPoolPage() {
   // Base phase used for countdown (scheduled / open / closed)
   let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
 
-  // 1) Prefer automatic timing based on opens/closes
+  // Prefer automatic timing based on opens/closes
   if (opensAtMs && closesAtMs) {
     if (nowMs < opensAtMs) {
       phase = 'scheduled';
@@ -275,7 +262,7 @@ export default function ClaimPoolPage() {
   } else if (opensAtMs && !closesAtMs) {
     phase = nowMs < opensAtMs ? 'scheduled' : 'open';
   } else {
-    // 2) Fallback to text / backend phase
+    // Fallback to backend phase/status
     if (rawPhase === 'open') {
       phase = 'open';
     } else if (
@@ -302,13 +289,12 @@ export default function ClaimPoolPage() {
   } else if (phase === 'open') {
     countdownTarget = closesAt || opensAt || null;
   } else if (phase === 'closed') {
-    // After closing, show countdown to *next* window if known, otherwise null
-    countdownTarget = opensAt || null;
+    countdownTarget = opensAt || null; // next window if known
   }
 
   const countdownLabel = useCountdown(countdownTarget);
 
-  // 🔔 Flash highlight in the last 3 seconds before a phase change
+  // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
     if (!countdownTarget) {
       setPreFlash(false);
@@ -613,6 +599,7 @@ export default function ClaimPoolPage() {
       );
     }
   };
+
   /* ───────────────────────────
      Render
   ─────────────────────────── */
@@ -627,6 +614,19 @@ export default function ClaimPoolPage() {
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+
+  let progressMessage = '';
+  if (currentPhase === 'scheduled') {
+    progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
+  } else if (currentPhase === 'snapshot') {
+    progressMessage = 'Snapshot complete. Next claim window coming soon.';
+  } else if (currentPhase === 'open') {
+    progressMessage = 'Claim window open. Lock in your share before the countdown hits zero.';
+  } else if (currentPhase === 'closed') {
+    progressMessage = 'Claim window closed. No new wallets can lock in for this round.';
+  } else if (currentPhase === 'distribution') {
+    progressMessage = 'Rewards being distributed for this round.';
+  }
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -746,10 +746,12 @@ export default function ClaimPoolPage() {
             <div className="flex-1 space-y-6">
               {/* Header text */}
               <div className="space-y-2">
-                <h1 className="text-[18px] sm:text-[30px] font-semibold 
+                <h1
+                  className="text-[18px] sm:text-[30px] font-semibold 
                                leading-[1.25]
                                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
-                               bg-clip-text text-transparent">
+                               bg-clip-text text-transparent"
+                >
                   Rewards earned by presence - show up, click, get your share.
                 </h1>
               </div>
@@ -764,21 +766,21 @@ export default function ClaimPoolPage() {
                 {/* Top row – Countdown left, reward pool right */}
                 <div className="flex flex-wrap items-start justify-between gap-6">
                   {/* Countdown (dominant, left) */}
-<div className="space-y-2">
-  {/* Header text ABOVE the timer */}
-  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    {isLive
-      ? 'Window closes in'
-      : isClosed
-      ? 'Next window in'
-      : 'Window opens in'}
-  </p>
+                  <div className="space-y-2">
+                    {/* Header text ABOVE the timer */}
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {isLive
+                        ? 'Window closes in'
+                        : isClosed
+                        ? 'Next window in'
+                        : 'Window opens in'}
+                    </p>
 
-  {/* Big numeric countdown */}
-  <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-    {isClosed ? '' : countdownLabel || '--:--:--'}
-  </p>
-</div>
+                    {/* Big numeric countdown */}
+                    <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+                      {isClosed ? '' : countdownLabel || '--:--:--'}
+                    </p>
+                  </div>
 
                   {/* Reward pool */}
                   <div className="space-y-1 text-right">
@@ -840,11 +842,191 @@ export default function ClaimPoolPage() {
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-            {/* RIGHT COLUMN can remain as you already have it */}
+            {/* RIGHT COLUMN – snapshot info / status */}
+            <div className="w-full max-w-xs space-y-4">
+              <SoftCard className="space-y-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  Round {roundNumber ?? 1}
+                </p>
+
+                <div className="space-y-2">
+                  <p className="text-sm text-slate-300">
+                    {snapshotLabel}{' '}
+                    <span className="font-mono text-[11px] text-slate-500">
+                      (#{snapshotBlock})
+                    </span>
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {claimWindowStatus}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <StatusPill
+                    label={networkLabel}
+                    tone="muted"
+                  />
+                  <StatusPill
+                    label={`Backend: ${frontEndStatus}`}
+                    tone={frontEndStatus === 'ok' ? 'success' : 'warning'}
+                  />
+                  <StatusPill
+                    label={`Contract: ${contractStatus}`}
+                    tone={contractStatus === 'ok' ? 'success' : 'warning'}
+                  />
+                </div>
+              </SoftCard>
+            </div>
           </div>
         </SoftCard>
 
-        {/* ...rest of your existing cards + sections stay as-is... */}
+        {/* Round progress bar */}
+        <SoftCard className="mt-6">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Round {roundNumber ?? 1} progress
+              </p>
+            </div>
+
+            <div className="mt-1 flex items-center justify-between gap-3">
+              {steps.map((step, index) => {
+                const isDone = activeIndex >= index;
+                return (
+                  <div key={step.id} className="flex flex-1 flex-col items-center">
+                    <div
+                      className={[
+                        'h-2 w-full rounded-full',
+                        index === 0 ? '' : 'ml-1',
+                        isDone ? 'bg-emerald-400' : 'bg-slate-800',
+                      ].join(' ')}
+                    />
+                    <div className="mt-2 flex items-center gap-2">
+                      <div
+                        className={[
+                          'h-2.5 w-2.5 rounded-full border',
+                          isDone
+                            ? 'bg-emerald-400 border-emerald-300'
+                            : 'bg-slate-800 border-slate-600',
+                        ].join(' ')}
+                      />
+                      <span className="text-[10px] text-slate-400">
+                        {step.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="mt-3 text-[11px] text-emerald-300">{progressMessage}</p>
+          </div>
+        </SoftCard>
+
+        {/* Preview Eligibility Cards */}
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Current Reward Pool */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Current reward pool
+            </p>
+
+            <div className="mt-1.5 space-y-1">
+              <p className="text-[20px] sm:text-[22px] font-bold text-slate-50 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+                {rewardAmountText}
+                <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+                  $CLAIM
+                </span>
+              </p>
+
+              <p className="text-xs font-medium text-emerald-300">
+                ≈ <span className="font-semibold">{rewardUsdText}</span>
+              </p>
+            </div>
+
+            <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                Contract address
+              </p>
+
+              <button
+                type="button"
+                onClick={handleCopyCa}
+                className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+                           text-[11px] font-medium text-slate-200 border border-slate-700/80
+                           hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
+                           transition-colors"
+              >
+                <span className="font-mono text-[11px] text-slate-300">
+                  {shortCa}
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
+                  Copy CA
+                </span>
+              </button>
+            </div>
+          </SoftCard>
+
+          {/* Minimum holding */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Minimum holding
+            </p>
+
+            <div className="mt-2 space-y-1">
+              <p className="text-2xl font-bold text-slate-50">
+                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+              </p>
+              <p className="text-xs text-slate-400">
+                Held in the connected wallet at snapshot.
+              </p>
+            </div>
+
+            <div className="mt-4 border-t border-slate-800/70 pt-3">
+              <a
+                href={JUPITER_BUY_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:bg-emerald-500/25"
+              >
+                Buy more on Jupiter
+              </a>
+            </div>
+          </SoftCard>
+
+          {/* Your eligibility */}
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Your eligibility
+            </p>
+
+            <div className="mt-2 space-y-1">
+              <p
+                className={
+                  eligibilityTitle === 'Wallet not connected'
+                    ? 'text-lg font-semibold text-emerald-300'
+                    : isEligible
+                    ? 'text-lg font-semibold text-emerald-300'
+                    : 'text-lg font-semibold text-amber-300'
+                }
+              >
+                {eligibilityTitle}
+              </p>
+              <p className="text-xs text-slate-400">{eligibilityBody}</p>
+            </div>
+
+            {effectiveWalletConnected && (
+              <div className="mt-4 border-t border-slate-800/70 pt-3">
+                <p className="text-[11px] text-slate-500">
+                  Wallet:{' '}
+                  <span className="font-mono text-slate-200">
+                    {effectiveWalletShort || '—'}
+                  </span>
+                </p>
+              </div>
+            )}
+          </SoftCard>
+        </div>
       </div>
 
       <ToastContainer />
