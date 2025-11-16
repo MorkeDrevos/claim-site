@@ -1198,7 +1198,7 @@ const snapshotDateLabel = snapshotTakenAt
         Snapshot #{snapshotBlock}{' '}
         <span className="text-slate-400">• {networkLabel}</span>
       </p>
-      <<p className="text-[13px] leading-relaxed text-slate-400">
+      <p className="text-[13px] leading-relaxed text-slate-400">
   Each round uses a single snapshot taken before the claim window opens.
   Wallets holding at least the minimum required amount of $CLAIM at that
   moment are eligible for that round - wallets below the minimum sit out
