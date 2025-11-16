@@ -509,12 +509,6 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-const windowTimingText = (() => {
-  if (isLive) return 'Claim window open. Lock in your share.';
-  if (isClosed) return 'Claim window closed.';
-  return ''; // ← no “Opens in …”
-})();
-
     if (isClosed) {
       if (!countdownLabel) return 'Waiting for the next round';
       if (countdownLabel === '00:00:00') return 'Next window opens any second';
