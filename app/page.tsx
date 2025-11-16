@@ -851,32 +851,38 @@ export default function ClaimPoolPage() {
 
             {/* RIGHT COLUMN – snapshot info / status */}
             <div className="w-full max-w-xs space-y-4">
-              <SoftCard className="space-y-4">
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Snapshot info
-  </p>
+              <SoftCard className="space-y-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  Round {roundNumber ?? 1}
+                </p>
 
-  <p className="text-[15px] font-semibold text-slate-100">
-    Snapshot #{snapshotBlock} · {networkLabel}
-  </p>
+                <div className="space-y-2">
+                  <p className="text-sm text-slate-300">
+                    {snapshotLabel}{' '}
+                    <span className="font-mono text-[11px] text-slate-500">
+                      (#{snapshotBlock})
+                    </span>
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {claimWindowStatus}
+                  </p>
+                </div>
 
-  <p className="text-[12px] leading-relaxed text-slate-400">
-  Snapshots can occur any time between the previous window being scheduled and
-  the next claim window opening. If you’re not holding the minimum required
-  amount of $CLAIM when it hits, your wallet sits out that round.
-</p>
-
-  <hr className="border-slate-800/70" />
-
-  <p className="text-[11px] text-slate-500">
-    Latest snapshot: {snapshotDateLabel}
-  </p>
-
-  <p className="text-[11px] text-slate-500">
-    © 2025 CLAIM portal · Subject to change. Built for serious holders,
-    not random forms.
-  </p>
-</SoftCard>
+                <div className="flex flex-wrap gap-2">
+                  <StatusPill
+                    label={networkLabel}
+                    tone="muted"
+                  />
+                  <StatusPill
+                    label={`Backend: ${frontEndStatus}`}
+                    tone={frontEndStatus === 'ok' ? 'success' : 'warning'}
+                  />
+                  <StatusPill
+                    label={`Contract: ${contractStatus}`}
+                    tone={contractStatus === 'ok' ? 'success' : 'warning'}
+                  />
+                </div>
+              </SoftCard>
             </div>
           </div>
         </SoftCard>
