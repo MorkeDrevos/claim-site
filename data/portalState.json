@@ -8,8 +8,8 @@
   "snapshotBlock": "247191921",
 
   "claimWindowStatus": "open",
-  "claimWindowOpensAt": "2025-11-15T00:050:00Z",
-  "claimWindowClosesAt": "2025-11-1500:10:10Z",
+  "claimWindowOpensAt": "2025-11-16T00:30:00Z",
+  "claimWindowClosesAt": "2025-11-1600:40:00Z",
 
   "frontEndStatus": "ok",
   "contractStatus": "ok",
