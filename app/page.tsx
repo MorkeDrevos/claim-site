@@ -806,47 +806,47 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
     </div>
 
-  {/* RIGHT: label + USD + $CLAIM */}
+    {/* RIGHT: label + USD + $CLAIM */}
 <div className="flex flex-col items-end gap-1 text-right">
-  {/* Label + info icon + custom tooltip */}
-  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <span>Current round pool</span>
 
-    <div className="relative group">
-      {/* Icon */}
+  {/* Label + info icon + tooltip */}
+  <div className="relative flex items-center gap-2">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      Current round pool
+    </p>
+
+    {/* Hover icon */}
+    <div className="group relative">
       <button
         type="button"
-        className="inline-flex h-5 w-5 items-center justify-center rounded-full 
-                   border border-slate-600/80 bg-slate-900/80 text-[10px] 
-                   text-slate-300 shadow-sm
-                   hover:border-emerald-400/70 hover:text-emerald-300
-                   focus:outline-none focus:ring-1 focus:ring-emerald-400/70"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full 
+                   bg-slate-800/80 text-slate-300 text-[10px] font-bold
+                   border border-slate-700 
+                   hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
       >
-        i
+        ?
       </button>
 
       {/* Tooltip */}
       <div
-        className="pointer-events-none absolute right-0 top-full z-20 mt-2 w-72
-                   -translate-y-1 opacity-0
-                   rounded-2xl bg-slate-950/95 px-4 py-3
-                   text-[11px] leading-relaxed text-slate-200
-                   shadow-[0_18px_45px_rgba(0,0,0,0.85)]
-                   ring-1 ring-slate-800/90
-                   transition-all duration-150
-                   group-hover:translate-y-0 group-hover:opacity-100"
+        className="pointer-events-none absolute right-0 top-6 w-64 opacity-0 group-hover:opacity-100 
+                   transition-opacity duration-200 z-50"
       >
-        <p>
-          Rewards are auto-distributed on-chain in{' '}
-          <span className="font-medium text-emerald-300">$CLAIM</span> after each
-          claim window closes. All claimers receive an equal share of the pool —
-          fewer claimers means a larger share per wallet.
-        </p>
+        <div className="rounded-2xl border border-slate-700/50 bg-gradient-to-b 
+                        from-slate-900/95 to-slate-900/80 
+                        p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+          <p className="text-[13px] text-slate-300 leading-relaxed">
+            Rewards are auto-distributed on-chain and paid out in 
+            <span className="text-emerald-300 font-medium"> $CLAIM</span> 
+            after each claim window closes. All claimers receive an equal share.
+            Fewer claimers → larger share per wallet.
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  {/* Big USD – same line height as countdown */}
+  {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
     {rewardUsdText} USD
   </p>
@@ -855,7 +855,7 @@ const snapshotDateLabel = snapshotTakenAt
     ≈ {rewardAmountText}
     <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
   </p>
-</div>  
+</div>
   </div>
 
   {/* CTA bar – keep as you have it */}
