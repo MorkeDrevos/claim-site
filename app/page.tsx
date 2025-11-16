@@ -784,12 +784,12 @@ const snapshotDateLabel = snapshotTakenAt
     {/* LEFT: label + countdown */}
     <div className="flex flex-col gap-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window closes in'
-          : isClosed
-          ? 'Next window in'
-          : 'Window opens in'}
-      </p>
+  {isLive
+    ? 'WINDOW CLOSES IN'
+    : isClosed
+    ? 'NEXT ROUND COMING UP'
+    : 'NEXT WINDOW IN'}
+</p>
 
       <div className={isLive ? 'relative' : ''}>
         {isLive && (
@@ -843,7 +843,7 @@ const snapshotDateLabel = snapshotTakenAt
     {canClaim
       ? 'Lock in my share'
       : isClosed
-      ? 'Next round announced soon'
+      ? 'Window closed'
       : 'Opens soon'}
   </button>
 
