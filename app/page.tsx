@@ -771,7 +771,7 @@ if (countdownTarget) {
                                bg-gradient-to-r from-slate-200/90 to-slate-300/90 
                                bg-clip-text text-transparent"
                 >
-                  Rewards earned by presence - show up, click, get your share.
+                  Rewards earned by presence - show up, click, get your share
                 </h1>
               </div>
 
@@ -783,7 +783,7 @@ if (countdownTarget) {
   ].join(' ')}
 >
   {/* One row: countdown left, USD right */}
-  <div className="flex items-start justify-between gap-6">
+  <div className="flex items-start justify-between gap-4">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col gap-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
