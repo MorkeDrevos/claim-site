@@ -926,8 +926,8 @@ export default function ClaimPoolPage() {
           className={[
             'tracking-wide',
             isDone
-              ? 'text-[13px] font-semibold text-slate-300'
-              : 'text-[13px] font-medium text-slate-500',
+              ? 'text-[14px] font-semibold text-slate-300'
+              : 'text-[14px] font-medium text-slate-500',
           ].join(' ')}
         >
           {step.label}
