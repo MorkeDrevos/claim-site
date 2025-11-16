@@ -787,7 +787,7 @@ const snapshotDateLabel = snapshotTakenAt
   {isLive
     ? 'WINDOW CLOSES IN'
     : isClosed
-    ? 'NEXT ROUND COMING UP SOON'
+    ? 'NEXT ROUND SOON'
     : 'NEXT WINDOW IN'}
 </p>
 
