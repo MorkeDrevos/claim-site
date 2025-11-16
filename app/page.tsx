@@ -920,7 +920,7 @@ export default function ClaimPoolPage() {
                       <span
   className={[
     'tracking-wide',
-    isDone ? 'text-[13px] font-semibold text-slate-300' : 'text-sm font-medium text-slate-500'
+    isDone ? 'text-[13px] font-semibold text-slate-300' : 'text-[13px] font-medium text-slate-500'
   ].join(' ')}
 >
   {step.label}
