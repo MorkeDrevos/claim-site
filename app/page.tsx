@@ -850,7 +850,7 @@ if (countdownTarget) {
       : 'Available when live'}
   </button>
 
-  {/* Eligibility text – unchanged */}
+    {/* Eligibility + how rewards work */}
   <div className="mt-6 text-[11px] leading-relaxed text-slate-400">
     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
       i
@@ -865,6 +865,14 @@ if (countdownTarget) {
       LOCK IN MY SHARE
     </span>{' '}
     to register your wallet’s share for that round.
+    <span className="mt-2 block">
+      <span className="font-semibold text-emerald-300"> Auto-distributed </span>
+      at window close.{' '}
+      <span className="font-semibold text-emerald-300">Equal reward</span> per wallet.{' '}
+      <span className="font-semibold text-emerald-300">Fewer claimers</span> = bigger share.{' '}
+      Runs autonomously on{' '}
+      <span className="font-semibold text-emerald-300">smart contracts.</span>
+    </span>
   </div>
 </div>
               {/* end CLAIM WINDOW CARD */}
