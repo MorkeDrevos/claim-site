@@ -830,7 +830,7 @@ const snapshotDateLabel = snapshotTakenAt
     onClick={handleClaimClick}
     disabled={!canClaim}
     className={[
-      'mt-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      'mt-10 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
       'transition-all duration-300 border',
       canClaim
         ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
@@ -844,7 +844,7 @@ const snapshotDateLabel = snapshotTakenAt
       ? 'Lock in my share'
       : isClosed
       ? 'Window closed'
-      : 'Available when live'}
+      : 'Opens soon'}
   </button>
 
   {/* Eligibility text – unchanged */}
