@@ -573,16 +573,18 @@ if (isLive) {
   })();
 
   // 👉 Numbers-only countdown used in the big UI
-const numericCountdown =
-  countdownLabel && countdownLabel !== 'now'
-    ? countdownLabel        // e.g. "4h 7m 30s"
-    : isLive
-    ? '0s'
-    : '';
+let numericCountdown = '';
 
-const { hours, minutes, seconds } = parseCountdownLabel(
-  numericCountdown || null
-);
+if (countdownLabel && countdownLabel !== 'now') {
+  // Normal case – we have a formatted label like "4h 7m 30s" or "12m 5s"
+  numericCountdown = countdownLabel;
+} else if (phase === 'open' && countdownTarget) {
+  // We’re live, within a second of the target → treat as "0s" once, not forever
+  numericCountdown = '0s';
+} else {
+  // No valid countdown available for this phase
+  numericCountdown = '';
+}
 
   const canClaim = !isPreview && isLive;
 
