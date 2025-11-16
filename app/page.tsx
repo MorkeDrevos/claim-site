@@ -638,10 +638,12 @@ if (countdownTarget) {
   } else if (currentPhase === 'distribution') {
     progressMessage = 'Rewards have been distributed for this round.';
   }
-// Safe fallback snapshot label
+
+// Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
-  : "Not yet announced";
+  : 'Not yet announced';
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
@@ -1136,14 +1138,10 @@ const snapshotDateLabel = snapshotTakenAt
   {/* Reward logic */}
   {activeTab === 'rewards' && (
     <div className="space-y-4">
-      <p>
-  • <span className="text-emerald-300 font-medium">Show up</span> during the live window and
-    <span className="text-emerald-300 font-medium"> lock in your share</span>.
-    <br />
-    <span className="text-slate-400">
-      All claimers split the pool equally — fewer claimers means a larger share per wallet.
-    </span>
-</p>
+      <p className="text-[13px]">
+        Rewards are earned by presence — if you show up during the live claim
+        window and lock your share, you receive an equal split of that round’s pool.
+      </p>
 
       <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
         <li>Everyone who locks in receives an equal share.</li>
@@ -1200,11 +1198,10 @@ const snapshotDateLabel = snapshotTakenAt
         Snapshot #{snapshotBlock}{' '}
         <span className="text-slate-400">• {networkLabel}</span>
       </p>
-      <<p className="text-[13px] leading-relaxed text-slate-400">
-  Each round uses a single snapshot taken before the claim window opens.
-  Wallets holding at least the minimum required amount of $CLAIM at that
-  moment are eligible for that round — wallets below the minimum sit out
-  until the next snapshot.
+      <p className="text-[13px] leading-relaxed text-slate-400">
+  Snapshots can occur any time between the previous window being scheduled and
+  the next claim window opening. If you’re not holding the minimum required
+  amount of $CLAIM when it hits, your wallet sits out that round.
 </p>
     </div>
 
