@@ -851,28 +851,28 @@ if (countdownTarget) {
   </button>
 
   {/* Eligibility text – unchanged */}
-  <div class="mt-5 space-y-1 text-[13px] leading-relaxed text-slate-300">
+  <<div className="mt-5 space-y-1 text-[11px] leading-relaxed text-slate-400">
 
   <p>
-    ⚡ <span class="text-emerald-300 font-semibold">Show up</span> during the live window and 
-    <span class="text-emerald-300 font-semibold">lock in your share.</span>
+    • <span className="text-emerald-300 font-medium">Show up</span> during the live window and 
+      <span className="text-emerald-300 font-medium"> lock in your share.</span>
   </p>
 
   <p>
-    ⛁ Rewards are 
-    <span class="text-emerald-300 font-semibold">auto-distributed on-chain</span> — 
-    <span class="text-emerald-300 font-semibold">equal payout per wallet.</span>
+    • Rewards are 
+      <span className="text-emerald-300 font-medium"> auto-distributed on-chain</span> — 
+      <span className="text-emerald-300 font-medium"> equal payout per wallet.</span>
   </p>
 
   <p>
-    △ <span class="text-emerald-300 font-semibold">Fewer claimers</span> 
-    = <span class="text-emerald-300 font-semibold">bigger share.</span>
+    • <span className="text-emerald-300 font-medium">Fewer claimers</span> 
+      = <span className="text-emerald-300 font-medium"> bigger share.</span>
   </p>
 
-  <p class="pt-2">
-    <span class="text-emerald-300 font-semibold">Eligibility:</span>
-    Hold <span class="text-emerald-300 font-semibold">1,000,000 $CLAIM</span> at the snapshot.
-    If you're below the minimum when it hits, your wallet sits out that round.
+  <p>
+    • <span className="text-emerald-300 font-medium">Eligibility:</span>
+      Hold <span className="text-emerald-300 font-medium">1,000,000 $CLAIM</span> at the snapshot —  
+      wallets below minimum sit out that round.
   </p>
 
 </div>
