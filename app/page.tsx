@@ -509,12 +509,6 @@ export default function ClaimPoolPage() {
       ? `$${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-    if (isClosed) {
-      if (!countdownLabel) return 'Waiting for the next round';
-      if (countdownLabel === '00:00:00') return 'Next window opens any second';
-      return `Next window opens in ${countdownLabel}`;
-    }
-
   const canClaim = !isPreview && isLive;
 
   const eligibilityTitle = effectiveWalletConnected
