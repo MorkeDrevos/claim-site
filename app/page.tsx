@@ -814,8 +814,8 @@ const snapshotDateLabel = snapshotTakenAt
 
       {/* Big USD – same line height as countdown */}
       <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
-        {rewardUsdText}
-      </p>
+  {rewardUsdText} USD
+</p>
 
       <p className="text-[13px] font-medium text-emerald-300">
         ≈ {rewardAmountText}
@@ -856,12 +856,9 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-  • Rewards are auto-distributed on-chain in 
-  <span className="text-emerald-300 font-medium"> $CLAIM</span>, funded by 
-  <span className="text-emerald-300 font-medium"> creator-fee buybacks</span> and 
-  governed entirely by 
-  <span className="text-emerald-300 font-medium"> autonomous smart-contract execution</span>.
-</p>
+    • Rewards are auto-distributed on-chain in <span className="text-emerald-300 font-medium">$CLAIM</span>, 
+    governed entirely by <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
+  </p>
 
   <p>
     • Eligibility: hold 1,000,000 $CLAIM at the{' '}
