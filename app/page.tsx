@@ -765,10 +765,10 @@ export default function ClaimPoolPage() {
                 <div className="flex flex-wrap items-start justify-between gap-6">
                   {/* Countdown */}
                   <div className="space-y-2">
-                    <p className="text-xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-                    {isClosed ? '' : (numericCountdown ?? '—:—:—')}
-                   </p>
-                  </div>
+  <p className="text-xl sm:text-3xl font-semibold tracking-tight text-slate-50">
+    {isClosed ? '' : (countdownLabel ?? '—:—:—')}
+  </p>
+</div>
 
                   {/* Reward pool */}
 <div className="space-y-1 text-right">
