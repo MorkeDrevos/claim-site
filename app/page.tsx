@@ -923,102 +923,6 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-                {/* Preview eligibility cards row */}
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* Current Reward Pool */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Current reward pool
-            </p>
-
-            <div className="mt-1.5 space-y-1">
-              <p className="text-[20px] sm:text-[22px] font-bold text-slate-50 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
-                {rewardAmountText}
-                <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
-                  $CLAIM
-                </span>
-              </p>
-
-              <p className="text-xs font-medium text-emerald-300">
-                ≈ <span className="font-semibold">{rewardUsdText}</span>
-              </p>
-            </div>
-
-            <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-800/70 pt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Contract address
-              </p>
-
-              <button
-                type="button"
-                onClick={handleCopyCa}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
-                   text-[11px] font-medium text-slate-200 border border-slate-700/80
-                   hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
-                   transition-colors"
-              >
-                <span className="font-mono text-[11px] text-slate-300">
-                  {shortCa}
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
-                  Copy CA
-                </span>
-              </button>
-            </div>
-          </SoftCard>
-
-          {/* Minimum holding */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Minimum holding
-            </p>
-            <div className="mt-2 space-y-2">
-              <p className="text-xl font-semibold text-slate-100">
-                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-              </p>
-              <p className="text-[13px] text-slate-400">
-                Held in the connected wallet at snapshot.
-              </p>
-              <a
-                href={JUPITER_BUY_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:text-emerald-200"
-              >
-                Get more CLAIM
-              </a>
-            </div>
-          </SoftCard>
-
-          {/* Your eligibility */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Your eligibility
-            </p>
-            <div className="mt-2 space-y-2">
-              <p
-                className={
-                  eligibilityTitle === 'Wallet not connected'
-                    ? 'text-lg font-semibold text-emerald-300'
-                    : isEligible
-                    ? 'text-lg font-semibold text-emerald-300'
-                    : 'text-lg font-semibold text-amber-300'
-                }
-              >
-                {eligibilityTitle}
-              </p>
-              <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
-              {effectiveWalletConnected && (
-                <p className="text-[12px] text-slate-500">
-                  Connected as{' '}
-                  <span className="font-mono text-slate-300">
-                    {effectiveWalletShort}
-                  </span>
-                </p>
-              )}
-            </div>
-          </SoftCard>
-        </div>
         
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Current Reward Pool */}
@@ -1122,6 +1026,45 @@ export default function ClaimPoolPage() {
               </div>
             )}
           </SoftCard>
+
+          {/* Info + rules section (tabs + snapshot info) */}
+        <section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
+          {/* LEFT: Tabs – eligibility / reward logic / history */}
+          <SoftCard>
+            {/* Tabs */}
+            <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              {(['eligibility', 'rewards', 'history'] as PortalTab[]).map(
+                (tab) => {
+                  const isActive = activeTab === tab;
+                  const label =
+                    tab === 'eligibility'
+                      ? 'Eligibility rules'
+                      : tab === 'rewards'
+                      ? 'Reward logic'
+                      : 'Claim history';
+
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setActiveTab(tab)}
+                      className={[
+                        'rounded-full px-4 py-1.5 transition-colors',
+                        isActive
+                          ? 'bg-slate-50 text-slate-950'
+                          : 'text-slate-400 hover:text-slate-100',
+                      ].join(' ')}
+                    >
+                      {label}
+                    </button>
+                  );
+                }
+              )}
+            </div>
+
+            <hr className="border-slate-800/80" />
+
+
         </div>
       </div>
 
