@@ -257,6 +257,48 @@ useEffect(() => {
   return () => clearInterval(id);
 }, []);
 
+// Countdown tick
+useEffect(() => {
+  if (!state?.claimWindowOpenAt && !state?.claimWindowCloseAt && !state?.nextWindowAt)
+    return;
+
+  const now = Date.now();
+
+  const target =
+    isLive
+      ? state.claimWindowCloseAt
+      : isClosed
+      ? state.nextWindowAt
+      : state.claimWindowOpenAt;
+
+  const update = () => {
+    if (!target) {
+      setNumericCountdown('--:--:--');
+      return;
+    }
+
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      setNumericCountdown('00:00:00');
+      return;
+    }
+
+    const h = Math.floor(diff / 1000 / 3600);
+    const m = Math.floor((diff / 1000 / 60) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    setNumericCountdown(
+      `${h.toString().padStart(2, '0')}:${m
+        .toString()
+        .padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+    );
+  };
+
+  update();
+  const id = setInterval(update, 1000);
+  return () => clearInterval(id);
+}, [state, isLive, isClosed]);
+
   // ── Contract address (TEMP: SOL mint) ──
   const CLAIM_CA = 'So11111111111111111111111111111111111111112';
   const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
