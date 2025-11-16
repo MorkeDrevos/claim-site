@@ -966,6 +966,7 @@ export default function ClaimPoolPage() {
       </p>
     </div>
   </SoftCard>
+      </div>
 
           {/* Minimum holding */}
           <SoftCard>
