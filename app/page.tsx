@@ -897,7 +897,7 @@ export default function ClaimPoolPage() {
             </div>
 
             <div className="mt-1 flex items-center justify-between gap-3">
-              {steps.map((step, index) => {
+              {•((step, index) => {
                 const isDone = activeIndex >= index;
                 return (
                   <div key={step.id} className="flex flex-1 flex-col items-center">
@@ -917,9 +917,14 @@ export default function ClaimPoolPage() {
                             : 'bg-slate-800 border-slate-600',
                         ].join(' ')}
                       />
-                      <span className="text-[10px] text-slate-400">
-                        {step.label}
-                      </span>
+<span
+  className={[
+    'tracking-wide',
+    isDone ? 'text-sm font-semibold text-slate-200' : 'text-sm font-medium text-slate-500'
+  ].join(' ')}
+>
+  {step.label}
+</span>
                     </div>
                   </div>
                 );
