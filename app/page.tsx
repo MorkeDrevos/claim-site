@@ -776,12 +776,12 @@ export default function ClaimPoolPage() {
                   <div className="space-y-2">
                     {/* Header text ABOVE the timer */}
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  {isLive
-    ? 'Window closes in'
-    : isClosed
-    ? 'Window closed'
-    : 'Window opens in'}
-</p>
+                      {isLive
+                        ? 'Window closes in'
+                        : isClosed
+                        ? 'Next window in'
+                        : 'Window opens in'}
+                    </p>
 
                     {/* Big numeric countdown */}
                     <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
@@ -943,25 +943,27 @@ export default function ClaimPoolPage() {
         </SoftCard>
 
         {/* Preview Eligibility Cards */}
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* Current Reward Pool */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Current reward pool
-            </p>
+<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  {/* Current Reward Pool */}
+  <SoftCard>
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Current reward pool
+    </p>
 
-            <div className="mt-2 space-y-1">
-  <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
-    {rewardAmountText}
-    <span className="ml-1 text-[15px] sm:text-[16px] text-emerald-400">
-      $CLAIM
-    </span>
-  </p>
+    <div className="mt-1.5 space-y-1">
+      {/* CLAIM amount */}
+      <p className="text-[20px] sm:text-[22px] font-bold text-emerald-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">
+        {rewardAmountText}
+        <span className="ml-1 text-[16px] sm:text-[17px] text-emerald-400">
+          $CLAIM
+        </span>
+      </p>
 
-  <p className="text-[13px] text-slate-400">
-    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText}</span>
-  </p>
-</div>
+      {/* USD estimate */}
+      <p className="text-[13px] font-medium text-slate-400">
+        ≈ <span className="text-slate-200">{rewardUsdText}</span>
+      </p>
+    </div>
 
             <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
