@@ -782,47 +782,57 @@ if (countdownTarget) {
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  
-  {/* One row: countdown left, pool right */}
-<div className="mt-1.5 flex w-full items-end justify-between gap-6">
-
-  {/* LEFT: Countdown */}
-  <div className={isLive ? 'relative' : ''}>
-    {isLive && (
-      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-    )}
-    <p
-      className={[
-        'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
-        isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-      ].join(' ')}
-    >
-      {isClosed ? '' : countdownLabel || '--:--:--'}
-    </p>
-  </div>
-
-  {/* VERTICAL DIVIDER */}
-  <div className="h-10 w-px bg-slate-700/40 mx-2"></div>
-
-  {/* RIGHT: Pool USD + CLAIM */}
-  <div className="flex flex-col items-end text-right gap-1">
+  {/* Top row: labels */}
+  <div className="flex items-baseline justify-between">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      Current Round Pool
+      {isLive
+        ? 'Window closes in'
+        : isClosed
+        ? 'Next window in'
+        : 'Window opens in'}
     </p>
 
-    <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
-      {rewardUsdText}
-    </p>
-
-    <p className="text-[13px] font-medium text-emerald-300">
-      ≈ {rewardAmountText}
-      <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      Current round pool
     </p>
   </div>
 
-</div>
+  {/* Second row: countdown + divider + USD */}
+  <div className="mt-1.5 flex items-end justify-between gap-6">
+    {/* LEFT: countdown */}
+    <div className={isLive ? 'relative' : ''}>
+      {isLive && (
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-emerald-400/40 blur-2xl opacity-20" />
+      )}
 
-  {/* CTA bar – keep as you have it */}
+      <p
+        className={[
+          'text-[32px] sm:text-[38px] font-bold tracking-tight text-slate-50',
+          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+        ].join(' ')}
+      >
+        {isClosed ? '' : countdownLabel || '--:--:--'}
+      </p>
+    </div>
+
+    {/* Middle divider */}
+    <div className="h-9 sm:h-10 w-px bg-slate-700/40 mx-4" />
+
+    {/* RIGHT: USD + CLAIM */}
+    <div className="flex flex-col items-end text-right gap-1 pt-0.5">
+      {/* Big USD – same line height as countdown */}
+      <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
+        {rewardUsdText}
+      </p>
+
+      <p className="text-[13px] font-medium text-emerald-300">
+        ≈ {rewardAmountText}
+        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+      </p>
+    </div>
+  </div>
+
+  {/* Big CTA bar */}
   <button
     type="button"
     onClick={handleClaimClick}
@@ -845,9 +855,9 @@ if (countdownTarget) {
       : 'Available when live'}
   </button>
 
-  {/* Eligibility text – unchanged */}
+  {/* Eligibility text */}
   <div className="mt-6 text-[12px] leading-relaxed text-slate-400">
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
+    <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px]">
       i
     </span>
     To be eligible, you must hold at least{' '}
@@ -862,7 +872,9 @@ if (countdownTarget) {
     to register your wallet’s share for that round.
   </div>
 </div>
-              {/* end CLAIM WINDOW CARD */}
+{/* end CLAIM WINDOW CARD */}
+
+              
             </div>
 
             {/* RIGHT COLUMN – snapshot info / status */}
