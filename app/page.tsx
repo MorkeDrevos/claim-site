@@ -788,13 +788,17 @@ export default function ClaimPoolPage() {
   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     Reward pool
   </p>
-  <p className="text-xl sm:text-2xl font-bold text-emerald-300">
-    {rewardAmountText}{' '}
-    <span className="text-sm text-emerald-400">$CLAIM</span>
-  </p>
-  <p className="text-xs text-slate-400">
-    ≈ <span className="text-slate-200">{rewardUsdText}</span>
-  </p>
+
+  <div className="flex justify-end items-baseline gap-3">
+    <span className="text-2xl sm:text-3xl font-semibold text-emerald-300 tracking-tight">
+      {rewardAmountText}
+      <span className="text-lg ml-1 text-emerald-400">$CLAIM</span>
+    </span>
+
+    <span className="text-xl sm:text-2xl font-semibold text-slate-200">
+      ≈ {rewardUsdText}
+    </span>
+  </div>
 </div>
                 </div>
 
