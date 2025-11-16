@@ -857,7 +857,7 @@ const snapshotDateLabel = snapshotTakenAt
 
   <p>
     • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
-    the system <span className="text-emerald-300 font-medium">runs autonomously on smart contracts</span>.
+    runs autonomously on smart contracts.
   </p>
 
   <p>
