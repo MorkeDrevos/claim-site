@@ -851,21 +851,21 @@ if (countdownTarget) {
   </button>
 
   {/* Eligibility text – unchanged */}
-  <div className="mt-6 text-[11px] leading-relaxed text-slate-400">
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
-      i
-    </span>
-    To be eligible, you must hold at least{' '}
-    {MIN_HOLDING.toLocaleString('en-US')} $CLAIM{' '}
-    <span className="font-semibold text-emerald-300">
-      at the snapshot.
-    </span>{' '}
-    When the claim window opens, click{' '}
-    <span className="font-semibold text-emerald-300">
-      LOCK IN MY SHARE
-    </span>{' '}
-    to register your wallet’s share for that round.
-  </div>
+  <<div className="mt-6 text-[11px] leading-relaxed text-slate-400">
+  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-600/60 bg-slate-900/80 text-[10px] mr-2">
+    i
+  </span>
+  To be eligible, you must hold at least {MIN_HOLDING.toLocaleString('en-US')} $CLAIM 
+  <span className="font-semibold text-emerald-300"> at the snapshot.</span>
+  {' '}Rewards are 
+  <span className="font-semibold text-emerald-300"> auto-distributed</span> at window close. 
+  Every wallet receives an 
+  <span className="font-semibold text-emerald-300"> equal reward</span>. 
+  Fewer claimers means a 
+  <span className="font-semibold text-emerald-300"> larger share per wallet</span>. 
+  All logic runs autonomously on 
+  <span className="font-semibold text-emerald-300"> smart contracts</span>.
+</div>
 </div>
               {/* end CLAIM WINDOW CARD */}
             </div>
