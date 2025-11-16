@@ -625,8 +625,15 @@ export default function ClaimPoolPage() {
   } else if (currentPhase === 'closed') {
     progressMessage = 'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage = 'Rewards being distributed for this round.';
+    progressMessage = 'Rewards have been distributed for this round.';
   }
+
+    const snapshotDateLabel = snapshotTakenAt
+    ? new Date(snapshotTakenAt).toLocaleString('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      })
+    : 'To be announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -923,7 +930,7 @@ export default function ClaimPoolPage() {
           </div>
         </SoftCard>
 
-        
+        {/* Preview Eligibility Cards */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* Current Reward Pool */}
           <SoftCard>
@@ -1026,46 +1033,79 @@ export default function ClaimPoolPage() {
               </div>
             )}
           </SoftCard>
-
-          {/* Info + rules section (tabs + snapshot info) */}
-        <section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
-          {/* LEFT: Tabs – eligibility / reward logic / history */}
-          <SoftCard>
-            {/* Tabs */}
-            <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
-              {(['eligibility', 'rewards', 'history'] as PortalTab[]).map(
-                (tab) => {
-                  const isActive = activeTab === tab;
-                  const label =
-                    tab === 'eligibility'
-                      ? 'Eligibility rules'
-                      : tab === 'rewards'
-                      ? 'Reward logic'
-                      : 'Claim history';
-
-                  return (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => setActiveTab(tab)}
-                      className={[
-                        'rounded-full px-4 py-1.5 transition-colors',
-                        isActive
-                          ? 'bg-slate-50 text-slate-950'
-                          : 'text-slate-400 hover:text-slate-100',
-                      ].join(' ')}
-                    >
-                      {label}
-                    </button>
-                  );
-                }
-              )}
-            </div>
-
-            <hr className="border-slate-800/80" />
-
-
         </div>
+
+{/* Info + rules section (tabs + snapshot info) */}
+<section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
+  {/* LEFT: Tabs – eligibility / reward logic / history */}
+  <SoftCard>
+    {/* Tabs */}
+    <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
+      {(['eligibility', 'rewards', 'history'] as PortalTab[]).map((tab) => {
+        const isActive = activeTab === tab;
+        const label =
+          tab === 'eligibility'
+            ? 'Eligibility rules'
+            : tab === 'rewards'
+            ? 'Reward logic'
+            : 'Claim history';
+
+        return (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className={[
+              'rounded-full px-4 py-1.5 transition-colors',
+              isActive
+                ? 'bg-slate-50 text-slate-950'
+                : 'text-slate-400 hover:text-slate-100',
+            ].join(' ')}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+
+    <hr className="border-slate-800/80" />
+
+    {/* Tab content goes here */}
+  </SoftCard>
+
+  {/* RIGHT: Snapshot info */}
+  <SoftCard className="space-y-4">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Snapshot info
+    </p>
+
+    <div className="space-y-2">
+      <p className="text-lg font-semibold text-slate-50">
+        Snapshot #{snapshotBlock}{' '}
+        <span className="text-slate-400">• {networkLabel}</span>
+      </p>
+      <p className="text-sm text-slate-400">
+        Snapshots can be taken any time between the last window being scheduled
+        and the next live claim window opening. If you’re not holding{' '}
+        {MIN_HOLDING.toLocaleString('en-US')} $CLAIM when it hits, your wallet
+        sits out that round.
+      </p>
+    </div>
+
+    <div className="pt-2 border-t border-slate-800/70">
+      <p className="text-[11px] text-slate-500">
+        Latest snapshot:{' '}
+        <span className="text-slate-300">{snapshotDateLabel}</span>
+      </p>
+    </div>
+
+    <p className="pt-3 text-[11px] text-slate-500">
+      © 2025 CLAIM portal · Subject to change. Built for serious holders, not
+      random forms.
+    </p>
+  </SoftCard>
+</section>
+        
       </div>
 
       <ToastContainer />
