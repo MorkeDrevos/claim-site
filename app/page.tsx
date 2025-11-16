@@ -798,7 +798,7 @@ if (countdownTarget) {
     <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
   )}
   <p className={[
-    "text-[32px] sm:text-[28px] font-bold tracking-tight text-slate-50",
+    "text-[32px] sm:text-[32px] font-bold tracking-tight text-slate-50",
     isFinalTen ? "animate-[pulse_0.35s_ease-in-out_infinite]" : ""
   ].join(" ")}>
     {isClosed ? '' : countdownLabel || '--:--:--'}
@@ -944,7 +944,7 @@ if (countdownTarget) {
             'tracking-wide',
             isDone
               ? 'text-[12px] font-semibold text-slate-300'
-              : 'text-[13px] font-medium text-slate-500',
+              : 'text-[12px] font-medium text-slate-500',
           ].join(' ')}
         >
           {step.label}
