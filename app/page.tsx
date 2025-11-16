@@ -771,13 +771,6 @@ export default function ClaimPoolPage() {
                 <div className="flex flex-wrap items-start justify-between gap-6">
                   {/* Countdown */}
                   <div className="space-y-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      {isLive
-                        ? 'Window closes in'
-                        : isClosed
-                        ? 'Next window in'
-                        : 'Window opens in'}
-                    </p>
                     <p className="text-1xl sm:text-3xl font-semibold tracking-tight text-slate-50">
                       {countdownLabel ?? '--:--:--'}
                     </p>
