@@ -766,8 +766,8 @@ export default function ClaimPoolPage() {
                   {/* Countdown */}
                   <div className="space-y-2">
                     <p className="text-xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-  {isClosed ? '' : (numericCountdownText ?? '—:—:—')}
-</p>
+                    {isClosed ? '' : (numericCountdown ?? '—:—:—')}
+                   </p>
                   </div>
 
                   {/* Reward pool */}
