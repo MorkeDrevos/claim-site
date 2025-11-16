@@ -812,7 +812,7 @@ if (countdownTarget) {
     {/* RIGHT: label + USD + CLAIM */}
     <div className="flex flex-col items-end gap-1 text-right">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        This Round’s Reward Pool
+        Current Round Value
       </p>
 
       {/* Big USD – same line height as countdown */}
