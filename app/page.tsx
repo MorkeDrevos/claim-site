@@ -1193,24 +1193,22 @@ export default function ClaimPoolPage() {
 </section>
 
       </div>
-      {/* Sticky Buy on Jupiter CTA */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <a
-          href={JUPITER_BUY_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center rounded-full
-                     bg-emerald-500/90 px-4 py-2
-                     text-[11px] font-semibold uppercase tracking-[0.22em]
-                     text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
-                     hover:bg-emerald-400 hover:text-slate-950
-                     transition-colors"
-        >
-          Buy $CLAIM on Jupiter
-        </a>
-      </div>
-
-      <ToastContainer />
+{/* Sticky Buy on Jupiter CTA */}
+<div className="fixed bottom-4 right-4 z-50">
+  <a
+    href={JUPITER_BUY_URL}
+    target="_blank"
+    rel="noreferrer"
+    className="inline-flex items-center rounded-full
+               bg-emerald-500/90 px-4 py-2.5
+               text-[11px] font-semibold uppercase tracking-[0.22em]
+               text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
+               hover:bg-emerald-400 hover:text-slate-950
+               transition-colors"
+  >
+    Buy $CLAIM on Jupiter
+  </a>
+</div>
       <ToastContainer />
     </main>
   );
