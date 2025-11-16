@@ -628,7 +628,8 @@ export default function ClaimPoolPage() {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-    const snapshotDateLabel = snapshotTakenAt
+    const snapshotDateLabel =
+  snapshotTakenAt
     ? new Date(snapshotTakenAt).toLocaleString('en-US', {
         dateStyle: 'medium',
         timeStyle: 'short',
@@ -917,7 +918,12 @@ export default function ClaimPoolPage() {
                             : 'bg-slate-800 border-slate-600',
                         ].join(' ')}
                       />
-<span className="text-base font-bold text-slate-200 tracking-wide">
+                      <span
+  className={[
+    'tracking-wide',
+    isDone ? 'text-sm font-semibold text-slate-200' : 'text-sm font-medium text-slate-500'
+  ].join(' ')}
+>
   {step.label}
 </span>
                     </div>
