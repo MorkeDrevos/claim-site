@@ -851,24 +851,22 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="mt-6 space-y-2 text-[12px] text-slate-300 leading-relaxed">
 
   <p>
-    • Hold $CLAIM at the moment of{' '}
-    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below
-    the minimum sit out that round.
+    • <span className="text-emerald-300 font-medium">Show up</span> during the live
+    window and <span className="text-emerald-300 font-medium">lock in your share</span>.
   </p>
 
   <p>
-    • Show up during the live window and{' '}
-    <span className="text-emerald-300 font-medium">lock in your share</span> — every
-    wallet that checks in receives an equal payout.
+    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span> — 
+    the system <span className="text-emerald-300 font-medium">runs autonomously on smart contracts</span>.
   </p>
 
   <p>
-    • Rewards are auto-distributed on-chain once the window closes — the system
-    <span className="text-emerald-300 font-medium"> runs fully autonomously on smart contracts</span>.
+    • Eligibility: hold $CLAIM at the{' '}
+    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below the
+    minimum sit out that round.
   </p>
 
 </div>
-
 </div>
               {/* end CLAIM WINDOW CARD */}
             </div>
