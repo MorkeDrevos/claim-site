@@ -848,7 +848,7 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
 {/* Eligibility text */}
-<div className="mt-6 space-y-2 text-[12px] text-slate-300 leading-relaxed">
+<div className="mt-6 space-y-1.5 text-[12px] text-slate-300 leading-relaxed">
 
   <p>
     • <span className="text-emerald-300 font-medium">Show up</span> during the live
@@ -856,15 +856,15 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p>
-    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span>,  
+    • Rewards are <span className="text-emerald-300 font-medium">auto-distributed on-chain</span>, 
     governed entirely by <span className="text-emerald-300 font-medium">autonomous smart-contract execution</span>.
   </p>
 
   <p>
-  • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-  <span className="text-emerald-300 font-medium">snapshot</span> - wallets below
-  the minimum sit out that round.
-</p>
+    • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+    <span className="text-emerald-300 font-medium">snapshot</span> — wallets below
+    the minimum sit out that round.
+  </p>
 
 </div>
 </div>
