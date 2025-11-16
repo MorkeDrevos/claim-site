@@ -639,7 +639,10 @@ if (countdownTarget) {
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
-  const snapshotDateLabel = snapshotTakenAt ?? 'Not yet announced';
+// Simple, safe fallback snapshot label
+const snapshotDateLabel = snapshotTakenAt
+  ? snapshotTakenAt
+  : 'Not yet announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
