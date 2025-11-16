@@ -3,23 +3,27 @@
 
   "windowPhase": "open",
 
-  "phaseTimestamps": {
-    "snapshotAt": 1763253600000,
-    "windowOpensAt": 1763260500000,
-    "windowClosesAt": 1763267700000,
-    "distributionAt": 1763268600000
-  },
+  "snapshotTakenAt": "2025-11-16T15:40:00Z",
+  "claimWindowOpensAt": "2025-11-16T15:46:00Z",
+  "claimWindowClosesAt": "2025-11-16T17:46:00Z",
+  "distributionCompletedAt": null,
 
-  "rewardPool": {
-    "claimAmount": 9325670,
-    "usdValue": 1865.13
-  },
+  "rewardPoolAmountClaim": 9325670,
+  "rewardPoolAmountUsd": 1865.13,
 
-  "eligibility": {
-    "isEligible": false,
-    "minHolding": 1000000,
-    "holdingAtSnapshot": 0
-  },
+  "walletConnected": false,
+  "walletShort": "",
+  "networkLabel": "Solana mainnet",
+  "snapshotLabel": "Snapshot #1",
+  "snapshotBlock": "247191921",
+
+  "claimWindowStatus": "open",
+  "frontEndStatus": "ok",
+  "contractStatus": "ok",
+  "firstPoolStatus": "open",
+
+  "eligibleAmount": 0,
+  "claimHistory": [],
 
   "backend": {
     "solana": "ok",
