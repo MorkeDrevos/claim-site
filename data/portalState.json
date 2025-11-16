@@ -2,11 +2,12 @@
   "currentRound": 1,
 
   "windowPhase": "open",
+
   "phaseTimestamps": {
-    "snapshotAt": 1731768000000,
-    "windowOpensAt": 1731775200000,
-    "windowClosesAt": 1731778800000,
-    "distributionAt": 1731782400000
+    "snapshotAt": 1763253600000,
+    "windowOpensAt": 1763260500000,
+    "windowClosesAt": 1763267700000,
+    "distributionAt": 1763268600000
   },
 
   "rewardPool": {
