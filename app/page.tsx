@@ -1023,7 +1023,7 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
-  <span className="text-[11.5px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+  <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
     Mission Control
   </span>
 </div>
@@ -1034,7 +1034,7 @@ const snapshotDateLabel = snapshotTakenAt
   Snapshot #{snapshotBlock}
 </p>
 
-<p className="text-[11px] text-slate-400">
+<p className="text-[12px] text-slate-400">
   {currentPhase === 'open'
     ? 'window open'
     : currentPhase === 'scheduled'
@@ -1084,7 +1084,7 @@ const snapshotDateLabel = snapshotTakenAt
             {row.value}
           </span>
         ) : (
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[12px] text-slate-400">
             {row.value}
           </span>
         )}
