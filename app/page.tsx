@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useToast } from './Toast';
 
 /* ───────────────────────────
@@ -757,46 +756,108 @@ const snapshotDateLabel = snapshotTakenAt
       </div>
 
       {/* Top nav – sticky */}
-<header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
-  <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          {/* Left: logo + title */}
+          <Link href="/" className="flex items-center gap-3 group">
+           {/* CLAIM logo circle */}
+<div
+  className="flex h-9 w-9 items-center justify-center rounded-full
+             bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
+             shadow-[0_0_12px_rgba(16,185,129,0.25)]
+             transition-all group-hover:ring-emerald-400/70
+             group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
+>
+  <Image
+    src="/img/claim-logo-circle.png"
+    alt="CLAIM Logo"
+    width={36}
+    height={36}
+    className="object-contain"
+    priority
+  />
+</div>
+          </Link>
 
-    {/* Left: logo + title */}
-    <Link href="/" className="flex items-center gap-3 group">
+          {/* Right: nav items */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/concept"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+            >
+              Concept
+            </Link>
 
-      {/* CLAIM logo circle */}
-      <div
-        className="flex h-9 w-9 items-center justify-center rounded-full
-                   bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
-                   shadow-[0_0_16px_rgba(16,185,129,0.35)]
-                   transition-all group-hover:ring-emerald-400/70
-                   group-hover:shadow-[0_0_22px_rgba(16,185,129,0.55)]"
-      >
-        <Image
-          src="/img/claim-logo-circle.png"
-          alt="CLAIM"
-          width={36}
-          height={36}
-          className="object-contain"
-          priority
-        />
-      </div>
+            <a
+              href="https://x.com/yourhandle"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+            >
+              X
+            </a>
 
-      {/* Title block (RESTORED) */}
-      <div className="flex flex-col">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-          CLAIM PORTAL
-        </span>
-        <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-          $CLAIM — Token of Timing
-        </span>
-      </div>
+            <a
+              href="https://t.me/yourtelegram"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+            >
+              TG
+            </a>
 
-    </Link>
+            {/* Contract address pill */}
+            <button
+              type="button"
+              onClick={handleCopyCa}
+              className="inline-flex items-center gap-2 rounded-full 
+                         border border-slate-700/70 
+                         bg-slate-900/70 
+                         px-4 py-1.5
+                         text-[10px] font-semibold uppercase tracking-[0.22em]
+                         text-slate-200
+                         hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+                         transition-all"
+            >
+              <span className="text-[10px] tracking-[0.22em] text-slate-400">
+                CA
+              </span>
 
-    {/* Right side intentionally unchanged – wallet, tags, etc */}
-    
-  </div>
-</header>
+              <span className="font-mono text-[11px] text-slate-100">
+                {shortCa}
+              </span>
+            </button>
+
+            {/* Network label */}
+            <span className="hidden text-xs text-slate-500 sm:inline">
+              {networkLabel}
+            </span>
+
+            {/* Wallet button */}
+            <button
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex items-center rounded-full
+                         px-5 py-2
+                         bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+                         border border-emerald-400/40
+                         text-[11px] font-semibold uppercase tracking-[0.22em]
+                         text-emerald-200
+                         shadow-[0_0_18px_rgba(16,185,129,0.25)]
+                         hover:from-emerald-400/35 hover:to-emerald-500/40
+                         hover:border-emerald-400
+                         hover:text-white
+                         transition-all"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* Content */}
       <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
