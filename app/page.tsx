@@ -1035,18 +1035,14 @@ const snapshotDateLabel = snapshotTakenAt
       </p>
 
       <p className="text-[11px] text-slate-400">
-        Snapshot #1
-        <span className="mx-1 text-slate-600">•</span>
-        <span className="text-slate-300">
-          {currentPhase === 'open'
-            ? 'window open'
-            : currentPhase === 'scheduled'
-            ? 'window scheduled'
-            : currentPhase === 'distribution'
-            ? 'distributing'
-            : 'window closed'}
-        </span>
-      </p>
+  {currentPhase === 'open'
+    ? 'window open'
+    : currentPhase === 'scheduled'
+    ? 'window scheduled'
+    : currentPhase === 'distribution'
+    ? 'distributing'
+    : 'window closed'}
+</p>
     </div>
 
     {/* Status rows */}
@@ -1117,11 +1113,13 @@ const snapshotDateLabel = snapshotTakenAt
   {/* Status line with pulse dot */}
   <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-relaxed font-normal">
   <span
-    className={[
-      'h-1.5 w-1.5 rounded-full animate-pulse',
-      statusDotColor
-    ].join(' ')}
-  ></span>
+  className={[
+    'h-2.0 w-2.0 rounded-full',
+    statusDotColor,
+    'shadow-[0_0_8px_rgba(16,185,129,0.55)]',
+    'animate-[pulse_1.8s_ease-in-out_infinite]'
+  ].join(' ')}
+></span>
 
   {statusSummary}
 </p>
