@@ -897,13 +897,12 @@ const snapshotDateLabel = snapshotTakenAt
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
 <div className="flex flex-col">
-<p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
   {isLive ? (
     <span className="inline-flex items-center gap-2">
-      {/* Phase icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[1px]"
+        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -913,15 +912,13 @@ const snapshotDateLabel = snapshotTakenAt
         <circle cx="12" cy="12" r="5" className="opacity-60" />
         <circle cx="12" cy="12" r="2" />
       </svg>
-
       WINDOW CLOSES IN
     </span>
   ) : isClosed ? (
     <span className="inline-flex items-center gap-2">
-      {/* Phase icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[1px]"
+        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -931,15 +928,13 @@ const snapshotDateLabel = snapshotTakenAt
         <circle cx="12" cy="12" r="5" className="opacity-60" />
         <circle cx="12" cy="12" r="2" />
       </svg>
-
       Awaiting next on-chain window
     </span>
   ) : (
     <span className="inline-flex items-center gap-2">
-      {/* Phase icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[1px]"
+        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -949,7 +944,6 @@ const snapshotDateLabel = snapshotTakenAt
         <circle cx="12" cy="12" r="5" className="opacity-60" />
         <circle cx="12" cy="12" r="2" />
       </svg>
-
       NEXT WINDOW IN
     </span>
   )}
