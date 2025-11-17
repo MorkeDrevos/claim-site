@@ -854,14 +854,19 @@ const snapshotDateLabel = snapshotTakenAt
     </div>
 
     {/* Big USD */}
-    <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
-      {rewardUsdText} USD
-    </p>
+<p
+  className="
+    text-[28px] sm:text-[34px] font-bold text-slate-50
+    -mt-1        /* ← lifts the USD number up */
+  "
+>
+  {rewardUsdText} USD
+</p>
 
-    <p className="text-[13px] font-medium text-emerald-300">
-      ≈ {rewardAmountText}
-      <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-    </p>
+<p className="text-[13px] font-medium text-emerald-300">
+  ≈ {rewardAmountText}
+  <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+</p>
   </div>
 </div>
 
