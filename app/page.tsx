@@ -525,6 +525,40 @@ const missionRows = [
   },
 ];
 
+// Rows for Mission Control (copy-polished)
+const missionRows = [
+  {
+    label: 'Network',
+    pill: networkLabel || 'Unknown',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
+  },
+  {
+    label: 'Portal backend',
+    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
+    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Reward contracts',
+    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
+    tone: contractStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Claim window',
+    pill:
+      currentPhase === 'open'
+        ? 'LIVE'
+        : currentPhase === 'scheduled'
+        ? 'SCHEDULED'
+        : currentPhase === 'distribution'
+        ? 'DISTRIBUTING'
+        : 'CLOSED',
+    tone: claimTone,
+  },
+];
+
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
 
@@ -955,11 +989,11 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – Mission Control (final polished) */}
+         {/* RIGHT COLUMN – Mission Control (final, “real” copy) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
 
-    {/* Header row – perfectly aligned */}
+    {/* Header row – aligned ROUND 1 / MISSION CONTROL */}
     <div className="flex items-baseline justify-between pr-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
         Round {roundNumber ?? 1}
@@ -979,7 +1013,15 @@ const snapshotDateLabel = snapshotTakenAt
       <p className="text-[11px] text-slate-400">
         Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
-        <span className="text-emerald-300">{claimWindowStatus}</span>
+        <span className="text-emerald-300">
+          {currentPhase === 'open'
+            ? 'window open'
+            : currentPhase === 'scheduled'
+            ? 'window scheduled'
+            : currentPhase === 'distribution'
+            ? 'rewards distributing'
+            : 'window closed'}
+        </span>
       </p>
     </div>
 
@@ -994,7 +1036,7 @@ const snapshotDateLabel = snapshotTakenAt
             {row.label}
           </span>
 
-          {/* pill with dot inside – dot tighter */}
+          {/* pill with dot inside – tight gap */}
           <span
             className={[
               'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
@@ -1006,7 +1048,6 @@ const snapshotDateLabel = snapshotTakenAt
                 : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
             ].join(' ')}
           >
-            {/* dot */}
             <span
               className={[
                 'h-1.5 w-1.5 rounded-full',
@@ -1038,24 +1079,22 @@ const snapshotDateLabel = snapshotTakenAt
         ].join(' ')}
       >
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-        Smart contracts
+        Smart-contract autopilot
       </span>
     </div>
 
-    {/* Footer */}
+    {/* Divider + footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-400 leading-relaxed">
-        When all indicators are on, snapshots and rewards execute fully autonomously on-chain.
+        When all indicators are green, rewards execute fully autonomously on-chain.
       </p>
-
       <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control monitors network health, backend services, contract
-        integrity and the live claim window state for this round.
+        Mission Control tracks network health, portal services, reward contracts
+        and the live claim window for this round.
       </p>
     </div>
-
   </SoftCard>
-</div>
+</div> 
 
           </div>
         </SoftCard>
