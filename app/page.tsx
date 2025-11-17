@@ -496,33 +496,23 @@ if (countdownTarget) {
   // Rows for Mission Control (NASA layout)
 const missionRows = [
   {
+    label: 'Network',
+    pill: 'Solana Mainnet',
+    tone: 'success',
+  },
+  {
     label: 'Portal backend',
-    mode: 'plain' as const,
-    value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
+    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
     tone: frontEndStatus === 'ok' ? 'success' : 'warning',
   },
-
   {
     label: 'Reward contracts',
-    mode: 'plain' as const,
-    value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
+    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
     tone: contractStatus === 'ok' ? 'success' : 'warning',
   },
-
-  {
-    label: 'Network',
-    mode: 'plain' as const,
-    value: networkLabel || 'Unknown',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-  },
-
   {
     label: 'Claim window',
-    mode: 'pill' as const,
-    value:
+    pill:
       currentPhase === 'open'
         ? 'LIVE'
         : currentPhase === 'scheduled'
@@ -532,12 +522,15 @@ const missionRows = [
         : 'CLOSED',
     tone: claimTone,
   },
-
   {
-    label: 'Contract version',
-    mode: 'plain' as const,
-    value: <span className="font-mono">V1.0.0</span>,
-    tone: 'neutral' as Tone,
+    label: 'Snapshots',
+    pill: snapshotTakenAt ? 'ACTIVE' : 'PENDING',
+    tone: snapshotTakenAt ? 'success' : 'warning',
+  },
+  {
+    label: 'Smart Contract revision',
+    pill: 'CR 0.9.14',
+    tone: 'muted',
   },
 ];
 
