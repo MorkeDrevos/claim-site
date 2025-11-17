@@ -828,21 +828,25 @@ const snapshotDateLabel = snapshotTakenAt
       </button>
 
       {/* Tooltip */}
-<div
-  className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 
-             w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50"
->
-  <div className="rounded-2xl border border-slate-700/60 bg-slate-900/95 
-                  p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
-    <p className="text-[14px] text-slate-200 leading-relaxed">
+      <div
+        className="pointer-events-none absolute left-full ml-3 top-2 
+                   w-72 opacity-0 group-hover:opacity-100 
+                   transition-opacity duration-200 z-50"
+      >
+        <div className="rounded-2xl border border-slate-700/70 
+                        bg-slate-900/95 p-4 
+                        shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+          
+          <p className="text-[14px] text-slate-200 leading-relaxed">
       Rewards are <span className="text-emerald-300 font-medium">shared equally</span> 
       among all wallets that lock in during the window. 
       <br /><br />
       USD value shown reflects an 
       <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
     </p>
-  </div>
-</div>
+
+        </div>
+      </div>
     </div>
   </div>
 
