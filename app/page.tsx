@@ -1018,7 +1018,7 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Header row */}
 <div className="flex items-baseline justify-between pr-1">
   {/* LEFT: Round number */}
-  <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
+  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
     Round {roundNumber ?? 1}
   </p>
 
