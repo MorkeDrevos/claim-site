@@ -680,32 +680,31 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
-  // Round progress helpers
-const activeIndex = steps.findIndex((s) => s.id === currentPhase);
-const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+  const activeIndex = steps.findIndex((s) => s.id === currentPhase);
+  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-let progressMessage = '';
-if (currentPhase === 'scheduled') {
-  progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
-} else if (currentPhase === 'snapshot') {
-  progressMessage = 'Snapshot complete. Next claim window coming soon.';
-} else if (currentPhase === 'open') {
-  progressMessage =
-    'Claim window open. Lock in your share before the countdown hits zero.';
-} else if (currentPhase === 'closed') {
-  progressMessage =
-    'Claim window closed. No new wallets can lock in for this round.';
-} else if (currentPhase === 'distribution') {
-  progressMessage = 'Rewards have been distributed for this round.';
-}
+   let progressMessage = '';
+  if (currentPhase === 'scheduled') {
+    progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
+  } else if (currentPhase === 'snapshot') {
+    progressMessage = 'Snapshot complete. Next claim window coming soon.';
+  } else if (currentPhase === 'open') {
+    progressMessage =
+      'Claim window open. Lock in your share before the countdown hits zero.';
+  } else if (currentPhase === 'closed') {
+    progressMessage =
+      'Claim window closed. No new wallets can lock in for this round.';
+  } else if (currentPhase === 'distribution') {
+    progressMessage = 'Rewards have been distributed for this round.';
+  }
 
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-return (
-  <main className="min-h-screen bg-slate-950 text-slate-50">
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
@@ -993,7 +992,7 @@ return (
       <p className="text-[11px] text-slate-400">
         Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
-        <span className="text-slate-300">
+        <span className="text-emerald-300">
           {currentPhase === 'open'
             ? 'window open'
             : currentPhase === 'scheduled'
@@ -1008,10 +1007,7 @@ return (
     {/* Status rows */}
     <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
-        <div
-          key={row.label}
-          className="flex items-center justify-between gap-3"
-        >
+        <div key={row.label} className="flex items-center justify-between gap-3">
           <span className="text-[11px] text-slate-300 whitespace-nowrap">
             {row.label}
           </span>
@@ -1043,36 +1039,24 @@ return (
       ))}
     </div>
 
-    {/* AUTOPILOT STATUS — NASA style */}
-    <div className="mt-3 flex items-center gap-3">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        Smart-contract autopilot
-      </span>
-
-      {/* Thin divider bar */}
-      <div className="h-4 w-px bg-slate-700/60" />
-
-      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-        Enabled
-      </span>
-    </div>
-
     {/* Divider + NASA footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-300 leading-relaxed">
-        All systems nominal. Autonomous settlement sequence is active. The round
-        will settle fully on-chain.
+        All systems nominal. Autonomous settlement sequence is active.  
+        The round will settle fully on-chain.
       </p>
 
       <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control oversees network status, portal uptime, contract
-        integrity, live claim-window timing, snapshot execution, and automated
-        reward distribution.
+        Mission Control oversees network status, portal uptime, contract integrity,  
+        live claim-window timing, snapshot execution, and automated reward distribution.
       </p>
     </div>
 
   </SoftCard>
 </div>
+
+          </div>
+        </SoftCard>
 
         {/* Round progress bar */}
         <SoftCard className="mt-6">
