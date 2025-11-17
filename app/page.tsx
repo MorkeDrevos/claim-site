@@ -901,7 +901,7 @@ const snapshotDateLabel = snapshotTakenAt
     {isLive
       ? 'WINDOW CLOSES IN'
       : isClosed
-      ? 'NEXT ROUND SOON'
+      ? '🔥 Awaiting next on-chain window'
       : 'NEXT WINDOW IN'}
   </p>
 
