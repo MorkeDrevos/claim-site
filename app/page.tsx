@@ -725,7 +725,7 @@ if (hasBackendIssue || hasContractIssue) {
     'All systems nominal. Live claim window running under autonomous settlement.';
 } else if (currentPhase === 'scheduled') {
   statusSummary =
-    'All systems nominal. Snapshot can occur at any moment before the next claim window opens.';
+    'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
 } else if (currentPhase === 'distribution') {
   statusSummary =
     'All systems nominal. Reward distribution sequence is executing on-chain.';
@@ -1103,14 +1103,25 @@ const snapshotDateLabel = snapshotTakenAt
       </span>
     </div>
 
-    {/* Divider + NASA footer copy */}
-    <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-      <p className="flex items-center gap-2 text-[11px] text-slate-300 leading-relaxed">
-  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-  <span>{statusSummary}</span>
-</p>
+{/* Divider + NASA footer copy */}
+<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
-    </div>
+  {/* Status line with pulse dot */}
+  <p className="flex items-center gap-2 text-[11px] text-slate-300 leading-relaxed">
+    <span
+      className="h-2 w-2 rounded-full bg-emerald-400 
+                 shadow-[0_0_6px_rgba(16,185,129,0.65)] 
+                 animate-pulse"
+    ></span>
+
+    {statusSummary}
+  </p>
+
+  <p className="text-[10px] text-slate-500 leading-relaxed">
+    Mission Control oversees network status, portal uptime, contract integrity,
+    live claim-window timing, snapshot execution, and automated reward distribution.
+  </p>
+</div>
 
   </SoftCard>
 </div>
