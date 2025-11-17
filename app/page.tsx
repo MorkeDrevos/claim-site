@@ -966,14 +966,13 @@ const snapshotDateLabel = snapshotTakenAt
         </p>
 
         <p className="text-sm font-semibold text-slate-50">
-          Snapshot #{snapshotBlock}{' '}
-          <span className="text-xs font-normal text-slate-500">
-            {snapshotLabel}
-          </span>
+          Snapshot #{snapshotBlock}
         </p>
 
-        <p className="text-[11px] text-emerald-300">
-          {claimWindowStatus}
+        <p className="text-[11px] text-slate-400">
+          {snapshotLabel}{' '}
+          <span className="mx-1 text-slate-600">•</span>
+          <span className="text-emerald-300">{claimWindowStatus}</span>
         </p>
       </div>
 
@@ -997,9 +996,9 @@ const snapshotDateLabel = snapshotTakenAt
               className={[
                 'h-2 w-2 rounded-full',
                 row.tone === 'success'
-                  ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]'
+                  ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]'
                   : row.tone === 'warning'
-                  ? 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.75)]'
+                  ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.7)]'
                   : 'bg-slate-500/70',
               ].join(' ')}
             />
@@ -1007,11 +1006,11 @@ const snapshotDateLabel = snapshotTakenAt
             {/* pill */}
             <span
               className={[
-                'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em]',
+                'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]',
                 row.tone === 'success'
-                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
+                  ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/35'
                   : row.tone === 'warning'
-                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/35'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
               ].join(' ')}
             >
@@ -1029,8 +1028,8 @@ const snapshotDateLabel = snapshotTakenAt
       </span>
 
       <div className="flex items-center gap-3">
-        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
-        <span className="rounded-full bg-emerald-500/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-300 border border-emerald-500/40">
+        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+        <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300 border border-emerald-500/35">
           Runs on smart contracts
         </span>
       </div>
