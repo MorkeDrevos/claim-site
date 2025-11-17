@@ -957,11 +957,10 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-         {/* RIGHT COLUMN – Mission Control (final, “real” copy) */}
+         {/* RIGHT COLUMN – Mission Control (final “real” copy) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
-
-    {/* Header row – aligned ROUND 1 / MISSION CONTROL */}
+    {/* Header row – aligned ROUND / MISSION CONTROL */}
     <div className="flex items-baseline justify-between pr-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
         Round {roundNumber ?? 1}
@@ -984,6 +983,8 @@ const snapshotDateLabel = snapshotTakenAt
         <span className="text-emerald-300">
           {currentPhase === 'open'
             ? 'window open'
+            : currentPhase === 'snapshot'
+            ? 'snapshot taken'
             : currentPhase === 'scheduled'
             ? 'window scheduled'
             : currentPhase === 'distribution'
@@ -1032,37 +1033,33 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row */}
+    {/* Autopilot row – no pill, reads like a status line */}
     <div className="mt-3 flex items-center justify-between gap-3">
       <span className="text-[11px] text-slate-300 whitespace-nowrap">
         Autopilot
       </span>
 
-      <span
-        className={[
-          'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-          'text-[10px] font-semibold uppercase tracking-[0.20em]',
-          'text-emerald-300 border border-emerald-500/35 bg-emerald-500/10',
-          'whitespace-nowrap',
-        ].join(' ')}
-      >
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-        Smart-contract autopilot
-      </span>
+      <div className="flex items-center gap-2 whitespace-nowrap">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
+        <span className="text-[11px] font-medium text-emerald-300">
+          Smart-contract autopilot enabled
+        </span>
+      </div>
     </div>
 
     {/* Divider + footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-400 leading-relaxed">
-        When all indicators are green, rewards execute fully autonomously on-chain.
+        When all indicators are green, this round settles fully autonomously
+        on-chain.
       </p>
       <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control tracks network health, portal services, reward contracts
-        and the live claim window for this round.
+        Mission Control monitors network health, portal services, reward
+        contracts and the live claim window timeline for this round.
       </p>
     </div>
   </SoftCard>
-</div> 
+</div>
 
           </div>
         </SoftCard>
