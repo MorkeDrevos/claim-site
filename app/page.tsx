@@ -494,6 +494,8 @@ if (countdownTarget) {
       ? 'warning'
       : 'muted';
 
+  const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
+  const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
     ? `${connectedWallet.address.slice(0, 4)}…${connectedWallet.address.slice(
@@ -915,75 +917,41 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-                        {/* RIGHT COLUMN – mission control */}
-            <div className="w-full max-w-xs space-y-4">
-              <SoftCard className="space-y-4">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                    Round {roundNumber ?? 1}
-                  </p>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300/80">
-                    Mission control
-                  </span>
-                </div>
+          {/* RIGHT COLUMN – snapshot info / status */}
+<div className="w-full max-w-xs space-y-4">
+  <SoftCard className="space-y-3">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      Round {roundNumber ?? 1}
+    </p>
 
-                {/* Snapshot summary */}
-                <div className="space-y-1">
-                  <p className="text-sm text-slate-200">
-                    Snapshot #{snapshotBlock}{' '}
-                    <span className="font-mono text-[11px] text-slate-500">
-                      {snapshotLabel}
-                    </span>
-                  </p>
-                  <p className="text-[11px] text-slate-500">
-                    {claimWindowStatus}
-                  </p>
-                </div>
+    <div className="space-y-2">
+      <p className="text-sm text-slate-300">
+        {snapshotLabel}{' '}
+        <span className="font-mono text-[11px] text-slate-500">
+          (#{snapshotBlock})
+        </span>
+      </p>
+      <p className="text-xs text-slate-500">
+        {claimWindowStatus}
+      </p>
+    </div>
 
-                {/* Systems grid */}
-                <div className="mt-2 space-y-2 text-[11px]">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Network</span>
-                    <StatusPill label={networkLabel} tone="muted" />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Backend</span>
-                    <StatusPill
-                      label={frontEndStatus === 'ok' ? 'Online' : 'Check'}
-                      tone={frontEndStatus === 'ok' ? 'success' : 'warning'}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Smart contracts</span>
-                    <StatusPill
-                      label={contractStatus === 'ok' ? 'Deployed' : 'Check'}
-                      tone={contractStatus === 'ok' ? 'success' : 'warning'}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Claim window</span>
-                    <StatusPill label={currentPhase} tone={claimTone} />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Autopilot</span>
-                    <StatusPill
-                      label="Runs on smart contracts"
-                      tone="success"
-                    />
-                  </div>
-                </div>
-
-                {/* Tiny footer line */}
-                <p className="pt-1 text-[10px] text-slate-500">
-                  All systems green → rewards run autonomously on-chain.
-                </p>
-              </SoftCard>
-            </div>
+    <div className="flex flex-wrap gap-2">
+      <StatusPill
+        label={networkLabel}
+        tone="muted"
+      />
+      <StatusPill
+        label={`Backend: ${frontEndStatus}`}
+        tone={frontEndStatus === 'ok' ? 'success' : 'warning'}
+      />
+      <StatusPill
+        label={`Contract: ${contractStatus}`}
+        tone={contractStatus === 'ok' ? 'success' : 'warning'}
+      />
+    </div>
+  </SoftCard>
+</div>
           </div>
         </SoftCard>
 
