@@ -782,10 +782,8 @@ const snapshotDateLabel = snapshotTakenAt
   {/* One row: countdown left, USD right */}
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
-    <div className="flex flex-col gap-1 pt-1.5">
-      <p
-  className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mt-[-10px]"
->
+    <div className="flex flex-col gap-1">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
   {isLive
     ? 'WINDOW CLOSES IN'
     : isClosed
@@ -813,7 +811,7 @@ const snapshotDateLabel = snapshotTakenAt
 
   {/* Label + info icon + tooltip */}
   <div className="relative flex items-baseline gap-2">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mt-[-10px]">
       Current round pool
     </p>
 
