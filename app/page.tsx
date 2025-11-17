@@ -992,7 +992,7 @@ const snapshotDateLabel = snapshotTakenAt
       <p className="text-[11px] text-slate-400">
         Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
-        <span className="text-emerald-300">
+        <span className="text-slate-300">
           {currentPhase === 'open'
             ? 'window open'
             : currentPhase === 'scheduled'
@@ -1007,7 +1007,10 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Status rows */}
     <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
-        <div key={row.label} className="flex items-center justify-between gap-3">
+        <div
+          key={row.label}
+          className="flex items-center justify-between gap-3"
+        >
           <span className="text-[11px] text-slate-300 whitespace-nowrap">
             {row.label}
           </span>
@@ -1039,24 +1042,36 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
+    {/* AUTOPILOT STATUS — NASA style */}
+    <div className="mt-3 flex items-center gap-3">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        Smart-contract autopilot
+      </span>
+
+      {/* Thin divider bar */}
+      <div className="h-4 w-px bg-slate-700/60" />
+
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+        Enabled
+      </span>
+    </div>
+
     {/* Divider + NASA footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-300 leading-relaxed">
-        All systems nominal. Autonomous settlement sequence is active.  
-        The round will settle fully on-chain.
+        All systems nominal. Autonomous settlement sequence is active. The round
+        will settle fully on-chain.
       </p>
 
       <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control oversees network status, portal uptime, contract integrity,  
-        live claim-window timing, snapshot execution, and automated reward distribution.
+        Mission Control oversees network status, portal uptime, contract
+        integrity, live claim-window timing, snapshot execution, and automated
+        reward distribution.
       </p>
     </div>
 
   </SoftCard>
 </div>
-
-          </div>
-        </SoftCard>
 
         {/* Round progress bar */}
         <SoftCard className="mt-6">
