@@ -842,12 +842,7 @@ const snapshotDateLabel = snapshotTakenAt
           <p className="text-[14px] leading-relaxed text-slate-300">
             Rewards are auto-paid out in 
             <span className="text-emerald-300 font-medium"> $CLAIM</span> 
-            {' '}after the claim window closes.
-          </p>
-
-          <p className="mt-3 text-[13px] leading-relaxed text-slate-400">
-            USD value shown is an 
-            <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
+            {' '}after the claim window closes. USD value shown is an approximate market conversion.
           </p>
         </div>
       </div>
