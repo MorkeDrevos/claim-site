@@ -494,45 +494,57 @@ if (countdownTarget) {
       : 'muted';
 
   // Rows for Mission Control (NASA layout)
-const missionRows = [
-  {
-    label: 'Network',
-    pill: 'Solana Mainnet',
-    tone: 'success',
-  },
+const missionRows: MissionRow[] = [
   {
     label: 'Portal backend',
-    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
+    value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
     tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+    mode: 'plain',
   },
   {
     label: 'Reward contracts',
-    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
+    value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
     tone: contractStatus === 'ok' ? 'success' : 'warning',
+    mode: 'plain',
   },
   {
     label: 'Claim window',
-    pill:
+    value:
       currentPhase === 'open'
-        ? 'LIVE'
+        ? 'Live'
         : currentPhase === 'scheduled'
-        ? 'SCHEDULED'
+        ? 'Scheduled'
         : currentPhase === 'distribution'
-        ? 'DISTRIBUTING'
-        : 'CLOSED',
+        ? 'Distributing'
+        : 'Closed',
     tone: claimTone,
+    mode: 'pill',
   },
   {
-    label: 'Snapshots',
-    pill: snapshotTakenAt ? 'ACTIVE' : 'PENDING',
-    tone: snapshotTakenAt ? 'success' : 'warning',
+    label: 'Network',
+    value: networkLabel || 'Solana Mainnet',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
+    mode: 'plain',
   },
   {
-    label: 'Smart Contract revision',
-    pill: 'CR 0.9.14',
+    label: 'Contract revision',
+    value: 'CR-0.9.14',
     tone: 'muted',
+    mode: 'plain',
   },
 ];
+
+type MissionRowMode = 'plain' | 'pill';
+
+type MissionRow = {
+  label: string;
+  value: string;
+  tone: Tone;
+  mode?: MissionRowMode; // default = 'plain'
+};
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
@@ -1003,39 +1015,52 @@ const snapshotDateLabel = snapshotTakenAt
     </div>
 
     {/* Status rows */}
-    <div className="mt-3 space-y-3">
-      {missionRows.map((row) => (
-  <div key={row.label} className="flex items-center justify-between gap-3">
-    <span className="text-[11px] text-slate-300 whitespace-nowrap">
-      {row.label}
-    </span>
+<div className="mt-3 space-y-3">
+  {missionRows.map((row) => {
+    const isPill = row.mode === 'pill';
 
-    {row.mode === 'pill' ? (
-      <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap
-                      border
-                      {row.tone === 'success'
-                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                        : row.tone === 'warning'
-                        ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
-                        : 'bg-slate-900/80 text-slate-300 border-slate-700/70'}">
-        <span
-          className={[
-            'h-1.5 w-1.5 rounded-full',
-            row.tone === 'success'
-              ? 'bg-emerald-400'
-              : row.tone === 'warning'
-              ? 'bg-amber-400'
-              : 'bg-slate-500/70',
-          ].join(' ')}
-        />
-        {row.value}
-      </span>
-    ) : (
-      <span className="text-[11px] text-slate-400">{row.value}</span>
-    )}
-  </div>
-))}
-    </div>
+    return (
+      <div
+        key={row.label}
+        className="flex items-center justify-between gap-3"
+      >
+        <span className="text-[11px] text-slate-300 whitespace-nowrap">
+          {row.label}
+        </span>
+
+        {isPill ? (
+          <span
+            className={[
+              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
+              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
+              row.tone === 'success'
+                ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+                : row.tone === 'warning'
+                ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+            ].join(' ')}
+          >
+            <span
+              className={[
+                'h-1.5 w-1.5 rounded-full',
+                row.tone === 'success'
+                  ? 'bg-emerald-400'
+                  : row.tone === 'warning'
+                  ? 'bg-amber-400'
+                  : 'bg-slate-500/70',
+              ].join(' ')}
+            />
+            {row.value}
+          </span>
+        ) : (
+          <span className="text-[11px] text-slate-400">
+            {row.value}
+          </span>
+        )}
+      </div>
+    );
+  })}
+</div>
 
     {/* AUTOPILOT STATUS — NASA style strip */}
     <div className="mt-3 flex items-center gap-3">
@@ -1054,15 +1079,9 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Divider + NASA footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-300 leading-relaxed">
-        All systems nominal. Autonomous settlement sequence is active. The round
-        will settle fully on-chain.
+        All systems nominal. Autonomous settlement sequence is active. 
       </p>
 
-      <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control oversees network status, portal uptime, contract
-        integrity, live claim-window timing, snapshot execution, and automated
-        reward distribution.
-      </p>
     </div>
 
   </SoftCard>
