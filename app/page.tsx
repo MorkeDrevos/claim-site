@@ -896,129 +896,132 @@ const snapshotDateLabel = snapshotTakenAt
   {/* One row: countdown left, USD right */}
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
-<div className="flex flex-col">
-  <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  {isLive ? (
-    <span className="inline-flex items-center gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <circle cx="12" cy="12" r="9" className="opacity-30" />
-        <circle cx="12" cy="12" r="5" className="opacity-60" />
-        <circle cx="12" cy="12" r="2" />
-      </svg>
-      WINDOW CLOSES IN
-    </span>
-  ) : isClosed ? (
-    <span className="inline-flex items-center gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <circle cx="12" cy="12" r="9" className="opacity-30" />
-        <circle cx="12" cy="12" r="5" className="opacity-60" />
-        <circle cx="12" cy="12" r="2" />
-      </svg>
-      Awaiting next on-chain window
-    </span>
-  ) : (
-    <span className="inline-flex items-center gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <circle cx="12" cy="12" r="9" className="opacity-30" />
-        <circle cx="12" cy="12" r="5" className="opacity-60" />
-        <circle cx="12" cy="12" r="2" />
-      </svg>
-      NEXT WINDOW IN
-    </span>
-  )}
-</p>
+    <div className="flex flex-col pl-1 sm:pl-2">
+      <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {isLive ? (
+          <span className="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="9" className="opacity-30" />
+              <circle cx="12" cy="12" r="5" className="opacity-60" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            WINDOW CLOSES IN
+          </span>
+        ) : isClosed ? (
+          <span className="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="9" className="opacity-30" />
+              <circle cx="12" cy="12" r="5" className="opacity-60" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            Awaiting next on-chain window
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="9" className="opacity-30" />
+              <circle cx="12" cy="12" r="5" className="opacity-60" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            NEXT WINDOW IN
+          </span>
+        )}
+      </p>
 
-  {/* extra padding above the countdown */}
-  <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
-    {isLive && (
-      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-    )}
-    <p
-  className={[
-    '-mt-1.5',                        // ⬅️ THIS LINE moves ONLY the number upward
-    'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
-    isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-  ].join(' ')}
->
-  {isClosed ? '' : countdownLabel || '--:--:--'}
-</p>
-  </div>
-</div>
-
-    {/* RIGHT: label + USD + $CLAIM */}
-<div className="flex flex-col items-end gap-1 text-right">
-
-  {/* Label + info icon + tooltip */}
-  <div className="relative flex items-baseline gap-2">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      Current round pool
-    </p>
-
-    {/* Hover icon wrapper */}
-    <div className="group relative mt-[-2px]"> 
-      <button
-  type="button"
-  className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
-             rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold
-             border border-slate-700 
-             hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
->
-  ?
-</button>
-
-      {/* Tooltip */}
-      <div
-        className="pointer-events-none absolute left-full ml-3 top-2 
-                   w-72 opacity-0 group-hover:opacity-100 
-                   transition-opacity duration-200 z-50"
-      >
-        <div className="rounded-2xl border border-slate-700/70 
-                        bg-slate-900/95 p-4 
-                        shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
-          
-          <p className="text-[14px] text-slate-200 leading-relaxed">
-      Rewards are <span className="text-emerald-300 font-medium">shared equally </span> 
-      among all wallets that lock in during the window. 
-      USD value shown reflects an 
-      <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
-    </p>
-
-        </div>
+      {/* extra padding above the countdown */}
+      <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
+        <p
+          className={[
+            '-mt-1.5', // moves ONLY the number upward
+            'text-[40px] sm:text-[42px] font-bold tracking-tight text-slate-50',
+            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+          ].join(' ')}
+        >
+          {isClosed ? '' : countdownLabel || '--:--:--'}
+        </p>
       </div>
     </div>
-  </div>
 
-  {/* Big USD */}
-  <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
-    {rewardUsdText} USD
-  </p>
+    {/* RIGHT: label + USD + $CLAIM */}
+    <div className="flex flex-col items-end gap-1 text-right">
+      {/* Label + info icon + tooltip */}
+      <div className="relative flex items-baseline gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+          Current round pool
+        </p>
 
-  <p className="text-[13px] font-medium text-emerald-300">
-    ≈ {rewardAmountText}
-    <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-  </p>
-</div>
+        {/* Hover icon wrapper */}
+        <div className="group relative mt-[-2px]">
+          <button
+            type="button"
+            className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
+                       rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold
+                       border border-slate-700 
+                       hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+          >
+            ?
+          </button>
+
+          {/* Tooltip */}
+          <div
+            className="pointer-events-none absolute left-full ml-3 top-2 
+                       w-72 opacity-0 group-hover:opacity-100 
+                       transition-opacity duration-200 z-50"
+          >
+            <div
+              className="rounded-2xl border border-slate-700/70 
+                          bg-slate-900/95 p-4 
+                          shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
+            >
+              <p className="text-[14px] text-slate-200 leading-relaxed">
+                Rewards are{' '}
+                <span className="text-emerald-300 font-medium">shared equally </span>
+                among all wallets that lock in during the window. USD value shown
+                reflects an{' '}
+                <span className="text-emerald-300 font-medium">
+                  approximate market conversion
+                </span>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Big USD – softer + not bold */}
+      <p className="text-[24px] sm:text-[30px] font-medium text-slate-200">
+        {rewardUsdText} USD
+      </p>
+
+      <p className="text-[13px] font-medium text-emerald-300">
+        ≈ {rewardAmountText}
+        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+      </p>
+    </div>
   </div>
 
   {/* CTA bar – keep as you have it */}
@@ -1044,26 +1047,29 @@ const snapshotDateLabel = snapshotTakenAt
       : 'Opens soon'}
   </button>
 
-{/* Eligibility text */}
-<div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
-  <p>
-    • <span className="text-emerald-300/70 font-medium">Show up</span> during the
-    live window and <span className="text-emerald-300/70 font-medium">lock in your share</span>.
-  </p>
+  {/* Eligibility text */}
+  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
+    <p>
+      • <span className="text-emerald-300/70 font-medium">Show up</span> during the
+      live window and{' '}
+      <span className="text-emerald-300/70 font-medium">lock in your share</span>.
+    </p>
 
-  <p>
-    • Rewards are auto-distributed in <span className="text-emerald-300/70 font-medium">$CLAIM</span>,
-    governed entirely by <span className="text-emerald-300/70 font-medium">autonomous smart-contract execution</span>.
-  </p>
+    <p>
+      • Rewards are auto-distributed in{' '}
+      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
+      via the{' '}
+      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
+    </p>
 
-  <p>
-    • Eligibility: hold 1,000,000 $CLAIM at the 
-    <span className="text-emerald-300/70 font-medium"> snapshot</span> — wallets below the minimum
-    sit out that round.
-  </p>
+    <p>
+      • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+      <span className="text-emerald-300/70 font-medium">snapshot</span> — wallets
+      below the minimum sit out that round.
+    </p>
+  </div>
 </div>
-</div>
-              {/* end CLAIM WINDOW CARD */}
+{/* end CLAIM WINDOW CARD */}
             </div>
 
          {/* RIGHT COLUMN – Mission Control (NASA style) */}
