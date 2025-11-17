@@ -867,17 +867,22 @@ const snapshotDateLabel = snapshotTakenAt
               <div className="space-y-2">
                 <h1
   className="
-    pl-8
-    text-[30px] sm:text-[38px]
+    text-[30px] sm:text-[36px]
     font-semibold
-    leading-[1.2]
-    tracking-tight
-    bg-gradient-to-r from-slate-100 to-slate-300/80
-    bg-clip-text text-transparent
-    drop-shadow-[0_0_14px_rgba(255,255,255,0.04)]
+    leading-[1.15]
+    tracking-[-0.01em]
+    text-slate-100
+
+    pl-[4px]          /* perfect horizontal alignment */
+    pt-[6px]          /* aligns with hero card top */
+    pb-[26px]         /* ideal spacing before next section */
+
+    drop-shadow-[0_0_18px_rgba(0,255,200,0.05)]
   "
 >
-  Rewards earned by presence. Show up. Lock in. Get your share.
+  Rewards earned by presence.
+  <br />
+  Show up. Lock in. Get your share.
 </h1>
               </div>
 
