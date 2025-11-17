@@ -955,10 +955,10 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – Mission Control (compact) */}
+          {/* RIGHT COLUMN – Mission Control (refined) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
-    {/* Tiny label in the corner */}
+    {/* Corner label */}
     <span className="absolute right-5 top-5 text-[9px] font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
       Mission control
     </span>
@@ -972,7 +972,7 @@ const snapshotDateLabel = snapshotTakenAt
         Snapshot #{snapshotBlock}
       </p>
       <p className="text-[11px] text-slate-400">
-        {snapshotLabel}{' '}
+        Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
         <span className="text-emerald-300">{claimWindowStatus}</span>
       </p>
@@ -985,17 +985,17 @@ const snapshotDateLabel = snapshotTakenAt
           key={row.label}
           className="flex items-center justify-between gap-3"
         >
-          <span className="text-[11px] text-slate-400">{row.label}</span>
+          <span className="text-[11px] text-slate-300">{row.label}</span>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             {/* status dot */}
             <span
               className={[
                 'h-1.5 w-1.5 rounded-full',
                 row.tone === 'success'
-                  ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]'
+                  ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]'
                   : row.tone === 'warning'
-                  ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]'
+                  ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.9)]'
                   : 'bg-slate-500/70',
               ].join(' ')}
             />
@@ -1020,23 +1020,23 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Autopilot row */}
     <div className="mt-3 flex items-center justify-between gap-3">
-      <span className="text-[11px] text-slate-400">Autopilot</span>
+      <span className="text-[11px] text-slate-300">Autopilot</span>
 
-      <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+      <div className="flex items-center gap-2.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
         <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300 border border-emerald-500/35">
           Runs on smart contracts
         </span>
       </div>
     </div>
 
-    {/* Footer copy */}
-    <div className="mt-4 space-y-1">
+    {/* Divider + footer copy */}
+    <div className="mt-4 space-y-1 border-t border-slate-800/70 pt-3">
       <p className="text-[11px] text-slate-400">
-        When all indicators are green, rewards run fully autonomously on-chain.
+        When all indicators are green, rewards execute fully autonomously on-chain.
       </p>
       <p className="text-[10px] text-slate-500">
-        Mission Control tracks network health, backend services, contract
+        Mission Control monitors network health, backend services, contract
         integrity and the live claim window state for this round.
       </p>
     </div>
