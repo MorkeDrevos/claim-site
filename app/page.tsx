@@ -1114,10 +1114,9 @@ const snapshotDateLabel = snapshotTakenAt
   <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-relaxed font-normal">
   <span
   className={[
-    'flex-none',                    // ← prevents stretching
+    'flex-none',
     'inline-block',
-    'h-2.5 w-2.5',                  // ← exact square size
-    'rounded-full',
+    'h-2.5 w-2.5 rounded-full',
     statusDotColor,
     'shadow-[0_0_4px_rgba(16,185,129,0.35)]',
     'animate-[pulse_2.4s_ease-in-out_infinite]'
