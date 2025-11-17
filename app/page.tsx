@@ -529,12 +529,12 @@ const missionRows = [
         ? 'success'
         : 'muted',
   },
-  {
-    label: 'Autopilot',
-    mode: 'pill' as const,
-    value: 'Enabled',
-    tone: 'success' as Tone,
-  },
+{
+  label: 'Contract version',
+  mode: 'plain' as const,
+  value: 'V1.0.0',
+  tone: 'neutral' as Tone,
+},
 ];
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
