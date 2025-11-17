@@ -1038,14 +1038,14 @@ const snapshotDateLabel = snapshotTakenAt
         ].join(' ')}
       >
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-        Runs on smart contracts
+        Smart contracts
       </span>
     </div>
 
     {/* Footer */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-400 leading-relaxed">
-        When all indicators are green, rewards execute fully autonomously on-chain.
+        When all indicators are on, snapshots and rewards execute fully autonomously on-chain.
       </p>
 
       <p className="text-[10px] text-slate-500 leading-relaxed">
