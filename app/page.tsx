@@ -743,18 +743,20 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
+  // Simple, safe fallback snapshot label
+  const snapshotDateLabel = snapshotTakenAt
+    ? snapshotTakenAt
+    : 'Not yet announced';
 
-return (
-  <main className="min-h-screen bg-slate-950 text-slate-50">
-    {/* Subtle moving glows */}
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-50">
+      {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
         <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
       </div>
+
+      {/* ...your existing header + content JSX here... */}
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
@@ -1545,17 +1547,20 @@ return (
     href={JUPITER_BUY_URL}
     target="_blank"
     rel="noreferrer"
-    className="inline-flex items-center rounded-full
-               bg-emerald-500/90 px-4 py-2.5
-               text-[11px] font-semibold uppercase tracking-[0.22em]
-               text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
-               hover:bg-emerald-400 hover:text-slate-950
-               transition-colors"
+    className="
+      inline-flex items-center rounded-full
+      bg-emerald-500/90 px-4 py-2.5
+      text-[11px] font-semibold uppercase tracking-[0.22em]
+      text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
+      hover:bg-emerald-400 hover:text-slate-950
+      transition-colors
+    "
   >
     Buy $CLAIM on Jupiter
   </a>
 </div>
-      <ToastContainer />
+
+<ToastContainer />
     </main>
   );
 }
