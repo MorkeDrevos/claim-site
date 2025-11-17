@@ -493,31 +493,32 @@ if (countdownTarget) {
       ? 'warning'
       : 'muted';
 
-  // Rows for Mission Control – fewer, more focused pills
+  // Rows for Mission Control (NASA layout)
 const missionRows = [
   {
     label: 'Network',
+    mode: 'dot' as const,
     value: networkLabel || 'Unknown',
     tone:
       networkLabel && networkLabel.toLowerCase().includes('mainnet')
         ? 'success'
         : 'muted',
-    mode: 'pill' as const,
   },
   {
     label: 'Portal backend',
-    value: frontEndStatus === 'ok' ? 'Online' : 'Degraded',
+    mode: 'plain' as const,
+    value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
     tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-    mode: 'text' as const,
   },
   {
     label: 'Reward contracts',
+    mode: 'plain' as const,
     value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
     tone: contractStatus === 'ok' ? 'success' : 'warning',
-    mode: 'text' as const,
   },
   {
     label: 'Claim window',
+    mode: 'pill' as const,
     value:
       currentPhase === 'open'
         ? 'Live'
@@ -527,19 +528,18 @@ const missionRows = [
         ? 'Distributing'
         : 'Closed',
     tone: claimTone,
-    mode: 'pill' as const,
   },
   {
     label: 'Snapshots',
+    mode: 'pill' as const,
     value: snapshotTakenAt ? 'Active' : 'Pending',
     tone: snapshotTakenAt ? 'success' : 'warning',
-    mode: 'pill' as const,
   },
   {
     label: 'Autopilot',
+    mode: 'pill' as const,
     value: 'Enabled',
     tone: 'success' as Tone,
-    mode: 'pill' as const,
   },
 ];
 
@@ -973,24 +973,22 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-         {/* RIGHT COLUMN – Mission Control (NASA style, fewer pills) */}
+         {/* RIGHT COLUMN – Mission Control (NASA style) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
 
-    {/* Header row */}
-<div className="flex items-baseline justify-between pr-1">
+    {/* Header row – swapped: Mission Control left, Round right */}
+    <div className="flex items-baseline justify-between pr-1">
+      {/* Neon accent */}
+      <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+        Mission Control
+      </span>
 
-  {/* Mission Control – now on the LEFT */}
-  <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-    Mission Control
-  </span>
-
-  {/* Round number – now on the RIGHT */}
-  <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
-    Round {roundNumber ?? 1}
-  </p>
-
-</div>
+      {/* Round number */}
+      <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
+        Round {roundNumber ?? 1}
+      </p>
+    </div>
 
     {/* Snapshot info */}
     <div className="space-y-1">
@@ -1001,7 +999,7 @@ const snapshotDateLabel = snapshotTakenAt
       <p className="text-[11px] text-slate-400">
         Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
-        <span className="text-emerald-300">
+        <span className="text-slate-300">
           {currentPhase === 'open'
             ? 'window open'
             : currentPhase === 'scheduled'
@@ -1013,17 +1011,19 @@ const snapshotDateLabel = snapshotTakenAt
       </p>
     </div>
 
-    {/* Status rows – mix of text + a few key pills */}
+    {/* Status rows */}
     <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
         <div
           key={row.label}
           className="flex items-center justify-between gap-3"
         >
+          {/* Left label */}
           <span className="text-[11px] text-slate-300 whitespace-nowrap">
             {row.label}
           </span>
 
+          {/* Right status – 3 modes: pill / dot / plain */}
           {row.mode === 'pill' ? (
             <span
               className={[
@@ -1046,7 +1046,21 @@ const snapshotDateLabel = snapshotTakenAt
                     : 'bg-slate-500/70',
                 ].join(' ')}
               />
-              {row.value.toUpperCase()}
+              {String(row.value).toUpperCase()}
+            </span>
+          ) : row.mode === 'dot' ? (
+            <span className="flex items-center gap-2 text-[11px] text-slate-300 whitespace-nowrap">
+              <span
+                className={[
+                  'h-1.5 w-1.5 rounded-full',
+                  row.tone === 'success'
+                    ? 'bg-emerald-400'
+                    : row.tone === 'warning'
+                    ? 'bg-amber-400'
+                    : 'bg-slate-500/70',
+                ].join(' ')}
+              />
+              {row.value}
             </span>
           ) : (
             <span className="text-[11px] text-slate-400 whitespace-nowrap">
@@ -1055,6 +1069,20 @@ const snapshotDateLabel = snapshotTakenAt
           )}
         </div>
       ))}
+    </div>
+
+    {/* AUTOPILOT STATUS — NASA style strip */}
+    <div className="mt-3 flex items-center gap-3">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        Smart-contract autopilot
+      </span>
+
+      {/* Thin divider bar */}
+      <div className="h-4 w-px bg-slate-700/60" />
+
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+        Enabled
+      </span>
     </div>
 
     {/* Divider + NASA footer copy */}
