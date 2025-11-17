@@ -784,7 +784,7 @@ const snapshotDateLabel = snapshotTakenAt
     {/* LEFT: label + countdown */}
     <div className="flex flex-col gap-1 pt-1.5">
       <p
-  className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mt-[-6px]"
+  className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mt-[-10px]"
 >
   {isLive
     ? 'WINDOW CLOSES IN'
