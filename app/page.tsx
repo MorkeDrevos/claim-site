@@ -1035,7 +1035,7 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Autopilot row – clean final version */}
 <div className="mt-3 flex items-center justify-between gap-3">
-  <span className="text-[11px] text-slate-300 whitespace-nowrap">
+  <span className="text-[10px] text-slate-300 whitespace-nowrap">
     Autopilot
   </span>
 
