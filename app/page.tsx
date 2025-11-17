@@ -990,7 +990,7 @@ const snapshotDateLabel = snapshotTakenAt
   </button>
 
 {/* Eligibility text */}
-<div className="mt-6 space-y-0 text-[11px] text-slate-400/80 leading-relaxed">
+<div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
   <p>
     • <span className="text-emerald-300/70 font-medium">Show up</span> during the
     live window and <span className="text-emerald-300/70 font-medium">lock in your share</span>.
@@ -1030,7 +1030,7 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Snapshot info */}
     <div className="space-y-1">
-      <p className="text-[16px] font-semibold text-slate-100">
+      <p className="text-[20px] font-semibold text-slate-100">
   Snapshot #{snapshotBlock}
 </p>
 
@@ -1111,7 +1111,7 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
   {/* Status line with pulse dot */}
-  <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-relaxed font-normal">
+  <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-snug font-normal">
   <span
   className={[
     'flex-none',
