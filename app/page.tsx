@@ -1428,17 +1428,16 @@ const snapshotDateLabel = snapshotTakenAt
   <p className="text-[11px] text-slate-500">
   Eligibility is derived solely from the wallet’s token balance as it existed at the snapshot slot for each round.
 </p>
-</p>
     </div>
   )}
 
   {/* Reward logic */}
   {activeTab === 'rewards' && (
     <div className="space-y-4">
-      <p className="text-[13px]">
-        Rewards are earned by presence. If you show up during the live claim
-        window and lock your share, you receive an equal split of that round’s pool.
-      </p>
+      <p className="text-[11px] text-slate-500">
+  Eligibility is derived solely from the wallet’s token balance as it existed
+  at the snapshot slot for each round.
+</p>
 
       <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
         <li>Everyone who locks in receives an equal share.</li>
