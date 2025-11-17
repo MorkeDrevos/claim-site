@@ -1115,13 +1115,14 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
   {/* Status line with pulse dot */}
-  <p className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 leading-relaxed">
+  <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-relaxed font-normal">
   <span
     className={[
-      'h-1.5 w-1.5 rounded-full animate-pulse shadow-[0_0_4px_rgba(16,185,129,0.6)]',
+      'h-1.5 w-1.5 rounded-full animate-pulse',
       statusDotColor
     ].join(' ')}
-  />
+  ></span>
+
   {statusSummary}
 </p>
 
