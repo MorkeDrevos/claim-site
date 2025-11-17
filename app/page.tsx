@@ -494,6 +494,16 @@ if (countdownTarget) {
       : 'muted';
 
   // Rows for Mission Control (NASA layout)
+type MissionRowMode = 'plain' | 'pill';
+
+type MissionRow = {
+  label: string;
+  value: string;
+  tone: Tone;
+  mode?: MissionRowMode; // default = 'plain'
+};
+
+// Rows for Mission Control (NASA layout)
 const missionRows: MissionRow[] = [
   {
     label: 'Portal backend',
@@ -505,6 +515,16 @@ const missionRows: MissionRow[] = [
     label: 'Reward contracts',
     value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
     tone: contractStatus === 'ok' ? 'success' : 'warning',
+    mode: 'plain',
+  },
+  {
+    // 🔁 Network now ABOVE Claim window
+    label: 'Network',
+    value: 'Solana Mainnet',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
     mode: 'plain',
   },
   {
@@ -521,13 +541,10 @@ const missionRows: MissionRow[] = [
     mode: 'pill',
   },
   {
-    label: 'Network',
-    value: networkLabel || 'Solana Mainnet',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-    mode: 'plain',
+    label: 'Snapshots',
+    value: snapshotTakenAt ? 'Active' : 'Pending',
+    tone: snapshotTakenAt ? 'success' : 'warning',
+    mode: 'pill',
   },
   {
     label: 'Contract revision',
@@ -536,15 +553,6 @@ const missionRows: MissionRow[] = [
     mode: 'plain',
   },
 ];
-
-type MissionRowMode = 'plain' | 'pill';
-
-type MissionRow = {
-  label: string;
-  value: string;
-  tone: Tone;
-  mode?: MissionRowMode; // default = 'plain'
-};
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
@@ -978,7 +986,7 @@ const snapshotDateLabel = snapshotTakenAt
 
          {/* RIGHT COLUMN – Mission Control (NASA style) */}
 <div className="w-full max-w-xs">
-  <SoftCard className="relative space-y-4">
+  <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
 <div className="flex items-baseline justify-between pr-1">
@@ -1032,12 +1040,12 @@ const snapshotDateLabel = snapshotTakenAt
           <span
             className={[
               'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
+              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
               row.tone === 'success'
-                ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
                 : row.tone === 'warning'
-                ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
-                : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+                ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
+                : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
             ].join(' ')}
           >
             <span
