@@ -1039,7 +1039,7 @@ const snapshotDateLabel = snapshotTakenAt
     ? 'window open'
     : currentPhase === 'scheduled'
     ? 'window scheduled'
-    : currentPhase === 'distributing'
+    : currentPhase === 'distribution'
     ? 'distributing'
     : 'window closed'}
 </p>
