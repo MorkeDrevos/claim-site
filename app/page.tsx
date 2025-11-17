@@ -485,79 +485,47 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
-  // Tone for claim window line
-const claimTone: Tone =
-  currentPhase === 'open'
-    ? 'success'
-    : currentPhase === 'scheduled'
-    ? 'warning'
-    : 'muted';
+    // Tone for claim window line
+  const claimTone: Tone =
+    currentPhase === 'open'
+      ? 'success'
+      : currentPhase === 'scheduled'
+      ? 'warning'
+      : 'muted';
 
-// Rows for Mission Control
-const missionRows = [
-  {
-    label: 'Network status',
-    pill: networkLabel || 'Unknown',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-  },
-  {
-    label: 'Backend services',
-    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'Attention',
-    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-  },
-  {
-    label: 'Contract integrity',
-    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'Check logs',
-    tone: contractStatus === 'ok' ? 'success' : 'warning',
-  },
-  {
-    label: 'Claim window state',
-    pill:
-      currentPhase === 'open'
-        ? 'LIVE'
-        : currentPhase === 'scheduled'
-        ? 'SCHEDULED'
-        : 'CLOSED',
-    tone: claimTone,
-  },
-];
-
-// Rows for Mission Control (copy-polished)
-const missionRows = [
-  {
-    label: 'Network',
-    pill: networkLabel || 'Unknown',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-  },
-  {
-    label: 'Portal backend',
-    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
-    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-  },
-  {
-    label: 'Reward contracts',
-    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
-    tone: contractStatus === 'ok' ? 'success' : 'warning',
-  },
-  {
-    label: 'Claim window',
-    pill:
-      currentPhase === 'open'
-        ? 'LIVE'
-        : currentPhase === 'scheduled'
-        ? 'SCHEDULED'
-        : currentPhase === 'distribution'
-        ? 'DISTRIBUTING'
-        : 'CLOSED',
-    tone: claimTone,
-  },
-];
+  // Rows for Mission Control (final)
+  const missionRows = [
+    {
+      label: 'Network',
+      pill: networkLabel || 'Unknown',
+      tone:
+        networkLabel && networkLabel.toLowerCase().includes('mainnet')
+          ? 'success'
+          : 'muted',
+    },
+    {
+      label: 'Portal backend',
+      pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
+      tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+    },
+    {
+      label: 'Reward contracts',
+      pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
+      tone: contractStatus === 'ok' ? 'success' : 'warning',
+    },
+    {
+      label: 'Claim window',
+      pill:
+        currentPhase === 'open'
+          ? 'LIVE'
+          : currentPhase === 'scheduled'
+          ? 'SCHEDULED'
+          : currentPhase === 'distribution'
+          ? 'DISTRIBUTING'
+          : 'CLOSED',
+      tone: claimTone,
+    },
+  ];
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
