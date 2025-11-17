@@ -496,15 +496,6 @@ if (countdownTarget) {
   // Rows for Mission Control (NASA layout)
 const missionRows = [
   {
-    label: 'Network',
-    mode: 'dot' as const,
-    value: networkLabel || 'Unknown',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-  },
-  {
     label: 'Portal backend',
     mode: 'plain' as const,
     value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
@@ -528,6 +519,15 @@ const missionRows = [
         ? 'Distributing'
         : 'Closed',
     tone: claimTone,
+  },
+  {
+    label: 'Network',
+    mode: 'plain' as const,
+    value: networkLabel || 'Unknown',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
   },
   {
     label: 'Autopilot',
@@ -971,18 +971,18 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
 
-    {/* Header row – swapped: Mission Control left, Round right */}
-    <div className="flex items-baseline justify-between pr-1">
-      {/* Neon accent */}
-      <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-        Mission Control
-      </span>
+    {/* Header row */}
+<div className="flex items-baseline justify-between pr-1">
+  {/* LEFT: Round number */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
+    Round {roundNumber ?? 1}
+  </p>
 
-      {/* Round number */}
-      <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
-    </div>
+  {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
+  <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+    Mission Control
+  </span>
+</div>
 
     {/* Snapshot info */}
     <div className="space-y-1">
@@ -1008,61 +1008,36 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Status rows */}
     <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
-        <div
-          key={row.label}
-          className="flex items-center justify-between gap-3"
-        >
-          {/* Left label */}
-          <span className="text-[11px] text-slate-300 whitespace-nowrap">
-            {row.label}
-          </span>
+  <div key={row.label} className="flex items-center justify-between gap-3">
+    <span className="text-[11px] text-slate-300 whitespace-nowrap">
+      {row.label}
+    </span>
 
-          {/* Right status – 3 modes: pill / dot / plain */}
-          {row.mode === 'pill' ? (
-            <span
-              className={[
-                'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-                'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
-                row.tone === 'success'
-                  ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
-                  : row.tone === 'warning'
-                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
-                  : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
-              ].join(' ')}
-            >
-              <span
-                className={[
-                  'h-1.5 w-1.5 rounded-full',
-                  row.tone === 'success'
-                    ? 'bg-emerald-400'
-                    : row.tone === 'warning'
-                    ? 'bg-amber-400'
-                    : 'bg-slate-500/70',
-                ].join(' ')}
-              />
-              {String(row.value).toUpperCase()}
-            </span>
-          ) : row.mode === 'dot' ? (
-            <span className="flex items-center gap-2 text-[11px] text-slate-300 whitespace-nowrap">
-              <span
-                className={[
-                  'h-1.5 w-1.5 rounded-full',
-                  row.tone === 'success'
-                    ? 'bg-emerald-400'
-                    : row.tone === 'warning'
-                    ? 'bg-amber-400'
-                    : 'bg-slate-500/70',
-                ].join(' ')}
-              />
-              {row.value}
-            </span>
-          ) : (
-            <span className="text-[11px] text-slate-400 whitespace-nowrap">
-              {row.value}
-            </span>
-          )}
-        </div>
-      ))}
+    {row.mode === 'pill' ? (
+      <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap
+                      border
+                      {row.tone === 'success'
+                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
+                        : row.tone === 'warning'
+                        ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
+                        : 'bg-slate-900/80 text-slate-300 border-slate-700/70'}">
+        <span
+          className={[
+            'h-1.5 w-1.5 rounded-full',
+            row.tone === 'success'
+              ? 'bg-emerald-400'
+              : row.tone === 'warning'
+              ? 'bg-amber-400'
+              : 'bg-slate-500/70',
+          ].join(' ')}
+        />
+        {row.value}
+      </span>
+    ) : (
+      <span className="text-[11px] text-slate-400">{row.value}</span>
+    )}
+  </div>
+))}
     </div>
 
     {/* AUTOPILOT STATUS — NASA style strip */}
