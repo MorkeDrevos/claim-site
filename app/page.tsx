@@ -867,17 +867,20 @@ const snapshotDateLabel = snapshotTakenAt
               <div className="space-y-2">
                 <h1
   className="
-    text-[26px] sm:text-[32px]
-    font-semibold
-    leading-[1.25]
+    text-[28px] sm:text-[36px] 
+    font-semibold 
+    leading-[1.15]
     tracking-[-0.01em]
-    text-slate-200
-    bg-gradient-to-r from-slate-200/90 to-slate-300/80
+    bg-gradient-to-r from-slate-200/90 to-slate-300/90 
     bg-clip-text text-transparent
-    drop-shadow-[0_0_12px_rgba(255,255,255,0.04)]
+    drop-shadow-[0_0_12px_rgba(255,255,255,0.05)]
   "
 >
-  Rewards earned by presence. Show up. Lock in. Get your share.
+  Rewards earned by presence
+  <br />
+  <span className="text-slate-400">
+    Show up. Lock in. Get your share.
+  </span>
 </h1>
               </div>
 
