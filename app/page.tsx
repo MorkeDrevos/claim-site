@@ -991,25 +991,25 @@ const snapshotDateLabel = snapshotTakenAt
             {/* status dot */}
            <span
   className={[
-    'relative inline-flex items-center rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
+    'inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]',
     row.tone === 'success'
-      ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+      ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/35'
       : row.tone === 'warning'
-      ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+      ? 'bg-amber-500/10 text-amber-200 border border-amber-500/35'
       : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
   ].join(' ')}
 >
   <span
     className={[
-      'absolute left-2 h-1.5 w-1.5 rounded-full',
+      'h-1.5 w-1.5 rounded-full',
       row.tone === 'success'
-        ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
+        ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]'
         : row.tone === 'warning'
-        ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+        ? 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.9)]'
         : 'bg-slate-500/70',
     ].join(' ')}
   />
-  <span className="pl-4">{row.pill}</span>
+  {row.pill}
 </span> 
           </div>
         </div>
@@ -1022,7 +1022,7 @@ const snapshotDateLabel = snapshotTakenAt
 
       <div className="flex items-center gap-2.5">
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
-        <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300 border border-emerald-500/35">
+        <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[8px] font-semibold uppercase tracking-[0.18em] text-emerald-300 border border-emerald-500/35">
           Runs on smart contracts
         </span>
       </div>
