@@ -955,18 +955,18 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – Mission Control (refined + aligned + no-wrap) */}
+          {/* RIGHT COLUMN – Mission Control (final polished) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4">
 
-    {/* Header (aligned cleanly) */}
-    <div className="flex items-center justify-between pr-2">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+    {/* Header row – perfectly aligned */}
+    <div className="flex items-baseline justify-between pr-1">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
         Round {roundNumber ?? 1}
       </p>
 
-      <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400">
-        Mission control
+      <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+        Mission Control
       </span>
     </div>
 
@@ -975,6 +975,7 @@ const snapshotDateLabel = snapshotTakenAt
       <p className="text-sm font-semibold text-slate-50">
         Snapshot #{snapshotBlock}
       </p>
+
       <p className="text-[11px] text-slate-400">
         Snapshot #1
         <span className="mx-1 text-slate-600">•</span>
@@ -983,7 +984,7 @@ const snapshotDateLabel = snapshotTakenAt
     </div>
 
     {/* Status rows */}
-    <div className="mt-3 space-y-2.5">
+    <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
         <div
           key={row.label}
@@ -993,10 +994,10 @@ const snapshotDateLabel = snapshotTakenAt
             {row.label}
           </span>
 
-          {/* Pill with internal dot */}
+          {/* pill with dot inside – dot tighter */}
           <span
             className={[
-              'inline-flex items-center gap-2 rounded-full px-4 py-1.5',
+              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
               'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
               row.tone === 'success'
                 ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
@@ -1005,6 +1006,7 @@ const snapshotDateLabel = snapshotTakenAt
                 : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
             ].join(' ')}
           >
+            {/* dot */}
             <span
               className={[
                 'h-1.5 w-1.5 rounded-full',
@@ -1021,7 +1023,7 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row with no-wrap + pill dot */}
+    {/* Autopilot row */}
     <div className="mt-3 flex items-center justify-between gap-3">
       <span className="text-[11px] text-slate-300 whitespace-nowrap">
         Autopilot
@@ -1029,10 +1031,10 @@ const snapshotDateLabel = snapshotTakenAt
 
       <span
         className={[
-          'inline-flex items-center gap-2 rounded-full px-4 py-1.5',
+          'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
           'text-[10px] font-semibold uppercase tracking-[0.20em]',
           'text-emerald-300 border border-emerald-500/35 bg-emerald-500/10',
-          'whitespace-nowrap',               // 🔥 keeps in one line
+          'whitespace-nowrap',
         ].join(' ')}
       >
         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -1040,8 +1042,8 @@ const snapshotDateLabel = snapshotTakenAt
       </span>
     </div>
 
-    {/* Divider + footer copy */}
-    <div className="mt-4 space-y-1 border-t border-slate-800/70 pt-3">
+    {/* Footer */}
+    <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
       <p className="text-[11px] text-slate-400 leading-relaxed">
         When all indicators are green, rewards execute fully autonomously on-chain.
       </p>
