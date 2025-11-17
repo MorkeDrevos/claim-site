@@ -711,27 +711,28 @@ const missionRows: MissionRow[] = [
 
 
   // Live-style status summary for Mission Control
-  let statusSummary = 'All systems nominal. Autonomous settlement sequence is active.';
+let statusSummary =
+  'All systems nominal. Autonomous settlement sequence is active.';
 
-  const hasBackendIssue = frontEndStatus !== 'ok';
-  const hasContractIssue = contractStatus !== 'ok';
+const hasBackendIssue = frontEndStatus !== 'ok';
+const hasContractIssue = contractStatus !== 'ok';
 
-  if (hasBackendIssue || hasContractIssue) {
-    statusSummary =
-      'Attention flagged. One or more subsystems are reporting a non-normal status.';
-  } else if (currentPhase === 'open') {
-    statusSummary =
-      'All systems nominal. Live claim window running under autonomous settlement.';
-  } else if (currentPhase === 'scheduled') {
-    statusSummary =
-      'All systems nominal. Next claim window is queued and waiting on-chain timing.';
-  } else if (currentPhase === 'distribution') {
-    statusSummary =
-      'All systems nominal. Reward distribution sequence is executing on-chain.';
-  } else if (currentPhase === 'closed') {
-    statusSummary =
-      'All systems nominal. Claim window closed and standing by for the next round.';
-  }
+if (hasBackendIssue || hasContractIssue) {
+  statusSummary =
+    'Attention flagged. One or more subsystems are reporting a non-normal status.';
+} else if (currentPhase === 'open') {
+  statusSummary =
+    'All systems nominal. Live claim window running under autonomous settlement.';
+} else if (currentPhase === 'scheduled') {
+  statusSummary =
+    'All systems nominal. Snapshot can occur at any moment before the next claim window opens.';
+} else if (currentPhase === 'distribution') {
+  statusSummary =
+    'All systems nominal. Reward distribution sequence is executing on-chain.';
+} else if (currentPhase === 'closed') {
+  statusSummary =
+    'All systems nominal. Claim window closed and standing by for the next round.';
+}
 
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
