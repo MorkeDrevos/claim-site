@@ -870,34 +870,35 @@ const snapshotDateLabel = snapshotTakenAt
       </header>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-        {/* HERO: Claim window */}
-        <SoftCard>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            {/* LEFT COLUMN */}
-            <div className="flex-1 space-y-6">
-              {/* Header text */}
-              <div className="space-y-2">
-                <h1
-  className="
-    text-[30px] sm:text-[36px]
-    font-semibold
-    leading-[1.12]
-    tracking-[-0.01em]
-    text-slate-100
+<div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
 
-    pl-[6px]          /* aligns visually with the card content */
-    pt-[4px]          /* slightly lifts, looks tighter */
-    pb-[18px]         /* perfect spacing before the claim box */
-    
-    drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
-  "
->
-  Rewards earned by presence.
-  <br />
-  Show up. Lock in. Get your share.
-</h1>
-              </div>
+  {/* HERO: Claim window */}
+  <SoftCard>
+    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+
+      {/* LEFT COLUMN */}
+      <div className="flex-1 space-y-6">
+
+        {/* Header text */}
+        <div className="space-y-2">
+          <h1
+            className="
+              text-[30px] sm:text-[36px]
+              font-semibold
+              leading-[1.12]
+              tracking-[-0.01em]
+              text-slate-100
+              pl-[6px]
+              pt-[4px]
+              pb-[18px]
+              drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
+            "
+          >
+            Rewards earned by presence.
+            <br />
+            Show up. Lock in. Get your share.
+          </h1>
+        </div>
 
               {/* CLAIM WINDOW CARD */}
 <div
