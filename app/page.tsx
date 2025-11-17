@@ -1116,10 +1116,11 @@ const snapshotDateLabel = snapshotTakenAt
   className={[
     'flex-none',
     'inline-block',
-    'h-2.5 w-2.5 rounded-full',
+    'h-[9px] w-[9px]', // perfect circle size
+    'rounded-full',
     statusDotColor,
-    'shadow-[0_0_4px_rgba(16,185,129,0.35)]',
-    'animate-[pulse_2.4s_ease-in-out_infinite]'
+    'shadow-[0_0_6px_rgba(16,185,129,0.30)]',
+    'animate-[pulse_2.8s_ease-in-out_infinite]'
   ].join(' ')}
 ></span>
 
