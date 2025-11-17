@@ -1126,11 +1126,6 @@ const snapshotDateLabel = snapshotTakenAt
     {statusSummary}
   </p>
 
-  <p className="text-[10px] text-slate-500 leading-relaxed">
-    Mission Control oversees network status, portal uptime, contract integrity,
-    live claim-window timing, snapshot execution, and automated reward
-    distribution.
-  </p>
 </div>
 
   </SoftCard>
