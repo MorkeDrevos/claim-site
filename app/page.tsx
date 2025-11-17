@@ -1011,129 +1011,126 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-       {/* RIGHT COLUMN – Mission Control (NASA style) */}
+         {/* RIGHT COLUMN – Mission Control (NASA style) */}
 <div className="w-full max-w-xs">
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
-    {/* Header row */}
-    <div className="flex items-baseline justify-between pr-1">
-      {/* LEFT: Round number */}
-      <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
 
-      {/* RIGHT: Mission Control */}
-      <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-        Mission Control
-      </span>
-    </div>
+    {/* Header row */}
+<div className="flex items-baseline justify-between pr-1">
+  {/* LEFT: Round number */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
+    Round {roundNumber ?? 1}
+  </p>
+
+  {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
+  <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+    Mission Control
+  </span>
+</div>
 
     {/* Snapshot info */}
     <div className="space-y-1">
-      <p className="text-[20px] font-semibold text-slate-100">
-        Snapshot #{snapshotBlock}
-      </p>
+      <p className="text-sm font-semibold text-slate-100">
+  Snapshot #{snapshotBlock}
+</p>
 
-      <p className="text-[11px] text-slate-400">
-        Snapshot #1
-        <span className="mx-1 text-slate-600">•</span>
-        <span className="text-slate-300">
-          {currentPhase === 'open'
-            ? 'window open'
-            : currentPhase === 'scheduled'
-            ? 'window scheduled'
-            : currentPhase === 'distribution'
-            ? 'distributing'
-            : 'window closed'}
-        </span>
-      </p>
+<p className="text-[11px] text-slate-400">
+  {currentPhase === 'open'
+    ? 'window open'
+    : currentPhase === 'scheduled'
+    ? 'window scheduled'
+    : currentPhase === 'distributing'
+    ? 'distributing'
+    : 'window closed'}
+</p>
     </div>
 
     {/* Status rows */}
-    <div className="mt-3 space-y-3">
-      {missionRows.map((row) => {
-        const isPill = row.mode === 'pill';
+<div className="mt-3 space-y-3">
+  {missionRows.map((row) => {
+    const isPill = row.mode === 'pill';
 
-        return (
-          <div
-            key={row.label}
-            className="flex items-center justify-between gap-3"
+    return (
+      <div
+        key={row.label}
+        className="flex items-center justify-between gap-3"
+      >
+        <span className="text-[11px] text-slate-300 whitespace-nowrap">
+          {row.label}
+        </span>
+
+        {isPill ? (
+          <span
+            className={[
+              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
+              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
+              row.tone === 'success'
+                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
+                : row.tone === 'warning'
+                ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
+                : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
+            ].join(' ')}
           >
-            <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
-              {row.label}
-            </span>
-
-            {isPill ? (
-              <span
-                className={[
-                  'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-                  'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
-                  row.tone === 'success'
-                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                    : row.tone === 'warning'
-                    ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
-                    : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
-                ].join(' ')}
-              >
-                <span
-                  className={[
-                    'h-1.5 w-1.5 rounded-full',
-                    row.tone === 'success'
-                      ? 'bg-emerald-400'
-                      : row.tone === 'warning'
-                      ? 'bg-amber-400'
-                      : 'bg-slate-500/70',
-                  ].join(' ')}
-                />
-                {row.value}
-              </span>
-            ) : (
-              <span className="text-[13px] text-slate-300">
-                {row.value}
-              </span>
-            )}
-          </div>
-        );
-      })}
-    </div>
+            <span
+              className={[
+                'h-1.5 w-1.5 rounded-full',
+                row.tone === 'success'
+                  ? 'bg-emerald-400'
+                  : row.tone === 'warning'
+                  ? 'bg-amber-400'
+                  : 'bg-slate-500/70',
+              ].join(' ')}
+            />
+            {row.value}
+          </span>
+        ) : (
+          <span className="text-[11px] text-slate-400">
+            {row.value}
+          </span>
+        )}
+      </div>
+    );
+  })}
+</div>
 
     {/* AUTOPILOT STATUS — NASA style strip */}
     <div className="mt-3 flex items-center gap-3">
-      <span className="text-[12px] font-semibold uppercase tracking-[0.28em] text-slate-400">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         Smart-contract autopilot
       </span>
 
       {/* Thin divider bar */}
       <div className="h-4 w-px bg-slate-700/60" />
 
-      <span className="text-[12px] font-semibold uppercase tracking-[0.28em] text-emerald-300">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
         Enabled
       </span>
     </div>
 
-    {/* Divider + NASA footer copy */}
-    <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-      {/* Status line with pulse dot */}
-      <p className="flex items-center gap-2 text-[14px] text-slate-200 leading-relaxed font-normal">
-        <span
-          className={[
-            'flex-none inline-block',
-            'h-[9px] w-[9px] rounded-full',
-            'shadow-[0_0_5px_rgba(16,185,129,0.45)]',
-            'animate-[pulse_2.8s_ease-in-out_infinite]',
-            statusDotColor,
-          ].join(' ')}
-        />
-        {statusSummary}
-      </p>
+{/* Divider + NASA footer copy */}
+<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
-      <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control oversees network status, portal uptime, contract
-        integrity, live claim-window timing, snapshot execution, and automated
-        reward distribution.
-      </p>
-    </div>
+  {/* Status line with pulse dot */}
+  <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-relaxed font-normal">
+  <span
+  className={[
+    'flex-none',
+    'inline-block',
+    'h-[9px] w-[9px]', // perfect circle size
+    'rounded-full',
+    statusDotColor,
+    'shadow-[0_0_6px_rgba(16,185,129,0.30)]',
+    'animate-[pulse_2.8s_ease-in-out_infinite]'
+  ].join(' ')}
+></span>
+
+  {statusSummary}
+</p>
+
+</div>
+
   </SoftCard>
-</div>  
+</div>
 
           </div>
         </SoftCard>
