@@ -1,11 +1,11 @@
 {
   "currentRound": 1,
 
-  "windowPhase": "distribution",
+  "windowPhase": "scheduled",
 
   "snapshotTakenAt": "2025-11-16T15:40:00Z",
-  "claimWindowOpensAt": "2025-11-17T18:31:00Z",
-  "claimWindowClosesAt": "2025-11-17T18:46:00Z",
+  "claimWindowOpensAt": "2025-11-17T22:31:00Z",
+  "claimWindowClosesAt": "2025-11-17T23:46:00Z",
   "distributionCompletedAt": null,
 
   "rewardPoolAmountClaim": 9325670,
