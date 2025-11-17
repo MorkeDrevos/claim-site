@@ -779,96 +779,87 @@ const snapshotDateLabel = snapshotTakenAt
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  
   {/* One row: countdown left, USD right */}
-<div className="flex items-start justify-between gap-6">
-  {/* LEFT: label + countdown */}
-  <div className="flex flex-col gap-1">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      {isLive
-        ? 'WINDOW CLOSES IN'
-        : isClosed
-        ? 'NEXT ROUND SOON'
-        : 'NEXT WINDOW IN'}
-    </p>
-
-    <div className={isLive ? 'relative' : ''}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
-      <p
-        className={[
-          'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {isClosed ? '' : countdownLabel || '--:--:--'}
-      </p>
-    </div>
-  </div>
-
-  {/* RIGHT: label + USD + $CLAIM */}
-  <div className="flex flex-col items-end gap-1 text-right">
-    {/* Label + info icon + tooltip */}
-    <div className="relative -mt-px flex items-center gap-2">
+  <div className="flex items-start justify-between gap-6">
+    {/* LEFT: label + countdown */}
+    <div className="flex flex-col gap-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        Current round pool
-      </p>
+  {isLive
+    ? 'WINDOW CLOSES IN'
+    : isClosed
+    ? 'NEXT ROUND SOON'
+    : 'NEXT WINDOW IN'}
+</p>
 
-      {/* Hover icon + tooltip */}
-      <div className="group relative">
-        <button
-          type="button"
-          className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-                     bg-slate-800/80 text-slate-300 text-[10px] font-bold
-                     border border-slate-700 
-                     hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+      <div className={isLive ? 'relative' : ''}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
+        <p
+          className={[
+            'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
+            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+          ].join(' ')}
         >
-          ?
-        </button>
-
-        {/* Tooltip */}
-        <div
-          className="pointer-events-none absolute left-full ml-3 top-2 
-                     w-72 opacity-0 group-hover:opacity-100 
-                     transition-opacity duration-200 z-50"
-        >
-          <div className="rounded-2xl border border-slate-700/70 
-                          bg-slate-900/95 p-4 
-                          shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
-            <p className="text-[13px] text-slate-200 leading-relaxed">
-              Rewards are{' '}
-              <span className="text-emerald-300 font-medium">
-                shared equally
-              </span>{' '}
-              among all wallets that lock in during the window. USD value shown
-              reflects an{' '}
-              <span className="text-emerald-300 font-medium">
-                approximate market conversion
-              </span>
-              .
-            </p>
-          </div>
-        </div>
+          {isClosed ? '' : countdownLabel || '--:--:--'}
+        </p>
       </div>
     </div>
 
-    {/* Big USD */}
-<p
-  className="
-    text-[28px] sm:text-[34px] font-bold text-slate-50
-    -mt-1        /* ← lifts the USD number up */
-  "
->
-  {rewardUsdText} USD
-</p>
+    {/* RIGHT: label + USD + $CLAIM */}
+<div className="flex flex-col items-end gap-1 text-right">
 
-<p className="text-[13px] font-medium text-emerald-300">
-  ≈ {rewardAmountText}
-  <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-</p>
+  {/* Label + info icon + tooltip */}
+  <div className="relative flex items-baseline gap-2">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      Current round pool
+    </p>
+
+    {/* Hover icon wrapper */}
+    <div className="group relative mt-[-2px]"> 
+      <button
+        type="button"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full 
+                   bg-slate-800/80 text-slate-300 text-[10px] font-bold
+                   border border-slate-700 
+                   hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+      >
+        ?
+      </button>
+
+      {/* Tooltip */}
+      <div
+        className="pointer-events-none absolute left-full ml-3 top-2 
+                   w-72 opacity-0 group-hover:opacity-100 
+                   transition-opacity duration-200 z-50"
+      >
+        <div className="rounded-2xl border border-slate-700/70 
+                        bg-slate-900/95 p-4 
+                        shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+          
+          <p className="text-[14px] text-slate-200 leading-relaxed">
+      Rewards are <span className="text-emerald-300 font-medium">shared equally </span> 
+      among all wallets that lock in during the window. 
+      USD value shown reflects an 
+      <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
+    </p>
+
+        </div>
+      </div>
+    </div>
   </div>
+
+  {/* Big USD */}
+  <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
+    {rewardUsdText} USD
+  </p>
+
+  <p className="text-[13px] font-medium text-emerald-300">
+    ≈ {rewardAmountText}
+    <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
+  </p>
 </div>
+  </div>
 
   {/* CTA bar – keep as you have it */}
   <button
