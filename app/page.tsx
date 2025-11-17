@@ -1424,9 +1424,8 @@ const snapshotDateLabel = snapshotTakenAt
       </ul>
 
       <p className="text-[11px] text-slate-500">
-        The final rule set for each round will be published before the snapshot
-        and mirrored here inside the portal.
-      </p>
+  Round rules focus on fairness, clarity, and rewarding presence.
+</p>
     </div>
   )}
 
