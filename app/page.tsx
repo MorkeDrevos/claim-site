@@ -838,9 +838,8 @@ const snapshotDateLabel = snapshotTakenAt
                         shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
           
           <p className="text-[14px] text-slate-200 leading-relaxed">
-      Rewards are <span className="text-emerald-300 font-medium">shared equally</span> 
+      Rewards are <span className="text-emerald-300 font-medium">shared equally </span> 
       among all wallets that lock in during the window. 
-      <br /><br />
       USD value shown reflects an 
       <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
     </p>
