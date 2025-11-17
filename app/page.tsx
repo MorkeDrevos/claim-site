@@ -485,6 +485,46 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
+  // Tone for claim window line
+const claimTone: Tone =
+  currentPhase === 'open'
+    ? 'success'
+    : currentPhase === 'scheduled'
+    ? 'warning'
+    : 'muted';
+
+// Rows for Mission Control
+const missionRows = [
+  {
+    label: 'Network status',
+    pill: networkLabel || 'Unknown',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
+  },
+  {
+    label: 'Backend services',
+    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'Attention',
+    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Contract integrity',
+    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'Check logs',
+    tone: contractStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Claim window state',
+    pill:
+      currentPhase === 'open'
+        ? 'LIVE'
+        : currentPhase === 'scheduled'
+        ? 'SCHEDULED'
+        : 'CLOSED',
+    tone: claimTone,
+  },
+];
+
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
     const claimTone: Tone =
@@ -621,6 +661,8 @@ if (countdownTarget) {
   /* ───────────────────────────
      Render
   ─────────────────────────── */
+
+
 
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
@@ -917,162 +959,98 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – mission control */}
-<div className="w-full max-w-xs">
+          {/* RIGHT COLUMN – Mission Control */}
+<div className="w-full max-w-xs space-y-4">
   <SoftCard className="space-y-4">
     {/* Header */}
-    <div className="flex items-baseline justify-between">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    <div className="flex items-baseline justify-between gap-3">
+      <div className="space-y-1">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Round {roundNumber ?? 1}
+        </p>
+
+        <p className="text-sm font-semibold text-slate-50">
+          Snapshot #{snapshotBlock}{' '}
+          <span className="text-xs font-normal text-slate-500">
+            {snapshotLabel}
+          </span>
+        </p>
+
+        <p className="text-[11px] text-emerald-300">
+          {claimWindowStatus}
+        </p>
+      </div>
+
+      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-400">
         Mission control
       </span>
     </div>
 
-    {/* Snapshot summary */}
-    <div className="space-y-1">
-      <p className="text-sm font-medium text-slate-100">
-        {snapshotLabel}{' '}
-        <span className="font-mono text-[11px] text-slate-500">
-          #{snapshotBlock}
-        </span>
-      </p>
-      <p className="text-[11px] text-slate-500">
-        {claimWindowStatus}
-      </p>
-    </div>
-
     {/* Status rows */}
-    <dl className="mt-2 space-y-2 text-[12px]">
-      {/* Network */}
-      <div className="flex items-center justify-between">
-        <dt className="text-slate-400">Network</dt>
-        <dd className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.75)]" />
-          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
-            {networkLabel}
-          </span>
-        </dd>
-      </div>
+    <div className="mt-4 space-y-3">
+      {missionRows.map((row) => (
+        <div
+          key={row.label}
+          className="flex items-center justify-between gap-3 text-[13px]"
+        >
+          <span className="w-[120px] text-slate-300">{row.label}</span>
 
-      {/* Backend */}
-      <div className="flex items-center justify-between">
-        <dt className="text-slate-400">Backend</dt>
-        <dd className="flex items-center gap-2">
-          <span
-            className={[
-              'h-1.5 w-1.5 rounded-full shadow-[0_0_8px_rgba(148,163,184,0.8)]',
-              backendTone === 'success'
-                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
-                : 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]',
-            ].join(' ')}
-          />
-          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
-            {frontEndStatus === 'ok' ? 'Online' : 'Check logs'}
-          </span>
-        </dd>
-      </div>
+          <div className="flex items-center gap-3">
+            {/* status dot */}
+            <span
+              className={[
+                'h-2 w-2 rounded-full',
+                row.tone === 'success'
+                  ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]'
+                  : row.tone === 'warning'
+                  ? 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.75)]'
+                  : 'bg-slate-500/70',
+              ].join(' ')}
+            />
 
-      {/* Smart contracts */}
-      <div className="flex items-center justify-between">
-        <dt className="text-slate-400">Smart contracts</dt>
-        <dd className="flex items-center gap-2">
-          <span
-            className={[
-              'h-1.5 w-1.5 rounded-full',
-              contractTone === 'success'
-                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
-                : 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]',
-            ].join(' ')}
-          />
-          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
-            {contractStatus === 'ok' ? 'Deployed' : 'Attention needed'}
-          </span>
-        </dd>
-      </div>
-
-      {/* Claim window */}
-      <div className="flex items-center justify-between">
-        <dt className="text-slate-400">Claim window</dt>
-        <dd className="flex items-center gap-2">
-          <span
-            className={[
-              'h-1.5 w-1.5 rounded-full',
-              claimTone === 'success'
-                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
-                : claimTone === 'warning'
-                ? 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]'
-                : 'bg-slate-500/70',
-            ].join(' ')}
-          />
-          <span
-            className={[
-              'rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]',
-              claimTone === 'success'
-                ? 'bg-emerald-500/10 text-emerald-300'
-                : claimTone === 'warning'
-                ? 'bg-amber-500/10 text-amber-300'
-                : 'bg-slate-900/70 text-slate-300',
-            ].join(' ')}
-          >
-            {currentPhase === 'open'
-              ? 'Live'
-              : currentPhase === 'scheduled'
-              ? 'Scheduled'
-              : currentPhase === 'snapshot'
-              ? 'Snapshot'
-              : currentPhase === 'distribution'
-              ? 'Distributing'
-              : 'Closed'}
-          </span>
-        </dd>
-      </div>
-
-      {/* Autopilot */}
-     <div className="mt-4 space-y-3">
-
-  {[
-    { label: 'Network',         pill: 'SOLANA MAINNET' },
-    { label: 'Backend',         pill: 'ONLINE' },
-    { label: 'Smart contracts', pill: 'DEPLOYED' },
-    { label: 'Claim window',    pill: currentPhase === 'open' ? 'LIVE' : 'SCHEDULED' },
-  ].map((item) => (
-    <div key={item.label} className="flex items-center gap-4">
-      <span className="w-[110px] text-slate-300">{item.label}</span>
-
-      <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
-
-      <span className="px-3 py-1 rounded-full bg-slate-900/60 text-xs tracking-wide text-slate-300">
-        {item.pill}
-      </span>
+            {/* pill */}
+            <span
+              className={[
+                'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em]',
+                row.tone === 'success'
+                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
+                  : row.tone === 'warning'
+                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                  : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+              ].join(' ')}
+            >
+              {row.pill}
+            </span>
+          </div>
+        </div>
+      ))}
     </div>
-  ))}
 
-  {/* Autopilot */}
-  <div className="flex items-center gap-4">
-    <span className="w-[110px] text-slate-300">Autopilot</span>
+    {/* Autopilot */}
+    <div className="mt-4 flex items-center justify-between gap-4">
+      <span className="w-[120px] text-[13px] text-slate-300">
+        Autopilot
+      </span>
 
-    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
+      <div className="flex items-center gap-3">
+        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+        <span className="rounded-full bg-emerald-500/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-300 border border-emerald-500/40">
+          Runs on smart contracts
+        </span>
+      </div>
+    </div>
 
-    <span className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-300 tracking-[0.15em] font-medium">
-      RUNS ON SMART CONTRACTS
-    </span>
-  </div>
-
-</div>
-
-<p className="mt-4 text-xs text-slate-400">
-  All systems green — rewards now run autonomously on-chain.
-</p> 
-    </dl>
-
-    {/* Footer line */}
-    <p className="pt-2 text-[11px] text-slate-500">
-      When all indicators are green, rewards run autonomously on-chain.
+    {/* Footer copy */}
+    <p className="mt-4 text-[11px] text-slate-400">
+      When all indicators are green, rewards run fully autonomously on-chain.
+    </p>
+    <p className="text-[10px] text-slate-500">
+      Mission Control tracks network health, backend services, contract
+      integrity and the live claim window state for this round.
     </p>
   </SoftCard>
 </div>
+          
           </div>
         </SoftCard>
 
