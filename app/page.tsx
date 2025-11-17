@@ -1023,14 +1023,14 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
-  <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+  <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
     Mission Control
   </span>
 </div>
 
     {/* Snapshot info */}
     <div className="space-y-1">
-      <p className="text-sm font-semibold text-slate-100">
+      <p className="text-[20px] font-semibold text-slate-100">
   Snapshot #{snapshotBlock}
 </p>
 
@@ -1055,7 +1055,7 @@ const snapshotDateLabel = snapshotTakenAt
         key={row.label}
         className="flex items-center justify-between gap-3"
       >
-        <span className="text-[11px] text-slate-300 whitespace-nowrap">
+        <span className="text-[12px] text-slate-300 whitespace-nowrap">
           {row.label}
         </span>
 
