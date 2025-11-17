@@ -782,7 +782,7 @@ const snapshotDateLabel = snapshotTakenAt
   {/* One row: countdown left, USD right */}
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 pt-1.5">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
   {isLive
     ? 'WINDOW CLOSES IN'
