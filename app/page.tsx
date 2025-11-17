@@ -798,7 +798,7 @@ const snapshotDateLabel = snapshotTakenAt
     )}
     <p
   className={[
-    '-mt-1',                        // ⬅️ THIS LINE moves ONLY the number upward
+    '-mt-1.5',                        // ⬅️ THIS LINE moves ONLY the number upward
     'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
     isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
   ].join(' ')}
