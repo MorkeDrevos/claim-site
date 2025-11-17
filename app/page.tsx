@@ -1047,10 +1047,10 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Divider + footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
   <p className="text-[11px] text-slate-400 leading-relaxed">
-    All systems nominal — the round will settle autonomously on-chain.
+    All systems nominal. The round will settle autonomously on-chain.
   </p>
 
-  <p className="text-[10px] text-slate-500 leading-relaxed">
+  <p className="text-[11px] text-slate-500 leading-relaxed">
     Mission Control oversees network status, portal uptime, contract integrity,
     live claim-window timing, snapshot execution, and automated reward
     distribution.
