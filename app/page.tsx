@@ -955,7 +955,7 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – Mission Control (refined) */}
+          {/* RIGHT COLUMN – Mission Control (refined, dots inside pills) */}
 <div className="w-full max-w-xs">
   <SoftCard className="space-y-4">
     {/* Header row: Round + Mission Control label on same line */}
@@ -993,7 +993,7 @@ const snapshotDateLabel = snapshotTakenAt
           <div className="flex items-center gap-2.5">
             <span
               className={[
-                'inline-flex items-center gap-3 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
+                'inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
                 row.tone === 'success'
                   ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
                   : row.tone === 'warning'
@@ -1023,8 +1023,15 @@ const snapshotDateLabel = snapshotTakenAt
       <span className="text-[11px] text-slate-300">Autopilot</span>
 
       <div className="flex items-center gap-2.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
-        <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300 border border-emerald-500/35">
+        <span
+          className="
+            inline-flex items-center gap-2
+            rounded-full bg-emerald-500/10 px-4 py-1.5
+            text-[10px] font-semibold uppercase tracking-[0.18em]
+            text-emerald-300 border border-emerald-500/35
+          "
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
           Runs on smart contracts
         </span>
       </div>
