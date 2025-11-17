@@ -810,46 +810,41 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="flex flex-col items-end gap-1 text-right">
 
   {/* Label + info icon + tooltip */}
-  <div className="relative flex items-center gap-2">
-
+  <div className="relative flex items-center gap-1">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       Current round pool
     </p>
 
-    {/* Icon wrapper */}
-    <div className="group relative flex items-center">
+    {/* Icon + tooltip wrapper */}
+    <div className="relative group flex items-center">
+      {/* ? Icon */}
       <button
         type="button"
-        className="inline-flex h-4 w-4 items-center justify-center rounded-full 
-                   bg-slate-800/90 text-slate-200 text-[10px] font-bold 
-                   border border-slate-700 
-                   hover:bg-slate-700 hover:text-white hover:border-slate-500 
-                   transition"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full
+                   bg-slate-800/90 text-slate-300 text-[10px] font-bold 
+                   border border-slate-600/70 hover:bg-slate-700 hover:text-white 
+                   hover:border-slate-400 transition"
       >
         ?
       </button>
 
       {/* Tooltip */}
       <div
-        className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 
-                   w-80 opacity-0 group-hover:opacity-100 
+        className="pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2
+                   w-64 opacity-0 group-hover:opacity-100 
                    transition-opacity duration-200 z-50"
       >
-        <div className="rounded-2xl border border-slate-700/70 
-                        bg-slate-900/95 p-5 shadow-[0_8px_40px_rgba(0,0,0,0.55)] 
-                        text-left">
-          
-          <p className="text-[14px] leading-relaxed text-slate-300">
-            Rewards are auto-paid out in 
-            <span className="text-emerald-300 font-medium"> $CLAIM</span> 
-            {' '}after the claim window closes. USD value shown is an approximate market conversion.
+        <div className="rounded-xl border border-slate-700/70 
+                        bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+          <p className="text-[12px] text-slate-200 leading-relaxed text-left">
+            Rewards are <span className="text-emerald-300 font-medium">automatically distributed</span> 
+            in <span className="text-emerald-300 font-medium">$CLAIM</span> after the claim window closes.
+            USD value shown reflects an <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
           </p>
         </div>
       </div>
     </div>
   </div>
-
-  {/* Big USD continues below… */}
 
   {/* Big USD */}
   <p className="text-[28px] sm:text-[34px] font-bold text-slate-50">
