@@ -1425,8 +1425,7 @@ const snapshotDateLabel = snapshotTakenAt
 
       <p className="text-[11px] text-slate-500">
   <p className="text-[11px] text-slate-500">
-  All eligibility checks are based on the on-chain snapshot taken for this
-  round. No additional steps or forms are required.
+  Eligibility is derived solely from the wallet’s token balance as it existed at the snapshot slot for each round.
 </p>
 </p>
     </div>
