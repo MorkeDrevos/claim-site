@@ -1433,7 +1433,7 @@ const snapshotDateLabel = snapshotTakenAt
   {activeTab === 'rewards' && (
     <div className="space-y-4">
       <p className="text-[13px]">
-        Rewards are earned by presence — if you show up during the live claim
+        Rewards are earned by presence. If you show up during the live claim
         window and lock your share, you receive an equal split of that round’s pool.
       </p>
 
