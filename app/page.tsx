@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useToast } from './Toast'; 
+import { useToast } from './Toast';
 
 /* ───────────────────────────
    Types
@@ -680,6 +680,7 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
+// Determine active step and message
 const activeIndex = steps.findIndex((s) => s.id === currentPhase);
 const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
@@ -698,11 +699,12 @@ if (currentPhase === 'scheduled') {
   progressMessage = 'Rewards have been distributed for this round.';
 }
 
-// Simple, safe fallback snapshot label
+// Safe snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
+// ✅ EVERYTHING ABOVE is JS only, now we safely open JSX:
 return (
   <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
