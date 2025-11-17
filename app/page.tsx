@@ -743,7 +743,7 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-  // Simple, safe fallback snapshot label
+   // Simple, safe fallback snapshot label
   const snapshotDateLabel = snapshotTakenAt
     ? snapshotTakenAt
     : 'Not yet announced';
