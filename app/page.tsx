@@ -837,16 +837,12 @@ const snapshotDateLabel = snapshotTakenAt
                         bg-slate-900/95 p-4 
                         shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
           
-          <p className="text-[13px] text-slate-300 leading-relaxed">
-            Rewards are <span className="text-emerald-300 font-medium">automatically distributed</span>
-            in <span className="text-emerald-300 font-medium">$CLAIM</span> 
-            after the claim window closes. USD value shown reflects an
-          </p>
-
-          <p className="mt-2 text-[13px] text-slate-400 leading-relaxed">
-            
-            <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
-          </p>
+          <p className="text-[13px] leading-relaxed text-slate-300">
+  Rewards are <span className="text-emerald-300 font-medium">automatically distributed</span> 
+  in <span className="text-emerald-300 font-medium">$CLAIM</span> after the claim window closes.
+  USD value shown reflects an 
+  <span className="text-emerald-300 font-medium"> approximate market conversion</span>.
+</p>
 
         </div>
       </div>
