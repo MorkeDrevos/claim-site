@@ -869,15 +869,15 @@ const snapshotDateLabel = snapshotTakenAt
   className="
     text-[30px] sm:text-[36px]
     font-semibold
-    leading-[1.15]
+    leading-[1.12]
     tracking-[-0.01em]
     text-slate-100
 
-    pl-[4px]          /* perfect horizontal alignment */
-    pt-[6px]          /* aligns with hero card top */
-    pb-[26px]         /* ideal spacing before next section */
-
-    drop-shadow-[0_0_18px_rgba(0,255,200,0.05)]
+    pl-[6px]          /* aligns visually with the card content */
+    pt-[4px]          /* slightly lifts, looks tighter */
+    pb-[18px]         /* perfect spacing before the claim box */
+    
+    drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
   "
 >
   Rewards earned by presence.
