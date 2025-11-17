@@ -642,8 +642,9 @@ if (countdownTarget) {
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
+  : 'Not yet announced';
 
-  return (
+return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
