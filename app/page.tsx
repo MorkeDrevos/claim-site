@@ -495,37 +495,47 @@ if (countdownTarget) {
 
   // Rows for Mission Control (final)
   const missionRows = [
-    {
-      label: 'Network',
-      pill: networkLabel || 'Unknown',
-      tone:
-        networkLabel && networkLabel.toLowerCase().includes('mainnet')
-          ? 'success'
-          : 'muted',
-    },
-    {
-      label: 'Portal backend',
-      pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
-      tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-    },
-    {
-      label: 'Reward contracts',
-      pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
-      tone: contractStatus === 'ok' ? 'success' : 'warning',
-    },
-    {
-      label: 'Claim window',
-      pill:
-        currentPhase === 'open'
-          ? 'LIVE'
-          : currentPhase === 'scheduled'
-          ? 'SCHEDULED'
-          : currentPhase === 'distribution'
-          ? 'DISTRIBUTING'
-          : 'CLOSED',
-      tone: claimTone,
-    },
-  ];
+  {
+    label: 'Network',
+    pill: networkLabel || 'Unknown',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
+  },
+  {
+    label: 'Portal backend',
+    pill: frontEndStatus === 'ok' ? 'ONLINE' : 'ATTENTION',
+    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Reward contracts',
+    pill: contractStatus === 'ok' ? 'DEPLOYED' : 'CHECK LOGS',
+    tone: contractStatus === 'ok' ? 'success' : 'warning',
+  },
+  {
+    label: 'Claim window',
+    pill:
+      currentPhase === 'open'
+        ? 'LIVE'
+        : currentPhase === 'scheduled'
+        ? 'SCHEDULED'
+        : currentPhase === 'distribution'
+        ? 'DISTRIBUTING'
+        : 'CLOSED',
+    tone: claimTone,
+  },
+  {
+    label: 'Snapshots',
+    pill: snapshotTakenAt ? 'ACTIVE' : 'PENDING',
+    tone: snapshotTakenAt ? 'success' : 'warning',
+  },
+  {
+    label: 'Autopilot',
+    pill: 'ENABLED',
+    tone: 'success',
+  },
+];
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
@@ -1027,17 +1037,6 @@ const snapshotDateLabel = snapshotTakenAt
           </span>
         </div>
       ))}
-    </div>
-
-    {/* Autopilot – NASA style: neutral, quiet, no pill */}
-    <div className="mt-3 flex items-center justify-between gap-3">
-      <span className="text-[11px] text-slate-300 whitespace-nowrap">
-        Autopilot
-      </span>
-
-      <span className="text-[11px] font-semibold tracking-[0.22em] text-slate-200 whitespace-nowrap">
-        Smart-contract autopilot enabled
-      </span>
     </div>
 
     {/* Divider + NASA footer copy */}
