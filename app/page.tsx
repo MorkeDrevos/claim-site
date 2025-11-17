@@ -978,16 +978,19 @@ const snapshotDateLabel = snapshotTakenAt
   <SoftCard className="relative space-y-4">
 
     {/* Header row */}
-    <div className="flex items-baseline justify-between pr-1">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
+<div className="flex items-baseline justify-between pr-1">
 
-      {/* The ONLY neon-green accent */}
-      <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-        Mission Control
-      </span>
-    </div>
+  {/* Mission Control – now on the LEFT */}
+  <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+    Mission Control
+  </span>
+
+  {/* Round number – now on the RIGHT */}
+  <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
+    Round {roundNumber ?? 1}
+  </p>
+
+</div>
 
     {/* Snapshot info */}
     <div className="space-y-1">
