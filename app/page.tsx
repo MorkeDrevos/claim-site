@@ -867,7 +867,7 @@ const snapshotDateLabel = snapshotTakenAt
               <div className="space-y-2">
                 <h1
   className="
-    pl-3
+    pl-8
     text-[30px] sm:text-[38px]
     font-semibold
     leading-[1.2]
