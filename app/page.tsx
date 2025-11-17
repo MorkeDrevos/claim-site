@@ -1033,19 +1033,21 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row – no pill, reads like a status line */}
-    <div className="mt-3 flex items-center justify-between gap-3">
-      <span className="text-[11px] text-slate-300 whitespace-nowrap">
-        Autopilot
-      </span>
+    {/* Autopilot row – clean system mode */}
+<div className="mt-3 flex items-center justify-between gap-3">
+  <span className="text-[11px] text-slate-300 whitespace-nowrap">
+    Autopilot
+  </span>
 
-      <div className="flex items-center gap-2 whitespace-nowrap">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
-        <span className="text-[11px] font-medium text-emerald-300">
-          Smart-contract autopilot enabled
-        </span>
-      </div>
-    </div>
+  <span
+    className={[
+      'text-[12px] font-semibold text-emerald-300',
+      'uppercase tracking-[0.20em] whitespace-nowrap',
+    ].join(' ')}
+  >
+    Smart-contract autopilot enabled
+  </span>
+</div>
 
     {/* Divider + footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
