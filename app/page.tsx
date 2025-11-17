@@ -779,13 +779,9 @@ const snapshotDateLabel = snapshotTakenAt
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  {/* One row: countdown left, USD right */}
-  <div className="flex items-start justify-between gap-6">
-    {/* LEFT: label + countdown (separated for independent positioning) */}
-<div className="flex flex-col">
-
-  {/* Label moved higher with its own margin */}
-  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mb-1">
+  {/* LEFT: label + countdown */}
+<div className="flex flex-col gap-1">
+  <p className="mt-[-6px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     {isLive
       ? 'WINDOW CLOSES IN'
       : isClosed
@@ -793,7 +789,6 @@ const snapshotDateLabel = snapshotTakenAt
       : 'NEXT WINDOW IN'}
   </p>
 
-  {/* Countdown number — untouched, stays aligned with USD */}
   <div className={isLive ? 'relative' : ''}>
     {isLive && (
       <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
@@ -807,8 +802,8 @@ const snapshotDateLabel = snapshotTakenAt
       {isClosed ? '' : countdownLabel || '--:--:--'}
     </p>
   </div>
-
 </div>
+
     {/* RIGHT: label + USD + $CLAIM */}
 <div className="flex flex-col items-end gap-1 text-right">
 
