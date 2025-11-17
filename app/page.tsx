@@ -680,10 +680,7 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
-  // ───────────────────────────
-// Round progress helpers
-// ───────────────────────────
-
+  // Round progress helpers
 const activeIndex = steps.findIndex((s) => s.id === currentPhase);
 const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
@@ -707,7 +704,6 @@ const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-// ⬇️ NOTHING between this line and the return
 return (
   <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
