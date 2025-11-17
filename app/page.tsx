@@ -760,26 +760,25 @@ const snapshotDateLabel = snapshotTakenAt
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           
-          {/* Left: logo + title */}
           <Link href="/" className="flex items-center gap-3 group">
-           {/* CLAIM logo circle */}
-<div
-  className="flex h-9 w-9 items-center justify-center rounded-full
-             bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
-             shadow-[0_0_12px_rgba(16,185,129,0.25)]
-             transition-all group-hover:ring-emerald-400/70
-             group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
->
-  <Image
-    src="/img/claim-logo-circle.png"
-    alt="CLAIM Logo"
-    width={36}
-    height={36}
-    className="object-contain"
-    priority
-  />
-</div>
-          </Link>
+  {/* CLAIM logo circle */}
+  <div
+    className="flex h-9 w-9 items-center justify-center rounded-full
+               bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
+               shadow-[0_0_12px_rgba(16,185,129,0.25)]
+               transition-all group-hover:ring-emerald-400/70
+               group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
+  >
+    <Image
+      src="/img/claim-logo-circle.png"
+      alt="CLAIM Logo"
+      width={36}
+      height={36}
+      className="object-contain"
+      priority
+    />
+  </div>
+</Link>
 
           {/* Right: nav items */}
           <div className="flex items-center gap-3">
