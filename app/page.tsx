@@ -743,10 +743,10 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-   // Simple, safe fallback snapshot label
-  const snapshotDateLabel = snapshotTakenAt
-    ? snapshotTakenAt
-    : 'Not yet announced';
+// Simple, safe fallback snapshot label
+const snapshotDateLabel = snapshotTakenAt
+  ? snapshotTakenAt
+  : 'Not yet announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -755,8 +755,6 @@ if (currentPhase === 'closed') {
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
         <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
       </div>
-
-      {/* ...your existing header + content JSX here... */}
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
@@ -875,53 +873,32 @@ if (currentPhase === 'closed') {
 <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
 
   {/* HERO: Claim window */}
-  <div
-    className="
-      relative overflow-hidden rounded-3xl
-      before:absolute before:inset-0
-      before:bg-[url('/img/claim-hero-green.png')]
-      before:bg-cover before:bg-center
-      before:opacity-[0.16] before:blur-[1px]
-    "
-  >
-    <SoftCard className="relative z-10 bg-slate-950/85">
-      <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+  <SoftCard>
+    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
 
-        {/* LEFT COLUMN */}
-        <div className="flex-1 space-y-6">
+      {/* LEFT COLUMN */}
+      <div className="flex-1 space-y-6">
 
-          {/* Header text */}
-          <div className="space-y-2">
-            <h1
-              className="
-                text-[30px] sm:text-[36px]
-                font-semibold
-                leading-[1.12]
-                tracking-[-0.01em]
-                text-slate-100
-                pl-[6px]
-                pt-[4px]
-                pb-[18px]
-                drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
-              "
-            >
-              Rewards earned by presence.
-              <br />
-              Show up. Lock in. Get your share.
-            </h1>
-          </div>
-
-          {/* ...rest of LEFT COLUMN content (claim window card, etc.) ... */}
-
+        {/* Header text */}
+        <div className="space-y-2">
+          <h1
+            className="
+              text-[30px] sm:text-[36px]
+              font-semibold
+              leading-[1.12]
+              tracking-[-0.01em]
+              text-slate-100
+              pl-[6px]
+              pt-[4px]
+              pb-[18px]
+              drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
+            "
+          >
+            Rewards earned by presence.
+            <br />
+            Show up. Lock in. Get your share.
+          </h1>
         </div>
-
-        {/* ...RIGHT COLUMN (Mission Control) stays as you had it... */}
-
-      </div>
-    </SoftCard>
-  </div>
-
-</div>
 
               {/* CLAIM WINDOW CARD */}
 <div
@@ -1547,20 +1524,17 @@ if (currentPhase === 'closed') {
     href={JUPITER_BUY_URL}
     target="_blank"
     rel="noreferrer"
-    className="
-      inline-flex items-center rounded-full
-      bg-emerald-500/90 px-4 py-2.5
-      text-[11px] font-semibold uppercase tracking-[0.22em]
-      text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
-      hover:bg-emerald-400 hover:text-slate-950
-      transition-colors
-    "
+    className="inline-flex items-center rounded-full
+               bg-emerald-500/90 px-4 py-2.5
+               text-[11px] font-semibold uppercase tracking-[0.22em]
+               text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
+               hover:bg-emerald-400 hover:text-slate-950
+               transition-colors"
   >
     Buy $CLAIM on Jupiter
   </a>
 </div>
-
-<ToastContainer />
+      <ToastContainer />
     </main>
   );
 }
