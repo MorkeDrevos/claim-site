@@ -758,9 +758,10 @@ const snapshotDateLabel = snapshotTakenAt
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          
           {/* Left: logo + title */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* CLAIM logo circle */}
+           {/* CLAIM logo circle */}
 <div
   className="flex h-9 w-9 items-center justify-center rounded-full
              bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
@@ -777,15 +778,6 @@ const snapshotDateLabel = snapshotTakenAt
     priority
   />
 </div>
-
-            <div className="flex flex-col">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-                CLAIM PORTAL
-              </span>
-              <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-                $CLAIM — Token of Timing
-              </span>
-            </div>
           </Link>
 
           {/* Right: nav items */}
