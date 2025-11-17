@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useToast } from './Toast';
+import { useToast } from './Toast'; 
 
 /* ───────────────────────────
    Types
