@@ -782,29 +782,30 @@ const snapshotDateLabel = snapshotTakenAt
   {/* One row: countdown left, USD right */}
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
-    <div className="flex flex-col gap-1">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  {isLive
-    ? 'WINDOW CLOSES IN'
-    : isClosed
-    ? 'NEXT ROUND SOON'
-    : 'NEXT WINDOW IN'}
-</p>
+<div className="flex flex-col">
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    {isLive
+      ? 'WINDOW CLOSES IN'
+      : isClosed
+      ? 'NEXT ROUND SOON'
+      : 'NEXT WINDOW IN'}
+  </p>
 
-      <div className={isLive ? 'relative' : ''}>
-        {isLive && (
-          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-        )}
-        <p
-          className={[
-            'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
-            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-          ].join(' ')}
-        >
-          {isClosed ? '' : countdownLabel || '--:--:--'}
-        </p>
-      </div>
-    </div>
+  {/* extra padding above the countdown */}
+  <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
+    {isLive && (
+      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+    )}
+    <p
+      className={[
+        'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
+        isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+      ].join(' ')}
+    >
+      {isClosed ? '' : countdownLabel || '--:--:--'}
+    </p>
+  </div>
+</div>
 
     {/* RIGHT: label + USD + $CLAIM */}
 <div className="flex flex-col items-end gap-1 text-right">
