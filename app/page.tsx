@@ -1035,31 +1035,27 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Autopilot row – clean final version */}
 <div className="mt-3 flex items-center justify-between gap-3">
-  <span className="text-[10px] text-slate-300 whitespace-nowrap">
+  <span className="text-[11px] text-slate-300 whitespace-nowrap">
     Autopilot
   </span>
 
-  <span
-    className={[
-      'text-[11px] font-semibold text-emerald-300',
-      'uppercase tracking-[0.12em] whitespace-nowrap',
-    ].join(' ')}
-  >
-    Smart-contract autopilot enabled
+  <span className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-400 whitespace-nowrap">
+    Smart-contract autopilot
   </span>
 </div>
 
     {/* Divider + footer copy */}
-    <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-      <p className="text-[11px] text-slate-400 leading-relaxed">
-        When all indicators are green, this round settles fully autonomously
-        on-chain.
-      </p>
-      <p className="text-[10px] text-slate-500 leading-relaxed">
-        Mission Control monitors network health, portal services, reward
-        contracts and the live claim window timeline for this round.
-      </p>
-    </div>
+<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
+  <p className="text-[11px] text-slate-400 leading-relaxed">
+    All systems nominal — the round will settle autonomously on-chain.
+  </p>
+
+  <p className="text-[10px] text-slate-500 leading-relaxed">
+    Mission Control oversees network status, portal uptime, contract integrity,
+    live claim-window timing, snapshot execution, and automated reward
+    distribution.
+  </p>
+</div>
   </SoftCard>
 </div>
 
