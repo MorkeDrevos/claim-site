@@ -955,30 +955,31 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – Mission Control (refined, dots inside pills) */}
+          {/* RIGHT COLUMN – Mission Control (refined + aligned + no-wrap) */}
 <div className="w-full max-w-xs">
-  <SoftCard className="space-y-4">
-    {/* Header row: Round + Mission Control label on same line */}
-    <div className="flex items-start justify-between gap-3">
-      <div className="space-y-1">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-          Round {roundNumber ?? 1}
-        </p>
+  <SoftCard className="relative space-y-4">
 
-        <p className="text-sm font-semibold text-slate-50">
-          Snapshot #{snapshotBlock}
-        </p>
+    {/* Header (aligned cleanly) */}
+    <div className="flex items-center justify-between pr-2">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+        Round {roundNumber ?? 1}
+      </p>
 
-        <p className="text-[11px] text-slate-400">
-          Snapshot #1
-          <span className="mx-1 text-slate-600">•</span>
-          <span className="text-emerald-300">{claimWindowStatus}</span>
-        </p>
-      </div>
-
-      <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-400">
         Mission control
       </span>
+    </div>
+
+    {/* Snapshot info */}
+    <div className="space-y-1">
+      <p className="text-sm font-semibold text-slate-50">
+        Snapshot #{snapshotBlock}
+      </p>
+      <p className="text-[11px] text-slate-400">
+        Snapshot #1
+        <span className="mx-1 text-slate-600">•</span>
+        <span className="text-emerald-300">{claimWindowStatus}</span>
+      </p>
     </div>
 
     {/* Status rows */}
@@ -988,65 +989,69 @@ const snapshotDateLabel = snapshotTakenAt
           key={row.label}
           className="flex items-center justify-between gap-3"
         >
-          <span className="text-[11px] text-slate-300">{row.label}</span>
+          <span className="text-[11px] text-slate-300 whitespace-nowrap">
+            {row.label}
+          </span>
 
-          <div className="flex items-center gap-2.5">
+          {/* Pill with internal dot */}
+          <span
+            className={[
+              'inline-flex items-center gap-2 rounded-full px-4 py-1.5',
+              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap',
+              row.tone === 'success'
+                ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+                : row.tone === 'warning'
+                ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+            ].join(' ')}
+          >
             <span
               className={[
-                'inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
+                'h-1.5 w-1.5 rounded-full',
                 row.tone === 'success'
-                  ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+                  ? 'bg-emerald-400'
                   : row.tone === 'warning'
-                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
-                  : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+                  ? 'bg-amber-400'
+                  : 'bg-slate-500/70',
               ].join(' ')}
-            >
-              <span
-                className={[
-                  'h-1.5 w-1.5 rounded-full',
-                  row.tone === 'success'
-                    ? 'bg-emerald-400'
-                    : row.tone === 'warning'
-                    ? 'bg-amber-400'
-                    : 'bg-slate-500/70',
-                ].join(' ')}
-              />
-              {row.pill}
-            </span>
-          </div>
+            />
+            {row.pill}
+          </span>
         </div>
       ))}
     </div>
 
-    {/* Autopilot row */}
+    {/* Autopilot row with no-wrap + pill dot */}
     <div className="mt-3 flex items-center justify-between gap-3">
-      <span className="text-[11px] text-slate-300">Autopilot</span>
+      <span className="text-[11px] text-slate-300 whitespace-nowrap">
+        Autopilot
+      </span>
 
-      <div className="flex items-center gap-2.5">
-        <span
-          className="
-            inline-flex items-center gap-2
-            rounded-full bg-emerald-500/10 px-4 py-1.5
-            text-[10px] font-semibold uppercase tracking-[0.18em]
-            text-emerald-300 border border-emerald-500/35
-          "
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
-          Runs on smart contracts
-        </span>
-      </div>
+      <span
+        className={[
+          'inline-flex items-center gap-2 rounded-full px-4 py-1.5',
+          'text-[10px] font-semibold uppercase tracking-[0.20em]',
+          'text-emerald-300 border border-emerald-500/35 bg-emerald-500/10',
+          'whitespace-nowrap',               // 🔥 keeps in one line
+        ].join(' ')}
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        Runs on smart contracts
+      </span>
     </div>
 
     {/* Divider + footer copy */}
     <div className="mt-4 space-y-1 border-t border-slate-800/70 pt-3">
-      <p className="text-[11px] text-slate-400">
+      <p className="text-[11px] text-slate-400 leading-relaxed">
         When all indicators are green, rewards execute fully autonomously on-chain.
       </p>
-      <p className="text-[10px] text-slate-500">
+
+      <p className="text-[10px] text-slate-500 leading-relaxed">
         Mission Control monitors network health, backend services, contract
         integrity and the live claim window state for this round.
       </p>
     </div>
+
   </SoftCard>
 </div>
 
