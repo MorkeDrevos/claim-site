@@ -1030,7 +1030,7 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Snapshot info */}
     <div className="space-y-1">
-      <p className="text-[20px] font-semibold text-slate-100">
+      <p className="text-[16px] font-semibold text-slate-100">
   Snapshot #{snapshotBlock}
 </p>
 
