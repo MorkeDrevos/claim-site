@@ -957,10 +957,10 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-         {/* RIGHT COLUMN – Mission Control (final “real” copy) */}
+         {/* RIGHT COLUMN – Mission Control */}
 <div className="w-full max-w-xs">
-  <SoftCard className="relative space-y-4">
-    {/* Header row – aligned ROUND / MISSION CONTROL */}
+  <SoftCard className="space-y-4">
+    {/* Header row – ROUND 1 / MISSION CONTROL */}
     <div className="flex items-baseline justify-between pr-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
         Round {roundNumber ?? 1}
@@ -983,8 +983,6 @@ const snapshotDateLabel = snapshotTakenAt
         <span className="text-emerald-300">
           {currentPhase === 'open'
             ? 'window open'
-            : currentPhase === 'snapshot'
-            ? 'snapshot taken'
             : currentPhase === 'scheduled'
             ? 'window scheduled'
             : currentPhase === 'distribution'
@@ -1005,7 +1003,6 @@ const snapshotDateLabel = snapshotTakenAt
             {row.label}
           </span>
 
-          {/* pill with dot inside – tight gap */}
           <span
             className={[
               'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
@@ -1033,29 +1030,28 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row – clean final version */}
-<div className="mt-3 flex items-center justify-between gap-3">
-  <span className="text-[11px] text-slate-300 whitespace-nowrap">
-    Autopilot
-  </span>
+    {/* Autopilot row – text only */}
+    <div className="mt-3 flex items-center justify-between gap-3">
+      <span className="text-[11px] text-slate-300 whitespace-nowrap">
+        Autopilot
+      </span>
 
-  <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-emerald-400 whitespace-nowrap">
-    Smart-contract autopilot
-  </span>
-</div>
+      <span className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-400 whitespace-nowrap">
+        Smart-contract autopilot
+      </span>
+    </div>
 
-    {/* Divider + footer copy */}
-<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-  <p className="text-[11px] text-slate-400 leading-relaxed">
-    All systems nominal. The round will settle autonomously on-chain.
-  </p>
-
-  <p className="text-[11px] text-slate-500 leading-relaxed">
-    Mission Control oversees network status, portal uptime, contract integrity,
+    {/* Divider + NASA-style copy */}
+    <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
+      <p className="text-[11px] text-slate-400 leading-relaxed">
+        All systems nominal. Autonomous settlement sequence is active. The round will settle autonomously on-chain.
+      </p>
+      <p className="text-[10px] text-slate-500 leading-relaxed">
+        Mission Control oversees network status, portal uptime, contract integrity,
     live claim-window timing, snapshot execution, and automated reward
     distribution.
-  </p>
-</div>
+      </p>
+    </div>
   </SoftCard>
 </div>
 
