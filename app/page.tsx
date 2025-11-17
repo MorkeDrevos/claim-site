@@ -680,7 +680,10 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
-// Determine active step and message
+// ───────────────────────────
+// Round progress helpers
+// ───────────────────────────
+
 const activeIndex = steps.findIndex((s) => s.id === currentPhase);
 const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
@@ -699,12 +702,12 @@ if (currentPhase === 'scheduled') {
   progressMessage = 'Rewards have been distributed for this round.';
 }
 
-// Safe snapshot label
+// Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-// ✅ EVERYTHING ABOVE is JS only, now we safely open JSX:
+// ⬇️ NOTHING between this line and the return
 return (
   <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
