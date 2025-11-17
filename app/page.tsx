@@ -1016,7 +1016,7 @@ const snapshotDateLabel = snapshotTakenAt
   </p>
 
   <p className="text-[13px] text-slate-400">
-    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText}</span>
+    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText} USD</span>
   </p>
 </div>
 
