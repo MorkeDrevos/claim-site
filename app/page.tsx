@@ -709,6 +709,30 @@ const missionRows: MissionRow[] = [
     progressMessage = 'Rewards have been distributed for this round.';
   }
 
+
+  // Live-style status summary for Mission Control
+  let statusSummary = 'All systems nominal. Autonomous settlement sequence is active.';
+
+  const hasBackendIssue = frontEndStatus !== 'ok';
+  const hasContractIssue = contractStatus !== 'ok';
+
+  if (hasBackendIssue || hasContractIssue) {
+    statusSummary =
+      'Attention flagged. One or more subsystems are reporting a non-normal status.';
+  } else if (currentPhase === 'open') {
+    statusSummary =
+      'All systems nominal. Live claim window running under autonomous settlement.';
+  } else if (currentPhase === 'scheduled') {
+    statusSummary =
+      'All systems nominal. Next claim window is queued and waiting on-chain timing.';
+  } else if (currentPhase === 'distribution') {
+    statusSummary =
+      'All systems nominal. Reward distribution sequence is executing on-chain.';
+  } else if (currentPhase === 'closed') {
+    statusSummary =
+      'All systems nominal. Claim window closed and standing by for the next round.';
+  }
+  
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
@@ -1080,9 +1104,10 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Divider + NASA footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-      <p className="text-[11px] text-slate-300 leading-relaxed">
-        All systems nominal. Autonomous settlement sequence is active. 
-      </p>
+      <p className="flex items-center gap-2 text-[11px] text-slate-300 leading-relaxed">
+  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+  <span>{statusSummary}</span>
+</p>
 
     </div>
 
