@@ -680,31 +680,31 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
-  const activeIndex = steps.findIndex((s) => s.id === currentPhase);
-  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+const activeIndex = steps.findIndex((s) => s.id === currentPhase);
+const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-   let progressMessage = '';
-  if (currentPhase === 'scheduled') {
-    progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
-  } else if (currentPhase === 'snapshot') {
-    progressMessage = 'Snapshot complete. Next claim window coming soon.';
-  } else if (currentPhase === 'open') {
-    progressMessage =
-      'Claim window open. Lock in your share before the countdown hits zero.';
-  } else if (currentPhase === 'closed') {
-    progressMessage =
-      'Claim window closed. No new wallets can lock in for this round.';
-  } else if (currentPhase === 'distribution') {
-    progressMessage = 'Rewards have been distributed for this round.';
-  }
+let progressMessage = '';
+if (currentPhase === 'scheduled') {
+  progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
+} else if (currentPhase === 'snapshot') {
+  progressMessage = 'Snapshot complete. Next claim window coming soon.';
+} else if (currentPhase === 'open') {
+  progressMessage =
+    'Claim window open. Lock in your share before the countdown hits zero.';
+} else if (currentPhase === 'closed') {
+  progressMessage =
+    'Claim window closed. No new wallets can lock in for this round.';
+} else if (currentPhase === 'distribution') {
+  progressMessage = 'Rewards have been distributed for this round.';
+}
 
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-  return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
+return (
+  <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
