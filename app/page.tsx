@@ -530,12 +530,6 @@ const missionRows = [
     tone: claimTone,
   },
   {
-    label: 'Snapshots',
-    mode: 'pill' as const,
-    value: snapshotTakenAt ? 'Active' : 'Pending',
-    tone: snapshotTakenAt ? 'success' : 'warning',
-  },
-  {
     label: 'Autopilot',
     mode: 'pill' as const,
     value: 'Enabled',
