@@ -917,39 +917,134 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-          {/* RIGHT COLUMN – snapshot info / status */}
-<div className="w-full max-w-xs space-y-4">
-  <SoftCard className="space-y-3">
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Round {roundNumber ?? 1}
-    </p>
+          {/* RIGHT COLUMN – mission control */}
+<div className="w-full max-w-xs">
+  <SoftCard className="space-y-4">
+    {/* Header */}
+    <div className="flex items-baseline justify-between">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+        Round {roundNumber ?? 1}
+      </p>
+      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+        Mission control
+      </span>
+    </div>
 
-    <div className="space-y-2">
-      <p className="text-sm text-slate-300">
+    {/* Snapshot summary */}
+    <div className="space-y-1">
+      <p className="text-sm font-medium text-slate-100">
         {snapshotLabel}{' '}
         <span className="font-mono text-[11px] text-slate-500">
-          (#{snapshotBlock})
+          #{snapshotBlock}
         </span>
       </p>
-      <p className="text-xs text-slate-500">
+      <p className="text-[11px] text-slate-500">
         {claimWindowStatus}
       </p>
     </div>
 
-    <div className="flex flex-wrap gap-2">
-      <StatusPill
-        label={networkLabel}
-        tone="muted"
-      />
-      <StatusPill
-        label={`Backend: ${frontEndStatus}`}
-        tone={frontEndStatus === 'ok' ? 'success' : 'warning'}
-      />
-      <StatusPill
-        label={`Contract: ${contractStatus}`}
-        tone={contractStatus === 'ok' ? 'success' : 'warning'}
-      />
-    </div>
+    {/* Status rows */}
+    <dl className="mt-2 space-y-2 text-[12px]">
+      {/* Network */}
+      <div className="flex items-center justify-between">
+        <dt className="text-slate-400">Network</dt>
+        <dd className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.75)]" />
+          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
+            {networkLabel}
+          </span>
+        </dd>
+      </div>
+
+      {/* Backend */}
+      <div className="flex items-center justify-between">
+        <dt className="text-slate-400">Backend</dt>
+        <dd className="flex items-center gap-2">
+          <span
+            className={[
+              'h-1.5 w-1.5 rounded-full shadow-[0_0_8px_rgba(148,163,184,0.8)]',
+              backendTone === 'success'
+                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
+                : 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]',
+            ].join(' ')}
+          />
+          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
+            {frontEndStatus === 'ok' ? 'Online' : 'Check logs'}
+          </span>
+        </dd>
+      </div>
+
+      {/* Smart contracts */}
+      <div className="flex items-center justify-between">
+        <dt className="text-slate-400">Smart contracts</dt>
+        <dd className="flex items-center gap-2">
+          <span
+            className={[
+              'h-1.5 w-1.5 rounded-full',
+              contractTone === 'success'
+                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
+                : 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]',
+            ].join(' ')}
+          />
+          <span className="rounded-full bg-slate-900/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
+            {contractStatus === 'ok' ? 'Deployed' : 'Attention needed'}
+          </span>
+        </dd>
+      </div>
+
+      {/* Claim window */}
+      <div className="flex items-center justify-between">
+        <dt className="text-slate-400">Claim window</dt>
+        <dd className="flex items-center gap-2">
+          <span
+            className={[
+              'h-1.5 w-1.5 rounded-full',
+              claimTone === 'success'
+                ? 'bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
+                : claimTone === 'warning'
+                ? 'bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]'
+                : 'bg-slate-500/70',
+            ].join(' ')}
+          />
+          <span
+            className={[
+              'rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]',
+              claimTone === 'success'
+                ? 'bg-emerald-500/10 text-emerald-300'
+                : claimTone === 'warning'
+                ? 'bg-amber-500/10 text-amber-300'
+                : 'bg-slate-900/70 text-slate-300',
+            ].join(' ')}
+          >
+            {currentPhase === 'open'
+              ? 'Live'
+              : currentPhase === 'scheduled'
+              ? 'Scheduled'
+              : currentPhase === 'snapshot'
+              ? 'Snapshot'
+              : currentPhase === 'distribution'
+              ? 'Distributing'
+              : 'Closed'}
+          </span>
+        </dd>
+      </div>
+
+      {/* Autopilot */}
+      <div className="flex items-center justify-between pt-2">
+        <dt className="text-slate-400">Autopilot</dt>
+        <dd className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+          <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+            Runs on smart contracts
+          </span>
+        </dd>
+      </div>
+    </dl>
+
+    {/* Footer line */}
+    <p className="pt-2 text-[11px] text-slate-500">
+      When all indicators are green, rewards run autonomously on-chain.
+    </p>
   </SoftCard>
 </div>
           </div>
