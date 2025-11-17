@@ -1406,7 +1406,7 @@ const snapshotDateLabel = snapshotTakenAt
         <li>
           Hold at least {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot block.
         </li>
-        <li>A single on-chain snapshot is taken each round, and its timing is intentionally flexible.</li>
+        <li>A single on-chain snapshot is taken each round and its timing is intentionally flexible.</li>
         <li>Optional bonus rules may reward long-term or early participants.</li>
       </ul>
 
