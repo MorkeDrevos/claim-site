@@ -760,23 +760,20 @@ const snapshotDateLabel = snapshotTakenAt
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           {/* Left: logo + title */}
           <Link href="/" className="flex items-center gap-3 group">
-           {/* CLAIM logo circle */}
-<div
-  className="flex h-9 w-9 items-center justify-center rounded-full
-             bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
-             shadow-[0_0_12px_rgba(16,185,129,0.25)]
-             transition-all group-hover:ring-emerald-400/70
-             group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
->
-  <Image
-    src="/img/claim-logo-circle.png"
-    alt="CLAIM Logo"
-    width={36}
-    height={36}
-    className="object-contain"
-    priority
-  />
-</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-emerald-400/70">
+              <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-200 group-hover:text-white">
+                $
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
+                CLAIM PORTAL
+              </span>
+              <span className="text-sm font-medium text-slate-100 group-hover:text-white">
+                $CLAIM — Token of Timing
+              </span>
+            </div>
           </Link>
 
           {/* Right: nav items */}
