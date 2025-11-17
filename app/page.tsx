@@ -1023,8 +1023,7 @@ const snapshotDateLabel = snapshotTakenAt
             </div>
 
          {/* RIGHT COLUMN – Mission Control (NASA style) */}
-
-<div className="w-full max-w-xs mt-[22px]">
+<div className="w-full max-w-xs mt-[18px]">
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
