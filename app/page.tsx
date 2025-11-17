@@ -680,7 +680,7 @@ if (countdownTarget) {
     { id: 'distribution', label: 'Rewards distributed' },
   ];
 
-// ───────────────────────────
+  // ───────────────────────────
 // Round progress helpers
 // ───────────────────────────
 
