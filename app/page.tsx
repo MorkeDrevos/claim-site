@@ -1039,7 +1039,7 @@ const snapshotDateLabel = snapshotTakenAt
     Autopilot
   </span>
 
-  <span className="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-400 whitespace-nowrap">
+  <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-emerald-400 whitespace-nowrap">
     Smart-contract autopilot
   </span>
 </div>
