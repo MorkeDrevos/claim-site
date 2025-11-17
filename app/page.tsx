@@ -1033,7 +1033,7 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row – clean system mode */}
+    {/* Autopilot row – clean final version */}
 <div className="mt-3 flex items-center justify-between gap-3">
   <span className="text-[11px] text-slate-300 whitespace-nowrap">
     Autopilot
@@ -1041,8 +1041,8 @@ const snapshotDateLabel = snapshotTakenAt
 
   <span
     className={[
-      'text-[12px] font-semibold text-emerald-300',
-      'uppercase tracking-[0.20em] whitespace-nowrap',
+      'text-[11px] font-semibold text-emerald-300',
+      'uppercase tracking-[0.12em] whitespace-nowrap',
     ].join(' ')}
   >
     Smart-contract autopilot enabled
