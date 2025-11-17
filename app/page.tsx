@@ -541,12 +541,6 @@ const missionRows: MissionRow[] = [
     mode: 'pill',
   },
   {
-    label: 'Snapshots',
-    value: snapshotTakenAt ? 'Active' : 'Pending',
-    tone: snapshotTakenAt ? 'success' : 'warning',
-    mode: 'pill',
-  },
-  {
     label: 'Contract revision',
     value: 'CR-0.9.14',
     tone: 'muted',
