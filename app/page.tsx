@@ -866,13 +866,19 @@ const snapshotDateLabel = snapshotTakenAt
               {/* Header text */}
               <div className="space-y-2">
                 <h1
-                  className="text-[18px] sm:text-[30px] font-semibold 
-                               leading-[1.25]
-                               bg-gradient-to-r from-slate-200/90 to-slate-300/90 
-                               bg-clip-text text-transparent"
-                >
-                  Rewards earned by presence - show up, click, get your share
-                </h1>
+  className="
+    text-[26px] sm:text-[32px]
+    font-semibold
+    leading-[1.25]
+    tracking-[-0.01em]
+    text-slate-200
+    bg-gradient-to-r from-slate-200/90 to-slate-300/80
+    bg-clip-text text-transparent
+    drop-shadow-[0_0_12px_rgba(255,255,255,0.04)]
+  "
+>
+  Rewards earned by presence. Show up. Lock in. Get your share.
+</h1>
               </div>
 
               {/* CLAIM WINDOW CARD */}
