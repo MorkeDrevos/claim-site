@@ -810,7 +810,7 @@ const snapshotDateLabel = snapshotTakenAt
 <div className="flex flex-col items-end gap-1 text-right">
 
   {/* Label + info icon + tooltip */}
-  <div className="relative flex items-baseline gap-2">
+  <div className="relative flex items-center gap-2">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       Current round pool
     </p>
