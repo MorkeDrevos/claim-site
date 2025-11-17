@@ -957,15 +957,17 @@ const snapshotDateLabel = snapshotTakenAt
               {/* end CLAIM WINDOW CARD */}
             </div>
 
-         {/* RIGHT COLUMN – Mission Control */}
+         {/* RIGHT COLUMN – Mission Control (NASA style) */}
 <div className="w-full max-w-xs">
-  <SoftCard className="space-y-4">
-    {/* Header row – ROUND 1 / MISSION CONTROL */}
+  <SoftCard className="relative space-y-4">
+
+    {/* Header row */}
     <div className="flex items-baseline justify-between pr-1">
       <p className="text-[11px] font-semibold uppercase tracking-[0.30em] text-slate-500">
         Round {roundNumber ?? 1}
       </p>
 
+      {/* The ONLY neon-green accent */}
       <span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
         Mission Control
       </span>
@@ -973,7 +975,7 @@ const snapshotDateLabel = snapshotTakenAt
 
     {/* Snapshot info */}
     <div className="space-y-1">
-      <p className="text-sm font-semibold text-slate-50">
+      <p className="text-sm font-semibold text-slate-100">
         Snapshot #{snapshotBlock}
       </p>
 
@@ -986,7 +988,7 @@ const snapshotDateLabel = snapshotTakenAt
             : currentPhase === 'scheduled'
             ? 'window scheduled'
             : currentPhase === 'distribution'
-            ? 'rewards distributing'
+            ? 'distributing'
             : 'window closed'}
         </span>
       </p>
@@ -995,10 +997,7 @@ const snapshotDateLabel = snapshotTakenAt
     {/* Status rows */}
     <div className="mt-3 space-y-3">
       {missionRows.map((row) => (
-        <div
-          key={row.label}
-          className="flex items-center justify-between gap-3"
-        >
+        <div key={row.label} className="flex items-center justify-between gap-3">
           <span className="text-[11px] text-slate-300 whitespace-nowrap">
             {row.label}
           </span>
@@ -1030,29 +1029,29 @@ const snapshotDateLabel = snapshotTakenAt
       ))}
     </div>
 
-    {/* Autopilot row – text only */}
+    {/* Autopilot – NASA style: neutral, quiet, no pill */}
     <div className="mt-3 flex items-center justify-between gap-3">
-  <span className="text-[11px] text-slate-300 whitespace-nowrap">
-    Autopilot
-  </span>
+      <span className="text-[11px] text-slate-300 whitespace-nowrap">
+        Autopilot
+      </span>
 
-  <span className="text-[11px] font-semibold uppercase tracking-[0.26em] whitespace-nowrap">
-    <span className="text-slate-400">Smart-contract autopilot</span>{' '}
-    <span className="text-emerald-400">enabled</span>
-  </span>
-</div>
+      <span className="text-[11px] font-semibold tracking-[0.22em] text-slate-200 whitespace-nowrap">
+        Smart-contract autopilot enabled
+      </span>
+    </div>
 
-    {/* Divider + NASA-style copy */}
+    {/* Divider + NASA footer copy */}
     <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-  <p className="text-[11px] text-slate-400 leading-relaxed">
-    All systems nominal. Autonomous settlement sequence is active. The round will settle autonomously on-chain.
-  </p>
+      <p className="text-[11px] text-slate-300 leading-relaxed">
+        All systems nominal. Autonomous settlement sequence is active.  
+        The round will settle fully on-chain.
+      </p>
 
-  <p className="text-[10px] text-slate-500 leading-relaxed">
-    Mission Control oversees network status, portal uptime, contract integrity,
-    live claim-window timing, snapshot execution and automated reward distribution.
-  </p>
-</div>
+      <p className="text-[10px] text-slate-500 leading-relaxed">
+        Mission Control oversees network status, portal uptime, contract integrity,  
+        live claim-window timing, snapshot execution, and automated reward distribution.
+      </p>
+    </div>
 
   </SoftCard>
 </div>
