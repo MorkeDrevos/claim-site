@@ -4,8 +4,8 @@
   "windowPhase": "scheduled",
 
   "snapshotTakenAt": "2025-11-16T15:40:00Z",
-  "claimWindowOpensAt": "2025-11-16T23:26:00Z",
-  "claimWindowClosesAt": "2025-11-17T20:46:00Z",
+  "claimWindowOpensAt": "2025-11-17T09:26:00Z",
+  "claimWindowClosesAt": "2025-11-17T10:46:00Z",
   "distributionCompletedAt": null,
 
   "rewardPoolAmountClaim": 9325670,
