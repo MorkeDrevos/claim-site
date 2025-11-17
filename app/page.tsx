@@ -1424,7 +1424,10 @@ const snapshotDateLabel = snapshotTakenAt
       </ul>
 
       <p className="text-[11px] text-slate-500">
-  Round rules focus on fairness, clarity, and rewarding presence.
+  <p className="text-[11px] text-slate-500">
+  All eligibility checks are based on the on-chain snapshot taken for this
+  round. No additional steps or forms are required.
+</p>
 </p>
     </div>
   )}
