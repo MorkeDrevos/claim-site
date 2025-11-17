@@ -797,13 +797,14 @@ const snapshotDateLabel = snapshotTakenAt
       <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
     )}
     <p
-      className={[
-        'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
-        isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-      ].join(' ')}
-    >
-      {isClosed ? '' : countdownLabel || '--:--:--'}
-    </p>
+  className={[
+    '-mt-2',                        // ⬅️ THIS LINE moves ONLY the number upward
+    'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
+    isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+  ].join(' ')}
+>
+  {isClosed ? '' : countdownLabel || '--:--:--'}
+</p>
   </div>
 </div>
 
