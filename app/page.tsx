@@ -501,25 +501,14 @@ const missionRows = [
     value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
     tone: frontEndStatus === 'ok' ? 'success' : 'warning',
   },
+
   {
     label: 'Reward contracts',
     mode: 'plain' as const,
     value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
     tone: contractStatus === 'ok' ? 'success' : 'warning',
   },
-  {
-    label: 'Claim window',
-    mode: 'pill' as const,
-    value:
-      currentPhase === 'open'
-        ? 'Live'
-        : currentPhase === 'scheduled'
-        ? 'Scheduled'
-        : currentPhase === 'distribution'
-        ? 'Distributing'
-        : 'Closed',
-    tone: claimTone,
-  },
+
   {
     label: 'Network',
     mode: 'plain' as const,
@@ -529,12 +518,27 @@ const missionRows = [
         ? 'success'
         : 'muted',
   },
-{
-  label: 'Contract version',
-  mode: 'plain' as const,
-  value: 'V1.0.0',
-  tone: 'neutral' as Tone,
-},
+
+  {
+    label: 'Claim window',
+    mode: 'pill' as const,
+    value:
+      currentPhase === 'open'
+        ? 'LIVE'
+        : currentPhase === 'scheduled'
+        ? 'SCHEDULED'
+        : currentPhase === 'distribution'
+        ? 'DISTRIBUTING'
+        : 'CLOSED',
+    tone: claimTone,
+  },
+
+  {
+    label: 'Contract version',
+    mode: 'plain' as const,
+    value: <span className="font-mono">V1.0.0</span>,
+    tone: 'neutral' as Tone,
+  },
 ];
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
