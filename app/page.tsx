@@ -957,25 +957,28 @@ const snapshotDateLabel = snapshotTakenAt
 
           {/* RIGHT COLUMN – Mission Control (refined) */}
 <div className="w-full max-w-xs">
-  <SoftCard className="relative space-y-4">
-    {/* Corner label */}
-    <span className="absolute right-5 top-5 text-[9px] font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
-      Mission control
-    </span>
+  <SoftCard className="space-y-4">
+    {/* Header row: Round + Mission Control label on same line */}
+    <div className="flex items-start justify-between gap-3">
+      <div className="space-y-1">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Round {roundNumber ?? 1}
+        </p>
 
-    {/* Header */}
-    <div className="space-y-1 pr-16">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
-      <p className="text-sm font-semibold text-slate-50">
-        Snapshot #{snapshotBlock}
-      </p>
-      <p className="text-[11px] text-slate-400">
-        Snapshot #1
-        <span className="mx-1 text-slate-600">•</span>
-        <span className="text-emerald-300">{claimWindowStatus}</span>
-      </p>
+        <p className="text-sm font-semibold text-slate-50">
+          Snapshot #{snapshotBlock}
+        </p>
+
+        <p className="text-[11px] text-slate-400">
+          Snapshot #1
+          <span className="mx-1 text-slate-600">•</span>
+          <span className="text-emerald-300">{claimWindowStatus}</span>
+        </p>
+      </div>
+
+      <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.24em] text-emerald-400/80">
+        Mission control
+      </span>
     </div>
 
     {/* Status rows */}
@@ -988,29 +991,28 @@ const snapshotDateLabel = snapshotTakenAt
           <span className="text-[11px] text-slate-300">{row.label}</span>
 
           <div className="flex items-center gap-2.5">
-            {/* status dot */}
-           <span
-  className={[
-    'inline-flex items-center gap-3 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
-    row.tone === 'success'
-      ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
-      : row.tone === 'warning'
-      ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
-      : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
-  ].join(' ')}
->
-  <span
-    className={[
-      'h-1.5 w-1.5 rounded-full',
-      row.tone === 'success'
-        ? 'bg-emerald-400'
-        : row.tone === 'warning'
-        ? 'bg-amber-400'
-        : 'bg-slate-500/70',
-    ].join(' ')}
-  />
-  {row.pill}
-</span> 
+            <span
+              className={[
+                'inline-flex items-center gap-3 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]',
+                row.tone === 'success'
+                  ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40'
+                  : row.tone === 'warning'
+                  ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                  : 'bg-slate-900/80 text-slate-300 border border-slate-700/70',
+              ].join(' ')}
+            >
+              <span
+                className={[
+                  'h-1.5 w-1.5 rounded-full',
+                  row.tone === 'success'
+                    ? 'bg-emerald-400'
+                    : row.tone === 'warning'
+                    ? 'bg-amber-400'
+                    : 'bg-slate-500/70',
+                ].join(' ')}
+              />
+              {row.pill}
+            </span>
           </div>
         </div>
       ))}
