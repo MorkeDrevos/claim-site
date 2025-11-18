@@ -1615,7 +1615,7 @@ return (
 </section>
 
       </div>
-    </div> 
+      
 {/* Sticky Buy on Jupiter CTA – only on larger screens */}
 <div className="hidden sm:block fixed bottom-4 right-4 z-50">
   <a
