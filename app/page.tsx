@@ -1053,7 +1053,7 @@ return (
       </div>
 
       {/* CLAIM pool + USD side-by-side */}
-<div className="flex items-baseline justify-end gap-3 mt-[10px] translate-y-[6px]">
+<div className="flex items-baseline justify-end gap-3 mt-[10px] translate-y-[8px]">
   {/* CLAIM – primary */}
   <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
