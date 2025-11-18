@@ -757,11 +757,11 @@ return (
   className="
     absolute inset-0
     bg-no-repeat bg-contain
-    opacity-[0.40]
+    opacity-[0.60]
   "
   style={{
     backgroundImage: "url('/img/claim-hero-green.png')",
-    backgroundPosition: "center -180px" // 🔥 move it UP
+    backgroundPosition: "center -360px" // 🔥 move it UP
   }}
 />
   {/* Soft gradient wash on top */}
