@@ -434,7 +434,7 @@ if (countdownTarget) {
 
   if (error || !state) {
     return (
-      <main className="relative min-h-screen bg-slate-950 text-slate-50">
+      <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-16 sm:px-6">
           <h1 className="text-xl font-semibold">CLAIM portal</h1>
           <p className="text-sm text-red-400">{error ?? 'No data available'}</p>
@@ -749,24 +749,30 @@ const snapshotDateLabel = snapshotTakenAt
   : 'Not yet announced';
 
 return (
-  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
-        {/* HERO BACKGROUND */}
-<div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-  {/* Background coin image */}
-  <div
-  className="
-    absolute inset-0
-    bg-no-repeat bg-contain
-    opacity-[0.60]
-  "
-  style={{
-    backgroundImage: "url('/img/claim-hero-green.png')",
-    backgroundPosition: "center -360px" // 🔥 move it UP
-  }}
-/>
-  {/* Soft gradient wash on top */}
-  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
-</div>
+  <main
+    className="
+      min-h-screen
+      text-slate-50
+      bg-gradient-to-b
+      from-emerald-500/5
+      via-slate-950/90
+      to-slate-950
+    "
+  >
+                  {/* HERO BACKGROUND */}
+      <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
+        {/* Base gradient – much stronger */}
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
+
+        {/* Left glow */}
+        <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
+
+        {/* Right glow */}
+        <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
+
+        {/* Horizon line */}
+        <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
+      </div>
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
@@ -882,7 +888,7 @@ return (
       </header>
 
       {/* Content */}
-<div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
