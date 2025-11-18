@@ -1270,7 +1270,7 @@ return (
   {/* Dot */}
   <span
     className={[
-      'h-2.5 w-2.5 rounded-full',
+      'h-2 w-2 rounded-full',
       statusDotColor,
       'shadow-[0_0_8px_currentColor]',
       'animate-[pulse_2.6s_ease-in-out_infinite]',
