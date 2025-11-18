@@ -1052,27 +1052,26 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool + USD — shift DOWN to match countdown */}
-<div className="flex items-end justify-end gap-3 mt-[10px] translate-y-[6px]">
+      {/* CLAIM pool + USD side-by-side */}
+<div className="flex items-baseline justify-end gap-3 mt-[10px] translate-y-[6px]">
   {/* CLAIM – primary */}
   <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
-    <span className="ml-1 text-[15px] text-emerald-300 font-semibold">
-      $CLAIM
-    </span>
+    <span className="ml-1 text-[15px] text-emerald-300 font-semibold">$CLAIM</span>
   </p>
 
   {/* Divider */}
-  <span className="text-slate-700 text-[18px] pb-[2px]">|</span>
+  <span className="text-slate-700 text-[18px]">|</span>
 
-  {/* USD */}
-  <p
-    key={rewardUsdText}
-    className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium opacity-80 pb-[2px]"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
+  {/* USD – secondary */}
+  <p 
+  key={rewardUsdText}
+  className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80"
+>
+  ≈ {rewardUsdText} USD
+</p>
 </div>
+
 
     </div>
   </div>
