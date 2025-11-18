@@ -1051,7 +1051,7 @@ return (
       {/* CLAIM pool + USD — responsive */}
 <div
   className="
-    flex gap-3 mt-[28px]
+    flex gap-3 mt-[24px]
     items-end justify-end
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
