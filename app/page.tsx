@@ -1265,7 +1265,7 @@ return (
     border border-slate-800/70
     px-4 py-2
     text-[10px] font-semibold uppercase tracking-[0.22em]
-    text-slate-200
+    text-slate-300
   "
 >
   {/* Dot */}
@@ -1280,7 +1280,7 @@ return (
 ></span>
 
   {/* Status summary */}
-  <span className="text-slate-200 tracking-wider">
+  <span className="text-slate-300 tracking-wider">
     {statusSummary}
   </span>
 </div>
