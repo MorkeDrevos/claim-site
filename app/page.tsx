@@ -685,7 +685,7 @@ const missionRows: MissionRow[] = [
 
 
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Claim window Opens soon' },
+    { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
@@ -743,13 +743,23 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Snapshot timing label – show nothing if there’s no snapshot yet
-const snapshotDateLabel = portalState.snapshot?.takenAt ?? '';
- 
+// Simple, safe fallback snapshot label
+const snapshotDateLabel = snapshotTakenAt
+  ? snapshotTakenAt
+  : 'Not yet announced';
+
 return (
-  <main className="min-h-screen text-slate-50">
-    {/* HERO BACKGROUND */}
-    <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
+  <main
+    className="
+      min-h-screen
+      text-slate-50
+      bg-gradient-to-b
+      from-emerald-500/5
+      via-slate-950/90
+      to-slate-950
+      overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
+    "
+  >
   
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
@@ -1249,36 +1259,29 @@ return (
 <div
   className="
     mt-4
-    rounded-2xl
+    inline-flex items-center gap-3
+    rounded-[6px]
     bg-slate-900/80
     border border-slate-800/70
     px-4 py-3
-    flex items-start gap-3
+    text-[13px] leading-snug text-slate-300
   "
 >
   {/* Dot */}
   <span
     className={[
-      'mt-[2px] h-2 w-2 rounded-full',      // slightly smaller + aligned with text
+      'h-2 w-2 rounded-full',                // ← SMALLER DOT
       statusDotColor,
-      'shadow-[0_0_8px_currentColor]',
+      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
       'animate-[pulse_2.6s_ease-in-out_infinite]',
       'flex-none',
     ].join(' ')}
   />
 
-  {/* Text block */}
-  <div className="space-y-0.5">
-    {/* Tiny label */}
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      System status
-    </p>
+  {/* Status summary */}
+  <span>{statusSummary}</span>
+</div>
 
-    {/* Main status line – 1px bigger, light tone, sentence case */}
-    <p className="text-[13px] leading-snug text-slate-300">
-      {statusSummary}
-    </p>
-  </div>
 </div>
 
   </SoftCard>
