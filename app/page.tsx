@@ -1199,40 +1199,25 @@ return (
       </span>
     </div>
 
-{/* Divider + NASA footer copy */}
-<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
+{/* Divider + status line */}
+<div className="mt-4 border-t border-slate-800/70 pt-3">
+  <div className="flex items-center gap-2">
+    {/* Dot */}
+    <span
+      className={[
+        'flex-none inline-block',
+        'h-2.5 w-2.5 rounded-full',
+        statusDotColor,
+        'shadow-[0_0_8px_rgba(16,185,129,0.40)]',
+        'animate-[pulse_2.8s_ease-in-out_infinite]',
+      ].join(' ')}
+    />
 
-  {/* STATUS BADGE — mission-control style */}
-<div
-  className="
-    mt-4
-    inline-flex items-center gap-3
-    rounded-full
-    bg-slate-900/80
-    border border-slate-800/70
-    px-4 py-2
-    text-[11px] font-semibold uppercase tracking-[0.22em]
-    text-slate-300
-  "
->
-  {/* Dot */}
-  <span
-    className={[
-      'h-3 w-3 rounded-full',
-      statusDotColor,
-      'shadow-[0_0_6px_rgba(16,185,129,0.35)]',
-      'animate-[pulse_2.8s_ease-in-out_infinite]'
-    ].join(' ')}
-  ></span>
-
-  
-
-  {/* Status summary */}
-  <span className="text-slate-300 tracking-wider">
-    {statusSummary}
-  </span>
-</div>
-
+    {/* Text */}
+    <p className="text-[13px] tracking-wide text-slate-300 leading-snug">
+      {statusSummary}
+    </p>
+  </div>
 </div>
 
   </SoftCard>
