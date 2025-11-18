@@ -1098,7 +1098,7 @@ return (
     {canClaim
       ? 'Lock in my share'
       : isClosed
-      ? 'Window closed'
+      ? 'Claim Window closed'
       : 'Opens soon'}
   </button>
 
