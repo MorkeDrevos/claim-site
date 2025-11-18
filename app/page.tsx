@@ -1112,38 +1112,28 @@ return (
 {/* end CLAIM WINDOW CARD */}
             </div>
 
-{/* Mobile-only CONNECT WALLET CTA */}
-<div className="mt-4 sm:hidden px-4">
+{/* Mobile-only Connect Wallet CTA */}
+<div className="mt-2 mb-4 sm:hidden">
   <button
     type="button"
     onClick={handleConnectClick}
     className="
-      w-full
-      rounded-full
-      bg-emerald-500/90
-      border border-emerald-400/70
-      shadow-[0_0_28px_rgba(16,185,129,0.55)]
-      
-      /* Height + padding tuned to match OPENS SOON button */
-      py-4
-
-      /* Text */
-      text-[13px]
-      font-semibold
-      tracking-[0.32em]
-      uppercase
-      text-emerald-950
-
-      /* Hover */
-      transition-colors
-      hover:bg-emerald-400 hover:text-slate-950
+      flex w-full items-center justify-center
+      rounded-full border border-emerald-400/50
+      bg-emerald-500/20
+      px-6 py-4
+      text-[13px] font-semibold uppercase tracking-[0.32em]
+      text-emerald-200
+      shadow-[0_0_28px_rgba(16,185,129,0.35)]
+      hover:bg-emerald-500/30 hover:text-white
+      transition-all
     "
   >
     {connectedWallet
       ? `${connectedWallet.name} connected`
       : effectiveWalletConnected
-      ? 'WALLET CONNECTED'
-      : 'CONNECT WALLET'}
+      ? 'Wallet connected'
+      : 'Connect wallet'}
   </button>
 </div>
 
