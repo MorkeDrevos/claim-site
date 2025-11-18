@@ -434,7 +434,7 @@ if (countdownTarget) {
 
   if (error || !state) {
     return (
-      <main className="relative min-h-screen bg-slate-950 text-slate-50">
+      <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-16 sm:px-6">
           <h1 className="text-xl font-semibold">CLAIM portal</h1>
           <p className="text-sm text-red-400">{error ?? 'No data available'}</p>
@@ -749,33 +749,21 @@ const snapshotDateLabel = snapshotTakenAt
   : 'Not yet announced';
 
 return (
-  <main
-  className="
-    relative
-    min-h-screen
-    text-slate-50
-    bg-transparent
-    overflow-hidden
-  "
->
+  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-
-  {/* Base dark wash */}
-  <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-[#020b11] to-[#020617]" />
-
-  {/* Coin image – positioned lower, just like the screenshot you liked */}
+    {/* Background coin image */}
   <div
-    className="absolute inset-0 bg-no-repeat opacity-[0.55]"
-    style={{
-      backgroundImage: "url('/img/claim-hero-fire-ice.png')",
-      backgroundSize: '1600px auto',
-      backgroundPosition: 'center 420px', // 👈 adjust this if you want more/less coin
-    }}
+    className="
+      absolute inset-0
+      bg-center bg-contain bg-no-repeat
+      opacity-[0.40]          /* much stronger */
+    "
+    style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
   />
 
-  {/* Soft vignette on top */}
-  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+    {/* Soft gradient wash on top */}
+  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
 </div>
 
       {/* Top nav – sticky */}
@@ -892,7 +880,7 @@ return (
       </header>
 
       {/* Content */}
-<div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
