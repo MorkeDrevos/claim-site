@@ -754,7 +754,7 @@ return (
       min-h-screen
       text-slate-50
       bg-gradient-to-b
-      from-emerald-500/15
+      from-emerald-500/10
       via-slate-950/90
       to-slate-950
     "
