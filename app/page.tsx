@@ -1048,31 +1048,29 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool + USD — mobile stacked, desktop aligned right */}
+      {/* CLAIM pool + USD — responsive */}
 <div
   className="
-    flex flex-col items-center gap-1 mt-[12px]
-    sm:flex-row sm:items-end sm:justify-end sm:gap-3 sm:mt-[10px]
+    flex gap-3 mt-[10px]
+    items-end justify-end
+    max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
 >
   {/* CLAIM – primary */}
-  <p className="text-[22px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
+  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
     {rewardAmountText}
-    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold">
+    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
       $CLAIM
     </span>
   </p>
 
-  {/* Divider – desktop only */}
-  <span className="hidden sm:inline text-slate-700 text-[18px] pb-[2px]">|</span>
+  {/* Divider */}
+  <span className="text-slate-700 text-[18px] leading-none">|</span>
 
-  {/* USD – secondary */}
+  {/* USD */}
   <p
     key={rewardUsdText}
-    className="
-      text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80
-      leading-none sm:pb-[2px]
-    "
+    className="text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
   >
     ≈ {rewardUsdText} USD
   </p>
