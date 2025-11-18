@@ -1354,13 +1354,20 @@ return (
               </p>
 
               <button
-                type="button"
-                onClick={handleCopyCa}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
-                           text-[11px] font-medium text-slate-200 border border-slate-700/80
-                           hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
-                           transition-colors"
-              >
+  type="button"
+  onClick={handleCopyCa}
+  className="
+    h-[38px] sm:h-auto                             /* ← FIXED HEIGHT ON MOBILE */
+    inline-flex items-center gap-2 rounded-full 
+    border border-slate-700/70 
+    bg-slate-900/70 
+    px-4 py-1.5
+    text-[10px] font-semibold uppercase tracking-[0.22em]
+    text-slate-200
+    hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+    transition-all
+  "
+>
                 <span className="font-mono text-[11px] text-slate-300">
                   {shortCa}
                 </span>
