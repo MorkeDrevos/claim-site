@@ -1211,7 +1211,7 @@ return (
     bg-slate-900/80
     border border-slate-800/80
     px-5 py-3
-    text-[11px] font-semibold uppercase tracking-[0.22em]
+    text-[10px] font-semibold uppercase tracking-[0.22em]
     text-slate-200
   "
 >
@@ -1231,7 +1231,7 @@ return (
     className="text-slate-200 leading-snug tracking-[0.22em]"
     style={{
       display: '-webkit-box',
-      WebkitLineClamp: 3,
+      WebkitLineClamp: 4,
       WebkitBoxOrient: 'vertical',
       overflow: 'hidden',
     }}
