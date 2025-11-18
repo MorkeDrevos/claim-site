@@ -1225,11 +1225,7 @@ return (
     ].join(' ')}
   ></span>
 
-  {/* Autopilot label */}
-  <span className="text-emerald-300">Autopilot active</span>
-
-  {/* Divider */}
-  <span className="text-slate-600">—</span>
+  
 
   {/* Status summary */}
   <span className="text-slate-300 tracking-wider">
