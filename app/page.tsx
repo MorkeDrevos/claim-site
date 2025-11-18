@@ -759,7 +759,7 @@ return (
   <div
     className="absolute inset-0 bg-no-repeat opacity-[0.55]"
     style={{
-      backgroundImage: "url('/img/claim-hero-fire-ice.jpg')",
+      backgroundImage: "url('/img/claim-hero-fire-ice.png')",
       backgroundSize: '1600px auto',
       backgroundPosition: 'center 420px', // 👈 keeps it down where you liked it
     }}
