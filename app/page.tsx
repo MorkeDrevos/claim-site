@@ -740,10 +740,14 @@ if (hasBackendIssue || hasContractIssue) {
 let statusDotColor = 'bg-emerald-400'; // default
 if (hasBackendIssue || hasContractIssue) {
   statusDotColor = 'bg-amber-400';    // warning / partial issue
-}
-if (currentPhase === 'closed') {
+} else if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
+
+// Simple, safe fallback snapshot label
+const snapshotDateLabel = snapshotTakenAt
+  ? snapshotTakenAt
+  : 'Not yet announced';
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
