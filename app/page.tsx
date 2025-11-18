@@ -1256,45 +1256,67 @@ return (
               </p>
             </div>
 
-            <div className="mt-1 flex items-center justify-between gap-3">
-            {steps.map((step, index) => {
-  const isDone = activeIndex >= index;
-  const isActiveStep = step.id === currentPhase;
+            {/* Desktop / tablet: full 5-step timeline */}
+<div className="mt-1 hidden sm:flex items-center justify-between gap-3">
+  {steps.map((step, index) => {
+    const isDone = activeIndex >= index;
+    const isActiveStep = step.id === currentPhase;
 
-  return (
-    <div key={step.id} className="flex flex-1 flex-col items-center">
-      <div
-        className={[
-          'h-2 w-full rounded-full',
-          index === 0 ? '' : 'ml-1',
-          isDone ? 'bg-emerald-400' : 'bg-slate-800',
-        ].join(' ')}
-      />
-      <div className="mt-2 flex items-center gap-2">
+    return (
+      <div key={step.id} className="flex flex-1 flex-col items-center">
         <div
-  className={[
-    'h-2.5 w-2.5 rounded-full border',
-    isDone
-      ? 'bg-emerald-400 border-emerald-300'
-      : 'bg-slate-800 border-slate-600',
-    isActiveStep ? 'animate-[pulse_1.6s_ease-in-out_infinite]' : '',
-  ].join(' ')}
-/>
-        <span
           className={[
-            'tracking-wide',
-            isDone
-              ? 'text-[12px] font-semibold text-slate-300'
-              : 'text-[12px] font-medium text-slate-500',
+            'h-2 w-full rounded-full',
+            index === 0 ? '' : 'ml-1',
+            isDone ? 'bg-emerald-400' : 'bg-slate-800',
           ].join(' ')}
-        >
-          {step.label}
-        </span>
+        />
+        <div className="mt-2 flex items-center gap-2">
+          <div
+            className={[
+              'h-2.5 w-2.5 rounded-full border',
+              isDone
+                ? 'bg-emerald-400 border-emerald-300'
+                : 'bg-slate-800 border-slate-600',
+              isActiveStep ? 'animate-[pulse_1.6s_ease-in-out_infinite]' : '',
+            ].join(' ')}
+          />
+          <span
+            className={[
+              'tracking-wide',
+              isDone
+                ? 'text-[12px] font-semibold text-slate-300'
+                : 'text-[12px] font-medium text-slate-500',
+            ].join(' ')}
+          >
+            {step.label}
+          </span>
+        </div>
       </div>
-    </div>
-  );
-})}  
-            </div>
+    );
+  })}
+</div>
+
+{/* Mobile: simple bar + current phase label */}
+<div className="mt-2 sm:hidden space-y-2">
+  {/* Single progress bar */}
+  <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+    <div
+      className="h-full rounded-full bg-emerald-400 transition-all"
+      style={{
+        width:
+          activeIndex >= 0
+            ? `${((activeIndex + 1) / steps.length) * 100}%`
+            : '0%',
+      }}
+    />
+  </div>
+
+  {/* Current step label */}
+  <p className="text-[11px] text-slate-400">
+    {activeStep ? activeStep.label : 'Round progress'}
+  </p>
+</div>
 
             <p className="mt-3 text-[12px] text-slate-200">
   {progressMessage}
