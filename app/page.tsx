@@ -1381,7 +1381,7 @@ return (
   </span>
 </button>
 
-{/* Desktop CA pill */}
+{/* CA pill – DESKTOP ONLY (Current reward pool” card) */}
 <button
   type="button"
   onClick={handleCopyCa}
