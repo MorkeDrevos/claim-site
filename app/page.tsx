@@ -1064,9 +1064,9 @@ return (
   <span className="text-slate-700 text-[18px]">|</span>
 
   {/* USD – secondary */}
-  <p className="text-[13px] text-slate-400 leading-none">
-    ≈ {rewardUsdText} USD
-  </p>
+  <p className="text-[13px] text-slate-400 leading-none translate-y-[1px]">
+  ≈ {rewardUsdText} USD
+</p>
 </div>
 
 
