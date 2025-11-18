@@ -685,7 +685,7 @@ const missionRows: MissionRow[] = [
 
 
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Opens soon' },
+    { id: 'scheduled', label: 'Claim window Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
@@ -743,12 +743,9 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Snapshot timing
-const snapshotTakenAt = portalState.snapshot?.takenAt;
-
-// If there's no snapshot yet, just use an empty string (nothing shown)
-const snapshotDateLabel = snapshotTakenAt || '';
-
+// Snapshot timing label – show nothing if there’s no snapshot yet
+const snapshotDateLabel = portalState.snapshot?.takenAt ?? '';
+ 
 return (
   <main className="min-h-screen text-slate-50">
     {/* HERO BACKGROUND */}
