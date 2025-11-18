@@ -888,21 +888,9 @@ return (
       </header>
 
       {/* Content */}
-<div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-  {/* Faint CLAIM background ring */}
-  <div className="pointer-events-none absolute inset-x-[-60px] top-[-40px] -z-10 opacity-[0.18]">
-    <Image
-      src="/img/claim-hero-ring.png"
-      alt="$CLAIM background"
-      width={1200}
-      height={1200}
-      className="mx-auto w-full max-w-[900px] object-contain"
-      priority
-    />
-  </div>
-
-  {/* HERO: Claim window */}
-  <SoftCard>
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+        {/* HERO: Claim window */}
+        <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
@@ -1214,22 +1202,40 @@ return (
 {/* Divider + NASA footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
-  {/* Status line with pulse dot */}
-  <p className="flex items-center gap-2 text-[12px] text-slate-200 leading-snug font-normal">
+  {/* STATUS BADGE — mission-control style */}
+<div
+  className="
+    mt-4
+    inline-flex items-center gap-3
+    rounded-full
+    bg-slate-900/80
+    border border-slate-800/70
+    px-4 py-2
+    text-[11px] font-semibold uppercase tracking-[0.22em]
+    text-slate-300
+  "
+>
+  {/* Dot */}
   <span
-  className={[
-    'flex-none',
-    'inline-block',
-    'h-[9px] w-[9px]', // perfect circle size
-    'rounded-full',
-    statusDotColor,
-    'shadow-[0_0_6px_rgba(16,185,129,0.30)]',
-    'animate-[pulse_2.8s_ease-in-out_infinite]'
-  ].join(' ')}
-></span>
+    className={[
+      'h-3 w-3 rounded-full',
+      statusDotColor,
+      'shadow-[0_0_6px_rgba(16,185,129,0.35)]',
+      'animate-[pulse_2.8s_ease-in-out_infinite]'
+    ].join(' ')}
+  ></span>
 
-  {statusSummary}
-</p>
+  {/* Autopilot label */}
+  <span className="text-emerald-300">Autopilot active</span>
+
+  {/* Divider */}
+  <span className="text-slate-600">—</span>
+
+  {/* Status summary */}
+  <span className="text-slate-300 tracking-wider">
+    {statusSummary}
+  </span>
+</div>
 
 </div>
 
