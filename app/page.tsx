@@ -897,7 +897,7 @@ return (
       </header>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-2 sm:px-6 pb-14 pt-10">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
