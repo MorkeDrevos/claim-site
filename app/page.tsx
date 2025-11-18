@@ -1370,38 +1370,37 @@ return (
             </div>
           </SoftCard>
 
-                    {/* Minimum holding */}
-          <SoftCard>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Minimum holding
-            </p>
+          {/* Minimum holding */}
+<SoftCard>
+  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+    Minimum holding
+  </p>
 
-            <div className="mt-2 space-y-1">
-              <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
-                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-              </p>
-              <p className="text-[13px] text-slate-400">
-                Held in the connected wallet at snapshot.
-              </p>
-            </div>
+  <div className="mt-2 space-y-1">
+    <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+      {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+    </p>
+    <p className="text-[13px] text-slate-400">
+      Held in the connected wallet at snapshot.
+    </p>
+  </div>
 
-            {/* BUY $CLAIM ON JUPITER – inside the card, full-width */}
-            <div className="mt-5">
-              <a
-                href={JUPITER_BUY_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-full items-center justify-center
-                           rounded-full bg-emerald-500/90 px-4 py-2.5
-                           text-[11px] font-semibold uppercase tracking-[0.22em]
-                           text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
-                           hover:bg-emerald-400 hover:text-slate-950
-                           transition-colors"
-              >
-                Buy $CLAIM on Jupiter
-              </a>
-            </div>
-          </SoftCard>
+  {/* Inline BUY button inside the card (like your screenshot) */}
+  <div className="mt-4">
+    <a
+      href={JUPITER_BUY_URL}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center rounded-full
+                 bg-emerald-500/15 px-4 py-2
+                 text-[11px] font-semibold uppercase tracking-[0.22em]
+                 text-emerald-300 hover:bg-emerald-500/25 hover:text-emerald-100
+                 transition-colors"
+    >
+      Buy $CLAIM on Jupiter
+    </a>
+  </div>
+</SoftCard>
 
           {/* Your eligibility */}
           <SoftCard>
