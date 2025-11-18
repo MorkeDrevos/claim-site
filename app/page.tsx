@@ -888,9 +888,21 @@ return (
       </header>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
-        {/* HERO: Claim window */}
-        <SoftCard>
+<div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+  {/* Faint CLAIM background ring */}
+  <div className="pointer-events-none absolute inset-x-[-60px] top-[-40px] -z-10 opacity-[0.18]">
+    <Image
+      src="/img/claim-hero-ring.png"
+      alt="$CLAIM background"
+      width={1200}
+      height={1200}
+      className="mx-auto w-full max-w-[900px] object-contain"
+      priority
+    />
+  </div>
+
+  {/* HERO: Claim window */}
+  <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
