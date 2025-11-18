@@ -1053,7 +1053,7 @@ return (
       </div>
 
       {/* CLAIM pool + USD side-by-side */}
-<div className="flex items-start justify-end gap-3 mt-[10px]">
+<div className="flex items-center justify-end gap-3 mt-[10px]">
   {/* CLAIM – primary */}
   <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
@@ -1061,12 +1061,12 @@ return (
   </p>
 
   {/* Divider */}
-  <span className="text-slate-700 text-[18px]">|</span>
+  <span className="text-slate-600 text-[18px]">|</span>
 
-  {/* USD – secondary */}
-  <p className="text-[13px] text-slate-400 leading-none translate-y-[1px]">
-  ≈ {rewardUsdText} USD
-</p>
+  {/* USD – dynamic & slightly larger */}
+  <p className="text-[15px] sm:text-[16px] text-slate-300 leading-none translate-y-[1px] font-medium">
+    ≈ {rewardUsdText} USD
+  </p>
 </div>
 
 
