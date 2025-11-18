@@ -1372,7 +1372,7 @@ return (
 >
   {/* Left: Copy CA label */}
   <span className="mr-1 text-[10px] tracking-[0.22em] text-emerald-300">
-    Copy CA
+    MOBILE
   </span>
 
   {/* Right: truncated address */}
@@ -1397,7 +1397,7 @@ return (
     {shortCa}
   </span>
   <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">
-    Copy
+    desktop REWARD POOL
   </span>
 </button>
             </div>
