@@ -1201,45 +1201,42 @@ return (
 
 {/* Divider + NASA footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-
-  {/* STATUS BADGE — compact, less rounded */}
-<div
-  className="
-    mt-4
-    inline-flex items-center gap-4     /* ⬅️ no w-full */
-    rounded-xl
-    bg-slate-900/80
-    border border-slate-800/80
-    px-5 py-3
-    text-[10px] font-semibold uppercase tracking-[0.22em]
-    text-slate-200
-  "
->
-  {/* Dot */}
-  <span
-    className={[
-      'h-2.5 w-2.5 rounded-full',
-      'flex-none',
-      statusDotColor,
-      'shadow-[0_0_8px_currentColor]',
-      'animate-[pulse_2.6s_ease-in-out_infinite]',
-    ].join(' ')}
-  />
-
-  {/* Status summary – max 3 lines */}
-  <span
-    className="text-slate-200 leading-snug tracking-[0.22em]"
-    style={{
-      display: '-webkit-box',
-      WebkitLineClamp: 4,
-      WebkitBoxOrient: 'vertical',
-      overflow: 'hidden',
-    }}
+  {/* STATUS BADGE — compact, no truncation */}
+  <div
+    className="
+      mt-4
+      inline-flex max-w-full items-center gap-4
+      rounded-2xl            /* less rounded than full pill */
+      bg-slate-900/80
+      border border-slate-800/80
+      px-5 py-3
+    "
   >
-    {statusSummary}
-  </span>
-</div>
+    {/* Dot */}
+    <span
+      className={[
+        'h-2.5 w-2.5 rounded-full',
+        'flex-none',
+        statusDotColor,
+        'shadow-[0_0_8px_currentColor]',
+        'animate-[pulse_2.6s_ease-in-out_infinite]',
+      ].join(' ')}
+    />
 
+    {/* Status summary — full text, just wraps */}
+    <p
+      className="
+        text-[11px]
+        font-semibold
+        uppercase
+        tracking-[0.18em]    /* a bit tighter so it fits */
+        leading-[1.6]
+        text-slate-200
+      "
+    >
+      {statusSummary}
+    </p>
+  </div>
 </div>
 
   </SoftCard>
