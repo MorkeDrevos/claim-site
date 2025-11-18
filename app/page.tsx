@@ -760,7 +760,7 @@ return (
     "
   >
                   {/* HERO BACKGROUND */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
         {/* Base gradient – much stronger */}
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
 
@@ -775,7 +775,7 @@ return (
       </div>
 
       {/* Top nav – sticky */}
-      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
+      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           {/* Left: logo + title */}
 <Link href="/" className="flex items-center gap-3 group">
