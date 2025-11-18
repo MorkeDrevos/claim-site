@@ -1113,7 +1113,7 @@ return (
             </div>
 
 {/* Mobile-only Connect Wallet CTA */}
-<div className="block sm:hidden mt-3 mb-3">
+<div className="block sm:hidden mt-2 mb-2">
   <button
     type="button"
     onClick={handleConnectClick}
@@ -1124,14 +1124,10 @@ return (
       px-6 py-4
       text-[13px] font-semibold uppercase tracking-[0.32em]
 
-      bg-slate-900/80
+      bg-gradient-to-b from-emerald-500/10 via-slate-900/80 to-slate-900/90
       text-slate-100
       border border-emerald-400/40
-      shadow-[0_0_28px_rgba(16,185,129,0.35)]
-
-      hover:bg-slate-900
-      hover:border-emerald-400/60
-      hover:text-emerald-200
+      shadow-[0_0_28px_rgba(16,185,129,0.45)]
 
       active:scale-[0.98]
       transition-all
