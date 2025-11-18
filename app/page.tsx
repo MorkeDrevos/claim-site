@@ -707,7 +707,7 @@ const missionRows: MissionRow[] = [
     progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage = 'Rewards have been distributed for this round.';
+    progressMessage = 'Distribution sequence active — standby for completion.';
   }
 
 
