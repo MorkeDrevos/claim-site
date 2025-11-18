@@ -743,8 +743,8 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Simple, safe snapshot label (empty if unknown)
-const snapshotDateLabel = snapshotTakenAt || '';
+// Simple, safe snapshot label – no "Not yet announced"
+const snapshotDateLabel = snapshotTakenAt || '—';
 
 return (
   <main
@@ -755,7 +755,7 @@ return (
       from-emerald-500/5
       via-slate-950/90
       to-slate-950
-      overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
+      overflow-x-hidden
     "
   >
   
