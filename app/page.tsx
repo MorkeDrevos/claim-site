@@ -749,30 +749,18 @@ const snapshotDateLabel = snapshotTakenAt
   : 'Not yet announced';
 
 return (
-  <main
-    className="
-      min-h-screen
-      text-slate-50
-      bg-gradient-to-b
-      from-emerald-500/5
-      via-slate-950/90
-      to-slate-950
-    "
-  >
-                  {/* HERO BACKGROUND */}
-      <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        {/* Base gradient – much stronger */}
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
+  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+        {/* HERO BACKGROUND */}
+<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+  {/* Background coin image */}
+  <div
+    className="absolute inset-0 bg-center bg-cover opacity-[0.12]"
+    style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
+  />
 
-        {/* Left glow */}
-        <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
-
-        {/* Right glow */}
-        <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
-
-        {/* Horizon line */}
-        <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
-      </div>
+  {/* Soft gradient wash on top */}
+  <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/20 via-transparent to-slate-950/70" />
+</div>
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
