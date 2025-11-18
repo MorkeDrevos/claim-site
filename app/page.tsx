@@ -92,7 +92,7 @@ function SoftCard({
 }) {
   return (
     <div
-      className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
+            className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
     >
       {children}
     </div>
@@ -897,7 +897,7 @@ return (
       </header>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-2 sm:px-6 pb-14 pt-10">
+      <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
