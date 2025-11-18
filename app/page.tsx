@@ -1211,7 +1211,7 @@ return (
     bg-slate-900/80
     border border-slate-800/70
     px-4 py-2
-    text-[11px] font-semibold uppercase tracking-[0.22em]
+    text-[10px] font-semibold uppercase tracking-[0.22em]
     text-slate-300
   "
 >
@@ -1225,7 +1225,6 @@ return (
     'flex-none'
   ].join(' ')}
 ></span>
-
 
   {/* Status summary */}
   <span className="text-slate-300 tracking-wider">
