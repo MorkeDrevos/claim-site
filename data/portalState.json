@@ -8,8 +8,8 @@
   "claimWindowClosesAt": "2025-11-18T22:01:00Z",
   "distributionCompletedAt": null,
 
-  "rewardPoolAmountClaim": 19325670,
-  "rewardPoolAmountUsd": 21865.13,
+  "rewardPoolAmountClaim": 10000000,
+  "rewardPoolAmountUsd": 165.13,
 
   "walletConnected": false,
   "walletShort": "",
