@@ -1280,7 +1280,7 @@ return (
 ></span>
 
   {/* Status summary */}
-  <span className="text-slate-300 tracking-wider">
+  <span className="text-slate-200 tracking-wider">
     {statusSummary}
   </span>
 </div>
