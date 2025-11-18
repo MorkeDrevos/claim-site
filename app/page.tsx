@@ -847,28 +847,26 @@ return (
               TG
             </a>
 
-            {/* Contract address pill – nav */}
+            {/* Contract address pill (top nav) */}
 <button
   type="button"
   onClick={handleCopyCa}
-  className="inline-flex items-center justify-center gap-2 rounded-full
-             border border-slate-700/70 bg-slate-900/70
-             px-4 py-2                 /* 🔥 taller, matches Connect Wallet */
+  className="inline-flex h-10 items-center gap-3 rounded-full 
+             border border-slate-700/70 
+             bg-slate-900/70 
+             px-4
              text-[10px] font-semibold uppercase tracking-[0.22em]
              text-slate-200
              hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
              transition-all"
 >
-  {/* Desktop / tablet: show CA + short address */}
-  <span className="hidden sm:inline text-[10px] tracking-[0.22em] text-slate-400">
-    CA
-  </span>
-  <span className="hidden sm:inline font-mono text-[11px] text-slate-100">
+  {/* truncated CA – gives nice width next to Connect Wallet */}
+  <span className="font-mono text-[11px] text-slate-100">
     {shortCa}
   </span>
 
-  {/* Mobile: show "Copy CA" text */}
-  <span className="inline sm:hidden text-[10px] tracking-[0.22em] text-slate-200">
+  {/* “Copy CA” label (shows on both mobile + desktop) */}
+  <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
     Copy CA
   </span>
 </button>
@@ -878,27 +876,27 @@ return (
               {networkLabel}
             </span>
 
-            {/* Wallet button */}
+            {/* Connect Wallet button */}
             <button
-              type="button"
-              onClick={handleConnectClick}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center
-                         rounded-full px-5 py-2
-                         bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-                         border border-emerald-400/40
-                         text-[11px] font-semibold uppercase tracking-[0.22em]
-                         text-emerald-200
-                         shadow-[0_0_18px_rgba(16,185,129,0.25)]
-                         hover:from-emerald-400/35 hover:to-emerald-500/40
-                         hover:border-emerald-400 hover:text-white
-                         transition-all"
-            >
-              {connectedWallet
-                ? `${connectedWallet.name} connected`
-                : effectiveWalletConnected
-                ? 'Wallet connected'
-                : 'Connect wallet'}
-            </button>
+  type="button"
+  onClick={handleConnectClick}
+  className="flex-1 sm:flex-none inline-flex h-10 items-center justify-center
+             rounded-full px-5
+             bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+             border border-emerald-400/40
+             text-[11px] font-semibold uppercase tracking-[0.22em]
+             text-emerald-200
+             shadow-[0_0_18px_rgba(16,185,129,0.25)]
+             hover:from-emerald-400/35 hover:to-emerald-500/40
+             hover:border-emerald-400 hover:text-white
+             transition-all"
+>
+  {connectedWallet
+    ? `${connectedWallet.name} connected`
+    : effectiveWalletConnected
+    ? 'Wallet connected'
+    : 'Connect wallet'}
+</button>
           </div>
         </div>
       </header>
