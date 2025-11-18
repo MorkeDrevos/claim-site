@@ -752,16 +752,17 @@ return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+
   {/* Base dark wash */}
   <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-[#020b11] to-[#020617]" />
 
-  {/* Coin image – positioned mostly behind the lower section */}
+  {/* Coin image – positioned lower, just like the screenshot you liked */}
   <div
     className="absolute inset-0 bg-no-repeat opacity-[0.55]"
     style={{
       backgroundImage: "url('/img/claim-hero-fire-ice.png')",
       backgroundSize: '1600px auto',
-      backgroundPosition: 'center 420px', // 👈 keeps it down where you liked it
+      backgroundPosition: 'center 420px', // 👈 adjust this if you want more/less coin
     }}
   />
 
