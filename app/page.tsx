@@ -1260,29 +1260,26 @@ return (
   className="
     mt-4
     inline-flex items-center gap-3
-    rounded-[10px]
+    rounded-[6px]
     bg-slate-900/80
     border border-slate-800/70
-    px-4 py-2
-    text-[13px] font-medium tracking-tight
-    text-slate-300
+    px-4 py-3
+    text-[13px] leading-snug text-slate-400
   "
 >
   {/* Dot */}
   <span
-  className={[
-    'h-2.5 w-2.5 rounded-full',             // slightly smaller, cleaner
-    statusDotColor,                         // your dynamic color
-    'shadow-[0_0_8px_currentColor]',        // uses dot color for glow
-    'animate-[pulse_2.6s_ease-in-out_infinite]',
-    'flex-none'
-  ].join(' ')}
-></span>
+    className={[
+      'h-2.5 w-2.5 rounded-full',
+      statusDotColor,
+      'shadow-[0_0_8px_currentColor]',
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
+      'flex-none',
+    ].join(' ')}
+  />
 
   {/* Status summary */}
-  <span className="text-slate-300 tracking-wider">
-    {statusSummary}
-  </span>
+  <span>{statusSummary}</span>
 </div>
 
 </div>
