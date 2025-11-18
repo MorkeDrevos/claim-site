@@ -1199,44 +1199,42 @@ return (
       </span>
     </div>
 
-{/* Divider + NASA footer copy */}
-<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-  {/* STATUS BADGE — compact, no truncation */}
-  <div
+{/* STATUS BADGE — mission-control style */}
+<div
+  className="
+    mt-4
+    flex w-full items-center gap-4
+    rounded-3xl                 /* less rounded than pill, more space */
+    bg-slate-900/80
+    border border-slate-800/80
+    px-5 py-3
+  "
+>
+  {/* Dot */}
+  <span
+    className={[
+      'h-2.5 w-2.5 rounded-full',
+      'flex-none',
+      statusDotColor,
+      'shadow-[0_0_8px_currentColor]',
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
+    ].join(' ')}
+  />
+
+  {/* Status summary – should stay within 3 lines now */}
+  <p
     className="
-      mt-4
-      inline-flex max-w-full items-center gap-4
-      rounded-2xl            /* less rounded than full pill */
-      bg-slate-900/80
-      border border-slate-800/80
-      px-5 py-3
+      flex-1
+      text-[10px]                  /* a bit smaller */
+      font-semibold
+      uppercase
+      tracking-[0.16em]            /* tighter so it packs better */
+      leading-[1.55]
+      text-slate-200
     "
   >
-    {/* Dot */}
-    <span
-      className={[
-        'h-2.5 w-2.5 rounded-full',
-        'flex-none',
-        statusDotColor,
-        'shadow-[0_0_8px_currentColor]',
-        'animate-[pulse_2.6s_ease-in-out_infinite]',
-      ].join(' ')}
-    />
-
-    {/* Status summary — full text, just wraps */}
-    <p
-      className="
-        text-[11px]
-        font-semibold
-        uppercase
-        tracking-[0.18em]    /* a bit tighter so it fits */
-        leading-[1.6]
-        text-slate-200
-      "
-    >
-      {statusSummary}
-    </p>
-  </div>
+    {statusSummary}
+  </p>
 </div>
 
   </SoftCard>
