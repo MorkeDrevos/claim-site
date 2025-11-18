@@ -471,6 +471,8 @@ if (countdownTarget) {
     roundNumber,
   } = state;
 
+    const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
+
   // Derived from phase
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
@@ -742,11 +744,6 @@ if (hasBackendIssue || hasContractIssue) {
 if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
-
-// Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
