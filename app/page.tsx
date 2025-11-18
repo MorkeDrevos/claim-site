@@ -1037,7 +1037,7 @@ return (
                           bg-slate-900/95 p-4 
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
             >
-              <p className="text-[14px] text-slate-200 leading-tight">
+              <p className="text-[12px] text-slate-200 leading-tight">
   Rewards are{' '}
   <span className="text-emerald-300 font-medium">shared equally </span>
   among all wallets that lock in during the window. USD value shown
