@@ -748,7 +748,7 @@ const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
- return (
+return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
     {/* HERO BACKGROUND */}
     <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
