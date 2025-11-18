@@ -1260,11 +1260,10 @@ return (
   className="
     mt-4
     inline-flex items-center gap-3
-    rounded-[6px]
+    rounded-[10px]
     bg-slate-900/80
     border border-slate-800/70
-    px-4 py-3
-    text-[13px] leading-snug text-slate-400
+    px-4 py-2
   "
 >
   {/* Dot */}
@@ -1278,8 +1277,10 @@ return (
     ].join(' ')}
   />
 
-  {/* Status summary */}
-  <span>{statusSummary}</span>
+  {/* Status summary – same vibe as body text, not all caps */}
+  <span className="text-[13px] font-medium text-slate-200 leading-snug">
+    {statusSummary}
+  </span>
 </div>
 
 </div>
