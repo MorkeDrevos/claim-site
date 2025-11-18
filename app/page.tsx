@@ -748,13 +748,22 @@ const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-  return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Subtle moving glows */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
-        <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
-      </div>
+ return (
+  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+    {/* HERO BACKGROUND */}
+    <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
+      {/* Base gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/15 via-slate-950/40 to-slate-950" />
+
+      {/* Left glow */}
+      <div className="absolute -left-32 top-[-40px] h-64 w-64 rounded-full bg-emerald-400/25 blur-3xl opacity-70" />
+
+      {/* Right glow */}
+      <div className="absolute right-[-40px] top-10 h-72 w-72 rounded-full bg-sky-400/25 blur-3xl opacity-60" />
+
+      {/* Soft horizon line */}
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent opacity-40" />
+    </div>
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
