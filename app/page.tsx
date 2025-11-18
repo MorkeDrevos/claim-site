@@ -748,17 +748,19 @@ const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-<main
-  className="
-    min-h-screen
-    text-slate-50
-    bg-gradient-to-b
-    from-emerald-500/5
-    via-slate-950/90
-    to-slate-950
-    overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
-  "
->
+return (
+  <main
+    className="
+      min-h-screen
+      text-slate-50
+      bg-gradient-to-b
+      from-emerald-500/5
+      via-slate-950/90
+      to-slate-950
+      overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
+    "
+  >
+  
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
         {/* Base gradient – much stronger */}
