@@ -872,20 +872,20 @@ return (
 
             {/* Wallet button */}
             <button
-              type="button"
-              onClick={handleConnectClick}
-              className="inline-flex items-center rounded-full
-                         px-5 py-2
-                         bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-                         border border-emerald-400/40
-                         text-[11px] font-semibold uppercase tracking-[0.22em]
-                         text-emerald-200
-                         shadow-[0_0_18px_rgba(16,185,129,0.25)]
-                         hover:from-emerald-400/35 hover:to-emerald-500/40
-                         hover:border-emerald-400
-                         hover:text-white
-                         transition-all"
-            >
+  type="button"
+  onClick={handleConnectClick}
+  className="hidden sm:inline-flex items-center rounded-full
+             px-5 py-2
+             bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+             border border-emerald-400/40
+             text-[11px] font-semibold uppercase tracking-[0.22em]
+             text-emerald-200
+             shadow-[0_0_18px_rgba(16,185,129,0.25)]
+             hover:from-emerald-400/35 hover:to-emerald-500/40
+             hover:border-emerald-400
+             hover:text-white
+             transition-all"
+>
               {connectedWallet
                 ? `${connectedWallet.name} connected`
                 : effectiveWalletConnected
@@ -1111,6 +1111,31 @@ return (
 </div>
 {/* end CLAIM WINDOW CARD */}
             </div>
+
+{/* Mobile-only Connect Wallet CTA – sits under CLAIM WINDOW CARD */}
+<div className="mt-4 sm:hidden">
+  <button
+    type="button"
+    onClick={handleConnectClick}
+    className="
+      flex w-full items-center justify-center
+      rounded-2xl border border-slate-800/80
+      bg-slate-950/90
+      px-5 py-3
+      text-[11px] font-semibold uppercase tracking-[0.26em]
+      text-slate-100
+      shadow-[0_22px_60px_rgba(0,0,0,0.85)]
+      hover:border-emerald-400/70 hover:text-emerald-200 hover:bg-slate-900
+      transition-colors
+    "
+  >
+    {connectedWallet
+      ? `${connectedWallet.name} connected`
+      : effectiveWalletConnected
+      ? 'Wallet connected'
+      : 'Connect wallet'}
+  </button>
+</div>
 
 {/* RIGHT COLUMN – Mission Control (NASA style) */}
 <div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
