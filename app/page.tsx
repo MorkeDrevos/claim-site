@@ -1055,9 +1055,9 @@ return (
       {/* CLAIM pool + USD side-by-side */}
 <div className="flex items-center justify-end gap-3 mt-[2px]">
   {/* CLAIM – primary */}
-  <p className="text-[28px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-tight">
+  <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
-    <span className="ml-1 text-[16px] text-emerald-300 font-semibold">$CLAIM</span>
+    <span className="ml-1 text-[15px] text-emerald-300 font-semibold">$CLAIM</span>
   </p>
 
   {/* Divider */}
