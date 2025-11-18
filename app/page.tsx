@@ -424,7 +424,7 @@ if (countdownTarget) {
 
   if (!state && !error) {
     return (
-  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+      <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
           <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
         </div>
@@ -748,10 +748,22 @@ const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
   : 'Not yet announced';
 
-  return (
-    <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Subtle moving glows */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    return (
+    <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+      {/* HERO BACKGROUND – CLAIM coin + soft wash (fire/ice) */}
+      <div className="pointer-events-none fixed inset-0 -z-20">
+        {/* Coin image */}
+        <div
+          className="absolute inset-[-140px] bg-center bg-cover opacity-[0.22]"
+          style={{ backgroundImage: "url('/img/claim-hero-fire-ice.png')" }}
+        />
+
+        {/* Dark / green wash to keep content readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/80 to-slate-950" />
+      </div>
+
+      {/* Subtle moving glows ABOVE coin but BELOW content */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
         <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
       </div>
@@ -760,34 +772,22 @@ const snapshotDateLabel = snapshotTakenAt
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           {/* Left: logo + title */}
-<Link href="/" className="flex items-center gap-3 group">
-  {/* CLAIM logo circle */}
-  <div
-    className="flex h-9 w-9 items-center justify-center rounded-full
-               bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
-               shadow-[0_0_12px_rgba(16,185,129,0.25)]
-               transition-all group-hover:ring-emerald-400/70
-               group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
-  >
-    <Image
-      src="/img/claim-logo-circle.png"
-      alt="CLAIM Logo"
-      width={28}
-      height={28}
-      className="object-contain"
-      priority
-    />
-  </div>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 transition-all group-hover:ring-emerald-400/70">
+              <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-200 group-hover:text-white">
+                $
+              </span>
+            </div>
 
-  <div className="flex flex-col">
-    <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-      CLAIM PORTAL
-    </span>
-    <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-      $CLAIM — Token of Timing
-    </span>
-  </div>
-</Link>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
+                CLAIM PORTAL
+              </span>
+              <span className="text-sm font-medium text-slate-100 group-hover:text-white">
+                $CLAIM — Token of Timing
+              </span>
+            </div>
+          </Link>
 
           {/* Right: nav items */}
           <div className="flex items-center gap-3">
@@ -1424,8 +1424,9 @@ const snapshotDateLabel = snapshotTakenAt
       </ul>
 
       <p className="text-[11px] text-slate-500">
-  Eligibility is derived solely from the wallet’s token balance as it existed at the snapshot slot for each round.
-</p>
+        The final rule set for each round will be published before the snapshot
+        and mirrored here inside the portal.
+      </p>
     </div>
   )}
 
@@ -1433,7 +1434,7 @@ const snapshotDateLabel = snapshotTakenAt
   {activeTab === 'rewards' && (
     <div className="space-y-4">
       <p className="text-[13px]">
-        Rewards are earned by presence. If you show up during the live claim
+        Rewards are earned by presence — if you show up during the live claim
         window and lock your share, you receive an equal split of that round’s pool.
       </p>
 
