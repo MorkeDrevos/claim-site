@@ -743,19 +743,13 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-let statusDotColor = 'bg-emerald-400'; // default
-if (hasBackendIssue || hasContractIssue) {
-  statusDotColor = 'bg-amber-400';    // warning / partial issue
-}
-if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500';    // resting / no active processes
-}
-
 // Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
+const snapshotDateLabel = snapshotTakenAt
+  ? snapshotTakenAt
+  : 'Not yet announced';
 
-return (
-  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* Subtle moving glows */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
