@@ -1090,7 +1090,7 @@ const snapshotDateLabel = snapshotTakenAt
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
-<div className="flex items-baseline justify-between pr-1">
+<di<v className="flex items-baseline justify-between pr-1">
   {/* LEFT: Round number */}
   <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
     Round {roundNumber ?? 1}
