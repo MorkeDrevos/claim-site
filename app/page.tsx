@@ -1424,8 +1424,7 @@ const snapshotDateLabel = snapshotTakenAt
       </ul>
 
       <p className="text-[11px] text-slate-500">
-  <p className="text-[11px] text-slate-500">
-  Eligibility is derived solely from the wallet’s token balance as it existed at the snapshot slot for this round.
+  Round rules focus on fairness, clarity, and rewarding presence.
 </p>
     </div>
   )}
