@@ -762,8 +762,8 @@ return (
     style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
   />
 
-  {/* Soft gradient wash on top */}
-  <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/20 via-transparent to-slate-950/70" />
+    {/* Soft gradient wash on top */}
+  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
 </div>
 
       {/* Top nav – sticky */}
