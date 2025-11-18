@@ -434,7 +434,7 @@ if (countdownTarget) {
 
   if (error || !state) {
     return (
-      <main className="min-h-screen bg-slate-950 text-slate-50">
+      <main className="relative min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-16 sm:px-6">
           <h1 className="text-xl font-semibold">CLAIM portal</h1>
           <p className="text-sm text-red-400">{error ?? 'No data available'}</p>
@@ -751,7 +751,7 @@ const snapshotDateLabel = snapshotTakenAt
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
-<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+<div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
   {/* Background coin image */}
   <div
     className="
@@ -879,7 +879,7 @@ return (
       </header>
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+<div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
