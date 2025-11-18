@@ -751,18 +751,22 @@ const snapshotDateLabel = snapshotTakenAt
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
-<div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-  {/* Background coin image */}
+<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+  {/* Base dark wash */}
+  <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-[#020b11] to-[#020617]" />
+
+  {/* Coin image – positioned mostly behind the lower section */}
   <div
-    className="
-      absolute inset-0
-      bg-center bg-contain bg-no-repeat
-      opacity-[0.40]
-    "
-    style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
+    className="absolute inset-0 bg-no-repeat opacity-[0.55]"
+    style={{
+      backgroundImage: "url('/img/claim-hero-fire-ice.jpg')",
+      backgroundSize: '1600px auto',
+      backgroundPosition: 'center 420px', // 👈 keeps it down where you liked it
+    }}
   />
-  {/* Soft gradient wash on top */}
-  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
+
+  {/* Soft vignette on top */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
 </div>
 
       {/* Top nav – sticky */}
