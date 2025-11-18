@@ -746,7 +746,6 @@ if (currentPhase === 'closed') {
 // Simple, safe fallback snapshot label
 const snapshotDateLabel = snapshotTakenAt
   ? snapshotTakenAt
-  : 'Not yet announced';
 
 return (
   <main
