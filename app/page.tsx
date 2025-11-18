@@ -1037,7 +1037,7 @@ return (
                           bg-slate-900/95 p-4 
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
             >
-              <p className="text-[14px] text-slate-200 leading-relaxed">
+              <p className="text-[12px] text-slate-200 leading-relaxed">
   Rewards are paid in{' '}
   <span className="text-emerald-300 font-medium">$CLAIM</span>
   {' '}and shared equally among wallets that locked in during the live window.
@@ -1051,7 +1051,7 @@ return (
       {/* CLAIM pool + USD — responsive */}
 <div
   className="
-    flex gap-3 mt-[10px]
+    flex gap-3 mt-[2px]
     items-end justify-end
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
@@ -1070,7 +1070,7 @@ return (
   {/* USD */}
   <p
     key={rewardUsdText}
-    className="text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
   >
     ≈ {rewardUsdText} USD
   </p>
