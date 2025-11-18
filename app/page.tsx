@@ -802,7 +802,7 @@ return (
       CLAIM PORTAL
     </span>
     <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-      $CLAIM — Token of Timing
+      $CLAIM - Token of Timing
     </span>
   </div>
 </Link>
@@ -1095,7 +1095,7 @@ return (
 
     <p>
       • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-      <span className="text-emerald-300/70 font-medium">snapshot</span> — wallets
+      <span className="text-emerald-300/70 font-medium">snapshot</span> - wallets
       below the minimum sit out that round.
     </p>
   </div>
