@@ -1112,34 +1112,38 @@ return (
 {/* end CLAIM WINDOW CARD */}
             </div>
 
-{/* Mobile-only Connect Wallet CTA - matches CLAIM btn height + Jupiter CTA colors */}
-<div className="mt-5 sm:hidden">
+{/* Mobile-only CONNECT WALLET CTA */}
+<div className="mt-4 sm:hidden px-4">
   <button
     type="button"
     onClick={handleConnectClick}
     className="
       w-full
-      flex items-center justify-center
       rounded-full
-      px-6 py-4       /* SAME HEIGHT as OPENS SOON button */
-      text-[13px] font-semibold uppercase tracking-[0.32em]
-
-      /* Jupiter CTA colors */
-      bg-emerald-500/90 
-      text-emerald-950 
+      bg-emerald-500/90
       border border-emerald-400/70
-      shadow-[0_0_24px_rgba(16,185,129,0.65)]
+      shadow-[0_0_28px_rgba(16,185,129,0.55)]
+      
+      /* Height + padding tuned to match OPENS SOON button */
+      py-4
+
+      /* Text */
+      text-[13px]
+      font-semibold
+      tracking-[0.32em]
+      uppercase
+      text-emerald-950
 
       /* Hover */
+      transition-colors
       hover:bg-emerald-400 hover:text-slate-950
-      transition-all
     "
   >
     {connectedWallet
       ? `${connectedWallet.name} connected`
       : effectiveWalletConnected
-      ? 'Wallet connected'
-      : 'Connect wallet'}
+      ? 'WALLET CONNECTED'
+      : 'CONNECT WALLET'}
   </button>
 </div>
 
