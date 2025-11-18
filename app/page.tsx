@@ -744,9 +744,7 @@ if (currentPhase === 'closed') {
 }
 
 // Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
+const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
 
 return (
   <main
@@ -757,7 +755,7 @@ return (
       from-emerald-500/5
       via-slate-950/90
       to-slate-950
-      overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
+      overflow-x-hidden
     "
   >
   
