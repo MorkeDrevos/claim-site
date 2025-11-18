@@ -1385,7 +1385,7 @@ return (
     </p>
   </div>
 
-  {/* Inline BUY button inside the card (like before) */}
+  {/* In-card BUY button – aligns with other cards */}
   <div className="mt-4">
     <a
       href={JUPITER_BUY_URL}
@@ -1394,11 +1394,10 @@ return (
       className="
         inline-flex w-full items-center justify-center
         rounded-full
-        bg-emerald-500/90 px-4 py-2.5
+        bg-emerald-500/15 px-4 py-2.5
         text-[11px] font-semibold uppercase tracking-[0.22em]
-        text-emerald-950
-        shadow-[0_0_24px_rgba(16,185,129,0.65)]
-        hover:bg-emerald-400 hover:text-slate-950
+        text-emerald-300
+        hover:bg-emerald-500/25
         transition-colors
       "
     >
