@@ -847,25 +847,29 @@ return (
               TG
             </a>
 
-            {/* Contract address pill */}
-            <button
+            {/* Contract address pill – nav */}
+<button
   type="button"
   onClick={handleCopyCa}
-  className="inline-flex items-center gap-2 rounded-full 
-             border border-slate-700/70 
-             bg-slate-900/70 
-             px-4 py-1.5
+  className="inline-flex items-center justify-center gap-2 rounded-full
+             border border-slate-700/70 bg-slate-900/70
+             px-4 py-2                 /* 🔥 taller, matches Connect Wallet */
              text-[10px] font-semibold uppercase tracking-[0.22em]
              text-slate-200
              hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
              transition-all"
 >
-  <span className="text-[10px] tracking-[0.22em] text-slate-400">
+  {/* Desktop / tablet: show CA + short address */}
+  <span className="hidden sm:inline text-[10px] tracking-[0.22em] text-slate-400">
     CA
   </span>
-
-  <span className="font-mono text-[11px] text-slate-100">
+  <span className="hidden sm:inline font-mono text-[11px] text-slate-100">
     {shortCa}
+  </span>
+
+  {/* Mobile: show "Copy CA" text */}
+  <span className="inline sm:hidden text-[10px] tracking-[0.22em] text-slate-200">
+    Copy CA
   </span>
 </button>
 
