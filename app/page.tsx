@@ -1051,7 +1051,7 @@ return (
       {/* CLAIM pool + USD — responsive */}
 <div
   className="
-    flex gap-3 mt-[14px]
+    flex gap-3 mt-[28px]
     items-end justify-end
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
@@ -1070,7 +1070,7 @@ return (
   {/* USD */}
   <p
     key={rewardUsdText}
-    className="-translate-y-[1px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
   >
     ≈ {rewardUsdText} USD
   </p>
