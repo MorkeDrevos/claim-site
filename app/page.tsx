@@ -756,10 +756,13 @@ return (
   <div
   className="
     absolute inset-0
-    bg-top bg-contain bg-no-repeat
+    bg-no-repeat bg-contain
     opacity-[0.40]
   "
-  style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
+  style={{
+    backgroundImage: "url('/img/claim-hero-green.png')",
+    backgroundPosition: "center -180px" // 🔥 move it UP
+  }}
 />
   {/* Soft gradient wash on top */}
   <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
