@@ -1356,23 +1356,16 @@ return (
               <button
   type="button"
   onClick={handleCopyCa}
-  className="
-    inline-flex items-center gap-2 rounded-full
-    border border-slate-700/70 
-    bg-slate-900/70 
-    px-5 py-2                     /* 🔥 same vertical padding as CONNECT WALLET */
-    text-[11px] font-semibold uppercase tracking-[0.22em]
-    text-slate-200
-    hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
-    transition-all
-  "
+  className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+             text-[11px] font-medium text-slate-200 border border-slate-700/80
+             hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
+             transition-colors"
 >
-  <span className="text-[10px] tracking-[0.22em] text-slate-400">
-    CA
-  </span>
-
-  <span className="font-mono text-[11px] text-slate-100">
+  <span className="font-mono text-[11px] text-slate-300">
     {shortCa}
+  </span>
+  <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
+    Copy CA
   </span>
 </button>
             </div>
