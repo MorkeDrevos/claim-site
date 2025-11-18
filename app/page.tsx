@@ -876,19 +876,19 @@ return (
 
             {/* Connect Wallet button */}
             <button
-  type="button"
-  onClick={handleConnectClick}
-  className="flex-1 sm:flex-none inline-flex h-10 items-center justify-center
-             rounded-full px-5
-             bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-             border border-emerald-400/40
-             text-[11px] font-semibold uppercase tracking-[0.22em]
-             text-emerald-200
-             shadow-[0_0_18px_rgba(16,185,129,0.25)]
-             hover:from-emerald-400/35 hover:to-emerald-500/40
-             hover:border-emerald-400 hover:text-white
-             transition-all"
->
+              type="button"
+              onClick={handleConnectClick}
+              className="flex-1 sm:flex-none inline-flex items-center justify-center
+                         rounded-full px-5 py-2
+                         bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+                         border border-emerald-400/40
+                         text-[11px] font-semibold uppercase tracking-[0.22em]
+                         text-emerald-200
+                         shadow-[0_0_18px_rgba(16,185,129,0.25)]
+                         hover:from-emerald-400/35 hover:to-emerald-500/40
+                         hover:border-emerald-400 hover:text-white
+                         transition-all"
+            >
               {connectedWallet
                 ? `${connectedWallet.name} connected`
                 : effectiveWalletConnected
