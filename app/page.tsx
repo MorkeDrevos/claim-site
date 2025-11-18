@@ -1366,7 +1366,7 @@ return (
              text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
              transition-all"
 >
-  <span className="text-[10px] tracking-[0.22em] text-slate-400">CA</span>
+  <span className="text-[10px] tracking-[0.22em] text-slate-400">COPY CA</span>
   <span className="font-mono text-[11px] text-slate-100">{shortCa}</span>
 </button>
 
@@ -1382,7 +1382,7 @@ return (
              hover:bg-slate-900/90 hover:text-emerald-200 hover:border-emerald-400
              transition-all"
 >
-  COPY CA
+  CA
 </button>
             </div>
           </SoftCard>
