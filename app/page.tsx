@@ -1037,38 +1037,47 @@ return (
                           bg-slate-900/95 p-4 
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
             >
-              <p className="text-[12px] text-slate-200 leading-relaxed">
-  Rewards are paid out in{' '}
+              <p className="text-[14px] text-slate-200 leading-relaxed">
+  Rewards are paid in{' '}
   <span className="text-emerald-300 font-medium">$CLAIM</span>
-  {' '}and shared equally among all wallets that lock in during the window.
-  The USD amount shown reflects an{' '}
-  <span className="text-emerald-300 font-medium">approximate market conversion</span>.
+  {' '}and shared equally among wallets that locked in during the live window.
+  {' '}<span className="text-emerald-300 font-medium">USD values are approximate.</span>
 </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* CLAIM pool + USD side-by-side */}
-<div className="flex items-baseline justify-end gap-3 mt-[10px] translate-y-[10px]">
+      {/* CLAIM pool + USD — responsive */}
+<div
+  className="
+    flex gap-3 mt-[10px]
+    items-end justify-end          /* desktop alignment */
+    max-sm:flex-col max-sm:items-center max-sm:gap-1  /* mobile stacked */
+  "
+>
   {/* CLAIM – primary */}
-  <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
+  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
-    <span className="ml-1 text-[15px] text-emerald-300 font-semibold">$CLAIM</span>
+    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold">
+      $CLAIM
+    </span>
   </p>
 
-  {/* Divider */}
-  <span className="text-slate-700 text-[18px]">|</span>
+  {/* Divider – hide on mobile */}
+  <span className="text-slate-700 text-[18px] pb-[2px] max-sm:hidden">|</span>
 
   {/* USD – secondary */}
-  <p 
-  key={rewardUsdText}
-  className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80"
->
-  ≈ {rewardUsdText} USD
-</p>
+  <p
+    key={rewardUsdText}
+    className="
+      text-[14px] sm:text-[16px] text-slate-300 leading-none font-medium opacity-80 pb-[2px]
+      max-sm:pb-0
+    "
+  >
+    ≈ {rewardUsdText} USD
+  </p>
 </div>
-
 
     </div>
   </div>
