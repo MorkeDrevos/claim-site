@@ -1124,10 +1124,14 @@ return (
       px-6 py-4
       text-[13px] font-semibold uppercase tracking-[0.32em]
 
-      bg-gradient-to-r from-emerald-500/90 to-emerald-400
-      text-emerald-950
-      border border-emerald-400/60
-      shadow-[0_0_28px_rgba(16,185,129,0.55)]
+      bg-slate-900/80
+      text-slate-100
+      border border-emerald-400/40
+      shadow-[0_0_28px_rgba(16,185,129,0.35)]
+
+      hover:bg-slate-900
+      hover:border-emerald-400/60
+      hover:text-emerald-200
 
       active:scale-[0.98]
       transition-all
