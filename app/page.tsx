@@ -1370,28 +1370,33 @@ return (
             </div>
           </SoftCard>
 
-          {/* Minimum holding */}
+                    {/* Minimum holding */}
           <SoftCard>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
               Minimum holding
             </p>
 
             <div className="mt-2 space-y-1">
-  <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
-    {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-  </p>
-  <p className="text-[13px] text-slate-400">
-    Held in the connected wallet at snapshot.
-  </p>
-</div>
+              <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+              </p>
+              <p className="text-[13px] text-slate-400">
+                Held in the connected wallet at snapshot.
+              </p>
+            </div>
 
-            {/* Sticky Buy on Jupiter CTA – only on larger screens */}
-            <div className="hidden sm:block fixed bottom-4 right-4 z-50">
+            {/* BUY $CLAIM ON JUPITER – inside the card, full-width */}
+            <div className="mt-5">
               <a
                 href={JUPITER_BUY_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300 hover:bg-emerald-500/25"
+                className="inline-flex w-full items-center justify-center
+                           rounded-full bg-emerald-500/90 px-4 py-2.5
+                           text-[11px] font-semibold uppercase tracking-[0.22em]
+                           text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
+                           hover:bg-emerald-400 hover:text-slate-950
+                           transition-colors"
               >
                 Buy $CLAIM on Jupiter
               </a>
