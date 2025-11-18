@@ -1112,21 +1112,27 @@ return (
 {/* end CLAIM WINDOW CARD */}
             </div>
 
-{/* Mobile-only Connect Wallet CTA – sits under CLAIM WINDOW CARD */}
-<div className="mt-4 sm:hidden">
+{/* Mobile-only Connect Wallet CTA - matches CLAIM btn height + Jupiter CTA colors */}
+<div className="mt-5 sm:hidden">
   <button
     type="button"
     onClick={handleConnectClick}
     className="
-      flex w-full items-center justify-center
-      rounded-2xl border border-slate-800/80
-      bg-slate-950/90
-      px-5 py-3
-      text-[11px] font-semibold uppercase tracking-[0.26em]
-      text-slate-100
-      shadow-[0_22px_60px_rgba(0,0,0,0.85)]
-      hover:border-emerald-400/70 hover:text-emerald-200 hover:bg-slate-900
-      transition-colors
+      w-full
+      flex items-center justify-center
+      rounded-full
+      px-6 py-4       /* SAME HEIGHT as OPENS SOON button */
+      text-[13px] font-semibold uppercase tracking-[0.32em]
+
+      /* Jupiter CTA colors */
+      bg-emerald-500/90 
+      text-emerald-950 
+      border border-emerald-400/70
+      shadow-[0_0_24px_rgba(16,185,129,0.65)]
+
+      /* Hover */
+      hover:bg-emerald-400 hover:text-slate-950
+      transition-all
     "
   >
     {connectedWallet
