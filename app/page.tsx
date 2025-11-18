@@ -1052,8 +1052,8 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool + USD — Option C (baseline + slight shift) */}
-<div className="flex items-baseline justify-end gap-3 mt-[8px] translate-y-[1px]">
+      {/* CLAIM pool + USD — bottom aligned */}
+<div className="flex items-end justify-end gap-3 mt-[6px]">
   {/* CLAIM – primary */}
   <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
@@ -1063,12 +1063,12 @@ return (
   </p>
 
   {/* Divider */}
-  <span className="text-slate-700 text-[18px]">|</span>
+  <span className="text-slate-700 text-[18px] pb-[2px]">|</span>
 
   {/* USD – secondary */}
   <p
     key={rewardUsdText}
-    className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80"
+    className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80 pb-[2px]"
   >
     ≈ {rewardUsdText} USD
   </p>
