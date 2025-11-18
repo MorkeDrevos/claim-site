@@ -1259,29 +1259,36 @@ return (
 <div
   className="
     mt-4
-    inline-flex items-center gap-3
-    rounded-[6px]
+    rounded-2xl
     bg-slate-900/80
     border border-slate-800/70
     px-4 py-3
-    text-[13px] leading-snug text-slate-300
+    flex items-start gap-3
   "
 >
   {/* Dot */}
   <span
     className={[
-      'h-2 w-2 rounded-full',                // ← SMALLER DOT
+      'mt-[2px] h-2 w-2 rounded-full',      // slightly smaller + aligned with text
       statusDotColor,
-      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
+      'shadow-[0_0_8px_currentColor]',
       'animate-[pulse_2.6s_ease-in-out_infinite]',
       'flex-none',
     ].join(' ')}
   />
 
-  {/* Status summary */}
-  <span>{statusSummary}</span>
-</div>
+  {/* Text block */}
+  <div className="space-y-0.5">
+    {/* Tiny label */}
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      System status
+    </p>
 
+    {/* Main status line – 1px bigger, light tone, sentence case */}
+    <p className="text-[13px] leading-snug text-slate-300">
+      {statusSummary}
+    </p>
+  </div>
 </div>
 
   </SoftCard>
