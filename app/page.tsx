@@ -1386,24 +1386,24 @@ return (
   type="button"
   onClick={handleCopyCa}
   className="
-    hidden sm:inline-flex items-center gap-3
+    hidden sm:inline-flex items-center gap-3       /* desktop only */
     rounded-full
-    bg-slate-900/70 
     border border-slate-700/70
-    px-5 py-2
-    text-[13px] font-medium tracking-wide
+    bg-slate-900/70
+    px-4 py-1.5
+    text-[13px] font-semibold tracking-wide
     text-slate-200
     hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
     transition-all
   "
 >
-  {/* CONTRACT ADDRESS (shortened) */}
-  <span className="font-mono text-[13px] text-slate-100">
+  {/* FULL CA ON LEFT */}
+  <span className="font-mono text-[14px] text-slate-100">
     {shortCa}
   </span>
 
-  {/* COPY CA label */}
-  <span className="text-[11px] uppercase tracking-[0.22em] text-slate-400">
+  {/* COPY CA TEXT ON RIGHT */}
+  <span className="text-[12px] uppercase tracking-[0.22em] text-slate-400">
     Copy CA
   </span>
 </button>
