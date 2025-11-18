@@ -752,17 +752,16 @@ return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-    {/* Background coin image */}
+  {/* Background coin image */}
   <div
     className="
       absolute inset-0
       bg-center bg-contain bg-no-repeat
-      opacity-[0.40]          /* much stronger */
+      opacity-[0.40]
     "
     style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
   />
-
-    {/* Soft gradient wash on top */}
+  {/* Soft gradient wash on top */}
   <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
 </div>
 
