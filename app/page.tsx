@@ -471,8 +471,6 @@ if (countdownTarget) {
     roundNumber,
   } = state;
 
-  const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
-
   // Derived from phase
   const isLive = phase === 'open';
   const isClosed = phase === 'closed';
@@ -745,9 +743,7 @@ if (hasBackendIssue || hasContractIssue) {
 }
 
 // Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
+const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
