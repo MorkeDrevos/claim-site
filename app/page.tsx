@@ -1037,7 +1037,7 @@ return (
                           bg-slate-900/95 p-4 
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
             >
-              <p className="text-[14px] text-slate-200 leading-relaxed">
+              <p className="text-[12px] text-slate-200 leading-relaxed">
   Rewards are paid out in{' '}
   <span className="text-emerald-300 font-medium">$CLAIM</span>
   {' '}and shared equally among all wallets that lock in during the window.
