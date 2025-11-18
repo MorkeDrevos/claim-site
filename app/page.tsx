@@ -1372,7 +1372,7 @@ return (
 >
   {/* Left: Copy CA label */}
   <span className="mr-1 text-[10px] tracking-[0.22em] text-emerald-300">
-    MOBILE
+    Copy CA
   </span>
 
   {/* Right: truncated address */}
@@ -1381,23 +1381,28 @@ return (
   </span>
 </button>
 
-{/* CA pill – DESKTOP ONLY (Current reward pool” card) */}
+{/* Desktop CA pill */}
 <button
   type="button"
   onClick={handleCopyCa}
-  className="inline-flex items-center gap-2 rounded-full
-             bg-slate-900/80 border border-slate-700/80
-             px-3 py-1.5
-             text-[10px] font-semibold uppercase tracking-[0.22em]
-             text-slate-200
-             hover:bg-slate-900 hover:border-emerald-400/60 hover:text-emerald-200
-             transition-all"
+  className="
+    hidden sm:inline-flex items-center gap-3
+    rounded-full
+    border border-slate-700/70
+    bg-slate-900/70
+    px-5 py-1.5
+    text-[12px] font-medium tracking-wide
+    text-slate-200
+    hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+    transition-all
+  "
 >
-  <span className="font-mono text-[11px] text-slate-100">
+  <span className="font-mono text-[13px] text-slate-100">
     {shortCa}
   </span>
-  <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">
-    desktop REWARD POOL
+
+  <span className="uppercase text-[10px] tracking-[0.22em] text-slate-400">
+    Copy CA
   </span>
 </button>
             </div>
