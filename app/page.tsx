@@ -1355,16 +1355,18 @@ return (
 
               <button
   type="button"
-  onClick={handleCopyCa}
+  onClick={handleConnectClick}
   className="
     h-[38px] sm:h-auto                             /* ← FIXED HEIGHT ON MOBILE */
-    inline-flex items-center gap-2 rounded-full 
-    border border-slate-700/70 
-    bg-slate-900/70 
-    px-4 py-1.5
-    text-[10px] font-semibold uppercase tracking-[0.22em]
-    text-slate-200
-    hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+    inline-flex items-center rounded-full
+    px-5 py-2
+    bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+    border border-emerald-400/40
+    text-[11px] font-semibold uppercase tracking-[0.22em]
+    text-emerald-200
+    shadow-[0_0_18px_rgba(16,185,129,0.25)]
+    hover:from-emerald-400/35 hover:to-emerald-500/40
+    hover:border-emerald-400 hover:text-white
     transition-all
   "
 >
