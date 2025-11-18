@@ -1264,15 +1264,15 @@ return (
     bg-slate-900/80
     border border-slate-800/70
     px-4 py-3
-    text-[12px] leading-snug text-slate-400
+    text-[13px] leading-snug text-slate-300
   "
 >
   {/* Dot */}
   <span
     className={[
-      'h-2 w-2 rounded-full',
+      'h-2 w-2 rounded-full',                // ← SMALLER DOT
       statusDotColor,
-      'shadow-[0_0_8px_currentColor]',
+      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
       'animate-[pulse_2.6s_ease-in-out_infinite]',
       'flex-none',
     ].join(' ')}
