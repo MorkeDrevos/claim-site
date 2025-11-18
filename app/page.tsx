@@ -752,9 +752,13 @@ return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         {/* HERO BACKGROUND */}
 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-  {/* Background coin image */}
+    {/* Background coin image */}
   <div
-    className="absolute inset-0 bg-center bg-cover opacity-[0.12]"
+    className="
+      absolute inset-0
+      bg-center bg-contain bg-no-repeat
+      opacity-[0.40]          /* much stronger */
+    "
     style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
   />
 
