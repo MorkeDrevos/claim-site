@@ -743,10 +743,7 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
+const snapshotDateLabel = snapshotTakenAt ?? 'Not yet announced';
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
