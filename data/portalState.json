@@ -1,7 +1,7 @@
 {
   "currentRound": 1,
 
-  "windowPhase": "scheduled",
+  "windowPhase": "snapshot",
 
   "snapshotTakenAt": "2025-11-19T20:00:00Z",
   "claimWindowOpensAt": "2025-11-19T20:30:00Z",
