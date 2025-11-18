@@ -1202,35 +1202,35 @@ return (
 {/* Divider + NASA footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
- {/* STATUS BADGE — compact, less rounded */}
-<div className="mt-4 border-t border-slate-800/70 pt-3">
-  <div
-    className="
-      flex w-full items-center gap-4
-      rounded-2xl          /* ⬅️ not a full pill anymore */
-      bg-slate-900/80
-      border border-slate-800/80
-      px-5 py-3
-      text-[11px] font-semibold uppercase tracking-[0.22em]
-      text-slate-200
-      leading-snug
-    "
-  >
-    {/* Dot */}
-    <span
-      className={[
-        'h-2.5 w-2.5 rounded-full flex-none',
-        statusDotColor,
-        'shadow-[0_0_8px_currentColor]',
-        'animate-[pulse_2.6s_ease-in-out_infinite]',
-      ].join(' ')}
-    />
+  {/* STATUS BADGE — mission-control style */}
+<div
+  className="
+    mt-4
+    inline-flex items-center gap-3
+    rounded-full
+    bg-slate-900/80
+    border border-slate-800/70
+    px-4 py-2
+    text-[11px] font-semibold uppercase tracking-[0.22em]
+    text-slate-300
+  "
+>
+  {/* Dot */}
+  <span
+  className={[
+    'h-2.5 w-2.5 rounded-full',             // slightly smaller, cleaner
+    statusDotColor,                         // your dynamic color
+    'shadow-[0_0_8px_currentColor]',        // uses dot color for glow
+    'animate-[pulse_2.6s_ease-in-out_infinite]',
+    'flex-none'
+  ].join(' ')}
+></span>
 
-    {/* Status summary (from JS, can be long) */}
-    <span className="block">
-      {statusSummary}
-    </span>
-  </div>
+
+  {/* Status summary */}
+  <span className="text-slate-300 tracking-wider">
+    {statusSummary}
+  </span>
 </div>
 
 </div>
