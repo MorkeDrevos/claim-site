@@ -1265,7 +1265,7 @@ return (
     border border-slate-800/70
     px-4 py-2
     text-[10px] font-semibold uppercase tracking-[0.22em]
-    text-slate-300
+    text-slate-200
   "
 >
   {/* Dot */}
