@@ -1052,15 +1052,16 @@ return (
         </div>
       </div>
 
-      {/* Big USD – softer + not bold */}
-      <p className="text-[24px] sm:text-[30px] font-medium text-slate-200">
-        {rewardUsdText} USD
-      </p>
+      {/* Primary – pool in $CLAIM */}
+<p className="text-[26px] sm:text-[30px] font-semibold text-slate-50 leading-tight">
+  {rewardAmountText}
+  <span className="ml-1 text-[14px] text-emerald-300 font-semibold">$CLAIM</span>
+</p>
 
-      <p className="text-[13px] font-medium text-emerald-300">
-        ≈ {rewardAmountText}
-        <span className="ml-1 text-[12px] text-emerald-400">$CLAIM</span>
-      </p>
+{/* Secondary – approximate USD value */}
+<p className="text-[13px] text-slate-400 -mt-1 leading-none">
+  ≈ {rewardUsdText} USD
+</p>
     </div>
   </div>
 
