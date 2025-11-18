@@ -847,38 +847,32 @@ return (
               TG
             </a>
 
-            {/* Contract address pill – nav */}
-<button
-  type="button"
-  onClick={handleCopyCa}
-  className="inline-flex items-center justify-center gap-2 rounded-full
-             border border-slate-700/70 bg-slate-900/70
-             px-4 py-2                 /* 🔥 taller, matches Connect Wallet */
-             text-[10px] font-semibold uppercase tracking-[0.22em]
-             text-slate-200
-             hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
-             transition-all"
->
-  {/* Desktop / tablet: show CA + short address */}
-  <span className="hidden sm:inline text-[10px] tracking-[0.22em] text-slate-400">
-    CA
-  </span>
-  <span className="hidden sm:inline font-mono text-[11px] text-slate-100">
-    {shortCa}
-  </span>
-
-  {/* Mobile: show "Copy CA" text */}
-  <span className="inline sm:hidden text-[10px] tracking-[0.22em] text-slate-200">
-    Copy CA
-  </span>
-</button>
+            {/* Contract address pill */}
+            <button
+              type="button"
+              onClick={handleCopyCa}
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2
+                         rounded-full border border-slate-700/70 bg-slate-900/70
+                         px-4 py-1.5
+                         text-[10px] font-semibold uppercase tracking-[0.22em]
+                         text-slate-200
+                         hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+                         transition-all"
+            >
+              <span className="text-[10px] tracking-[0.22em] text-slate-400">
+                CA
+              </span>
+              <span className="font-mono text-[11px] text-slate-100">
+                {shortCa}
+              </span>
+            </button>
 
             {/* Network label (desktop only) */}
             <span className="hidden text-xs text-slate-500 sm:inline">
               {networkLabel}
             </span>
 
-            {/* Connect Wallet button (desktop only) */}
+            {/* Wallet button */}
             <button
               type="button"
               onClick={handleConnectClick}
@@ -1359,25 +1353,17 @@ return (
                 Contract address
               </p>
 
-              {/* Contract address pill (top nav) */}
-<button
+              <button
   type="button"
   onClick={handleCopyCa}
-  className="inline-flex h-10 items-center gap-3 rounded-full 
-             border border-slate-700/70 
-             bg-slate-900/70 
-             px-4
-             text-[10px] font-semibold uppercase tracking-[0.22em]
-             text-slate-200
-             hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
-             transition-all"
+  className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1
+             text-[11px] font-medium text-slate-200 border border-slate-700/80
+             hover:border-emerald-400/60 hover:text-emerald-200 hover:bg-slate-900/90
+             transition-colors"
 >
-  {/* truncated CA – gives nice width next to Connect Wallet */}
-  <span className="font-mono text-[11px] text-slate-100">
+  <span className="font-mono text-[11px] text-slate-300">
     {shortCa}
   </span>
-
-  {/* “Copy CA” label (shows on both mobile + desktop) */}
   <span className="text-[9px] uppercase tracking-[0.18em] text-slate-400">
     Copy CA
   </span>
