@@ -851,10 +851,10 @@ return (
             <button
   type="button"
   onClick={handleCopyCa}
-  className="inline-flex h-10 items-center gap-2 rounded-full 
+  className="inline-flex items-center gap-2 rounded-full 
              border border-slate-700/70 
              bg-slate-900/70 
-             px-4
+             px-4 py-1.5
              text-[10px] font-semibold uppercase tracking-[0.22em]
              text-slate-200
              hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
@@ -874,7 +874,7 @@ return (
               {networkLabel}
             </span>
 
-            {/* Connect Wallet button */}
+            {/* Wallet button */}
             <button
               type="button"
               onClick={handleConnectClick}
