@@ -434,7 +434,7 @@ if (countdownTarget) {
 
   if (error || !state) {
     return (
-      <main className="relative min-h-screen bg-slate-950 text-slate-50">
+      <main className="min-h-screen bg-slate-950 text-slate-50">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-16 sm:px-6">
           <h1 className="text-xl font-semibold">CLAIM portal</h1>
           <p className="text-sm text-red-400">{error ?? 'No data available'}</p>
@@ -750,35 +750,21 @@ const snapshotDateLabel = snapshotTakenAt
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
-    {/* HERO BACKGROUND */}
+        {/* HERO BACKGROUND */}
 <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-  {/* Coin silhouette */}
+    {/* Background coin image */}
   <div
     className="
-      absolute inset-x-[-140px] top-[140px]
-      h-[540px]
-      bg-center bg-no-repeat
-      opacity-[0.26]
-      mix-blend-screen
+      absolute inset-0
+      bg-center bg-contain bg-no-repeat
+      opacity-[0.40]          /* much stronger */
     "
-    style={{
-      backgroundImage: "url('/img/claim-hero-fire-ice.png')",
-      backgroundSize: '1100px auto',
-    }}
+    style={{ backgroundImage: "url('/img/claim-hero-green.png')" }}
   />
 
-  {/* Soft green wash */}
-  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/10 via-slate-950/40 to-slate-950" />
-
-  {/* Left glow */}
-  <div className="absolute -left-20 top-[-40px] h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl opacity-70" />
-
-  {/* Right glow */}
-  <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-emerald-300/25 blur-3xl opacity-60" />
-
-  {/* Horizon fade */}
-  <div className="absolute inset-x-0 bottom-0 h-[80px] bg-gradient-to-t from-emerald-500/20 via-transparent to-transparent" />
-</div>    
+    {/* Soft gradient wash on top */}
+  <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-transparent to-slate-950/80" />
+</div>
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
@@ -894,7 +880,7 @@ return (
       </header>
 
       {/* Content */}
-<div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
