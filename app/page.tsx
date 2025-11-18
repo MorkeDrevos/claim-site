@@ -857,8 +857,17 @@ const snapshotDateLabel = snapshotTakenAt
         </div>
       </header>
 
-      {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+            {/* Content */}
+      <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-10 sm:px-6">
+        {/* Faint CLAIM logo background */}
+        <div className="pointer-events-none absolute inset-x-[-80px] top-[-60px] -z-10 opacity-[0.18]">
+          <img
+            src="/claim-hero-fire-ice.png"
+            alt="$CLAIM logo"
+            className="mx-auto w-full max-w-[820px] select-none"
+          />
+        </div>
+
         {/* HERO: Claim window */}
         <SoftCard>
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
