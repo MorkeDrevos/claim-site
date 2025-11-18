@@ -1199,41 +1199,39 @@ return (
       </span>
     </div>
 
-{/* STATUS BADGE — clean block (no pill) */}
+{/* Divider + NASA footer copy */}
+<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
+
+  {/* STATUS BADGE — mission-control style */}
 <div
   className="
     mt-4
-    flex items-start gap-3
-    rounded-lg                 /* small radius only */
-    bg-slate-900/40
-    border border-slate-800/60
-    px-4 py-3
+    inline-flex items-center gap-3
+    rounded-full
+    bg-slate-900/80
+    border border-slate-800/70
+    px-4 py-2
+    text-[10px] font-semibold uppercase tracking-[0.22em]
+    text-slate-300
   "
 >
   {/* Dot */}
   <span
-    className={[
-      'h-2.5 w-2.5 rounded-full flex-none',
-      statusDotColor,
-      'shadow-[0_0_8px_currentColor]',
-      'animate-[pulse_2.6s_ease-in-out_infinite]'
-    ].join(' ')}
-  />
+  className={[
+    'h-2.5 w-2.5 rounded-full',             // slightly smaller, cleaner
+    statusDotColor,                         // your dynamic color
+    'shadow-[0_0_8px_currentColor]',        // uses dot color for glow
+    'animate-[pulse_2.6s_ease-in-out_infinite]',
+    'flex-none'
+  ].join(' ')}
+></span>
 
-  {/* Status Summary */}
-  <p
-    className="
-      flex-1
-      text-[11px]
-      font-semibold
-      uppercase
-      tracking-[0.22em]
-      leading-[1.55]
-      text-slate-300
-    "
-  >
+  {/* Status summary */}
+  <span className="text-slate-300 tracking-wider">
     {statusSummary}
-  </p>
+  </span>
+</div>
+
 </div>
 
   </SoftCard>
