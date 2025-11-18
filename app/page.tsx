@@ -848,22 +848,21 @@ return (
             </a>
 
             {/* 1. CA BUTTON #1 — inside the top nav (desktop + mobile) */}
-            {/* TOP NAV – CA pill (desktop + mobile) */}
+            {/* CA pill – DESKTOP ONLY (top nav) */}
 <button
   type="button"
   onClick={handleCopyCa}
-  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2
-             rounded-full px-4 py-2
-             border border-emerald-400/40
+  className="hidden sm:inline-flex items-center gap-2
+             rounded-full border border-slate-700/70
              bg-slate-900/70
+             px-4 py-1.5
              text-[10px] font-semibold uppercase tracking-[0.22em]
              text-slate-200
-             shadow-[0_0_14px_rgba(16,185,129,0.35)]
-             hover:bg-slate-900/90 hover:border-emerald-400 hover:text-emerald-100
+             hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
              transition-all"
 >
   <span className="text-[10px] tracking-[0.22em] text-slate-400">
-    Copy CA
+    CA
   </span>
   <span className="font-mono text-[11px] text-slate-100">
     {shortCa}
@@ -875,8 +874,7 @@ return (
               {networkLabel}
             </span>
 
-            {/* Connect Wallet button - both dektop and mobile */}
-            {/* TOP NAV – Connect wallet */}
+{/* Connect Wallet button – shared for mobile + desktop */}
 <button
   type="button"
   onClick={handleConnectClick}
@@ -1359,34 +1357,48 @@ return (
 
               {/* 2. CA BUTTON #2 — inside the “Current reward pool” card - DESKTOP ONLY */}
 
-{/* Desktop CA pill */}
+{/* CA pill – MOBILE ONLY (top nav) */}
 <button
   type="button"
   onClick={handleCopyCa}
-  className="hidden sm:inline-flex items-center gap-2 rounded-full 
-             border border-slate-700/70 
-             bg-slate-900/70 
-             px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]
-             text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200
+  className="inline-flex sm:hidden flex-1 items-center justify-center
+             rounded-full px-5 py-2
+             bg-slate-900/80 border border-emerald-400/40
+             text-[11px] font-semibold uppercase tracking-[0.22em]
+             text-slate-100
+             shadow-[0_0_14px_rgba(16,185,129,0.35)]
+             hover:bg-slate-900 hover:text-emerald-200 hover:border-emerald-400
              transition-all"
 >
-  <span className="text-[10px] tracking-[0.22em] text-slate-400">COPY CA</span>
-  <span className="font-mono text-[11px] text-slate-100">{shortCa}</span>
+  {/* Left: Copy CA label */}
+  <span className="mr-1 text-[10px] tracking-[0.22em] text-emerald-300">
+    Copy CA
+  </span>
+
+  {/* Right: truncated address */}
+  <span className="font-mono text-[11px] text-slate-200">
+    {shortCa}
+  </span>
 </button>
 
-{/* Mobile CA pill */}
+{/* CA pill – DESKTOP ONLY (Current reward pool” card) */}
 <button
   type="button"
   onClick={handleCopyCa}
-  className="sm:hidden inline-flex items-center justify-center 
-             rounded-full px-5 py-2 
-             bg-slate-900/70 border border-emerald-400/40
-             text-[12px] font-semibold uppercase tracking-[0.25em]
-             text-slate-200 shadow-[0_0_14px_rgba(16,185,129,0.35)]
-             hover:bg-slate-900/90 hover:text-emerald-200 hover:border-emerald-400
+  className="inline-flex items-center gap-2 rounded-full
+             bg-slate-900/80 border border-slate-700/80
+             px-3 py-1.5
+             text-[10px] font-semibold uppercase tracking-[0.22em]
+             text-slate-200
+             hover:bg-slate-900 hover:border-emerald-400/60 hover:text-emerald-200
              transition-all"
 >
-  CA
+  <span className="font-mono text-[11px] text-slate-100">
+    {shortCa}
+  </span>
+  <span className="text-[9px] uppercase tracking-[0.22em] text-slate-400">
+    Copy
+  </span>
 </button>
             </div>
           </SoftCard>
