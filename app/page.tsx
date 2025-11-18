@@ -750,19 +750,19 @@ const snapshotDateLabel = snapshotTakenAt
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-            {/* HERO BACKGROUND */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/15 via-slate-950/40 to-slate-950" />
+                  {/* HERO BACKGROUND */}
+      <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
+        {/* Base gradient – much stronger */}
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
 
         {/* Left glow */}
-        <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-emerald-400/25 blur-3xl opacity-70" />
+        <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
 
         {/* Right glow */}
-        <div className="absolute -right-36 top-24 h-80 w-80 rounded-full bg-sky-400/25 blur-3xl opacity-60" />
+        <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
 
-        {/* Soft horizon line */}
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent opacity-60" />
+        {/* Horizon line */}
+        <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
       </div>
 
       {/* Top nav – sticky */}
