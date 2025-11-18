@@ -1554,8 +1554,8 @@ return (
 </section>
 
       </div>
-{/* Sticky Buy on Jupiter CTA */}
-<div className="fixed bottom-4 right-4 z-50">
+{/* Sticky Buy on Jupiter CTA – only on larger screens */}
+<div className="hidden sm:block fixed bottom-4 right-4 z-50">
   <a
     href={JUPITER_BUY_URL}
     target="_blank"
