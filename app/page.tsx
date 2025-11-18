@@ -744,20 +744,11 @@ if (currentPhase === 'closed') {
 }
 
 // Simple, safe fallback snapshot label
+const snapshotTakenAt = portalState?.snapshot?.takenAt;
 const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
 
 return (
-  <main
-    className="
-      min-h-screen
-      text-slate-50
-      bg-gradient-to-b
-      from-emerald-500/5
-      via-slate-950/90
-      to-slate-950
-      overflow-x-hidden
-    "
-  >
+  <main className="min-h-screen text-slate-50">
   
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
