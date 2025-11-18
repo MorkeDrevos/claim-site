@@ -847,7 +847,6 @@ return (
               TG
             </a>
 
-            {/* 1. CA BUTTON #1 — inside the top nav (desktop + mobile) */}
             {/* CA pill – DESKTOP ONLY (top nav) */}
 <button
   type="button"
@@ -865,6 +864,30 @@ return (
     CA
   </span>
   <span className="font-mono text-[11px] text-slate-100">
+    {shortCa}
+  </span>
+</button>
+
+{/* CA pill – MOBILE ONLY (top nav) */}
+<button
+  type="button"
+  onClick={handleCopyCa}
+  className="inline-flex sm:hidden flex-1 items-center justify-center
+             rounded-full px-5 py-2
+             bg-slate-900/80 border border-emerald-400/40
+             text-[11px] font-semibold uppercase tracking-[0.22em]
+             text-slate-100
+             shadow-[0_0_14px_rgba(16,185,129,0.35)]
+             hover:bg-slate-900 hover:text-emerald-200 hover:border-emerald-400
+             transition-all"
+>
+  {/* Left: Copy CA label */}
+  <span className="mr-1 text-[10px] tracking-[0.22em] text-emerald-300">
+    Copy CA
+  </span>
+
+  {/* Right: truncated address */}
+  <span className="font-mono text-[11px] text-slate-200">
     {shortCa}
   </span>
 </button>
@@ -1355,33 +1378,7 @@ return (
                 Contract address
               </p>
 
-              {/* 2. CA BUTTON #2 — inside the “Current reward pool” card - DESKTOP ONLY */}
-
-{/* CA pill – MOBILE ONLY (top nav) */}
-<button
-  type="button"
-  onClick={handleCopyCa}
-  className="inline-flex sm:hidden flex-1 items-center justify-center
-             rounded-full px-5 py-2
-             bg-slate-900/80 border border-emerald-400/40
-             text-[11px] font-semibold uppercase tracking-[0.22em]
-             text-slate-100
-             shadow-[0_0_14px_rgba(16,185,129,0.35)]
-             hover:bg-slate-900 hover:text-emerald-200 hover:border-emerald-400
-             transition-all"
->
-  {/* Left: Copy CA label */}
-  <span className="mr-1 text-[10px] tracking-[0.22em] text-emerald-300">
-    Copy CA
-  </span>
-
-  {/* Right: truncated address */}
-  <span className="font-mono text-[11px] text-slate-200">
-    {shortCa}
-  </span>
-</button>
-
-{/* CA pill – DESKTOP ONLY (Current reward pool” card) */}
+{/* CA pill – DESKTOP ONLY (reward pool” card) */}
 <button
   type="button"
   onClick={handleCopyCa}
