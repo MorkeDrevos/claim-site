@@ -776,7 +776,14 @@ return (
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <div
+    className="
+      mx-auto max-w-6xl
+      flex flex-wrap items-center justify-between
+      gap-2 sm:gap-4
+      px-4 py-3 sm:px-6
+    "
+  >
           {/* Left: logo + title */}
 <Link href="/" className="flex items-center gap-3 group">
   {/* CLAIM logo circle */}
@@ -808,7 +815,7 @@ return (
 </Link>
 
           {/* Right: nav items */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
             <Link
               href="/concept"
               className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
@@ -1103,8 +1110,8 @@ return (
 {/* end CLAIM WINDOW CARD */}
             </div>
 
-         {/* RIGHT COLUMN – Mission Control (NASA style) */}
-<div className="w-full max-w-xs mt-[18px]">
+{/* RIGHT COLUMN – Mission Control (NASA style) */}
+<div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
@@ -1354,7 +1361,8 @@ return (
   </p>
 </div>
 
-            <div className="mt-4 border-t border-slate-800/70 pt-3">
+            {/* Sticky Buy on Jupiter CTA – only on larger screens */}
+            <div className="hidden sm:block fixed bottom-4 right-4 z-50">
               <a
                 href={JUPITER_BUY_URL}
                 target="_blank"
