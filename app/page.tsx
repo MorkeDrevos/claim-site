@@ -1206,12 +1206,12 @@ return (
 <div
   className="
     mt-4
-    flex w-full items-center gap-4
+    inline-flex items-center gap-4     /* ⬅️ no w-full */
     rounded-xl
     bg-slate-900/80
     border border-slate-800/80
     px-5 py-3
-    text-[10px] font-semibold uppercase tracking-[0.22em]
+    text-[11px] font-semibold uppercase tracking-[0.22em]
     text-slate-200
   "
 >
