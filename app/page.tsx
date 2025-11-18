@@ -743,10 +743,11 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Simple, safe fallback snapshot label
-const snapshotTakenAt = portalState?.snapshot?.takenAt;
-const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
-
+// Snapshot timing
+const snapshotTakenAt = portalState.snapshot?.takenAt ?? null;
+// If there's no snapshot yet, just use an empty string (nothing shown)
+const snapshotDateLabel = snapshotTakenAt ?? '';
+ 
 return (
   <main className="min-h-screen text-slate-50">
   
