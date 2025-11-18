@@ -750,10 +750,19 @@ const snapshotDateLabel = snapshotTakenAt
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Subtle moving glows */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-40 top-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl animate-pulse" />
-        <div className="absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl animate-pulse" />
+            {/* HERO BACKGROUND */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/15 via-slate-950/40 to-slate-950" />
+
+        {/* Left glow */}
+        <div className="absolute -left-32 top-10 h-72 w-72 rounded-full bg-emerald-400/25 blur-3xl opacity-70" />
+
+        {/* Right glow */}
+        <div className="absolute -right-36 top-24 h-80 w-80 rounded-full bg-sky-400/25 blur-3xl opacity-60" />
+
+        {/* Soft horizon line */}
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent opacity-60" />
       </div>
 
       {/* Top nav – sticky */}
