@@ -744,9 +744,7 @@ if (currentPhase === 'closed') {
 }
 
 // Snapshot timing
-const snapshotTakenAt = portalState.snapshot?.takenAt ?? null;
-// If there's no snapshot yet, just use an empty string (nothing shown)
-const snapshotDateLabel = snapshotTakenAt ?? '';
+const snapshotDateLabel = snapshotTakenAt || 'Not yet announced';
  
 return (
   <main className="min-h-screen text-slate-50">
