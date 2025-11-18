@@ -1053,7 +1053,7 @@ return (
       </div>
 
       {/* CLAIM pool + USD side-by-side */}
-<div className="flex items-start justify-end gap-3 mt-[10px]">
+<div className="flex items-baseline justify-end gap-3 mt-[10px]">
   {/* CLAIM – primary */}
   <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
     {rewardAmountText}
@@ -1064,9 +1064,9 @@ return (
   <span className="text-slate-700 text-[18px]">|</span>
 
   {/* USD – secondary */}
-  <p
-  key={rewardUsdText} 
-  className="text-[15px] sm:text-[16px] text-slate-300 leading-none translate-y-[1px] font-medium transition-opacity duration-300 opacity-80"
+  <p 
+  key={rewardUsdText}
+  className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80"
 >
   ≈ {rewardUsdText} USD
 </p>
