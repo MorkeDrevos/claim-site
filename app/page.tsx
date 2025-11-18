@@ -1199,39 +1199,40 @@ return (
       </span>
     </div>
 
-{/* Divider + NASA footer copy */}
-<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-
-  {/* STATUS BADGE — mission-control style */}
+{/* STATUS BADGE — mission-control style */}
 <div
   className="
     mt-4
-    inline-flex items-center gap-3
-    rounded-full
+    flex items-center gap-3
+    w-full
+    rounded-[26px]                /* less rounded than full pill */
     bg-slate-900/80
     border border-slate-800/70
-    px-4 py-2
-    text-[10px] font-semibold uppercase tracking-[0.22em]
-    text-slate-300
+    px-5 py-3                     /* comfy but not huge */
   "
 >
   {/* Dot */}
   <span
-  className={[
-    'h-2.5 w-2.5 rounded-full',             // slightly smaller, cleaner
-    statusDotColor,                         // your dynamic color
-    'shadow-[0_0_8px_currentColor]',        // uses dot color for glow
-    'animate-[pulse_2.6s_ease-in-out_infinite]',
-    'flex-none'
-  ].join(' ')}
-></span>
+    className={[
+      'h-3 w-3 rounded-full flex-none',
+      statusDotColor,
+      'shadow-[0_0_10px_currentColor]',
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
+    ].join(' ')}
+  />
 
   {/* Status summary */}
-  <span className="text-slate-300 tracking-wider">
+  <p
+    className="
+      flex-1
+      text-[10px] font-semibold uppercase
+      tracking-[0.22em]
+      leading-[1.6]
+      text-slate-300
+    "
+  >
     {statusSummary}
-  </span>
-</div>
-
+  </p>
 </div>
 
   </SoftCard>
