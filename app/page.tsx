@@ -1260,11 +1260,11 @@ return (
   className="
     mt-4
     inline-flex items-center gap-3
-    rounded-[6px]
+    rounded-[10px]
     bg-slate-900/80
     border border-slate-800/70
     px-4 py-2
-    text-[10px] font-semibold uppercase tracking-[0.22em]
+    text-[13px] font-medium tracking-tight
     text-slate-300
   "
 >
