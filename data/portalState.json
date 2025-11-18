@@ -3,13 +3,13 @@
 
   "windowPhase": "scheduled",
 
-  "snapshotTakenAt": "2025-11-16T15:40:00Z",
-  "claimWindowOpensAt": "2025-11-17T22:31:00Z",
-  "claimWindowClosesAt": "2025-11-17T23:46:00Z",
+  "snapshotTakenAt": "2025-11-18T15:40:00Z",
+  "claimWindowOpensAt": "2025-11-18T22:31:00Z",
+  "claimWindowClosesAt": "2025-11-18T23:46:00Z",
   "distributionCompletedAt": null,
 
-  "rewardPoolAmountClaim": 9325670,
-  "rewardPoolAmountUsd": 1865.13,
+  "rewardPoolAmountClaim": 19325670,
+  "rewardPoolAmountUsd": 21865.13,
 
   "walletConnected": false,
   "walletShort": "",
