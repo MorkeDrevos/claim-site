@@ -743,23 +743,11 @@ if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
 
-// Simple, safe fallback snapshot label
-const snapshotDateLabel = snapshotTakenAt
-  ? snapshotTakenAt
-  : 'Not yet announced';
+// Snapshot timing label – show nothing if there’s no snapshot yet
+const snapshotDateLabel = snapshotTakenAt ?? '';
 
 return (
-  <main
-    className="
-      min-h-screen
-      text-slate-50
-      bg-gradient-to-b
-      from-emerald-500/5
-      via-slate-950/90
-      to-slate-950
-      overflow-x-hidden     /* 🔥 FIXES MOBILE SIDE-SCROLL */
-    "
-  >
+  <main className="min-h-screen text-slate-50">
   
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
@@ -1627,6 +1615,7 @@ return (
 </section>
 
       </div>
+    </div> 
 {/* Sticky Buy on Jupiter CTA – only on larger screens */}
 <div className="hidden sm:block fixed bottom-4 right-4 z-50">
   <a
