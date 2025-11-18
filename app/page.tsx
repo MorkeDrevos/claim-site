@@ -1052,26 +1052,26 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool + USD side-by-side */}
-<div className="flex items-baseline justify-end gap-3 mt-[10px]">
-  {/* CLAIM – primary */}
-  <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-tight">
-    {rewardAmountText}
-    <span className="ml-1 text-[15px] text-emerald-300 font-semibold">
-      $CLAIM
-    </span>
-  </p>
+      {/* CLAIM pool + USD – responsive */}
+<div className="flex items-center justify-between">
+  {/* Countdown wrapper */}
+  <div className="flex flex-col justify-center">
+    ... countdown ...
+  </div>
 
-  {/* Divider */}
-  <span className="text-slate-700 text-[18px]">|</span>
+  {/* CLAIM + USD */}
+  <div className="flex items-center gap-3 translate-y-[2px]">
+    <p className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-slate-50">
+      {rewardAmountText}
+      <span className="ml-1 text-[15px] text-emerald-300 font-semibold">$CLAIM</span>
+    </p>
 
-  {/* USD – secondary (slightly nudged down) */}
-  <p
-    key={rewardUsdText}
-    className="text-[15px] sm:text-[16px] text-slate-300 leading-none font-medium transition-opacity duration-300 opacity-80 translate-y-[1px]"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
+    <span className="text-slate-700 text-[18px]">|</span>
+
+    <p className="text-[15px] sm:text-[16px] text-slate-300 font-medium">
+      ≈ {rewardUsdText} USD
+    </p>
+  </div>
 </div>
 
 
