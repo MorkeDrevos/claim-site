@@ -1368,7 +1368,7 @@ return (
   "
 >
   <span className="text-[10px] tracking-[0.22em] text-slate-400">
-    Copy CA
+    CA
   </span>
 
   <span className="font-mono text-[11px] text-slate-100">
