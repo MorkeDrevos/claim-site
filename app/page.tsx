@@ -750,34 +750,35 @@ const snapshotDateLabel = snapshotTakenAt
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
-        {/* HERO BACKGROUND — CLEAN ORIGINAL STYLE */}
-<div className="pointer-events-none absolute inset-0 top-0 -z-10 overflow-hidden">
+    {/* HERO BACKGROUND */}
+<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+  {/* Coin silhouette */}
+  <div
+    className="
+      absolute inset-x-[-140px] top-[140px]
+      h-[540px]
+      bg-center bg-no-repeat
+      opacity-[0.26]
+      mix-blend-screen
+    "
+    style={{
+      backgroundImage: "url('/img/claim-hero-fire-ice.png')",
+      backgroundSize: '1100px auto',
+    }}
+  />
 
-  {/* Base soft gradient */}
-  <div className="absolute inset-0 bg-gradient-to-b 
-                  from-emerald-500/10 
-                  via-slate-950/40 
-                  to-slate-950" />
+  {/* Soft green wash */}
+  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/10 via-slate-950/40 to-slate-950" />
 
   {/* Left glow */}
-  <div className="absolute -left-20 top-[-40px] 
-                  h-64 w-64 rounded-full 
-                  bg-emerald-400/20 
-                  blur-3xl opacity-70" />
+  <div className="absolute -left-20 top-[-40px] h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl opacity-70" />
 
   {/* Right glow */}
-  <div className="absolute -right-20 top-10 
-                  h-72 w-72 rounded-full 
-                  bg-emerald-300/25 
-                  blur-3xl opacity-60" />
+  <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-emerald-300/25 blur-3xl opacity-60" />
 
-  {/* Soft horizon fade */}
-  <div className="absolute inset-x-0 bottom-0 h-[80px]
-                  bg-gradient-to-t
-                  from-emerald-500/20
-                  via-transparent
-                  to-transparent" />
-</div>
+  {/* Horizon fade */}
+  <div className="absolute inset-x-0 bottom-0 h-[80px] bg-gradient-to-t from-emerald-500/20 via-transparent to-transparent" />
+</div>    
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
