@@ -1041,7 +1041,7 @@ return (
         )}
       </p>
 
-      {/* Countdown – pulled up a bit */}
+      {/* Countdown pulled higher */}
       <div className={`mt-1 ${isLive ? 'relative' : ''}`}>
         {isLive && (
           <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
@@ -1103,7 +1103,7 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool – pulled closer to the label */}
+      {/* CLAIM pool – closer to the label and higher overall */}
       <div
         className="
           flex gap-2 mt-[8px]
@@ -1121,13 +1121,14 @@ return (
     </div>
   </div>
 
-  {/* CTA bar – spacing tightened */}
+  {/* CTA bar */}
   <button
     type="button"
     onClick={handleClaimClick}
     disabled={!canClaim}
     className={[
-      'mt-4 mb-4 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+      // tighter spacing so button sits higher
+      'mt-4 mb-4 flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.32em]',
       'transition-all duration-300 border',
       canClaim
         ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
@@ -1144,8 +1145,8 @@ return (
       : 'Opens soon'}
   </button>
 
-  {/* Eligibility text */}
-  <div className="mt-5 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
+  {/* Eligibility text (unchanged) */}
+  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
     <p>
       • <span className="text-emerald-300/70 font-medium">Show up</span> during the
       live window and{' '}
