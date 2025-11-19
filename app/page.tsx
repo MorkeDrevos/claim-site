@@ -1006,7 +1006,7 @@ return (
               <circle cx="12" cy="12" r="5" className="opacity-60" />
               <circle cx="12" cy="12" r="2" />
             </svg>
-            Awaiting next on-chain window
+            Standing by for next window
           </span>
         ) : (
           <span className="inline-flex items-center gap-2">
