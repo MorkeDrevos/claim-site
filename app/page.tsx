@@ -803,7 +803,6 @@ if (hasBackendIssue || hasContractIssue) {
 }
 if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
-}
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
