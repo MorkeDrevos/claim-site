@@ -945,32 +945,34 @@ return (
 
             </header>
 
-      {/* Drill / test banner - only visible in preview mode */}
-      {isPreview && (
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 pt-4">
-          <div
-            className="
-              mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-2
-              rounded-2xl border border-amber-400/50 bg-amber-500/10
-              px-4 py-3
-              text-[12px] leading-relaxed text-amber-100
-              shadow-[0_16px_40px_rgba(0,0,0,0.6)]
-            "
-          >
-            <span className="mt-[3px] h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.9)]" />
+      // Drill / test banner - only visible in preview mode
+const isPreview = true; // TEMP for live drill
 
-            <div className="space-y-0.5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200">
-                System drill - test round only
-              </p>
-              <p>
-                We are about to run a live test of the CLAIM window. This is a
-                drill and rewards shown here are for testing only.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+{isPreview && (
+  <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 pt-4">
+    <div
+      className="
+        mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-2
+        rounded-2xl border border-amber-400/50 bg-amber-500/10
+        px-4 py-3
+        text-[12px] leading-relaxed text-amber-100
+        shadow-[0_16px_40px_rgba(0,0,0,0.6)]
+      "
+    >
+      <span className="mt-[3px] h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.9)]" />
+
+      <div className="space-y-0.5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200">
+          System drill – test round only
+        </p>
+        <p>
+          We are about to run a live test of the CLAIM window. This is a drill
+          and rewards shown here are for testing only.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Content */}
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
