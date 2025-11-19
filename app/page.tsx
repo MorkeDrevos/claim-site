@@ -550,15 +550,6 @@ if (countdownTarget) {
       : 'muted';
 
   // Snapshot timing label – show nothing if there’s no snapshot yet
-  // Tone for claim window line
-  const claimTone: Tone =
-    currentPhase === 'open'
-      ? 'success'
-      : currentPhase === 'scheduled'
-      ? 'warning'
-      : 'muted';
-
-  // Snapshot timing label – show nothing if there’s no snapshot yet
   const snapshotDateLabel = snapshotAt ?? '';
 
   // Normalize backend / contract status
