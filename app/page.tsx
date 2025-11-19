@@ -1377,17 +1377,15 @@ return (
             </p>
 
             <div className="mt-2 space-y-1">
-  {/* USD FIRST */}
-  <p className="text-[13px] text-slate-400">
-    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText} USD</span>
-  </p>
-
-  {/* CLAIM SECOND */}
   <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
     {rewardAmountText}
     <span className="ml-1 text-[15px] sm:text-[16px] text-emerald-400">
       CLAIM
     </span>
+  </p>
+
+  <p className="text-[13px] text-slate-400">
+    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText} USD</span>
   </p>
 </div>
 
