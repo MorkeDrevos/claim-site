@@ -544,20 +544,6 @@ if (countdownTarget) {
   // Snapshot timing label – show nothing if there’s no snapshot yet
     const snapshotDateLabel = snapshotAt ?? '';
 
-  // Normalised backend / contract status
-  const backendStatus = (frontEndStatus || '').toLowerCase();
-  const contractStatusLower = (contractStatus || '').toLowerCase();
-
-  const hasBackendIssue =
-    backendStatus === 'error' ||
-    backendStatus === 'down' ||
-    backendStatus === 'offline';
-
-  const hasContractIssue =
-    contractStatusLower === 'error' ||
-    contractStatusLower === 'down' ||
-    contractStatusLower === 'offline';
-
   // Rows for Mission Control (NASA layout)
   type MissionRowMode = 'plain' | 'pill';
 
@@ -776,14 +762,27 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
     progressMessage = 'Distribution sequence active — standby for completion.';
   }
 
+    // Normalised backend / contract status
+  const backendStatus = (frontEndStatus || '').toLowerCase();
+  const contractStatusLower = (contractStatus || '').toLowerCase();
+
+  const hasBackendIssue =
+    backendStatus === 'error' ||
+    backendStatus === 'down' ||
+    backendStatus === 'offline';
+
+  const hasContractIssue =
+    contractStatusLower === 'error' ||
+    contractStatusLower === 'down' ||
+    contractStatusLower === 'offline';
+
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
+
   // Live-style status summary for Mission Control
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
 
-  const hasBackendIssue = frontEndStatus !== 'ok';
-  const hasContractIssue = contractStatus !== 'ok';
-
-  if (hasBackendIssue || hasContractIssue) {
+  if (hasAnyIssue) {
     statusSummary =
       'Attention flagged. One or more subsystems are reporting a non-normal status.';
   } else if (currentPhase === 'open') {
@@ -816,47 +815,49 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
-      </div>
-      
-    className="
-      mx-auto max-w-6xl
-      flex flex-wrap items-center justify-between
-      gap-2 sm:gap-4
-      px-4 py-3 sm:px-6
-    "
-  >
-          {/* Left: logo + title */}
-<Link href="/" className="flex items-center gap-3 group">
-  {/* CLAIM logo circle */}
-  <div
-    className="flex h-9 w-9 items-center justify-center rounded-full
-               bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
-               shadow-[0_0_12px_rgba(16,185,129,0.25)]
-               transition-all group-hover:ring-emerald-400/70
-               group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
-  >
-    <Image
-      src="/img/claim-logo-circle.png"
-      alt="CLAIM Logo"
-      width={28}
-      height={28}
-      className="object-contain"
-      priority
-    />
-  </div>
+            </div>
 
-  <div className="flex flex-col">
-    <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-      CLAIM PORTAL
-    </span>
-    <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-      $CLAIM - Token of Timing
-    </span>
-  </div>
-</Link>
+      {/* Top nav bar */}
+      <header
+        className="
+          mx-auto max-w-6xl
+          flex flex-wrap items-center justify-between
+          gap-2 sm:gap-4
+          px-4 py-3 sm:px-6
+        "
+      >
+        {/* Left: logo + title */}
+        <Link href="/" className="flex items-center gap-3 group">
+          {/* CLAIM logo circle */}
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-full
+                       bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
+                       shadow-[0_0_12px_rgba(16,185,129,0.25)]
+                       transition-all group-hover:ring-emerald-400/70
+                       group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
+          >
+            <Image
+              src="/img/claim-logo-circle.png"
+              alt="CLAIM Logo"
+              width={28}
+              height={28}
+              className="object-contain"
+              priority
+            />
+          </div>
 
-          {/* Right: nav items */}
-          <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
+          <div className="flex flex-col">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
+              CLAIM PORTAL
+            </span>
+            <span className="text-sm font-medium text-slate-100 group-hover:text-white">
+              $CLAIM - Token of Timing
+            </span>
+          </div>
+        </Link>
+
+        {/* Right: nav items */}
+        <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
             <Link
               href="/concept"
               className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
@@ -1200,32 +1201,24 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
 <div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
-    {/* Header row */}
-<div className="flex items-center justify-between gap-3">
-  {/* Left: Round number */}
-  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-    Round {roundNumber ?? 0}
-  </p>
+       {/* Header row */}
+    <div className="flex items-center justify-between gap-3">
+      {/* Left: Round number */}
+      <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+        Round {roundNumber ?? 0}
+      </p>
 
-{/* Right: Mission Control header */}
-{/* Header row */}
-<div className="flex items-center justify-between gap-3">
-  {/* Left: Round number */}
-  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-    Round {roundNumber ?? 0}
-  </p>
-
-  {/* Right: Mission Control header – right-aligned to the value column */}
-  <span
-    className={[
-      'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
-      RIGHT_COL_WIDTH,
-      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
-    ].join(' ')}
-  >
-    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
-  </span>
-</div>
+      {/* Right: Mission Control header – right-aligned to the value column */}
+      <span
+        className={[
+          'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
+          RIGHT_COL_WIDTH,
+          hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
+        ].join(' ')}
+      >
+        {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
+      </span>
+    </div> 
 
     {/* Snapshot info */}
     <div className="space-y-1">
