@@ -15,7 +15,13 @@ type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
 type Tone = 'neutral' | 'success' | 'warning' | 'muted';
 
-type WindowPhase = 'scheduled' | 'snapshot' | 'open' | 'closed' | 'distribution';
+type WindowPhase =
+  | 'scheduled'
+  | 'snapshot'
+  | 'open'
+  | 'closed'
+  | 'distribution'
+  | 'done';
 
 type ClaimHistoryEntry = {
   round: number;
