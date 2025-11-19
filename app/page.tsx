@@ -495,6 +495,15 @@ const {
     currentPhase === 'distribution' ||
     currentPhase === 'done';
 
+  const claimTone: Tone =
+  isLive
+    ? 'success'
+    : currentPhase === 'scheduled'
+    ? 'muted'
+    : currentPhase === 'distribution'
+    ? 'warning'
+    : 'muted';
+
   // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
     if (!countdownTargetIso) {
