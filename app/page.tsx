@@ -1213,13 +1213,13 @@ return (
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
-<div className="flex items-baseline justify-between pr-[6px]">
-  {/* LEFT: Round number */}
+<div className="flex items-center justify-between gap-3 pr-[2px]">
+  {/* Left: Round number */}
   <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
     Round {roundNumber ?? 1}
   </p>
 
-  {/* RIGHT-aligned header */}
+  {/* Right: Mission Control text — fully right-aligned */}
   <span
     className={[
       'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
