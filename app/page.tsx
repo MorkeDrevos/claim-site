@@ -593,9 +593,6 @@ const missionRows: MissionRow[] = [
   },
 ];
 
-  const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
-  const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
-
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
     ? `${connectedWallet.address.slice(0, 4)}…${connectedWallet.address.slice(
