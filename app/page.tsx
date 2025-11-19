@@ -1221,19 +1221,22 @@ return (
     Round {roundNumber ?? 0}
   </p>
 
-  {/* Right: Mission Control header */}
+{/* Right: Mission Control header */}
+{/* Header row */}
+<div className="flex items-center justify-between gap-3">
+  {/* Left: Round number */}
+  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+    Round {roundNumber ?? 0}
+  </p>
+
+  {/* Right: Mission Control header – right-aligned to the value column */}
   <span
-  className={[
-    'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 justify-end',
-    RIGHT_COL_WIDTH,
-    'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
-    row.tone === 'success'
-      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-      : row.tone === 'warning'
-      ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
-      : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
-  ].join(' ')}
->
+    className={[
+      'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
+      RIGHT_COL_WIDTH,
+      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
+    ].join(' ')}
+  >
     {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
   </span>
 </div>
