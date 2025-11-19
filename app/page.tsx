@@ -945,10 +945,7 @@ return (
         </div>
       </header>
 
-      {/* Content */}
-      <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
-
-      {/* Content */}
+            {/* Content */}
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO: Claim window */}
         <SoftCard>
