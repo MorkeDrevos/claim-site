@@ -2,7 +2,7 @@ name: Rotate CLAIM schedule
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # every 15 min - adjust later
+  - cron: "*/1 * * * *"   # every 1 minute for fast testing
   workflow_dispatch:
 
 jobs:
