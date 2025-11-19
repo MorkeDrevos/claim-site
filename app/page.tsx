@@ -336,6 +336,10 @@ if (distributionDone) {
     currentPhase === 'distribution' ||
     currentPhase === 'done';
 
+  const isDistributing = currentPhase === 'distribution';
+  const isDone = currentPhase === 'done';
+  const isClosedOnly = currentPhase === 'closed';
+
   const claimTone: Tone =
     isLive
       ? 'success'
@@ -777,6 +781,11 @@ const {
     progressMessage = 'Distribution sequence active — standby for completion.';
   }
 
+  } else if (currentPhase === 'done') {
+    progressMessage =
+      'Rewards distributed. Next window will be scheduled soon.';
+  }
+  
     // Live-style status summary for Mission Control
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -1015,8 +1024,10 @@ return (
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col pl-1 sm:pl-2">
-      <p className="mt-[22px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      
+            <p className="mt-[22px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         {isLive ? (
+          // Live window
           <span className="inline-flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1032,7 +1043,8 @@ return (
             </svg>
             WINDOW CLOSES IN
           </span>
-        ) : isClosed ? (
+        ) : isClosedOnly ? (
+          // Claim window is closed, waiting for distribution to start
           <span className="inline-flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1048,7 +1060,42 @@ return (
             </svg>
             REWARDS DISTRIBUTION STARTS IN
           </span>
+        ) : isDistributing ? (
+          // Distribution is running
+          <span className="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="9" className="opacity-30" />
+              <circle cx="12" cy="12" r="5" className="opacity-60" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            REWARDS DISTRIBUTION COMPLETES IN
+          </span>
+        ) : isDone ? (
+          // Final happy state
+          <span className="inline-flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="9" className="opacity-30" />
+              <circle cx="12" cy="12" r="5" className="opacity-60" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            NEXT WINDOW IN
+          </span>
         ) : (
+          // Pre-snapshot scheduling
           <span className="inline-flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1164,10 +1211,14 @@ return (
       canClaim && isPulseOn ? 'animate-pulse' : '',
     ].join(' ')}
   >
-    {canClaim
+        {canClaim
       ? 'Lock in my share'
-      : isClosed
-      ? 'Claim Window closed'
+      : isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Rewards distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
       : 'Opens soon'}
   </button>
 
