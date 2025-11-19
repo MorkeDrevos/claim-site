@@ -264,6 +264,117 @@ export default function ClaimPoolPage() {
     return () => clearInterval(id);
   }, []);
 
+    /* ───────────────────────────
+     Phase + countdown from schedule.json
+  ─────────────────────────── */
+
+  // Purely schedule-based timings (no `state` used here)
+  const nowMs = Date.now();
+
+  const snapshotMs =
+    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
+  const opensMs =
+    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
+  const closesMs =
+    SCHEDULE.windowClosesAt ? new Date(SCHEDULE.windowClosesAt).getTime() : null;
+  const distStartMs =
+    SCHEDULE.distributionStartsAt
+      ? new Date(SCHEDULE.distributionStartsAt).getTime()
+      : null;
+  const distDoneMs =
+    SCHEDULE.distributionDoneAt
+      ? new Date(SCHEDULE.distributionDoneAt).getTime()
+      : null;
+
+  // Monotonic phase ladder
+  let currentPhase: WindowPhase = 'scheduled';
+
+  if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
+  if (opensMs && nowMs >= opensMs) currentPhase = 'open';
+  if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
+  if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
+  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
+
+  // Whether this round has actually finished distributing, from schedule
+  const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
+
+  // What are we counting toward?
+  let countdownTargetIso: string | null = null;
+
+  switch (currentPhase) {
+    case 'scheduled':
+    case 'snapshot':
+      // We hype the claim window, not the snapshot
+      countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
+      break;
+    case 'open':
+      countdownTargetIso = SCHEDULE.windowClosesAt ?? null;
+      break;
+    case 'closed':
+      // Claim window closed -> count to distribution start
+      countdownTargetIso = SCHEDULE.distributionStartsAt ?? null;
+      break;
+    case 'distribution':
+      countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
+      break;
+    default:
+      countdownTargetIso = null;
+  }
+
+  // ⬅️ This hook MUST be above any conditional returns
+  const countdownLabel = useCountdown(countdownTargetIso);
+
+  // Helpers used for styling
+  const isLive = currentPhase === 'open';
+  const isClosed =
+    currentPhase === 'closed' ||
+    currentPhase === 'distribution' ||
+    currentPhase === 'done';
+
+  const claimTone: Tone =
+    isLive
+      ? 'success'
+      : currentPhase === 'scheduled'
+      ? 'muted'
+      : currentPhase === 'distribution'
+      ? 'warning'
+      : 'muted';
+
+  // Flash highlight in the last 3 seconds before a phase change
+  useEffect(() => {
+    if (!countdownTargetIso) {
+      setPreFlash(false);
+      return;
+    }
+
+    const targetMs = new Date(countdownTargetIso).getTime();
+    if (!targetMs) return;
+
+    const check = () => {
+      const diff = targetMs - Date.now();
+      if (diff <= 3000 && diff >= 0) {
+        setPreFlash(true);
+      } else if (diff < 0 || diff > 3000) {
+        setPreFlash(false);
+      }
+    };
+
+    check();
+    const id = setInterval(check, 300);
+    return () => {
+      clearInterval(id);
+      setPreFlash(false);
+    };
+  }, [countdownTargetIso]);
+
+  // Final 10-second pulse
+  let isFinalTen = false;
+  if (countdownTargetIso) {
+    const targetMs = new Date(countdownTargetIso).getTime();
+    const diff = targetMs - Date.now();
+    isFinalTen = diff > 0 && diff <= 10_000;
+  }
+
   useEffect(() => {
   let cancelled = false;
 
@@ -433,111 +544,6 @@ const {
   // has this round actually finished distributing?
   const distributionDone = !!distributionDoneAt;
 
-  /* ───────────────────────────
-     Phase + countdown from schedule.json
-  ─────────────────────────── */
-
-  const nowMs = Date.now();
-
-  const snapshotMs =
-    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
-  const opensMs =
-    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
-  const closesMs =
-    SCHEDULE.windowClosesAt ? new Date(SCHEDULE.windowClosesAt).getTime() : null;
-  const distStartMs =
-    SCHEDULE.distributionStartsAt
-      ? new Date(SCHEDULE.distributionStartsAt).getTime()
-      : null;
-  const distDoneMs =
-    SCHEDULE.distributionDoneAt
-      ? new Date(SCHEDULE.distributionDoneAt).getTime()
-      : null;
-
-  // Monotonic phase ladder
-  let currentPhase: WindowPhase = 'scheduled';
-
-  if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
-  if (opensMs && nowMs >= opensMs) currentPhase = 'open';
-  if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
-  if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
-  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
-
-  // What are we counting towards?
-  let countdownTargetIso: string | null = null;
-
-  switch (currentPhase) {
-    case 'scheduled':
-    case 'snapshot':
-      // We hype the claim window, not the snapshot
-      countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
-      break;
-    case 'open':
-      countdownTargetIso = SCHEDULE.windowClosesAt ?? null;
-      break;
-    case 'closed':
-      // Claim window closed -> count to distribution start
-      countdownTargetIso = SCHEDULE.distributionStartsAt ?? null;
-      break;
-    case 'distribution':
-      countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
-      break;
-    default:
-      countdownTargetIso = null;
-  }
-
-  const countdownLabel = useCountdown(countdownTargetIso);
-
-  // Helpers used for styling
-  const isLive = currentPhase === 'open';
-  const isClosed =
-    currentPhase === 'closed' ||
-    currentPhase === 'distribution' ||
-    currentPhase === 'done';
-
-  const claimTone: Tone =
-  isLive
-    ? 'success'
-    : currentPhase === 'scheduled'
-    ? 'muted'
-    : currentPhase === 'distribution'
-    ? 'warning'
-    : 'muted';
-
-  // Flash highlight in the last 3 seconds before a phase change
-  useEffect(() => {
-    if (!countdownTargetIso) {
-      setPreFlash(false);
-      return;
-    }
-
-    const targetMs = new Date(countdownTargetIso).getTime();
-    if (!targetMs) return;
-
-    const check = () => {
-      const diff = targetMs - Date.now();
-      if (diff <= 3000 && diff >= 0) {
-        setPreFlash(true);
-      } else if (diff < 0 || diff > 3000) {
-        setPreFlash(false);
-      }
-    };
-
-    check();
-    const id = setInterval(check, 300);
-    return () => {
-      clearInterval(id);
-      setPreFlash(false);
-    };
-  }, [countdownTargetIso]);
-
-  // Final 10 second pulse
-  let isFinalTen = false;
-  if (countdownTargetIso) {
-    const targetMs = new Date(countdownTargetIso).getTime();
-    const diff = targetMs - Date.now();
-    isFinalTen = diff > 0 && diff <= 10_000;
-  }
 
   // Snapshot timing label – show nothing if there is no snapshot yet
   const snapshotDateLabel = snapshotAt ?? '';
