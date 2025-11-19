@@ -741,13 +741,11 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
     }
   };
 
-  /* ───────────────────────────
+    /* ───────────────────────────
      Render
   ─────────────────────────── */
 
-
-
-    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
@@ -763,7 +761,7 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-   let progressMessage = '';
+  let progressMessage = '';
   if (currentPhase === 'scheduled') {
     progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
@@ -778,59 +776,48 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
     progressMessage = 'Distribution sequence active — standby for completion.';
   }
 
-
-    // Live-style status summary for Mission Control
+  // Live-style status summary for Mission Control
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
 
-  const hasAnyIssue = hasBackendIssue || hasContractIssue;
+  const hasBackendIssue = frontEndStatus !== 'ok';
+  const hasContractIssue = contractStatus !== 'ok';
 
-if (hasBackendIssue || hasContractIssue) {
-  statusSummary =
-    'Attention flagged. One or more subsystems are reporting a non-normal status.';
-} else if (currentPhase === 'open') {
-  statusSummary =
-    'All systems nominal. Live claim window running under autonomous settlement.';
-} else if (currentPhase === 'scheduled') {
-  statusSummary =
-    'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
-} else if (currentPhase === 'distribution') {
-  statusSummary =
-    'All systems nominal. Reward distribution sequence is executing on-chain.';
-} else if (currentPhase === 'closed') {
-  statusSummary =
-    'All systems nominal. Claim window closed and standing by for the next round.';
-}
+  if (hasBackendIssue || hasContractIssue) {
+    statusSummary =
+      'Attention flagged. One or more subsystems are reporting a non-normal status.';
+  } else if (currentPhase === 'open') {
+    statusSummary =
+      'All systems nominal. Live claim window running under autonomous settlement.';
+  } else if (currentPhase === 'scheduled') {
+    statusSummary =
+      'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
+  } else if (currentPhase === 'distribution') {
+    statusSummary =
+      'All systems nominal. Reward distribution sequence is executing on-chain.';
+  } else if (currentPhase === 'closed') {
+    statusSummary =
+      'All systems nominal. Claim window closed and standing by for the next round.';
+  }
 
-let statusDotColor = 'bg-emerald-400';
-if (hasBackendIssue || hasContractIssue) {
-  statusDotColor = 'bg-amber-400';
-}
-if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500';
-}
+  let statusDotColor = 'bg-emerald-400'; // default
+  if (hasBackendIssue || hasContractIssue) {
+    statusDotColor = 'bg-amber-400'; // warning / partial issue
+  }
+  if (currentPhase === 'closed') {
+    statusDotColor = 'bg-slate-500'; // resting / no active processes
+  }
 
-return (
-  <main className="min-h-screen text-slate-50">
-  
-                  {/* HERO BACKGROUND */}
+  return (
+    <main className="min-h-screen text-slate-50">
+      {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        {/* Base gradient – much stronger */}
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
-
-        {/* Left glow */}
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
-
-        {/* Right glow */}
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
-
-        {/* Horizon line */}
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
       </div>
-
-      {/* Top nav – sticky */}
-      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
-          <div
+      
     className="
       mx-auto max-w-6xl
       flex flex-wrap items-center justify-between
