@@ -22,7 +22,7 @@ export default function ConceptPage() {
       </div>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
+      <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           {/* Left: logo + title (clickable) */}
           <Link href="/" className="flex items-center gap-3 group">
