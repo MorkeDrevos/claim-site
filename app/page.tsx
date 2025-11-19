@@ -687,12 +687,17 @@ const missionRows: MissionRow[] = [
 
 
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
-    { id: 'distribution', label: 'Rewards distributed' },
+    {
+      id: 'distribution',
+      label: distributionDone
+        ? 'Rewards distributed'
+        : 'Reward distribution in progress',
+    },
   ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
