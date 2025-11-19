@@ -295,8 +295,13 @@ export default function ClaimPoolPage() {
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
   if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
 
-  // Whether this round has actually finished distributing, from schedule
-  const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
+// whether this round has actually finished distributing, from schedule
+const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
+
+// ✅ if distribution is fully done, force final happy phase
+if (distributionDone) {
+  currentPhase = 'done';
+}
 
   // What are we counting toward?
   let countdownTargetIso: string | null = null;
