@@ -1253,23 +1253,32 @@ return (
 
 <div
   className="
-    mt-4 rounded-xl bg-slate-900/60 
-    border border-slate-800/70 px-4 py-3
-    flex items-center gap-3 
-    shadow-[0_0_20px_rgba(0,0,0,0.45)]
+    mt-4
+    rounded-2xl
+    bg-slate-900/85
+    border border-slate-800/80
+    px-4 py-3
+    flex items-start gap-3
   "
 >
   <span
     className={[
-      "h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_6px_currentColor]",
+      'mt-[3px] h-2 w-2 rounded-full',
       statusDotColor,
-      "animate-[pulse_2.8s_ease-in-out_infinite]"
-    ].join(" ")}
+      'shadow-[0_0_8px_currentColor]',
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
+      'flex-none',
+    ].join(' ')}
   />
 
-  <p className="text-[13px] text-slate-300 leading-snug">
-    {statusSummary}
-  </p>
+  <div className="space-y-0.5">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      System status
+    </p>
+    <p className="text-[13px] leading-snug text-slate-300">
+      {statusSummary}
+    </p>
+  </div>
 </div>  
 
 </div>
