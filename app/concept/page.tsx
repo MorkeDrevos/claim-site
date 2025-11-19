@@ -37,7 +37,7 @@ export default function ConceptPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300 transition">
-                CLAIM
+                $CLAIM
               </span>
               <span className="text-sm font-medium text-slate-100">
                 Token of Timing · Concept
