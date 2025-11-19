@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function SoftCard({ children }: { children: React.ReactNode }) {
   return (
@@ -24,14 +25,15 @@ export default function ConceptPage() {
       <header className="border-b border-slate-900/80 bg-black/40 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           {/* Left: logo + title (clickable) */}
-          <Link
-            href="/"
-            className="flex items-center gap-3 group"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 group-hover:ring-emerald-400/70 transition">
-              <span className="text-[11px] font-semibold tracking-[0.18em]">
-                $
-              </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 ring-1 ring-slate-700/80 overflow-hidden group-hover:ring-emerald-400/70 transition">
+              <Image
+                src="/img/claim-logo-circle.png"
+                alt="$CLAIM logo"
+                width={36}
+                height={36}
+                className="h-9 w-9 object-cover"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300 transition">
@@ -51,7 +53,7 @@ export default function ConceptPage() {
             >
               Portal
             </Link>
-            
+
             {/* Active pill */}
             <span className="inline-flex items-center rounded-full bg-slate-100 px-4 py-2 text-slate-900">
               Concept
@@ -129,7 +131,7 @@ export default function ConceptPage() {
               </p>
 
               <p className="text-[15px] leading-relaxed text-slate-300">
-                No staking. No waiting. No complex mechanics —{' '}
+                No staking. No waiting. No complex mechanics,{' '}
                 <span className="text-emerald-300 font-semibold">
                   just presence
                 </span>
@@ -178,7 +180,7 @@ export default function ConceptPage() {
                 </li>
                 <li>
                   <span className="font-semibold text-emerald-300">
-                    3. Show up & click Claim
+                    3. Show up and click Claim
                   </span>
                   <br />
                   No race conditions, no gas wars, no tricks.
