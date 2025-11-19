@@ -345,101 +345,7 @@ export default function ClaimPoolPage() {
     }
   };
 
-  const claimWindowStatusSafe = state?.claimWindowStatus ?? '';
-  const rawPhase = (state as any)?.windowPhase as WindowPhase | undefined;
-  const lowerStatus = claimWindowStatusSafe.toLowerCase();
-
-  // Parse open/close timestamps (if present)
-  const opensAtMs =
-    state?.claimWindowOpensAt ? new Date(state.claimWindowOpensAt).getTime() : null;
-  const closesAtMs =
-    state?.claimWindowClosesAt ? new Date(state.claimWindowClosesAt).getTime() : null;
-  const nowMs = Date.now();
-
-  // Base phase used for countdown (scheduled / open / closed)
-  let phase: 'scheduled' | 'open' | 'closed' = 'scheduled';
-
-  // Prefer automatic timing based on opens/closes
-  if (opensAtMs && closesAtMs) {
-    if (nowMs < opensAtMs) {
-      phase = 'scheduled';
-    } else if (nowMs >= opensAtMs && nowMs < closesAtMs) {
-      phase = 'open';
-    } else {
-      phase = 'closed';
-    }
-  } else if (opensAtMs && !closesAtMs) {
-    phase = nowMs < opensAtMs ? 'scheduled' : 'open';
-  } else {
-    // Fallback to backend phase/status
-    if (rawPhase === 'open') {
-      phase = 'open';
-    } else if (
-      rawPhase === 'closed' ||
-      rawPhase === 'snapshot' ||
-      rawPhase === 'distribution'
-    ) {
-      phase = 'closed';
-    } else if (lowerStatus.includes('closed')) {
-      phase = 'closed';
-    } else if (lowerStatus.includes('closes')) {
-      phase = 'open';
-    } else {
-      phase = 'scheduled';
-    }
-  }
-
-  const opensAt = state?.claimWindowOpensAt ?? null;
-  const closesAt = state?.claimWindowClosesAt ?? null;
-
-  let countdownTarget: string | null = null;
-if (phase === 'scheduled') {
-  countdownTarget = opensAt || null;
-} else if (phase === 'open') {
-  countdownTarget = closesAt || null;
-} else if (phase === 'closed') {
-  // 🟢 Correct target: upcoming distribution phase
-  countdownTarget = state?.distributionStartsAt || null;
-}
-
-  const countdownLabel = useCountdown(countdownTarget);
-
-  // Flash highlight in the last 3 seconds before a phase change
-  useEffect(() => {
-    if (!countdownTarget) {
-      setPreFlash(false);
-      return;
-    }
-
-    const targetMs = new Date(countdownTarget).getTime();
-    if (!targetMs) return;
-
-    const check = () => {
-      const diff = targetMs - Date.now();
-      if (diff <= 3000 && diff >= 0) {
-        setPreFlash(true);
-      } else if (diff < 0 || diff > 3000) {
-        setPreFlash(false);
-      }
-    };
-
-    check();
-    const id = setInterval(check, 300);
-    return () => {
-      clearInterval(id);
-      setPreFlash(false);
-    };
-  }, [countdownTarget]);
-
-  // Final 10 second pulse trigger
-let isFinalTen = false;
-
-if (countdownTarget) {
-  const targetMs = new Date(countdownTarget).getTime();
-  const diff = targetMs - Date.now();
-  isFinalTen = diff > 0 && diff <= 10_000;
-}
-
+  
   /* ── Wallet connect / disconnect ── */
 
   const handleConnectClick = async () => {
@@ -641,6 +547,15 @@ const {
     contractStatusLower === 'error' ||
     contractStatusLower === 'down' ||
     contractStatusLower === 'offline';
+
+  const claimTone: Tone =
+    currentPhase === 'open'
+      ? 'success'
+      : currentPhase === 'distribution'
+      ? 'warning'
+      : currentPhase === 'scheduled'
+      ? 'muted'
+      : 'muted';
 
   const missionRows: MissionRow[] = [
     {
