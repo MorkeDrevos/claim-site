@@ -799,10 +799,11 @@ if (hasBackendIssue || hasContractIssue) {
 
 let statusDotColor = 'bg-emerald-400'; // default
 if (hasBackendIssue || hasContractIssue) {
-  statusDotColor = 'bg-amber-400';    // warning / partial issue
+  statusDotColor = 'bg-amber-400'; // warning / partial issue
 }
 if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500';    // resting / no active processes
+  statusDotColor = 'bg-slate-500'; // resting / no active processes
+}
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
@@ -1124,33 +1125,23 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool + USD — responsive */}
-<div
-  className="
-    flex gap-3 mt-[24px]
-    items-end justify-end
-    max-sm:flex-col max-sm:items-center max-sm:gap-1
-  "
->
-  {/* CLAIM – primary */}
-  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
-    {rewardAmountText}
-    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-      $CLAIM
-    </span>
-  </p>
-
-  {/* Divider removed for now */}
-// <span className="text-slate-700 text-[18px] leading-none">|</span>
-
-{/* USD removed for now */}
-// <p
-//   key={rewardUsdText}
-//   className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
-// >
-//   ≈ {rewardUsdText} USD
-// </p>
-</div>
+        {/* CLAIM pool + USD — responsive */}
+  <div
+    className="
+      flex gap-3 mt-[24px]
+      items-end justify-end
+      max-sm:flex-col max-sm:items-center max-sm:gap-1
+    "
+  >
+    {/* CLAIM – primary */}
+    <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
+      {rewardAmountText}
+      <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+        $CLAIM
+      </span>
+    </p>
+    {/* USD temporarily removed */}
+  </div>
 
     </div>
   </div>
