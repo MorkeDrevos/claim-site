@@ -1014,7 +1014,7 @@ return (
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col pl-1 sm:pl-2">
-      <p className="mt-[2px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      <p className="mt-[22px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         {isLive ? (
           <span className="inline-flex items-center gap-2">
             <svg
