@@ -2,7 +2,7 @@ name: Rotate CLAIM schedule
 
 on:
   schedule:
-  - cron: "*/1 * * * *"   # every 1 minute for fast testing
+    - cron: "*/1 * * * *"   # every 1 min for testing
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "none"   # no lockfile, so disable npm cache
 
       - name: Install dependencies
         run: npm install
