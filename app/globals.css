@@ -32,6 +32,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  background-image: url("/img/noise.png");
   opacity: 0.07;
   mix-blend-mode: screen;
   z-index: -1;
