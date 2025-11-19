@@ -797,7 +797,7 @@ if (currentPhase === 'closed') {
 }
 
 return (
-  <main className="min-h-screen text-slate-50">
+  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
   
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
