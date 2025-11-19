@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-// scripts/update-claim-schedule.cjs
 // Rotates claim-schedule.json to the next round using randomised timings.
 
 const fs = require('fs');
 const path = require('path');
 
-/* ---- Config helpers --------------------------------------------------- */
+/* ---- Small helpers ---------------------------------------------------- */
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -38,11 +37,10 @@ try {
   process.exit(1);
 }
 
-/* ---- Check if current round is still active --------------------------- */
-
 const now = new Date();
 const nowMs = now.getTime();
 
+// If current round has a future distributionDoneAt, leave it alone
 let currentDoneMs = null;
 if (schedule.distributionDoneAt) {
   const t = new Date(schedule.distributionDoneAt).getTime();
@@ -50,24 +48,21 @@ if (schedule.distributionDoneAt) {
 }
 
 if (currentDoneMs && currentDoneMs > nowMs) {
-  console.log(
-    '[CLAIM schedule] Current round still in progress. No changes written.'
-  );
+  console.log('[CLAIM schedule] Current round still in progress. No changes.');
   process.exit(0);
 }
 
-/* ---- Timings (with sane defaults, overridable via env) ---------------- */
+/* ---- Timing ranges (can be tuned with env vars) ----------------------- */
 
 // When should the next window open, relative to *now* (minutes)?
-const OPEN_DELAY_MIN = Number(process.env.CLAIM_OPEN_DELAY_MIN || 20); // default 20
-const OPEN_DELAY_MAX = Number(process.env.CLAIM_OPEN_DELAY_MAX || 60); // default 60
+const OPEN_DELAY_MIN = Number(process.env.CLAIM_OPEN_DELAY_MIN || 20); // 20–60 min
+const OPEN_DELAY_MAX = Number(process.env.CLAIM_OPEN_DELAY_MAX || 60);
 
-// Snapshot offset before open (minutes).
-// Example: 10–45 minutes before claim window.
+// Snapshot offset *before* open (minutes) — 10–45 minutes before.
 const SNAPSHOT_OFFSET_MIN = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MIN || 10);
 const SNAPSHOT_OFFSET_MAX = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MAX || 45);
 
-// Claim window duration (minutes).
+// Claim window duration (minutes) — 3–5 minutes.
 const WINDOW_DURATION_MIN = Number(
   process.env.CLAIM_WINDOW_DURATION_MIN || 3
 );
@@ -75,11 +70,11 @@ const WINDOW_DURATION_MAX = Number(
   process.env.CLAIM_WINDOW_DURATION_MAX || 5
 );
 
-// Distribution lag after window closes (seconds).
+// Distribution lag after close (seconds) — 60–180 seconds.
 const DIST_LAG_MIN = Number(process.env.CLAIM_DIST_LAG_MIN || 60);
 const DIST_LAG_MAX = Number(process.env.CLAIM_DIST_LAG_MAX || 180);
 
-// Distribution duration (seconds).
+// Distribution duration (seconds) — 60–180 seconds.
 const DIST_DURATION_MIN = Number(
   process.env.CLAIM_DIST_DURATION_MIN || 60
 );
@@ -92,6 +87,7 @@ const DIST_DURATION_MAX = Number(
 const nextRoundNumber =
   typeof schedule.roundNumber === 'number' ? schedule.roundNumber + 1 : 0;
 
+// Randomised timings
 const openDelayMinutes = randInt(OPEN_DELAY_MIN, OPEN_DELAY_MAX);
 const windowDurationMinutes = randInt(
   WINDOW_DURATION_MIN,
@@ -120,6 +116,7 @@ const distributionDoneAt = addSeconds(
   distributionDurationSeconds
 );
 
+// This structure is what your frontend expects via SCHEDULE
 const nextSchedule = {
   roundNumber: nextRoundNumber,
   snapshotAt: snapshotAt.toISOString(),
