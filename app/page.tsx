@@ -533,6 +533,45 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
+    // Tone for claim window line
+  const claimTone: Tone =
+    currentPhase === 'open'
+      ? 'success'
+      : currentPhase === 'scheduled'
+      ? 'warning'
+      : 'muted';
+
+  // Snapshot timing label – show nothing if there’s no snapshot yet
+  const snapshotDateLabel = snapshotAt ?? '';
+
+  // Normalised backend / contract status
+  const backendStatus = (frontEndStatus || '').toLowerCase();
+  const contractStatusLower = (contractStatus || '').toLowerCase();
+
+  const hasBackendIssue =
+    backendStatus === 'error' ||
+    backendStatus === 'down' ||
+    backendStatus === 'offline';
+
+  const hasContractIssue =
+    contractStatusLower === 'error' ||
+    contractStatusLower === 'down' ||
+    contractStatusLower === 'offline';
+
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
+
+  // Rows for Mission Control (NASA layout)
+  type MissionRowMode = 'plain' | 'pill';
+
+  type MissionRow = {
+    label: string;
+    value: string;
+    tone: Tone;
+    mode?: MissionRowMode; // default = 'plain'
+  };
+
+  const RIGHT_COL_WIDTH = 'w-[120px]';
+
  const missionRows: MissionRow[] = [
   {
     label: 'Portal backend',
