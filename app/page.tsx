@@ -802,12 +802,12 @@ if (hasBackendIssue || hasContractIssue) {
     'All systems nominal. Claim window closed and standing by for the next round.';
 }
 
-let statusDotColor = 'bg-emerald-400'; // default
+let statusDotColor = 'bg-emerald-400';
 if (hasBackendIssue || hasContractIssue) {
-  statusDotColor = 'bg-amber-400';    // warning / partial issue
+  statusDotColor = 'bg-amber-400';
 }
 if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500';    // resting / no active processes
+  statusDotColor = 'bg-slate-500';
 }
 
 return (
