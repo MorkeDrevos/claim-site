@@ -25,8 +25,21 @@ type ClaimHistoryEntry = {
 };
 
 type ClaimPortalState = {
-    // window status text the UI shows (unchanged)
+  // unified round number
+  roundNumber?: number;
+
+  // wallet / network
+  walletConnected: boolean;
+  walletShort: string;
+  networkLabel: string;
+
+  // snapshot info
+  snapshotLabel: string;
+  snapshotBlock: string;
+
+  // window status text the UI shows
   claimWindowStatus: string;
+  windowPhase?: WindowPhase;
 
   // NEW: these now directly match claim-schedule.json
   snapshotAt?: string | null;
@@ -34,6 +47,20 @@ type ClaimPortalState = {
   claimWindowClosesAt?: string | null;
   distributionStartsAt?: string | null;
   distributionDoneAt?: string | null;
+
+  // backend/system status
+  frontEndStatus: string;
+  contractStatus: string;
+  firstPoolStatus: PoolStatus;
+
+  // pool + eligibility
+  eligibleAmount: number;
+  claimHistory: ClaimHistoryEntry[];
+  rewardPoolAmountClaim?: number | null;
+  rewardPoolAmountUsd?: number | null;
+
+  // helper from schedule
+  numericCountdown?: string;
 };
 
 
@@ -84,6 +111,26 @@ function SoftCard({
       {children}
     </div>
   );
+}
+
+/* ───────────────────────────
+   Schedule helpers
+─────────────────────────── */
+
+const SCHEDULE = schedule as ClaimSchedule;
+
+function formatCountdown(target: Date | null): string {
+  if (!target) return '--:--:--';
+
+  const diff = target.getTime() - Date.now();
+  if (diff <= 0) return '00:00:00';
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const s = String(totalSeconds % 60).padStart(2, '0');
+
+  return `${h}:${m}:${s}`;
 }
 
 /* ───────────────────────────
@@ -378,62 +425,6 @@ if (countdownTarget) {
   isFinalTen = diff > 0 && diff <= 10_000;
 }
 
-  /* ── Initial load + polling ── */
-
-  useEffect(() => {
-    let alive = true;
-
-    const load = () => {
-      getClaimPortalState()
-        .then((data) => {
-          if (!alive) return;
-
-          const statusSafe = data.claimWindowStatus?.toLowerCase?.() ?? '';
-          const raw = (data as any)?.windowPhase as WindowPhase | undefined;
-
-          let nextPhase: 'scheduled' | 'open' | 'closed' = 'scheduled';
-          if (raw === 'open') {
-            nextPhase = 'open';
-          } else if (
-            raw === 'closed' ||
-            raw === 'snapshot' ||
-            raw === 'distribution'
-          ) {
-            nextPhase = 'closed';
-          } else if (statusSafe.includes('closed')) {
-            nextPhase = 'closed';
-          } else if (statusSafe.includes('closes')) {
-            nextPhase = 'open';
-          } else {
-            nextPhase = 'scheduled';
-          }
-
-          const prevPhase = lastWindowPhaseRef.current;
-
-          if (nextPhase === 'open' && prevPhase !== 'open') {
-            setIsPulseOn(true);
-            setTimeout(() => setIsPulseOn(false), 3500);
-          }
-
-          lastWindowPhaseRef.current = nextPhase;
-          setState(data);
-          setError(null);
-        })
-        .catch((err) => {
-          console.error(err);
-          if (!alive) return;
-          setError('Unable to load portal data right now.');
-        });
-    };
-
-    load();
-    const id = setInterval(load, 60_000);
-    return () => {
-      alive = false;
-      clearInterval(id);
-    };
-  }, []);
-
   /* ── Wallet connect / disconnect ── */
 
   const handleConnectClick = async () => {
@@ -498,22 +489,28 @@ if (countdownTarget) {
 
   /* ── Safe destructure (state is now non-null) ── */
 
-    const {
-  ...
-  windowPhase,
-  snapshotAt,
-  distributionDoneAt,
-  roundNumber,
-} = state;
+  const {
+    walletConnected,
+    walletShort,
+    networkLabel,
+    snapshotLabel,
+    snapshotBlock,
+    claimWindowStatus,
+    frontEndStatus,
+    contractStatus,
+    firstPoolStatus,
+    eligibleAmount,
+    claimHistory,
+    rewardPoolAmountClaim,
+    rewardPoolAmountUsd,
+    windowPhase,
+    roundNumber,
+    snapshotAt,
+    distributionDoneAt,
+  } = state;
 
-// has this round actually finished distributing?
-const distributionDone = !!distributionDoneAt;
-
-// Snapshot timing label – show nothing if there’s no snapshot yet
-const snapshotDateLabel = snapshotAt ?? '';
-
-  // 🔹 NEW: has this round actually finished distributing?
-  const distributionDone = !!distributionCompletedAt;
+  // has this round actually finished distributing?
+  const distributionDone = !!distributionDoneAt;
 
   // Derived from phase
   const isLive = phase === 'open';
@@ -530,13 +527,16 @@ const snapshotDateLabel = snapshotAt ?? '';
     currentPhase = 'scheduled';
   }
 
-    // Tone for claim window line
+  // Tone for claim window line
   const claimTone: Tone =
     currentPhase === 'open'
       ? 'success'
       : currentPhase === 'scheduled'
       ? 'warning'
       : 'muted';
+
+  // Snapshot timing label – show nothing if there’s no snapshot yet
+  const snapshotDateLabel = snapshotAt ?? '';
 
   // Rows for Mission Control (NASA layout)
 type MissionRowMode = 'plain' | 'pill';
@@ -791,9 +791,6 @@ if (hasBackendIssue || hasContractIssue) {
 if (currentPhase === 'closed') {
   statusDotColor = 'bg-slate-500';    // resting / no active processes
 }
-
-// Snapshot timing label – show nothing if there’s no snapshot yet
-const snapshotDateLabel = snapshotTakenAt ?? '';
 
 return (
   <main className="min-h-screen text-slate-50">
