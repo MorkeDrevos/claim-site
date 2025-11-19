@@ -1251,36 +1251,40 @@ return (
 {/* Divider + NASA footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
-{/* STATUS BAND — mission-control style */}
-<div className="mt-4 rounded-2xl border border-slate-800/80 bg-slate-950/90 shadow-[0_18px_40px_rgba(0,0,0,0.7)] overflow-hidden">
-  {/* main row */}
-  <div className="flex items-center gap-3 px-4 py-3.5">
-    {/* Dot */}
+<div
+  className="
+    mt-4
+    rounded-2xl
+    bg-slate-950/70
+    border border-slate-800/70
+    px-5 py-4
+    relative
+    overflow-hidden
+    shadow-[0_0_24px_rgba(0,0,0,0.6)]
+  "
+>
+  {/* Top glow line */}
+  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+
+  {/* Dot + text */}
+  <div className="flex items-start gap-4">
     <span
       className={[
-        'mt-[2px] h-2 w-2 rounded-full flex-none',
+        "mt-[2px] h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_8px_currentColor]",
         statusDotColor,
-        'shadow-[0_0_10px_currentColor]',
-        'animate-[pulse_2.6s_ease-in-out_infinite]',
-      ].join(' ')}
+        "animate-[pulse_2.8s_ease-in-out_infinite]"
+      ].join(" ")}
     />
 
-    {/* Text block */}
-    <div className="flex-1 space-y-0.5">
-      {/* Tiny label */}
+    <div className="space-y-1">
       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        System status
+        System Status
       </p>
-
-      {/* Main status line – 1px bigger, light tone, sentence case */}
-      <p className="text-[13px] leading-snug text-slate-300">
+      <p className="text-[13px] leading-snug text-slate-200">
         {statusSummary}
       </p>
     </div>
   </div>
-
-  {/* subtle glow line under the content */}
-  <div className="h-px w-full bg-gradient-to-r from-emerald-400/40 via-transparent to-sky-400/40" />
 </div>  
 
 </div>
