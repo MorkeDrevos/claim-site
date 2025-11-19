@@ -769,6 +769,7 @@ let statusSummary =
 
 const hasBackendIssue = frontEndStatus !== 'ok';
 const hasContractIssue = contractStatus !== 'ok';
+const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
 if (hasBackendIssue || hasContractIssue) {
   statusSummary =
@@ -1206,9 +1207,16 @@ return (
     Round {roundNumber ?? 1}
   </p>
 
-  {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
-  <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-    Mission Control
+  {/* RIGHT: Mission Control header – turns amber on issues */}
+  <span
+    className={[
+      'text-[12px] font-semibold uppercase tracking-[0.32em]',
+      hasAnyIssue
+        ? 'text-amber-300'
+        : 'text-emerald-400',
+    ].join(' ')}
+  >
+    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
   </span>
 </div>
 
@@ -1234,27 +1242,22 @@ return (
   {missionRows.map((row) => {
     const isPill = row.mode === 'pill';
 
-    // 🔍 Special styling for "Portal backend: Attention"
-    const isBackendAttention =
-      row.label === 'Portal backend' && row.value === 'Attention';
+    // Plain-value text colour
+    const plainValueClass =
+      row.tone === 'success'
+        ? 'text-[12px] text-emerald-300'
+        : row.tone === 'warning'
+        ? 'text-[12px] text-amber-300'
+        : 'text-[12px] text-slate-400';
 
-    const rowWrapperClasses = [
-      'flex items-center justify-between gap-3',
-      isBackendAttention
-        ? 'rounded-xl bg-amber-500/5 px-3 py-1.5 -mx-3' // soft glow behind the text
-        : '',
-    ].join(' ');
-
-    const valueClasses = [
-      'text-[12px]',
-      row.tone === 'warning' ? 'text-amber-200' : 'text-slate-400',
-      isBackendAttention
-        ? 'pb-[2px] border-b border-amber-400/80' // thin “gold” underline
-        : '',
-    ].join(' ');
+    // Any non-pill row with tone "warning" gets the gold underline
+    const showWarningUnderline = row.tone === 'warning' && !isPill;
 
     return (
-      <div key={row.label} className={rowWrapperClasses}>
+      <div
+        key={row.label}
+        className="flex items-center justify-between gap-3"
+      >
         <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
           {row.label}
         </span>
@@ -1284,7 +1287,20 @@ return (
             {row.value}
           </span>
         ) : (
-          <span className={valueClasses}>{row.value}</span>
+          <div className="flex flex-col items-end">
+            <span className={plainValueClass}>{row.value}</span>
+
+            {showWarningUnderline && (
+              <span
+                className="
+                  mt-0.5 h-[1px] w-full rounded-full
+                  bg-amber-400/90
+                  shadow-[0_0_12px_rgba(251,191,36,0.9)]
+                  animate-pulse
+                "
+              />
+            )}
+          </div>
         )}
       </div>
     );
