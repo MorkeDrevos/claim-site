@@ -14,6 +14,14 @@ import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
 type Tone = 'neutral' | 'success' | 'warning' | 'muted';
+type MissionRowMode = 'plain' | 'pill';
+
+type MissionRow = {
+  label: string;
+  value: string;
+  tone: Tone;
+  mode?: MissionRowMode; // default = 'plain'
+};
 
 type WindowPhase =
   | 'scheduled'
@@ -542,7 +550,33 @@ if (countdownTarget) {
       : 'muted';
 
   // Snapshot timing label – show nothing if there’s no snapshot yet
-    const missionRows: MissionRow[] = [
+  // Tone for claim window line
+  const claimTone: Tone =
+    currentPhase === 'open'
+      ? 'success'
+      : currentPhase === 'scheduled'
+      ? 'warning'
+      : 'muted';
+
+  // Snapshot timing label – show nothing if there’s no snapshot yet
+  const snapshotDateLabel = snapshotAt ?? '';
+
+  // Normalize backend / contract status
+  const backendStatus = (frontEndStatus || '').toLowerCase();
+  const contractStatusLower = (contractStatus || '').toLowerCase();
+
+  // Only treat real failures as issues
+  const hasBackendIssue =
+    backendStatus === 'error' ||
+    backendStatus === 'down' ||
+    backendStatus === 'offline';
+
+  const hasContractIssue =
+    contractStatusLower === 'error' ||
+    contractStatusLower === 'down' ||
+    contractStatusLower === 'offline';
+
+  const missionRows: MissionRow[] = [
     {
       label: 'Portal backend',
       value: hasBackendIssue ? 'Attention' : 'Online',
