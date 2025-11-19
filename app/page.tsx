@@ -1253,30 +1253,23 @@ return (
 
 <div
   className="
-    mt-4
-    rounded-2xl
-    bg-slate-900/85
-    border border-slate-800/80
-    px-4 py-3
-    flex items-start gap-3
+    mt-6 rounded-3xl border border-slate-800/70
+    bg-slate-950/40 px-6 py-5
+    shadow-[0_0_32px_-8px_rgba(16,185,129,0.25)]
   "
 >
-  <span
-    className={[
-      'mt-[3px] h-2 w-2 rounded-full',
-      statusDotColor,
-      'shadow-[0_0_8px_currentColor]',
-      'animate-[pulse_2.6s_ease-in-out_infinite]',
-      'flex-none',
-    ].join(' ')}
-  />
+  <p className="text-[11px] font-semibold tracking-[0.22em] text-slate-400 uppercase">
+    System Status
+  </p>
 
-  <div className="space-y-0.5">
-    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      System status
-    </p>
-    <p className="text-[13px] leading-snug text-slate-300">
-      {statusSummary}
+  <div className="mt-2 flex items-start gap-3">
+    {/* Green dot */}
+    <span className="mt-1.5 h-3 w-3 rounded-full bg-emerald-400/80 shadow-[0_0_12px_rgba(16,185,129,0.9)]"></span>
+
+    {/* Status text */}
+    <p className="text-[15px] leading-relaxed text-slate-300">
+      All systems nominal. Snapshot execution is standing by and may
+      trigger at any time.
     </p>
   </div>
 </div>  
