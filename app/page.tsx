@@ -541,10 +541,6 @@ const {
   distributionDoneAt,
 } = state;
 
-  // has this round actually finished distributing?
-  const distributionDone = !!distributionDoneAt;
-
-
   // Snapshot timing label – show nothing if there is no snapshot yet
   const snapshotDateLabel = snapshotAt ?? '';
 
