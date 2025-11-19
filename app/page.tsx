@@ -1253,24 +1253,37 @@ return (
 
 <div
   className="
-    mt-6 rounded-3xl border border-slate-800/70
-    bg-slate-950/40 px-6 py-5
-    shadow-[0_0_32px_-8px_rgba(16,185,129,0.25)]
+    mt-4
+    rounded-2xl
+    bg-slate-950/70
+    border border-slate-800/70
+    px-5 py-4
+    relative
+    overflow-hidden
+    shadow-[0_0_24px_rgba(0,0,0,0.6)]
   "
 >
-  <p className="text-[11px] font-semibold tracking-[0.22em] text-slate-400 uppercase">
-    System Status
-  </p>
+  {/* Top glow line */}
+  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
 
-  <div className="mt-2 flex items-start gap-3">
-    {/* Green dot */}
-    <span className="mt-1.5 h-3 w-3 rounded-full bg-emerald-400/80 shadow-[0_0_12px_rgba(16,185,129,0.9)]"></span>
+  {/* Dot + text */}
+  <div className="flex items-start gap-4">
+    <span
+      className={[
+        "mt-[2px] h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_8px_currentColor]",
+        statusDotColor,
+        "animate-[pulse_2.8s_ease-in-out_infinite]"
+      ].join(" ")}
+    />
 
-    {/* Status text */}
-    <p className="text-[15px] leading-relaxed text-slate-300">
-      All systems nominal. Snapshot execution is standing by and may
-      trigger at any time.
-    </p>
+    <div className="space-y-1">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+        System Status
+      </p>
+      <p className="text-[13px] leading-snug text-slate-200">
+        {statusSummary}
+      </p>
+    </div>
   </div>
 </div>  
 
