@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "update:claim-schedule": "node scripts/update-claim-schedule.cjs"
   },
   "dependencies": {
     "next": "14.2.5",
