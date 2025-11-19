@@ -504,27 +504,25 @@ if (countdownTarget) {
 
   /* ── Safe destructure (state is now non-null) ── */
 
-  const {
-    walletConnected,
-    walletShort,
-    networkLabel,
-    snapshotLabel,
-    snapshotBlock,
-    claimWindowStatus,
-    frontEndStatus,
-    contractStatus,
-    firstPoolStatus,
-    eligibleAmount,
-    claimHistory,
-    rewardPoolAmountClaim,
-    rewardPoolAmountUsd,
-    windowPhase,
-    roundNumber,
-    snapshotAt,
-    distributionDoneAt,
-  } = state;
-
-let currentPhase: WindowPhase;
+const {
+  walletConnected,
+  walletShort,
+  networkLabel,
+  snapshotLabel,
+  snapshotBlock,
+  claimWindowStatus,
+  frontEndStatus,
+  contractStatus,
+  firstPoolStatus,
+  eligibleAmount,
+  claimHistory,
+  rewardPoolAmountClaim,
+  rewardPoolAmountUsd,
+  windowPhase,
+  roundNumber,
+  snapshotAt,
+  distributionDoneAt,
+} = state;
 
 let currentPhase: WindowPhase;
 
@@ -541,7 +539,7 @@ if (windowPhase === 'open') {
 } else {
   // windowPhase === 'scheduled'
   // Before snapshot: "Opens soon"
-  // After snapshotAt but before open: "Snapshot complete"
+  // After snapshot but before open: "Snapshot complete"
   currentPhase = snapshotAt ? 'snapshot' : 'scheduled';
 }
 
