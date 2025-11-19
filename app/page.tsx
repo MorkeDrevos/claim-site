@@ -1035,7 +1035,7 @@ return (
         <p
           className={[
             '-mt-1.5', // moves ONLY the number upward
-            'text-[35px] sm:text-[37px] font-bold tracking-tight text-slate-50',
+            'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
@@ -1200,23 +1200,27 @@ return (
 <div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
-    {/* Header row */}
-<div className="flex items-baseline justify-between pr-1">
+{/* Header row */}
+<div className="flex items-baseline justify-between gap-3 pr-1">
   {/* LEFT: Round number */}
   <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
     Round {roundNumber ?? 1}
   </p>
 
-  {/* RIGHT: Mission Control header – turns amber on issues */}
+  {/* RIGHT: Mission Control header */}
   <span
     className={[
-      'text-[12px] font-semibold uppercase tracking-[0.32em]',
+      'inline-flex items-center justify-center',
+      'rounded-full px-4 py-1.5',
+      'text-[10px] font-semibold uppercase tracking-[0.22em]',
+      'min-w-[160px]', // <- keeps the box wide enough even for big round numbers
       hasAnyIssue
-        ? 'text-amber-300'
-        : 'text-emerald-400',
+        ? 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+        : 'bg-slate-900/80 text-emerald-300 border border-emerald-500/40',
     ].join(' ')}
   >
-    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
+    {hasAnyIssue && <span className="mr-1 text-[11px]">⚠</span>}
+    Mission Control
   </span>
 </div>
 
