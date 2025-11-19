@@ -767,8 +767,10 @@ const {
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
    let progressMessage = '';
+
   if (currentPhase === 'scheduled') {
-    progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
+    progressMessage =
+      'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
     progressMessage = 'Snapshot complete. Next claim window coming soon.';
   } else if (currentPhase === 'open') {
@@ -778,14 +780,13 @@ const {
     progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage = 'Distribution sequence active — standby for completion.';
-  }
-
+    progressMessage =
+      'Distribution sequence active — standby for completion.';
   } else if (currentPhase === 'done') {
     progressMessage =
       'Rewards distributed. Next window will be scheduled soon.';
   }
-  
+
     // Live-style status summary for Mission Control
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
