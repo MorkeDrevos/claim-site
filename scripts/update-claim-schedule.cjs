@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Rotates claim-schedule.json to the next round using randomised timings.
+// Rotates claim-schedule.json to the next round using timed offsets.
+// CURRENT SETUP: 1-minute steps between each stage (good for live testing).
 
 const fs = require('fs');
 const path = require('path');
@@ -37,6 +38,11 @@ try {
   process.exit(1);
 }
 
+// In case we ever store it as an array, just take the first entry.
+if (Array.isArray(schedule)) {
+  schedule = schedule[0] || {};
+}
+
 const now = new Date();
 const nowMs = now.getTime();
 
@@ -52,42 +58,50 @@ if (currentDoneMs && currentDoneMs > nowMs) {
   process.exit(0);
 }
 
-/* ---- Timing ranges (can be tuned with env vars) ----------------------- */
+/* ---- Timing ranges (TEST MODE: 1-minute steps) ------------------------ */
+/*
+  Defaults below give you:
+
+    now  + 1 min  -> snapshotAt
+    now  + 2 min  -> windowOpensAt
+    now  + 3 min  -> windowClosesAt
+    now  + 4 min  -> distributionStartsAt
+    now  + 5 min  -> distributionDoneAt
+
+  You can still override via env vars on the workflow if you want.
+*/
 
 // When should the next window open, relative to *now* (minutes)?
-const OPEN_DELAY_MIN = Number(process.env.CLAIM_OPEN_DELAY_MIN || 20); // 20–60 min
-const OPEN_DELAY_MAX = Number(process.env.CLAIM_OPEN_DELAY_MAX || 60);
+// TEST: fixed 2 minutes from now.
+const OPEN_DELAY_MIN = Number(process.env.CLAIM_OPEN_DELAY_MIN || 2);
+const OPEN_DELAY_MAX = Number(process.env.CLAIM_OPEN_DELAY_MAX || 2);
 
-// Snapshot offset *before* open (minutes) — 10–45 minutes before.
-const SNAPSHOT_OFFSET_MIN = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MIN || 10);
-const SNAPSHOT_OFFSET_MAX = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MAX || 45);
+// Snapshot offset *before* open (minutes).
+// TEST: fixed 1 minute before open.
+const SNAPSHOT_OFFSET_MIN = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MIN || 1);
+const SNAPSHOT_OFFSET_MAX = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MAX || 1);
 
-// Claim window duration (minutes) — 3–5 minutes.
-const WINDOW_DURATION_MIN = Number(
-  process.env.CLAIM_WINDOW_DURATION_MIN || 3
-);
-const WINDOW_DURATION_MAX = Number(
-  process.env.CLAIM_WINDOW_DURATION_MAX || 5
-);
+// Claim window duration (minutes).
+// TEST: fixed 1-minute live window.
+const WINDOW_DURATION_MIN = Number(process.env.CLAIM_WINDOW_DURATION_MIN || 1);
+const WINDOW_DURATION_MAX = Number(process.env.CLAIM_WINDOW_DURATION_MAX || 1);
 
-// Distribution lag after close (seconds) — 60–180 seconds.
+// Distribution lag after close (seconds).
+// TEST: fixed 60 seconds after window closes.
 const DIST_LAG_MIN = Number(process.env.CLAIM_DIST_LAG_MIN || 60);
-const DIST_LAG_MAX = Number(process.env.CLAIM_DIST_LAG_MAX || 180);
+const DIST_LAG_MAX = Number(process.env.CLAIM_DIST_LAG_MAX || 60);
 
-// Distribution duration (seconds) — 60–180 seconds.
-const DIST_DURATION_MIN = Number(
-  process.env.CLAIM_DIST_DURATION_MIN || 60
-);
-const DIST_DURATION_MAX = Number(
-  process.env.CLAIM_DIST_DURATION_MAX || 180
-);
+// Distribution duration (seconds).
+// TEST: fixed 60 seconds to finish distribution.
+const DIST_DURATION_MIN = Number(process.env.CLAIM_DIST_DURATION_MIN || 60);
+const DIST_DURATION_MAX = Number(process.env.CLAIM_DIST_DURATION_MAX || 60);
 
 /* ---- Generate next round ---------------------------------------------- */
 
 const nextRoundNumber =
-  typeof schedule.roundNumber === 'number' ? schedule.roundNumber + 1 : 0;
+  typeof schedule.roundNumber === 'number' ? schedule.roundNumber + 1 : 1;
 
-// Randomised timings
+// Randomised (but with very tight ranges for test)
 const openDelayMinutes = randInt(OPEN_DELAY_MIN, OPEN_DELAY_MAX);
 const windowDurationMinutes = randInt(
   WINDOW_DURATION_MIN,
@@ -107,10 +121,7 @@ const distributionDurationSeconds = randInt(
 const windowOpensAt = addMinutes(now, openDelayMinutes);
 const windowClosesAt = addMinutes(windowOpensAt, windowDurationMinutes);
 const snapshotAt = addMinutes(windowOpensAt, -snapshotOffsetMinutes);
-const distributionStartsAt = addSeconds(
-  windowClosesAt,
-  distributionLagSeconds
-);
+const distributionStartsAt = addSeconds(windowClosesAt, distributionLagSeconds);
 const distributionDoneAt = addSeconds(
   distributionStartsAt,
   distributionDurationSeconds
