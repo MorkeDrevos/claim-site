@@ -1253,32 +1253,23 @@ return (
 
 <div
   className="
-    mt-4 relative rounded-2xl
-    bg-slate-950/70 border border-slate-800/70 
-    px-5 py-4 shadow-[0_0_32px_rgba(0,0,0,0.55)]
-    overflow-hidden
+    mt-4 rounded-xl bg-slate-900/60 
+    border border-slate-800/70 px-4 py-3
+    flex items-center gap-3 
+    shadow-[0_0_20px_rgba(0,0,0,0.45)]
   "
 >
-  {/* soft radial glow */}
-  <div className="absolute left-5 top-1/2 -translate-y-1/2 h-20 w-20 rounded-full bg-emerald-500/10 blur-2xl" />
+  <span
+    className={[
+      "h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_6px_currentColor]",
+      statusDotColor,
+      "animate-[pulse_2.8s_ease-in-out_infinite]"
+    ].join(" ")}
+  />
 
-  <div className="relative flex items-start gap-4">
-    <span
-      className={[
-        "mt-[2px] h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_10px_currentColor]",
-        statusDotColor,
-        "animate-[pulse_3s_ease-in-out_infinite]"
-      ].join(" ")}
-    />
-    <div className="space-y-1">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        System Status
-      </p>
-      <p className="text-[13px] leading-snug text-slate-200">
-        {statusSummary}
-      </p>
-    </div>
-  </div>
+  <p className="text-[13px] text-slate-300 leading-snug">
+    {statusSummary}
+  </p>
 </div>  
 
 </div>
