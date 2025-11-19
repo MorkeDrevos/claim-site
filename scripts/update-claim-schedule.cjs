@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-// Rotates claim-schedule.json to the next round using timed offsets.
-// CURRENT SETUP: 1-minute steps between each stage (good for live testing).
+// Rotates claim-schedule.json to the next round using randomised timings.
 
 const fs = require('fs');
 const path = require('path');
@@ -29,18 +28,13 @@ if (!fs.existsSync(schedulePath)) {
 }
 
 const raw = fs.readFileSync(schedulePath, 'utf8');
-let schedule;
 
+let schedule;
 try {
   schedule = JSON.parse(raw);
 } catch (err) {
   console.error('Unable to parse claim-schedule.json', err);
   process.exit(1);
-}
-
-// In case we ever store it as an array, just take the first entry.
-if (Array.isArray(schedule)) {
-  schedule = schedule[0] || {};
 }
 
 const now = new Date();
@@ -58,59 +52,44 @@ if (currentDoneMs && currentDoneMs > nowMs) {
   process.exit(0);
 }
 
-/* ---- Timing ranges (TEST MODE: 1-minute steps) ------------------------ */
-/*
-  Defaults below give you:
+/* ---- Timing ranges (TEST MODE: very short) ---------------------------- */
 
-    now  + 1 min  -> snapshotAt
-    now  + 2 min  -> windowOpensAt
-    now  + 3 min  -> windowClosesAt
-    now  + 4 min  -> distributionStartsAt
-    now  + 5 min  -> distributionDoneAt
-
-  You can still override via env vars on the workflow if you want.
-*/
+// For testing, everything happens fast:
+//
+// - Next window opens in 1–2 minutes
+// - Snapshot is 1 minute before open
+// - Window lasts 1 minute
+// - Distribution a short time after
 
 // When should the next window open, relative to *now* (minutes)?
-// TEST: fixed 2 minutes from now.
-const OPEN_DELAY_MIN = Number(process.env.CLAIM_OPEN_DELAY_MIN || 2);
-const OPEN_DELAY_MAX = Number(process.env.CLAIM_OPEN_DELAY_MAX || 2);
+const OPEN_DELAY_MIN = 1;
+const OPEN_DELAY_MAX = 2;
 
-// Snapshot offset *before* open (minutes).
-// TEST: fixed 1 minute before open.
-const SNAPSHOT_OFFSET_MIN = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MIN || 1);
-const SNAPSHOT_OFFSET_MAX = Number(process.env.CLAIM_SNAPSHOT_OFFSET_MAX || 1);
+// Snapshot offset *before* open (minutes) — fixed 1 minute for test.
+const SNAPSHOT_OFFSET_MIN = 1;
+const SNAPSHOT_OFFSET_MAX = 1;
 
-// Claim window duration (minutes).
-// TEST: fixed 1-minute live window.
-const WINDOW_DURATION_MIN = Number(process.env.CLAIM_WINDOW_DURATION_MIN || 1);
-const WINDOW_DURATION_MAX = Number(process.env.CLAIM_WINDOW_DURATION_MAX || 1);
+// Claim window duration (minutes) — fixed 1 minute for test.
+const WINDOW_DURATION_MIN = 1;
+const WINDOW_DURATION_MAX = 1;
 
 // Distribution lag after close (seconds).
-// TEST: fixed 60 seconds after window closes.
-const DIST_LAG_MIN = Number(process.env.CLAIM_DIST_LAG_MIN || 60);
-const DIST_LAG_MAX = Number(process.env.CLAIM_DIST_LAG_MAX || 60);
+const DIST_LAG_MIN = 30;
+const DIST_LAG_MAX = 60;
 
 // Distribution duration (seconds).
-// TEST: fixed 60 seconds to finish distribution.
-const DIST_DURATION_MIN = Number(process.env.CLAIM_DIST_DURATION_MIN || 60);
-const DIST_DURATION_MAX = Number(process.env.CLAIM_DIST_DURATION_MAX || 60);
+const DIST_DURATION_MIN = 30;
+const DIST_DURATION_MAX = 60;
 
 /* ---- Generate next round ---------------------------------------------- */
 
 const nextRoundNumber =
-  typeof schedule.roundNumber === 'number' ? schedule.roundNumber + 1 : 1;
+  typeof schedule.roundNumber === 'number' ? schedule.roundNumber + 1 : 0;
 
-// Randomised (but with very tight ranges for test)
+// Randomised timings
 const openDelayMinutes = randInt(OPEN_DELAY_MIN, OPEN_DELAY_MAX);
-const windowDurationMinutes = randInt(
-  WINDOW_DURATION_MIN,
-  WINDOW_DURATION_MAX
-);
-const snapshotOffsetMinutes = randInt(
-  SNAPSHOT_OFFSET_MIN,
-  SNAPSHOT_OFFSET_MAX
-);
+const windowDurationMinutes = randInt(WINDOW_DURATION_MIN, WINDOW_DURATION_MAX);
+const snapshotOffsetMinutes = randInt(SNAPSHOT_OFFSET_MIN, SNAPSHOT_OFFSET_MAX);
 const distributionLagSeconds = randInt(DIST_LAG_MIN, DIST_LAG_MAX);
 const distributionDurationSeconds = randInt(
   DIST_DURATION_MIN,
