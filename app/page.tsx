@@ -533,99 +533,49 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
-    // Tone for claim window line
-  const claimTone: Tone =
-    currentPhase === 'open'
-      ? 'success'
-      : currentPhase === 'scheduled'
-      ? 'warning'
-      : 'muted';
-
-  // Snapshot timing label – show nothing if there’s no snapshot yet
-  const snapshotDateLabel = snapshotAt ?? '';
-
-  // Normalised backend / contract status
-  const backendStatus = (frontEndStatus || '').toLowerCase();
-  const contractStatusLower = (contractStatus || '').toLowerCase();
-
-  const hasBackendIssue =
-    backendStatus === 'error' ||
-    backendStatus === 'down' ||
-    backendStatus === 'offline';
-
-  const hasContractIssue =
-    contractStatusLower === 'error' ||
-    contractStatusLower === 'down' ||
-    contractStatusLower === 'offline';
-
-  const hasAnyIssue = hasBackendIssue || hasContractIssue;
-
-  // Rows for Mission Control (NASA layout)
-  type MissionRowMode = 'plain' | 'pill';
-
-  type MissionRow = {
-    label: string;
-    value: string;
-    tone: Tone;
-    mode?: MissionRowMode; // default = 'plain'
-  };
-
-  const RIGHT_COL_WIDTH = 'w-[120px]';
-
-  type MissionRowMode = 'plain' | 'pill';
-
-  type MissionRow = {
-    label: string;
-    value: string;
-    tone: Tone;
-    mode?: MissionRowMode; // default = 'plain'
-  };
-
-  const RIGHT_COL_WIDTH = 'w-[120px]';
-
-  const missionRows: MissionRow[] = [
-    {
-      label: 'Portal backend',
-      value: hasBackendIssue ? 'Attention' : 'Online',
-      tone: hasBackendIssue ? 'warning' : 'success',
-      mode: 'plain',
-    },
-    {
-      label: 'Reward contracts',
-      value: hasContractIssue ? 'Check logs' : 'Deployed',
-      tone: hasContractIssue ? 'warning' : 'success',
-      mode: 'plain',
-    },
-    {
-      // Network now ABOVE Claim window
-      label: 'Network',
-      value: 'Solana Mainnet',
-      tone:
-        networkLabel && networkLabel.toLowerCase().includes('mainnet')
-          ? 'success'
-          : 'muted',
-      mode: 'plain',
-    },
-    {
-      label: 'Claim window',
-      value:
-        currentPhase === 'open'
-          ? 'Live'
-          : currentPhase === 'scheduled'
-          ? 'Scheduled'
-          : currentPhase === 'distribution'
-          ? 'Distributing'
-          : 'Closed',
-      tone: claimTone,
-      mode: 'pill',
-    },
-    {
-      label: 'Contract revision',
-      value: 'CR-0.9.14',
-      tone: 'muted',
-      mode: 'plain',
-    },
-  ];
+ const missionRows: MissionRow[] = [
+  {
+    label: 'Portal backend',
+    value: hasBackendIssue ? 'Attention' : 'Online',
+    tone: hasBackendIssue ? 'warning' : 'success',
+    mode: 'plain',
+  },
+  {
+    label: 'Reward contracts',
+    value: hasContractIssue ? 'Check logs' : 'Deployed',
+    tone: hasContractIssue ? 'warning' : 'success',
+    mode: 'plain',
+  },
+  {
+    // Network now ABOVE Claim window
+    label: 'Network',
+    value: 'Solana Mainnet',
+    tone:
+      networkLabel && networkLabel.toLowerCase().includes('mainnet')
+        ? 'success'
+        : 'muted',
+    mode: 'plain',
+  },
+  {
+    label: 'Claim window',
+    value:
+      currentPhase === 'open'
+        ? 'Live'
+        : currentPhase === 'scheduled'
+        ? 'Scheduled'
+        : currentPhase === 'distribution'
+        ? 'Distributing'
+        : 'Closed',
+    tone: claimTone,
+    mode: 'pill',
+  },
+  {
+    label: 'Contract revision',
+    value: 'CR-0.9.14',
+    tone: 'muted',
+    mode: 'plain',
+  },
+]; 
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
