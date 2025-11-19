@@ -542,10 +542,24 @@ if (countdownTarget) {
       : 'muted';
 
   // Snapshot timing label – show nothing if there’s no snapshot yet
-  const snapshotDateLabel = snapshotAt ?? '';
+    const snapshotDateLabel = snapshotAt ?? '';
+
+  // Normalised backend / contract status
+  const backendStatus = (frontEndStatus || '').toLowerCase();
+  const contractStatusLower = (contractStatus || '').toLowerCase();
+
+  const hasBackendIssue =
+    backendStatus === 'error' ||
+    backendStatus === 'down' ||
+    backendStatus === 'offline';
+
+  const hasContractIssue =
+    contractStatusLower === 'error' ||
+    contractStatusLower === 'down' ||
+    contractStatusLower === 'offline';
 
   // Rows for Mission Control (NASA layout)
-type MissionRowMode = 'plain' | 'pill';
+  type MissionRowMode = 'plain' | 'pill';
 
 type MissionRow = {
   label: string;
@@ -555,49 +569,49 @@ type MissionRow = {
 };
 
 // Rows for Mission Control (NASA layout)
-const missionRows: MissionRow[] = [
-  {
-    label: 'Portal backend',
-    value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
-    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-    mode: 'plain',
-  },
-  {
-    label: 'Reward contracts',
-    value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
-    tone: contractStatus === 'ok' ? 'success' : 'warning',
-    mode: 'plain',
-  },
-  {
-    // 🔁 Network now ABOVE Claim window
-    label: 'Network',
-    value: 'Solana Mainnet',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-    mode: 'plain',
-  },
-  {
-    label: 'Claim window',
-    value:
-      currentPhase === 'open'
-        ? 'Live'
-        : currentPhase === 'scheduled'
-        ? 'Scheduled'
-        : currentPhase === 'distribution'
-        ? 'Distributing'
-        : 'Closed',
-    tone: claimTone,
-    mode: 'pill',
-  },
-  {
-    label: 'Contract revision',
-    value: 'CR-0.9.14',
-    tone: 'muted',
-    mode: 'plain',
-  },
-];
+  const missionRows: MissionRow[] = [
+    {
+      label: 'Portal backend',
+      value: hasBackendIssue ? 'Attention' : 'Online',
+      tone: hasBackendIssue ? 'warning' : 'success',
+      mode: 'plain',
+    },
+    {
+      label: 'Reward contracts',
+      value: hasContractIssue ? 'Check logs' : 'Deployed',
+      tone: hasContractIssue ? 'warning' : 'success',
+      mode: 'plain',
+    },
+    {
+      // Network now ABOVE Claim window
+      label: 'Network',
+      value: 'Solana Mainnet',
+      tone:
+        networkLabel && networkLabel.toLowerCase().includes('mainnet')
+          ? 'success'
+          : 'muted',
+      mode: 'plain',
+    },
+    {
+      label: 'Claim window',
+      value:
+        currentPhase === 'open'
+          ? 'Live'
+          : currentPhase === 'scheduled'
+          ? 'Scheduled'
+          : currentPhase === 'distribution'
+          ? 'Distributing'
+          : 'Closed',
+      tone: claimTone,
+      mode: 'pill',
+    },
+    {
+      label: 'Contract revision',
+      value: 'CR-0.9.14',
+      tone: 'muted',
+      mode: 'plain',
+    },
+  ];
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
   const effectiveWalletShort = connectedWallet
@@ -763,13 +777,11 @@ const missionRows: MissionRow[] = [
   }
 
 
-  // Live-style status summary for Mission Control
-let statusSummary =
-  'All systems nominal. Autonomous settlement sequence is active.';
+    // Live-style status summary for Mission Control
+  let statusSummary =
+    'All systems nominal. Autonomous settlement sequence is active.';
 
-const hasBackendIssue = frontEndStatus !== 'ok';
-const hasContractIssue = contractStatus !== 'ok';
-const hasAnyIssue = hasBackendIssue || hasContractIssue;
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
 if (hasBackendIssue || hasContractIssue) {
   statusSummary =
