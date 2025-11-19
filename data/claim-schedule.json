@@ -1,10 +1,8 @@
 {
-  "mode": "auto",
   "roundNumber": 0,
-
-  "snapshotAt": null,
-  "windowOpensAt": null,
-  "windowClosesAt": null,
-  "distributionStartsAt": null,
-  "distributionDoneAt": null
+  "snapshotAt": "2025-11-19T10:45:00Z",
+  "windowOpensAt": "2025-11-19T11:00:00Z",
+  "windowClosesAt": "2025-11-19T11:03:00Z",
+  "distributionStartsAt": "2025-11-19T11:04:00Z",
+  "distributionDoneAt": "2025-11-19T11:05:00Z"
 }
