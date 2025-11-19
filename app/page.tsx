@@ -809,6 +809,14 @@ if (currentPhase === 'closed') {
 
 return (
   <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
+
+    {/* DRILL MODE BANNER */}
+<div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-300 backdrop-blur">
+  <p className="text-[13px] font-medium tracking-wide flex items-center gap-2">
+    <span className="text-[15px]">⚡</span>
+    Accelerated testing mode active — timings are running in fast-forward.
+  </p>
+</div>
   
                   {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
