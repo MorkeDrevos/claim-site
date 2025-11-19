@@ -1075,13 +1075,6 @@ return (
       </div>
     </div>
 
-    {/* RIGHT: (keep your existing CLAIM / tooltip / etc. here) */}
-    {/* ... */}
-  </div>
-
-  {/* CTA bar + eligibility text stay exactly as you already have them */}
-</div>
-
     {/* RIGHT: label + $CLAIM amount */}
     <div className="flex flex-col items-end gap-0.5 text-right">
       {/* Label + info icon + tooltip */}
