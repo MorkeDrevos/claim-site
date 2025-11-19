@@ -1083,7 +1083,7 @@ return (
         </p>
 
         {/* Hover icon wrapper */}
-        <div className="group relative mt-[-2px]">
+        <div className="group relative mt-[-22px]">
           <button
             type="button"
             className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
