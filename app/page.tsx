@@ -963,6 +963,12 @@ return (
 </h1>
               </div>
 
+              {hasBackendIssue && (
+  <p className="mb-2 text-[11px] text-amber-300/80">
+    Some systems are in attention mode. Claims will stay queued until all checks pass.
+  </p>
+)}
+
               {/* CLAIM WINDOW CARD */}
 <div
   className={[
