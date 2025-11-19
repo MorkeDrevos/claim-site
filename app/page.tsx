@@ -804,14 +804,8 @@ if (countdownTarget) {
     statusDotColor = 'bg-slate-500';
   }
 
-return (
-  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-    {/* TEMP DEBUG BANNER – remove later */}
-    <div className="fixed inset-x-0 top-4 z-[9999] flex justify-center pointer-events-none">
-      <div className="pointer-events-auto rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.7)]">
-        CLAIM portal rendering OK
-      </div>
-    </div>
+  return (
+    <main className="min-h-screen text-slate-50">
       {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
