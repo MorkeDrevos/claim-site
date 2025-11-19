@@ -1,14 +1,17 @@
-name: Rotate CLAIM schedule
+name: Update claim-schedule-rotation
 
 on:
+  # runs on a schedule – tweak cron as you like
   schedule:
-    - cron: "*/1 * * * *"   # every 1 min for testing
+    - cron: '*/15 * * * *'
+  # allow manual runs from the Actions tab
   workflow_dispatch:
 
 jobs:
   rotate-schedule:
     runs-on: ubuntu-latest
 
+    # allow this workflow to push back to the repo
     permissions:
       contents: write
 
@@ -19,23 +22,24 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Update CLAIM schedule JSON
+      - name: Rotate CLAIM schedule JSON
         run: npm run update:claim-schedule
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Commit and push if there are changes
+      - name: Commit and push if there are changes
         run: |
-          # Only continue if data/claim-schedule.json has changed
-          if ! git diff --quiet -- data/claim-schedule.json; then
-            git config user.name "github-actions[bot]"
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/claim-schedule.json
-            git commit -m "chore: rotate CLAIM schedule [skip ci]"
+            git commit -m "chore: rotate claim schedule"
             git push
           else
-            echo "No changes to claim-schedule.json, skipping commit."
+            echo "No changes to commit."
           fi
