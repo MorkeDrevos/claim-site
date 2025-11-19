@@ -393,13 +393,14 @@ export default function ClaimPoolPage() {
   const closesAt = state?.claimWindowClosesAt ?? null;
 
   let countdownTarget: string | null = null;
-  if (phase === 'scheduled') {
-    countdownTarget = opensAt || null;
-  } else if (phase === 'open') {
-    countdownTarget = closesAt || opensAt || null;
-  } else if (phase === 'closed') {
-    countdownTarget = opensAt || null; // next window if known
-  }
+if (phase === 'scheduled') {
+  countdownTarget = opensAt || null;
+} else if (phase === 'open') {
+  countdownTarget = closesAt || null;
+} else if (phase === 'closed') {
+  // 🟢 Correct target: upcoming distribution phase
+  countdownTarget = state?.distributionStartsAt || null;
+}
 
   const countdownLabel = useCountdown(countdownTarget);
 
@@ -986,11 +987,19 @@ return (
              {/* CLAIM WINDOW CARD */}
 <div
   className={[
-    // slightly tighter top margin + less vertical padding
-    'mt-2 rounded-3xl border border-emerald-500/40',
+    // shape + padding
+    'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
     'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-    'px-6 pt-3 pb-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+
+    // soft flash just before phase change
     preFlash ? 'animate-pulse' : '',
+
+    // LIVE = green; CLOSED = greyed; everything else = neutral
+    isLive
+      ? 'border-emerald-500/40'
+      : isClosed
+        ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
+        : 'border-slate-700/60 bg-slate-900/80',
   ].join(' ')}
 >
   {/* One row: countdown left, CLAIM right */}
@@ -1028,7 +1037,7 @@ return (
               <circle cx="12" cy="12" r="5" className="opacity-60" />
               <circle cx="12" cy="12" r="2" />
             </svg>
-            Standing by for next claim window
+            REWARDS DISTRIBUTION STARTS IN
           </span>
         ) : (
           <span className="inline-flex items-center gap-2">
@@ -1056,15 +1065,22 @@ return (
         )}
         <p
           className={[
-            '-mt-2', // pulls the number further up
+            '-mt-2',
             'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
-          {isClosed ? '' : countdownLabel || '--:--:--'}
+          {countdownLabel || '--:--:--'}
         </p>
       </div>
     </div>
+
+    {/* RIGHT: (keep your existing CLAIM / tooltip / etc. here) */}
+    {/* ... */}
+  </div>
+
+  {/* CTA bar + eligibility text stay exactly as you already have them */}
+</div>
 
     {/* RIGHT: label + $CLAIM amount */}
     <div className="flex flex-col items-end gap-0.5 text-right">
