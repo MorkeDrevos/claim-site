@@ -799,6 +799,16 @@ if (hasBackendIssue || hasContractIssue) {
   statusSummary =
     'All systems nominal. Claim window closed and standing by for the next round.';
 }
+} else if (currentPhase === 'distribution') {
+  statusSummary =
+    'All systems nominal. Reward distribution sequence is executing on-chain.';
+} else if (currentPhase === 'done') {
+  statusSummary =
+    'All systems nominal. Rewards distributed. Next window will be scheduled soon.';
+} else if (currentPhase === 'closed') {
+  statusSummary =
+    'All systems nominal. Claim window closed and standing by for the next round.';
+}
 
 let statusDotColor = 'bg-emerald-400'; // default
 
