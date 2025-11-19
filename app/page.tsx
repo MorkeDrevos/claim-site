@@ -964,9 +964,9 @@ return (
               </div>
 
               {hasBackendIssue && (
-  <p className="mb-2 text-[11px] text-amber-300/80">
-    Some systems are in attention mode. Claims will stay queued until all checks pass.
-  </p>
+  <p className="text-[13px] text-slate-400">
+  {portalState.backendStatus}
+</p>
 )}
 
               {/* CLAIM WINDOW CARD */}
