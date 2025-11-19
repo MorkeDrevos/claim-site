@@ -568,6 +568,8 @@ type MissionRow = {
   mode?: MissionRowMode; // default = 'plain'
 };
 
+const RIGHT_COL_WIDTH = 'w-[120px]';
+
 // Rows for Mission Control (NASA layout)
   const missionRows: MissionRow[] = [
     {
@@ -1213,19 +1215,25 @@ return (
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
-<div className="flex items-center justify-between gap-3 pr-[2px]">
+<div className="flex items-center justify-between gap-3">
   {/* Left: Round number */}
   <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-    Round {roundNumber ?? 1}
+    Round {roundNumber ?? 0}
   </p>
 
-  {/* Right: Mission Control text — fully right-aligned */}
+  {/* Right: Mission Control header */}
   <span
-    className={[
-      'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
-      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
-    ].join(' ')}
-  >
+  className={[
+    'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 justify-end',
+    RIGHT_COL_WIDTH,
+    'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
+    row.tone === 'success'
+      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
+      : row.tone === 'warning'
+      ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
+      : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
+  ].join(' ')}
+>
     {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
   </span>
 </div>
@@ -1297,7 +1305,7 @@ return (
             {row.value}
           </span>
         ) : (
-          <div className="flex flex-col items-end">
+          <div className={`flex flex-col items-end ${RIGHT_COL_WIDTH}`}>
             <span className={plainValueClass}>{row.value}</span>
 
             {showWarningUnderline && (
