@@ -1035,7 +1035,7 @@ return (
         <p
           className={[
             '-mt-1.5', // moves ONLY the number upward
-            'text-[40px] sm:text-[42px] font-bold tracking-tight text-slate-50',
+            'text-[35px] sm:text-[37px] font-bold tracking-tight text-slate-50',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
