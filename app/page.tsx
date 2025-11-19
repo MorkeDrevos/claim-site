@@ -1253,29 +1253,23 @@ return (
 
 <div
   className="
-    mt-4
-    rounded-2xl
-    bg-slate-950/70
-    border border-slate-800/70
-    px-5 py-4
-    relative
+    mt-4 relative rounded-2xl
+    bg-slate-950/70 border border-slate-800/70 
+    px-5 py-4 shadow-[0_0_32px_rgba(0,0,0,0.55)]
     overflow-hidden
-    shadow-[0_0_24px_rgba(0,0,0,0.6)]
   "
 >
-  {/* Top glow line */}
-  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+  {/* soft radial glow */}
+  <div className="absolute left-5 top-1/2 -translate-y-1/2 h-20 w-20 rounded-full bg-emerald-500/10 blur-2xl" />
 
-  {/* Dot + text */}
-  <div className="flex items-start gap-4">
+  <div className="relative flex items-start gap-4">
     <span
       className={[
-        "mt-[2px] h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_8px_currentColor]",
+        "mt-[2px] h-2.5 w-2.5 rounded-full flex-none shadow-[0_0_10px_currentColor]",
         statusDotColor,
-        "animate-[pulse_2.8s_ease-in-out_infinite]"
+        "animate-[pulse_3s_ease-in-out_infinite]"
       ].join(" ")}
     />
-
     <div className="space-y-1">
       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
         System Status
