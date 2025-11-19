@@ -1141,16 +1141,16 @@ return (
     </span>
   </p>
 
-  {/* Divider */}
-  <span className="text-slate-700 text-[18px] leading-none">|</span>
+  {/* Divider removed for now */}
+// <span className="text-slate-700 text-[18px] leading-none">|</span>
 
-  {/* USD */}
-  <p
-    key={rewardUsdText}
-    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
+{/* USD removed for now */}
+// <p
+//   key={rewardUsdText}
+//   className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+// >
+//   ≈ {rewardUsdText} USD
+// </p>
 </div>
 
     </div>
