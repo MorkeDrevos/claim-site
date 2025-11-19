@@ -572,6 +572,17 @@ if (countdownTarget) {
 
   const RIGHT_COL_WIDTH = 'w-[120px]';
 
+  type MissionRowMode = 'plain' | 'pill';
+
+  type MissionRow = {
+    label: string;
+    value: string;
+    tone: Tone;
+    mode?: MissionRowMode; // default = 'plain'
+  };
+
+  const RIGHT_COL_WIDTH = 'w-[120px]';
+
   const missionRows: MissionRow[] = [
     {
       label: 'Portal backend',
@@ -585,7 +596,35 @@ if (countdownTarget) {
       tone: hasContractIssue ? 'warning' : 'success',
       mode: 'plain',
     },
-    ...
+    {
+      // Network now ABOVE Claim window
+      label: 'Network',
+      value: 'Solana Mainnet',
+      tone:
+        networkLabel && networkLabel.toLowerCase().includes('mainnet')
+          ? 'success'
+          : 'muted',
+      mode: 'plain',
+    },
+    {
+      label: 'Claim window',
+      value:
+        currentPhase === 'open'
+          ? 'Live'
+          : currentPhase === 'scheduled'
+          ? 'Scheduled'
+          : currentPhase === 'distribution'
+          ? 'Distributing'
+          : 'Closed',
+      tone: claimTone,
+      mode: 'pill',
+    },
+    {
+      label: 'Contract revision',
+      value: 'CR-0.9.14',
+      tone: 'muted',
+      mode: 'plain',
+    },
   ];
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
