@@ -777,40 +777,33 @@ const {
     progressMessage = 'Distribution sequence active — standby for completion.';
   }
 
-  // Live-style status summary for Mission Control
+    // Live-style status summary for Mission Control
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
 
   const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
-if (hasBackendIssue || hasContractIssue) {
-  statusSummary =
-    'Attention flagged. One or more subsystems are reporting a non-normal status.';
-} else if (currentPhase === 'open') {
-  statusSummary =
-    'All systems nominal. Live claim window running under autonomous settlement.';
-} else if (currentPhase === 'scheduled') {
-  statusSummary =
-    'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
-} else if (currentPhase === 'distribution') {
-  statusSummary =
-    'All systems nominal. Reward distribution sequence is executing on-chain.';
-} else if (currentPhase === 'closed') {
-  statusSummary =
-    'All systems nominal. Claim window closed and standing by for the next round.';
-}
-} else if (currentPhase === 'distribution') {
-  statusSummary =
-    'All systems nominal. Reward distribution sequence is executing on-chain.';
-} else if (currentPhase === 'done') {
-  statusSummary =
-    'All systems nominal. Rewards distributed. Next window will be scheduled soon.';
-} else if (currentPhase === 'closed') {
-  statusSummary =
-    'All systems nominal. Claim window closed and standing by for the next round.';
-}
+  if (hasAnyIssue) {
+    statusSummary =
+      'Attention flagged. One or more subsystems are reporting a non-normal status.';
+  } else if (currentPhase === 'open') {
+    statusSummary =
+      'All systems nominal. Live claim window running under autonomous settlement.';
+  } else if (currentPhase === 'scheduled') {
+    statusSummary =
+      'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
+  } else if (currentPhase === 'distribution') {
+    statusSummary =
+      'All systems nominal. Reward distribution sequence is executing on-chain.';
+  } else if (currentPhase === 'done') {
+    statusSummary =
+      'All systems nominal. Rewards distributed. Next window will be scheduled soon.';
+  } else if (currentPhase === 'closed') {
+    statusSummary =
+      'All systems nominal. Claim window closed and standing by for the next round.';
+  }
 
-let statusDotColor = 'bg-emerald-400'; // default
+  let statusDotColor = 'bg-emerald-400'; // default
 
 if (hasBackendIssue || hasContractIssue) {
   statusDotColor = 'bg-amber-400'; // warning / partial issue
