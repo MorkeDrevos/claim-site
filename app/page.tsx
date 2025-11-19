@@ -963,12 +963,6 @@ return (
 </h1>
               </div>
 
-              {hasBackendIssue && (
-  <p className="text-[13px] text-slate-400">
-  {portalState.backendStatus}
-</p>
-)}
-
               {/* CLAIM WINDOW CARD */}
 <div
   className={[
@@ -1240,11 +1234,27 @@ return (
   {missionRows.map((row) => {
     const isPill = row.mode === 'pill';
 
+    // 🔍 Special styling for "Portal backend: Attention"
+    const isBackendAttention =
+      row.label === 'Portal backend' && row.value === 'Attention';
+
+    const rowWrapperClasses = [
+      'flex items-center justify-between gap-3',
+      isBackendAttention
+        ? 'rounded-xl bg-amber-500/5 px-3 py-1.5 -mx-3' // soft glow behind the text
+        : '',
+    ].join(' ');
+
+    const valueClasses = [
+      'text-[12px]',
+      row.tone === 'warning' ? 'text-amber-200' : 'text-slate-400',
+      isBackendAttention
+        ? 'pb-[2px] border-b border-amber-400/80' // thin “gold” underline
+        : '',
+    ].join(' ');
+
     return (
-      <div
-        key={row.label}
-        className="flex items-center justify-between gap-3"
-      >
+      <div key={row.label} className={rowWrapperClasses}>
         <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
           {row.label}
         </span>
@@ -1274,9 +1284,7 @@ return (
             {row.value}
           </span>
         ) : (
-          <span className="text-[12px] text-slate-400">
-            {row.value}
-          </span>
+          <span className={valueClasses}>{row.value}</span>
         )}
       </div>
     );
