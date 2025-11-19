@@ -592,18 +592,20 @@ const {
       mode: 'plain',
     },
     {
-      label: 'Claim window',
-      value:
-        currentPhase === 'open'
-          ? 'Live'
-          : currentPhase === 'scheduled'
-          ? 'Scheduled'
-          : currentPhase === 'distribution'
-          ? 'Distributing'
-          : 'Closed',
-      tone: claimTone,
-      mode: 'pill',
-    },
+  label: 'Claim window',
+  value:
+    currentPhase === 'open'
+      ? 'Live'
+      : currentPhase === 'scheduled'
+      ? 'Scheduled'
+      : currentPhase === 'distribution'
+      ? 'Distributing'
+      : currentPhase === 'done'
+      ? 'Rewards distributed'
+      : 'Closed',
+  tone: claimTone,
+  mode: 'pill',
+},
     {
       label: 'Contract revision',
       value: 'CR-0.9.14',
