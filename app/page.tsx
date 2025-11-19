@@ -1170,11 +1170,10 @@ return (
     </p>
 
     <p>
-      • Rewards are auto-distributed in{' '}
-      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
-      via the{' '}
-      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
-    </p>
+  • Rewards are distributed automatically in{' '}
+  <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
+  once each round finishes.
+</p>
 
   </div>
 </div>
