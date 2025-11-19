@@ -1100,13 +1100,13 @@ return (
         {/* CLAIM pool + USD — responsive */}
   <div
     className="
-      flex gap-3 mt-[15px]
+      flex gap-3 mt-[13px]
       items-end justify-end
       max-sm:flex-col max-sm:items-center max-sm:gap-1
     "
   >
     {/* CLAIM – primary */}
-    <p className="text-[15px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
+    <p className="text-[13px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
       {rewardAmountText}
       <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
         $CLAIM
