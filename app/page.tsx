@@ -1213,19 +1213,17 @@ return (
   <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
     {/* Header row */}
-<div className="flex items-baseline justify-between pr-1">
+<div className="flex items-baseline justify-between pr-[6px]">
   {/* LEFT: Round number */}
   <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
     Round {roundNumber ?? 1}
   </p>
 
-  {/* RIGHT: Mission Control header – turns amber on issues */}
+  {/* RIGHT-aligned header */}
   <span
     className={[
-      'text-[12px] font-semibold uppercase tracking-[0.32em]',
-      hasAnyIssue
-        ? 'text-amber-300'
-        : 'text-emerald-400',
+      'text-[12px] font-semibold uppercase tracking-[0.32em] text-right',
+      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
     ].join(' ')}
   >
     {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
