@@ -1052,24 +1052,21 @@ return (
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
 >
-  {/* CLAIM – primary */}
-  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
-    {rewardAmountText}
-    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-      $CLAIM
-    </span>
-  </p>
+  {/* USD FIRST */}
+<p
+  key={rewardUsdText}
+  className="translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+>
+  ≈ {rewardUsdText} USD
+</p>
 
-  {/* Divider */}
-  <span className="text-slate-700 text-[18px] leading-none">|</span>
-
-  {/* USD */}
-  <p
-    key={rewardUsdText}
-    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
+{/* CLAIM SECOND */}
+<p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
+  {rewardAmountText}
+  <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+    $CLAIM
+  </span>
+</p>
 </div>
 
     </div>
