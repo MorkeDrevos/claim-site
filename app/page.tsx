@@ -13,7 +13,7 @@ type PortalTab = 'eligibility' | 'rewards' | 'history';
 type PoolStatus = 'not-opened' | 'open' | 'closed';
 type Tone = 'neutral' | 'success' | 'warning' | 'muted';
 
-type WindowPhase = 'scheduled' | 'open' | 'closed' | 'snapshot' | 'distribution';
+type WindowPhase = 'scheduled' | 'snapshot' | 'open' | 'closed' | 'distribution';
 
 type ClaimHistoryEntry = {
   round: number;
@@ -451,7 +451,7 @@ if (countdownTarget) {
 
   /* ── Safe destructure (state is now non-null) ── */
 
-  const {
+    const {
     walletConnected,
     walletShort,
     networkLabel,
@@ -470,6 +470,9 @@ if (countdownTarget) {
     distributionCompletedAt,
     roundNumber,
   } = state;
+
+  // 🔹 NEW: has this round actually finished distributing?
+  const distributionDone = !!distributionCompletedAt;
 
   // Derived from phase
   const isLive = phase === 'open';
@@ -684,12 +687,17 @@ const missionRows: MissionRow[] = [
 
 
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
-    { id: 'distribution', label: 'Rewards distributed' },
+    {
+      id: 'distribution',
+      label: distributionDone
+        ? 'Rewards distributed'
+        : 'Reward distribution in progress',
+    },
   ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
@@ -1247,29 +1255,34 @@ return (
 <div
   className="
     mt-4
-    inline-flex items-center gap-3
-    rounded-[6px]
+    rounded-2xl
     bg-slate-900/80
     border border-slate-800/70
-    px-4 py-3
-    text-[13px] leading-snug text-slate-300
+    px-4 py-3.5
+    flex items-start gap-3
+    shadow-[0_18px_40px_rgba(0,0,0,0.65)]
   "
 >
   {/* Dot */}
   <span
     className={[
-      'h-2 w-2 rounded-full',                // ← SMALLER DOT
+      'mt-[3px] h-2 w-2 rounded-full',
       statusDotColor,
-      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
-      'animate-[pulse_2.6s_ease-in-out_infinite]',
+      'shadow-[0_0_10px_currentColor]',
       'flex-none',
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
     ].join(' ')}
   />
 
-  {/* Status summary */}
-  <span>{statusSummary}</span>
-</div>
-
+  {/* Text block */}
+  <div className="space-y-0.5">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      System status
+    </p>
+    <p className="text-[13px] leading-snug text-slate-300">
+      {statusSummary}
+    </p>
+  </div>
 </div>
 
   </SoftCard>
@@ -1615,7 +1628,7 @@ return (
 </section>
 
       </div>
-      
+
 {/* Sticky Buy on Jupiter CTA – only on larger screens */}
 <div className="hidden sm:block fixed bottom-4 right-4 z-50">
   <a
