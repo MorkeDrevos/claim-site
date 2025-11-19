@@ -687,17 +687,12 @@ const missionRows: MissionRow[] = [
 
 
 
-    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
-    {
-      id: 'distribution',
-      label: distributionDone
-        ? 'Rewards distributed'
-        : 'Reward distribution in progress',
-    },
+    { id: 'distribution', label: 'Rewards distributed' },
   ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
@@ -1052,20 +1047,23 @@ return (
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
 >
-  {/* USD value */}
-  <p
-    key={rewardUsdText}
-    className="translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
-
-  {/* CLAIM primary */}
+  {/* CLAIM – primary */}
   <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
     {rewardAmountText}
     <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
       $CLAIM
     </span>
+  </p>
+
+  {/* Divider */}
+  <span className="text-slate-700 text-[18px] leading-none">|</span>
+
+  {/* USD */}
+  <p
+    key={rewardUsdText}
+    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+  >
+    ≈ {rewardUsdText} USD
   </p>
 </div>
 
