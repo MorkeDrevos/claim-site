@@ -557,15 +557,6 @@ const {
     contractStatusLower === 'down' ||
     contractStatusLower === 'offline';
 
-  const claimTone: Tone =
-    currentPhase === 'open'
-      ? 'success'
-      : currentPhase === 'distribution'
-      ? 'warning'
-      : currentPhase === 'scheduled'
-      ? 'muted'
-      : 'muted';
-
   const missionRows: MissionRow[] = [
     {
       label: 'Portal backend',
