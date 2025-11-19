@@ -1052,21 +1052,21 @@ return (
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
 >
-  {/* USD FIRST */}
-<p
-  key={rewardUsdText}
-  className="translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
->
-  ≈ {rewardUsdText} USD
-</p>
+  {/* USD value */}
+  <p
+    key={rewardUsdText}
+    className="translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+  >
+    ≈ {rewardUsdText} USD
+  </p>
 
-{/* CLAIM SECOND */}
-<p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
-  {rewardAmountText}
-  <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-    $CLAIM
-  </span>
-</p>
+  {/* CLAIM primary */}
+  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
+    {rewardAmountText}
+    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+      $CLAIM
+    </span>
+  </p>
 </div>
 
     </div>
@@ -1248,37 +1248,32 @@ return (
 {/* Divider + NASA footer copy */}
 <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
 
-{/* STATUS BAND — mission-control style */}
-<div className="mt-4 rounded-2xl border border-slate-800/80 bg-slate-950/90 shadow-[0_18px_40px_rgba(0,0,0,0.7)] overflow-hidden">
-  {/* main row */}
-  <div className="flex items-center gap-3 px-4 py-3.5">
-    {/* Dot */}
-    <span
-      className={[
-        'mt-[2px] h-2 w-2 rounded-full flex-none',
-        statusDotColor,
-        'shadow-[0_0_10px_currentColor]',
-        'animate-[pulse_2.6s_ease-in-out_infinite]',
-      ].join(' ')}
-    />
+  {/* STATUS BADGE — mission-control style */}
+<div
+  className="
+    mt-4
+    inline-flex items-center gap-3
+    rounded-[6px]
+    bg-slate-900/80
+    border border-slate-800/70
+    px-4 py-3
+    text-[13px] leading-snug text-slate-300
+  "
+>
+  {/* Dot */}
+  <span
+    className={[
+      'h-2 w-2 rounded-full',                // ← SMALLER DOT
+      statusDotColor,
+      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
+      'animate-[pulse_2.6s_ease-in-out_infinite]',
+      'flex-none',
+    ].join(' ')}
+  />
 
-    {/* Text block */}
-    <div className="flex-1 space-y-0.5">
-      {/* Tiny label */}
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-        System status
-      </p>
-
-      {/* Main status line – 1px bigger, light tone, sentence case */}
-      <p className="text-[13px] leading-snug text-slate-300">
-        {statusSummary}
-      </p>
-    </div>
-  </div>
-
-  {/* subtle glow line under the content */}
-  <div className="h-px w-full bg-gradient-to-r from-emerald-400/40 via-transparent to-sky-400/40" />
-</div>  
+  {/* Status summary */}
+  <span>{statusSummary}</span>
+</div>
 
 </div>
 
