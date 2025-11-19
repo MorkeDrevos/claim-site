@@ -975,18 +975,21 @@ return (
 </h1>
               </div>
 
-              {/* CLAIM WINDOW CARD */}
+             {/* CLAIM WINDOW CARD */}
 <div
   className={[
-    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+    // slightly tighter top margin + less vertical padding
+    'mt-2 rounded-3xl border border-emerald-500/40',
+    'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+    'px-6 pt-3 pb-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
     preFlash ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  {/* One row: countdown left, USD right */}
+  {/* One row: countdown left, CLAIM right */}
   <div className="flex items-start justify-between gap-6">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col pl-1 sm:pl-2">
-      <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      <p className="mt-[2px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         {isLive ? (
           <span className="inline-flex items-center gap-2">
             <svg
@@ -1017,7 +1020,7 @@ return (
               <circle cx="12" cy="12" r="5" className="opacity-60" />
               <circle cx="12" cy="12" r="2" />
             </svg>
-            Awaiting next on-chain window
+            Standing by for next claim window
           </span>
         ) : (
           <span className="inline-flex items-center gap-2">
@@ -1038,15 +1041,15 @@ return (
         )}
       </p>
 
-      {/* extra padding above the countdown */}
-      <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
+      {/* Countdown – pulled up a bit */}
+      <div className={`mt-1 ${isLive ? 'relative' : ''}`}>
         {isLive && (
           <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
         )}
         <p
           className={[
-            '-mt-1.5', // moves ONLY the number upward
-            'text-[30px] sm:text-[32px] font-bold tracking-tight text-slate-50',
+            '-mt-2', // pulls the number further up
+            'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
@@ -1055,8 +1058,8 @@ return (
       </div>
     </div>
 
-    {/* RIGHT: label + USD + $CLAIM */}
-    <div className="flex flex-col items-end gap-1 text-right">
+    {/* RIGHT: label + $CLAIM amount */}
+    <div className="flex flex-col items-end gap-0.5 text-right">
       {/* Label + info icon + tooltip */}
       <div className="relative flex items-baseline gap-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
@@ -1087,86 +1090,63 @@ return (
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
             >
               <p className="text-[12px] text-slate-200 leading-relaxed">
-  Rewards are paid in{' '}
-  <span className="text-emerald-300 font-medium">$CLAIM</span>
-  {' '}and shared equally among wallets that locked in during the live window.
-  {' '}<span className="text-emerald-300 font-medium">USD values are approximate.</span>
-</p>
+                Rewards are paid in{' '}
+                <span className="text-emerald-300 font-medium">$CLAIM</span>
+                {' '}and shared equally among wallets that locked in during the live window.
+                {' '}
+                <span className="text-emerald-300 font-medium">USD values are approximate.</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-        {/* CLAIM pool + USD — responsive */}
-  <div
-    className="
-      flex gap-3 mt-[13px]
-      items-end justify-end
-      max-sm:flex-col max-sm:items-center max-sm:gap-1
-    "
-  >
-    {/* CLAIM – primary */}
-    <p className="text-[13px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
-      {rewardAmountText}
-      <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-        $CLAIM
-      </span>
-    </p>
-    {/* USD temporarily removed */}
-  </div>
-
+      {/* CLAIM pool – pulled closer to the label */}
+      <div
+        className="
+          flex gap-2 mt-[8px]
+          items-end justify-end
+          max-sm:flex-col max-sm:items-center max-sm:gap-1
+        "
+      >
+        <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
+          {rewardAmountText}
+          <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+            $CLAIM
+          </span>
+        </p>
+      </div>
     </div>
   </div>
-
-  {/* CTA bar – keep as you have it */}
-  <button
-    type="button"
-    onClick={handleClaimClick}
-    disabled={!canClaim}
-    className={[
-      'mt-5 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-      'transition-all duration-300 border',
-      canClaim
-        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-        : isClosed
-        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-      canClaim && isPulseOn ? 'animate-pulse' : '',
-    ].join(' ')}
-  >
-    {canClaim
-      ? 'Lock in my share'
-      : isClosed
-      ? 'Claim Window closed'
-      : 'Opens soon'}
-  </button>
-
-  {/* Eligibility text */}
-  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
-
-    <p>
-      • <span className="text-emerald-300/70 font-medium">Show up</span> during the
-      live window and{' '}
-      <span className="text-emerald-300/70 font-medium">lock in your share</span>.
-    </p>
-
-    <p>
-      • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-      <span className="text-emerald-300/70 font-medium">snapshot</span> - wallets
-      below the minimum sit out that round.
-    </p>
-
-    <p>
-      • Rewards are auto-distributed in{' '}
-      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
-      via the{' '}
-      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
-    </p>
-
-  </div>
 </div>
-{/* end CLAIM WINDOW CARD */}
-            </div>
+
+{/* MAIN CLAIM CTA */}
+<button
+  type="button"
+  onClick={handleClaimClick}
+  disabled={!canClaim}
+  className={[
+    // spacing
+    'mt-3 w-full flex items-center justify-center rounded-full px-6 py-4',
+    // typography
+    'text-[13px] font-semibold uppercase tracking-[0.32em]',
+    // states
+    canClaim
+      ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.55)] hover:bg-emerald-400'
+      : isClosed
+      ? 'bg-slate-950/80 text-slate-500 border border-slate-700/80'
+      : 'bg-slate-950/80 text-slate-400 border border-slate-800',
+    // subtle pulse only when live + claimable
+    canClaim && isPulseOn ? 'animate-[pulse_1.4s_ease-in-out_infinite]' : '',
+    'transition-all'
+  ].join(' ')}
+>
+  {canClaim
+    ? 'Lock in my share'
+    : isClosed
+    ? 'Claim window closed'
+    : 'Claim window opens soon'}
+</button>
 
 {/* Mobile-only Connect Wallet CTA */}
 <div className="block sm:hidden mt-2 mb-2">
