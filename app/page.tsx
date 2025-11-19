@@ -524,41 +524,107 @@ const {
   distributionDoneAt,
 } = state;
 
-let currentPhase: WindowPhase;
-
-// Canonical phase for the current round
-if (windowPhase === 'open') {
-  currentPhase = 'open';
-} else if (windowPhase === 'distribution') {
-  // If backend later starts sending "done", use that
-  currentPhase = distributionDoneAt ? 'done' : 'distribution';
-} else if (windowPhase === 'closed') {
-  currentPhase = 'closed';
-} else if (windowPhase === 'done') {
-  currentPhase = 'done';
-} else {
-  // windowPhase === 'scheduled'
-  // Before snapshot: "Opens soon"
-  // After snapshot but before open: "Snapshot complete"
-  currentPhase = snapshotAt ? 'snapshot' : 'scheduled';
-}
-
   // has this round actually finished distributing?
   const distributionDone = !!distributionDoneAt;
 
- // Derived from canonical currentPhase
-const isLive = currentPhase === 'open';
-const isClosed = currentPhase === 'closed';
+  /* ───────────────────────────
+     Phase + countdown from schedule.json
+  ─────────────────────────── */
 
-  // Tone for claim window line
-  const claimTone: Tone =
-    currentPhase === 'open'
-      ? 'success'
-      : currentPhase === 'scheduled'
-      ? 'warning'
-      : 'muted';
+  const nowMs = Date.now();
 
-  // Snapshot timing label – show nothing if there’s no snapshot yet
+  const snapshotMs =
+    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
+  const opensMs =
+    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
+  const closesMs =
+    SCHEDULE.windowClosesAt ? new Date(SCHEDULE.windowClosesAt).getTime() : null;
+  const distStartMs =
+    SCHEDULE.distributionStartsAt
+      ? new Date(SCHEDULE.distributionStartsAt).getTime()
+      : null;
+  const distDoneMs =
+    SCHEDULE.distributionDoneAt
+      ? new Date(SCHEDULE.distributionDoneAt).getTime()
+      : null;
+
+  // Monotonic phase ladder
+  let currentPhase: WindowPhase = 'scheduled';
+
+  if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
+  if (opensMs && nowMs >= opensMs) currentPhase = 'open';
+  if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
+  if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
+  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
+
+  // What are we counting towards?
+  let countdownTargetIso: string | null = null;
+
+  switch (currentPhase) {
+    case 'scheduled':
+    case 'snapshot':
+      // We hype the claim window, not the snapshot
+      countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
+      break;
+    case 'open':
+      countdownTargetIso = SCHEDULE.windowClosesAt ?? null;
+      break;
+    case 'closed':
+      // Claim window closed -> count to distribution start
+      countdownTargetIso = SCHEDULE.distributionStartsAt ?? null;
+      break;
+    case 'distribution':
+      countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
+      break;
+    default:
+      countdownTargetIso = null;
+  }
+
+  const countdownLabel = useCountdown(countdownTargetIso);
+
+  // Helpers used for styling
+  const isLive = currentPhase === 'open';
+  const isClosed =
+    currentPhase === 'closed' ||
+    currentPhase === 'distribution' ||
+    currentPhase === 'done';
+
+  // Flash highlight in the last 3 seconds before a phase change
+  useEffect(() => {
+    if (!countdownTargetIso) {
+      setPreFlash(false);
+      return;
+    }
+
+    const targetMs = new Date(countdownTargetIso).getTime();
+    if (!targetMs) return;
+
+    const check = () => {
+      const diff = targetMs - Date.now();
+      if (diff <= 3000 && diff >= 0) {
+        setPreFlash(true);
+      } else if (diff < 0 || diff > 3000) {
+        setPreFlash(false);
+      }
+    };
+
+    check();
+    const id = setInterval(check, 300);
+    return () => {
+      clearInterval(id);
+      setPreFlash(false);
+    };
+  }, [countdownTargetIso]);
+
+  // Final 10 second pulse
+  let isFinalTen = false;
+  if (countdownTargetIso) {
+    const targetMs = new Date(countdownTargetIso).getTime();
+    const diff = targetMs - Date.now();
+    isFinalTen = diff > 0 && diff <= 10_000;
+  }
+
+  // Snapshot timing label – show nothing if there is no snapshot yet
   const snapshotDateLabel = snapshotAt ?? '';
 
   // Normalize backend / contract status
