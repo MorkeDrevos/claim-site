@@ -524,8 +524,7 @@ if (countdownTarget) {
     distributionDoneAt,
   } = state;
 
-  // Normalised currentPhase from backend
-const { snapshotTakenAt, distributionDoneAt: distributionCompletedAt } = state;
+let currentPhase: WindowPhase;
 
 let currentPhase: WindowPhase;
 
@@ -533,8 +532,8 @@ let currentPhase: WindowPhase;
 if (windowPhase === 'open') {
   currentPhase = 'open';
 } else if (windowPhase === 'distribution') {
-  // If backend later starts sending “done”, use that
-  currentPhase = distributionCompletedAt ? 'done' : 'distribution';
+  // If backend later starts sending "done", use that
+  currentPhase = distributionDoneAt ? 'done' : 'distribution';
 } else if (windowPhase === 'closed') {
   currentPhase = 'closed';
 } else if (windowPhase === 'done') {
@@ -542,8 +541,8 @@ if (windowPhase === 'open') {
 } else {
   // windowPhase === 'scheduled'
   // Before snapshot: "Opens soon"
-  // After snapshotTakenAt but before open: "Snapshot complete"
-  currentPhase = snapshotTakenAt ? 'snapshot' : 'scheduled';
+  // After snapshotAt but before open: "Snapshot complete"
+  currentPhase = snapshotAt ? 'snapshot' : 'scheduled';
 }
 
   // has this round actually finished distributing?
