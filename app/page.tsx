@@ -92,7 +92,7 @@ function SoftCard({
 }) {
   return (
     <div
-            className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
+      className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
     >
       {children}
     </div>
@@ -203,6 +203,9 @@ export default function ClaimPoolPage() {
   const lastWindowPhaseRef = useRef<string | null>(null);
 
   const [preFlash, setPreFlash] = useState(false);
+
+  // Live USD total for current reward pool (from backend price API)
+  const [liveUsdTotal, setLiveUsdTotal] = useState<number | null>(null);
 
   /* ── Phase + countdown (safe when state is null) ── */
 
@@ -323,13 +326,13 @@ export default function ClaimPoolPage() {
   }, [countdownTarget]);
 
   // Final 10 second pulse trigger
-let isFinalTen = false;
+  let isFinalTen = false;
 
-if (countdownTarget) {
-  const targetMs = new Date(countdownTarget).getTime();
-  const diff = targetMs - Date.now();
-  isFinalTen = diff > 0 && diff <= 10_000;
-}
+  if (countdownTarget) {
+    const targetMs = new Date(countdownTarget).getTime();
+    const diff = targetMs - Date.now();
+    isFinalTen = diff > 0 && diff <= 10_000;
+  }
 
   /* ── Initial load + polling ── */
 
@@ -387,6 +390,46 @@ if (countdownTarget) {
     };
   }, []);
 
+  /* ── Live USD value fetch for pool ── */
+
+  useEffect(() => {
+    if (!state || typeof state.rewardPoolAmountClaim !== 'number') {
+      setLiveUsdTotal(null);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    async function fetchPrice() {
+      try {
+        // Backend endpoint you will implement (e.g. proxy to Birdeye)
+        const res = await fetch('/api/claim-price', {
+          method: 'GET',
+          signal: controller.signal,
+        });
+
+        if (!res.ok) throw new Error('Price fetch failed');
+
+        const data = await res.json();
+        const priceUsd =
+          typeof data?.priceUsd === 'number' ? data.priceUsd : null;
+
+        if (priceUsd !== null) {
+          setLiveUsdTotal(state.rewardPoolAmountClaim! * priceUsd);
+        }
+      } catch (err: any) {
+        if (err?.name === 'AbortError') return;
+        console.error('USD price fetch error', err);
+        // If error, keep existing static value from backend and do not hard fail
+        setLiveUsdTotal(null);
+      }
+    }
+
+    fetchPrice();
+
+    return () => controller.abort();
+  }, [state?.rewardPoolAmountClaim]);
+
   /* ── Wallet connect / disconnect ── */
 
   const handleConnectClick = async () => {
@@ -424,7 +467,7 @@ if (countdownTarget) {
 
   if (!state && !error) {
     return (
-  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+      <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
           <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
         </div>
@@ -451,7 +494,7 @@ if (countdownTarget) {
 
   /* ── Safe destructure (state is now non-null) ── */
 
-    const {
+  const {
     walletConnected,
     walletShort,
     networkLabel,
@@ -489,7 +532,7 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
-    // Tone for claim window line
+  // Tone for claim window line
   const claimTone: Tone =
     currentPhase === 'open'
       ? 'success'
@@ -498,59 +541,58 @@ if (countdownTarget) {
       : 'muted';
 
   // Rows for Mission Control (NASA layout)
-type MissionRowMode = 'plain' | 'pill';
+  type MissionRowMode = 'plain' | 'pill';
 
-type MissionRow = {
-  label: string;
-  value: string;
-  tone: Tone;
-  mode?: MissionRowMode; // default = 'plain'
-};
+  type MissionRow = {
+    label: string;
+    value: string;
+    tone: Tone;
+    mode?: MissionRowMode; // default = 'plain'
+  };
 
-// Rows for Mission Control (NASA layout)
-const missionRows: MissionRow[] = [
-  {
-    label: 'Portal backend',
-    value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
-    tone: frontEndStatus === 'ok' ? 'success' : 'warning',
-    mode: 'plain',
-  },
-  {
-    label: 'Reward contracts',
-    value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
-    tone: contractStatus === 'ok' ? 'success' : 'warning',
-    mode: 'plain',
-  },
-  {
-    // 🔁 Network now ABOVE Claim window
-    label: 'Network',
-    value: 'Solana Mainnet',
-    tone:
-      networkLabel && networkLabel.toLowerCase().includes('mainnet')
-        ? 'success'
-        : 'muted',
-    mode: 'plain',
-  },
-  {
-    label: 'Claim window',
-    value:
-      currentPhase === 'open'
-        ? 'Live'
-        : currentPhase === 'scheduled'
-        ? 'Scheduled'
-        : currentPhase === 'distribution'
-        ? 'Distributing'
-        : 'Closed',
-    tone: claimTone,
-    mode: 'pill',
-  },
-  {
-    label: 'Contract revision',
-    value: 'CR-0.9.14',
-    tone: 'muted',
-    mode: 'plain',
-  },
-];
+  const missionRows: MissionRow[] = [
+    {
+      label: 'Portal backend',
+      value: frontEndStatus === 'ok' ? 'Online' : 'Attention',
+      tone: frontEndStatus === 'ok' ? 'success' : 'warning',
+      mode: 'plain',
+    },
+    {
+      label: 'Reward contracts',
+      value: contractStatus === 'ok' ? 'Deployed' : 'Check logs',
+      tone: contractStatus === 'ok' ? 'success' : 'warning',
+      mode: 'plain',
+    },
+    {
+      // Network now ABOVE Claim window
+      label: 'Network',
+      value: 'Solana Mainnet',
+      tone:
+        networkLabel && networkLabel.toLowerCase().includes('mainnet')
+          ? 'success'
+          : 'muted',
+      mode: 'plain',
+    },
+    {
+      label: 'Claim window',
+      value:
+        currentPhase === 'open'
+          ? 'Live'
+          : currentPhase === 'scheduled'
+          ? 'Scheduled'
+          : currentPhase === 'distribution'
+          ? 'Distributing'
+          : 'Closed',
+      tone: claimTone,
+      mode: 'pill',
+    },
+    {
+      label: 'Contract revision',
+      value: 'CR-0.9.14',
+      tone: 'muted',
+      mode: 'plain',
+    },
+  ];
 
   const backendTone: Tone = frontEndStatus === 'ok' ? 'success' : 'warning';
   const contractTone: Tone = contractStatus === 'ok' ? 'success' : 'warning';
@@ -570,13 +612,14 @@ const missionRows: MissionRow[] = [
       : 'TBA';
 
   const rewardUsdText =
-    typeof rewardPoolAmountUsd === 'number'
-      ? `${rewardPoolAmountUsd.toLocaleString('en-US')}`
+    liveUsdTotal !== null
+      ? liveUsdTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })
+      : typeof rewardPoolAmountUsd === 'number'
+      ? rewardPoolAmountUsd.toLocaleString('en-US', { maximumFractionDigits: 2 })
       : 'Soon';
 
   // preview mode = anything except explicit "live"
-  const isPreview =
-    process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
+  const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
   const canClaim = !isPreview && isLive;
 
@@ -685,20 +728,23 @@ const missionRows: MissionRow[] = [
      Render
   ─────────────────────────── */
 
-
-
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot complete' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
-    { id: 'distribution', label: 'Rewards distributed' },
+    {
+      id: 'distribution',
+      label: distributionDone
+        ? 'Rewards distributed'
+        : 'Reward distribution in progress',
+    },
   ];
 
   const activeIndex = steps.findIndex((s) => s.id === currentPhase);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-   let progressMessage = '';
+  let progressMessage = '';
   if (currentPhase === 'scheduled') {
     progressMessage = 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
@@ -710,49 +756,47 @@ const missionRows: MissionRow[] = [
     progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage = 'Distribution sequence active — standby for completion.';
+    progressMessage = 'Distribution sequence active - standby for completion.';
   }
 
-
   // Live-style status summary for Mission Control
-let statusSummary =
-  'All systems nominal. Autonomous settlement sequence is active.';
+  let statusSummary =
+    'All systems nominal. Autonomous settlement sequence is active.';
 
-const hasBackendIssue = frontEndStatus !== 'ok';
-const hasContractIssue = contractStatus !== 'ok';
+  const hasBackendIssue = frontEndStatus !== 'ok';
+  const hasContractIssue = contractStatus !== 'ok';
 
-if (hasBackendIssue || hasContractIssue) {
-  statusSummary =
-    'Attention flagged. One or more subsystems are reporting a non-normal status.';
-} else if (currentPhase === 'open') {
-  statusSummary =
-    'All systems nominal. Live claim window running under autonomous settlement.';
-} else if (currentPhase === 'scheduled') {
-  statusSummary =
-    'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
-} else if (currentPhase === 'distribution') {
-  statusSummary =
-    'All systems nominal. Reward distribution sequence is executing on-chain.';
-} else if (currentPhase === 'closed') {
-  statusSummary =
-    'All systems nominal. Claim window closed and standing by for the next round.';
-}
+  if (hasBackendIssue || hasContractIssue) {
+    statusSummary =
+      'Attention flagged. One or more subsystems are reporting a non-normal status.';
+  } else if (currentPhase === 'open') {
+    statusSummary =
+      'All systems nominal. Live claim window running under autonomous settlement.';
+  } else if (currentPhase === 'scheduled') {
+    statusSummary =
+      'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
+  } else if (currentPhase === 'distribution') {
+    statusSummary =
+      'All systems nominal. Reward distribution sequence is executing on-chain.';
+  } else if (currentPhase === 'closed') {
+    statusSummary =
+      'All systems nominal. Claim window closed and standing by for the next round.';
+  }
 
-let statusDotColor = 'bg-emerald-400'; // default
-if (hasBackendIssue || hasContractIssue) {
-  statusDotColor = 'bg-amber-400';    // warning / partial issue
-}
-if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500';    // resting / no active processes
-}
+  let statusDotColor = 'bg-emerald-400'; // default
+  if (hasBackendIssue || hasContractIssue) {
+    statusDotColor = 'bg-amber-400'; // warning / partial issue
+  }
+  if (currentPhase === 'closed') {
+    statusDotColor = 'bg-slate-500'; // resting / no active processes
+  }
 
-// Snapshot timing label – show nothing if there’s no snapshot yet
-const snapshotDateLabel = snapshotTakenAt ?? '';
+  // Snapshot timing label – show nothing if there is no snapshot yet
+  const snapshotDateLabel = snapshotTakenAt ?? '';
 
-return (
-  <main className="min-h-screen text-slate-50">
-  
-                  {/* HERO BACKGROUND */}
+  return (
+    <main className="min-h-screen text-slate-50">
+      {/* HERO BACKGROUND */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
         {/* Base gradient – much stronger */}
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
@@ -769,43 +813,43 @@ return (
 
       {/* Top nav – sticky */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
-          <div
-    className="
+        <div
+          className="
       mx-auto max-w-6xl
       flex flex-wrap items-center justify-between
       gap-2 sm:gap-4
       px-4 py-3 sm:px-6
     "
-  >
+        >
           {/* Left: logo + title */}
-<Link href="/" className="flex items-center gap-3 group">
-  {/* CLAIM logo circle */}
-  <div
-    className="flex h-9 w-9 items-center justify-center rounded-full
+          <Link href="/" className="flex items-center gap-3 group">
+            {/* CLAIM logo circle */}
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full
                bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden
                shadow-[0_0_12px_rgba(16,185,129,0.25)]
                transition-all group-hover:ring-emerald-400/70
                group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]"
-  >
-    <Image
-      src="/img/claim-logo-circle.png"
-      alt="CLAIM Logo"
-      width={28}
-      height={28}
-      className="object-contain"
-      priority
-    />
-  </div>
+            >
+              <Image
+                src="/img/claim-logo-circle.png"
+                alt="CLAIM Logo"
+                width={28}
+                height={28}
+                className="object-contain"
+                priority
+              />
+            </div>
 
-  <div className="flex flex-col">
-    <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
-      CLAIM PORTAL
-    </span>
-    <span className="text-sm font-medium text-slate-100 group-hover:text-white">
-      $CLAIM - Token of Timing
-    </span>
-  </div>
-</Link>
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 group-hover:text-slate-300">
+                CLAIM PORTAL
+              </span>
+              <span className="text-sm font-medium text-slate-100 group-hover:text-white">
+                $CLAIM - Token of Timing
+              </span>
+            </div>
+          </Link>
 
           {/* Right: nav items */}
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
@@ -863,9 +907,9 @@ return (
 
             {/* Wallet button */}
             <button
-  type="button"
-  onClick={handleConnectClick}
-  className="hidden sm:inline-flex items-center rounded-full
+              type="button"
+              onClick={handleConnectClick}
+              className="hidden sm:inline-flex items-center rounded-full
              px-5 py-2
              bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
              border border-emerald-400/40
@@ -876,7 +920,7 @@ return (
              hover:border-emerald-400
              hover:text-white
              transition-all"
->
+            >
               {connectedWallet
                 ? `${connectedWallet.name} connected`
                 : effectiveWalletConnected
@@ -897,233 +941,284 @@ return (
               {/* Header text */}
               <div className="space-y-2">
                 <h1
-  className="
+                  className="
     text-[30px] sm:text-[36px]
     font-semibold
     leading-[1.12]
     tracking-[-0.01em]
     text-slate-100
 
-    pl-[6px]          /* aligns visually with the card content */
-    pt-[4px]          /* slightly lifts, looks tighter */
-    pb-[18px]         /* perfect spacing before the claim box */
+    pl-[6px]
+    pt-[4px]
+    pb-[18px]
     
     drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]
   "
->
-  Rewards earned by presence.
-  <br />
-  Show up. Lock in. Get your share.
-</h1>
+                >
+                  Rewards earned by presence.
+                  <br />
+                  Show up. Lock in. Get your share.
+                </h1>
               </div>
 
               {/* CLAIM WINDOW CARD */}
-<div
-  className={[
-    'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-    preFlash ? 'animate-pulse' : '',
-  ].join(' ')}
->
-  {/* One row: countdown left, USD right */}
-  <div className="flex items-start justify-between gap-6">
-    {/* LEFT: label + countdown */}
-    <div className="flex flex-col pl-1 sm:pl-2">
-      <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive ? (
-          <span className="inline-flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="12" cy="12" r="9" className="opacity-30" />
-              <circle cx="12" cy="12" r="5" className="opacity-60" />
-              <circle cx="12" cy="12" r="2" />
-            </svg>
-            WINDOW CLOSES IN
-          </span>
-        ) : isClosed ? (
-          <span className="inline-flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="12" cy="12" r="9" className="opacity-30" />
-              <circle cx="12" cy="12" r="5" className="opacity-60" />
-              <circle cx="12" cy="12" r="2" />
-            </svg>
-            Awaiting next on-chain window
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="12" cy="12" r="9" className="opacity-30" />
-              <circle cx="12" cy="12" r="5" className="opacity-60" />
-              <circle cx="12" cy="12" r="2" />
-            </svg>
-            NEXT WINDOW IN
-          </span>
-        )}
-      </p>
+              <div
+                className={[
+                  'mt-3 rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90 px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+                  preFlash ? 'animate-pulse' : '',
+                ].join(' ')}
+              >
+                {/* One row: countdown left, USD right */}
+                <div className="flex items-start justify-between gap-6">
+                  {/* LEFT: label + countdown */}
+                  <div className="flex flex-col pl-1 sm:pl-2">
+                    <p className="mt-[5px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {isLive ? (
+                        <span className="inline-flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              className="opacity-30"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="5"
+                              className="opacity-60"
+                            />
+                            <circle cx="12" cy="12" r="2" />
+                          </svg>
+                          WINDOW CLOSES IN
+                        </span>
+                      ) : isClosed ? (
+                        <span className="inline-flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              className="opacity-30"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="5"
+                              className="opacity-60"
+                            />
+                            <circle cx="12" cy="12" r="2" />
+                          </svg>
+                          Awaiting next on-chain window
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              className="opacity-30"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="5"
+                              className="opacity-60"
+                            />
+                            <circle cx="12" cy="12" r="2" />
+                          </svg>
+                          NEXT WINDOW IN
+                        </span>
+                      )}
+                    </p>
 
-      {/* extra padding above the countdown */}
-      <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
-        {isLive && (
-          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-        )}
-        <p
-          className={[
-            '-mt-1.5', // moves ONLY the number upward
-            'text-[40px] sm:text-[42px] font-bold tracking-tight text-slate-50',
-            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-          ].join(' ')}
-        >
-          {isClosed ? '' : countdownLabel || '--:--:--'}
-        </p>
-      </div>
-    </div>
+                    {/* extra padding above the countdown */}
+                    <div className={`mt-3 ${isLive ? 'relative' : ''}`}>
+                      {isLive && (
+                        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+                      )}
+                      <p
+                        className={[
+                          '-mt-1.5',
+                          'text-[40px] sm:text-[42px] font-bold tracking-tight text-slate-50',
+                          isFinalTen
+                            ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+                            : '',
+                        ].join(' ')}
+                      >
+                        {isClosed ? '' : countdownLabel || '--:--:--'}
+                      </p>
+                    </div>
+                  </div>
 
-    {/* RIGHT: label + USD + $CLAIM */}
-    <div className="flex flex-col items-end gap-1 text-right">
-      {/* Label + info icon + tooltip */}
-      <div className="relative flex items-baseline gap-2">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-          Current round pool
-        </p>
+                  {/* RIGHT: label + USD + $CLAIM */}
+                  <div className="flex flex-col items-end gap-1 text-right">
+                    {/* Label + info icon + tooltip */}
+                    <div className="relative flex items-baseline gap-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                        Current round pool
+                      </p>
 
-        {/* Hover icon wrapper */}
-        <div className="group relative mt-[-2px]">
-          <button
-            type="button"
-            className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
+                      {/* Hover icon wrapper */}
+                      <div className="group relative mt-[-2px]">
+                        <button
+                          type="button"
+                          className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
                        rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold
                        border border-slate-700 
                        hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
-          >
-            ?
-          </button>
+                        >
+                          ?
+                        </button>
 
-          {/* Tooltip */}
-          <div
-            className="pointer-events-none absolute left-full ml-3 top-2 
+                        {/* Tooltip */}
+                        <div
+                          className="pointer-events-none absolute left-full ml-3 top-2 
                        w-72 opacity-0 group-hover:opacity-100 
                        transition-opacity duration-200 z-50"
-          >
-            <div
-              className="rounded-2xl border border-slate-700/70 
+                        >
+                          <div
+                            className="rounded-2xl border border-slate-700/70 
                           bg-slate-900/95 p-4 
                           shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left"
-            >
-              <p className="text-[12px] text-slate-200 leading-relaxed">
-  Rewards are paid in{' '}
-  <span className="text-emerald-300 font-medium">$CLAIM</span>
-  {' '}and shared equally among wallets that locked in during the live window.
-  {' '}<span className="text-emerald-300 font-medium">USD values are approximate.</span>
-</p>
-            </div>
-          </div>
-        </div>
-      </div>
+                          >
+                            <p className="text-[12px] text-slate-200 leading-relaxed">
+                              Rewards are paid in{' '}
+                              <span className="text-emerald-300 font-medium">
+                                $CLAIM
+                              </span>{' '}
+                              and shared equally among wallets that locked in
+                              during the live window.{' '}
+                              <span className="text-emerald-300 font-medium">
+                                USD values are approximate.
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-      {/* CLAIM pool + USD — responsive */}
-<div
-  className="
+                    {/* CLAIM pool + USD — responsive */}
+                    <div
+                      className="
     flex gap-3 mt-[24px]
     items-end justify-end
     max-sm:flex-col max-sm:items-center max-sm:gap-1
   "
->
-  {/* CLAIM – primary */}
-  <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
-    {rewardAmountText}
-    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-      $CLAIM
-    </span>
-  </p>
+                    >
+                      {/* CLAIM – primary */}
+                      <p className="text-[24px] sm:text-[30px] font-semibold tracking-tight text-slate-50 leading-none">
+                        {rewardAmountText}
+                        <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+                          $CLAIM
+                        </span>
+                      </p>
 
-  {/* Divider */}
-  <span className="text-slate-700 text-[18px] leading-none">|</span>
+                      {/* Divider */}
+                      <span className="text-slate-700 text-[18px] leading-none">
+                        |
+                      </span>
 
-  {/* USD */}
-  <p
-    key={rewardUsdText}
-    className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
-  >
-    ≈ {rewardUsdText} USD
-  </p>
-</div>
+                      {/* USD */}
+                      <p
+                        key={rewardUsdText}
+                        className="-translate-y-[2px] text-[14px] sm:text-[16px] text-slate-300 font-medium opacity-80 leading-none"
+                      >
+                        ≈ {rewardUsdText} USD
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-    </div>
-  </div>
+                {/* CTA bar – keep as you have it */}
+                <button
+                  type="button"
+                  onClick={handleClaimClick}
+                  disabled={!canClaim}
+                  className={[
+                    'mt-5 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
+                    'transition-all duration-300 border',
+                    canClaim
+                      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+                      : isClosed
+                      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+                      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+                    canClaim && isPulseOn ? 'animate-pulse' : '',
+                  ].join(' ')}
+                >
+                  {canClaim
+                    ? 'Lock in my share'
+                    : isClosed
+                    ? 'Claim Window closed'
+                    : 'Opens soon'}
+                </button>
 
-  {/* CTA bar – keep as you have it */}
-  <button
-    type="button"
-    onClick={handleClaimClick}
-    disabled={!canClaim}
-    className={[
-      'mt-5 mb-6 flex w-full items-center justify-center rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.32em]',
-      'transition-all duration-300 border',
-      canClaim
-        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-        : isClosed
-        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-      canClaim && isPulseOn ? 'animate-pulse' : '',
-    ].join(' ')}
-  >
-    {canClaim
-      ? 'Lock in my share'
-      : isClosed
-      ? 'Claim Window closed'
-      : 'Opens soon'}
-  </button>
+                {/* Eligibility text */}
+                <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
+                  <p>
+                    •{' '}
+                    <span className="text-emerald-300/70 font-medium">
+                      Show up
+                    </span>{' '}
+                    during the live window and{' '}
+                    <span className="text-emerald-300/70 font-medium">
+                      lock in your share
+                    </span>
+                    .
+                  </p>
 
-  {/* Eligibility text */}
-  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
-    <p>
-      • <span className="text-emerald-300/70 font-medium">Show up</span> during the
-      live window and{' '}
-      <span className="text-emerald-300/70 font-medium">lock in your share</span>.
-    </p>
+                  <p>
+                    • Rewards are auto-distributed in{' '}
+                    <span className="text-emerald-300/70 font-medium">
+                      $CLAIM
+                    </span>{' '}
+                    via the{' '}
+                    <span className="text-emerald-300/70 font-medium">
+                      on-chain rewards engine
+                    </span>
+                    .
+                  </p>
 
-    <p>
-      • Rewards are auto-distributed in{' '}
-      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
-      via the{' '}
-      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
-    </p>
-
-    <p>
-      • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-      <span className="text-emerald-300/70 font-medium">snapshot</span> - wallets
-      below the minimum sit out that round.
-    </p>
-  </div>
-</div>
-{/* end CLAIM WINDOW CARD */}
+                  <p>
+                    • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+                    <span className="text-emerald-300/70 font-medium">
+                      snapshot
+                    </span>{' '}
+                    - wallets below the minimum sit out that round.
+                  </p>
+                </div>
+              </div>
+              {/* end CLAIM WINDOW CARD */}
             </div>
 
-{/* Mobile-only Connect Wallet CTA */}
-<div className="block sm:hidden mt-2 mb-2">
-  <button
-    type="button"
-    onClick={handleConnectClick}
-    className="
+            {/* Mobile-only Connect Wallet CTA */}
+            <div className="block sm:hidden mt-2 mb-2">
+              <button
+                type="button"
+                onClick={handleConnectClick}
+                className="
       w-full
       flex items-center justify-center
       rounded-[28px]
@@ -1138,117 +1233,115 @@ return (
       active:scale-[0.98]
       transition-all
     "
-  >
-    {connectedWallet
-      ? `${connectedWallet.name} connected`
-      : effectiveWalletConnected
-      ? 'Wallet connected'
-      : 'Connect wallet'}
-  </button>
-</div>
+              >
+                {connectedWallet
+                  ? `${connectedWallet.name} connected`
+                  : effectiveWalletConnected
+                  ? 'Wallet connected'
+                  : 'Connect wallet'}
+              </button>
+            </div>
 
-{/* RIGHT COLUMN – Mission Control (NASA style) */}
-<div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
-  <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+            {/* RIGHT COLUMN – Mission Control (NASA style) */}
+            <div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
+              <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+                {/* Header row */}
+                <div className="flex items-baseline justify-between pr-1">
+                  {/* LEFT: Round number */}
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+                    Round {roundNumber ?? 1}
+                  </p>
 
-    {/* Header row */}
-<div className="flex items-baseline justify-between pr-1">
-  {/* LEFT: Round number */}
-  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-    Round {roundNumber ?? 1}
-  </p>
+                  {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
+                  <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
+                    Mission Control
+                  </span>
+                </div>
 
-  {/* RIGHT: Mission Control (the ONLY neon-green accent) */}
-  <span className="text-[12px] font-semibold uppercase tracking-[0.32em] text-emerald-400">
-    Mission Control
-  </span>
-</div>
+                {/* Snapshot info */}
+                <div className="space-y-1">
+                  <p className="text-[20px] font-semibold text-slate-100">
+                    Snapshot #{snapshotBlock}
+                  </p>
 
-    {/* Snapshot info */}
-    <div className="space-y-1">
-      <p className="text-[20px] font-semibold text-slate-100">
-  Snapshot #{snapshotBlock}
-</p>
+                  <p className="text-[12px] text-slate-400">
+                    {currentPhase === 'open'
+                      ? 'window open'
+                      : currentPhase === 'scheduled'
+                      ? 'window scheduled'
+                      : currentPhase === 'distribution'
+                      ? 'distributing'
+                      : 'window closed'}
+                  </p>
+                </div>
 
-<p className="text-[12px] text-slate-400">
-  {currentPhase === 'open'
-    ? 'window open'
-    : currentPhase === 'scheduled'
-    ? 'window scheduled'
-    : currentPhase === 'distribution'
-    ? 'distributing'
-    : 'window closed'}
-</p>
-    </div>
+                {/* Status rows */}
+                <div className="mt-3 space-y-3">
+                  {missionRows.map((row) => {
+                    const isPill = row.mode === 'pill';
 
-    {/* Status rows */}
-<div className="mt-3 space-y-3">
-  {missionRows.map((row) => {
-    const isPill = row.mode === 'pill';
+                    return (
+                      <div
+                        key={row.label}
+                        className="flex items-center justify-between gap-3"
+                      >
+                        <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
+                          {row.label}
+                        </span>
 
-    return (
-      <div
-        key={row.label}
-        className="flex items-center justify-between gap-3"
-      >
-        <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
-          {row.label}
-        </span>
+                        {isPill ? (
+                          <span
+                            className={[
+                              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
+                              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
+                              row.tone === 'success'
+                                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
+                                : row.tone === 'warning'
+                                ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
+                                : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
+                            ].join(' ')}
+                          >
+                            <span
+                              className={[
+                                'h-1.5 w-1.5 rounded-full',
+                                row.tone === 'success'
+                                  ? 'bg-emerald-400'
+                                  : row.tone === 'warning'
+                                  ? 'bg-amber-400'
+                                  : 'bg-slate-500/70',
+                              ].join(' ')}
+                            />
+                            {row.value}
+                          </span>
+                        ) : (
+                          <span className="text-[12px] text-slate-400">
+                            {row.value}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
-        {isPill ? (
-          <span
-            className={[
-              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
-              row.tone === 'success'
-                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                : row.tone === 'warning'
-                ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
-                : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
-            ].join(' ')}
-          >
-            <span
-              className={[
-                'h-1.5 w-1.5 rounded-full',
-                row.tone === 'success'
-                  ? 'bg-emerald-400'
-                  : row.tone === 'warning'
-                  ? 'bg-amber-400'
-                  : 'bg-slate-500/70',
-              ].join(' ')}
-            />
-            {row.value}
-          </span>
-        ) : (
-          <span className="text-[12px] text-slate-400">
-            {row.value}
-          </span>
-        )}
-      </div>
-    );
-  })}
-</div>
+                {/* AUTOPILOT STATUS — NASA style strip */}
+                <div className="mt-3 flex items-center gap-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    Smart-contract autopilot
+                  </span>
 
-    {/* AUTOPILOT STATUS — NASA style strip */}
-    <div className="mt-3 flex items-center gap-3">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        Smart-contract autopilot
-      </span>
+                  {/* Thin divider bar */}
+                  <div className="h-4 w-px bg-slate-700/60" />
 
-      {/* Thin divider bar */}
-      <div className="h-4 w-px bg-slate-700/60" />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                    Enabled
+                  </span>
+                </div>
 
-      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-        Enabled
-      </span>
-    </div>
-
-{/* Divider + NASA footer copy */}
-<div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
-
-  {/* STATUS BADGE — mission-control style */}
-<div
-  className="
+                {/* Divider + NASA footer copy */}
+                <div className="mt-4 border-t border-slate-800/70 pt-3 space-y-1">
+                  {/* STATUS BADGE — mission-control style */}
+                  <div
+                    className="
     mt-4
     inline-flex items-center gap-3
     rounded-[6px]
@@ -1257,27 +1350,24 @@ return (
     px-4 py-3
     text-[13px] leading-snug text-slate-300
   "
->
-  {/* Dot */}
-  <span
-    className={[
-      'h-2 w-2 rounded-full',                // ← SMALLER DOT
-      statusDotColor,
-      'shadow-[0_0_6px_currentColor]',       // softer glow to match smaller dot
-      'animate-[pulse_2.6s_ease-in-out_infinite]',
-      'flex-none',
-    ].join(' ')}
-  />
+                  >
+                    {/* Dot */}
+                    <span
+                      className={[
+                        'h-2 w-2 rounded-full',
+                        statusDotColor,
+                        'shadow-[0_0_6px_currentColor]',
+                        'animate-[pulse_2.6s_ease-in-out_infinite]',
+                        'flex-none',
+                      ].join(' ')}
+                    />
 
-  {/* Status summary */}
-  <span>{statusSummary}</span>
-</div>
-
-</div>
-
-  </SoftCard>
-</div>
-
+                    {/* Status summary */}
+                    <span>{statusSummary}</span>
+                  </div>
+                </div>
+              </SoftCard>
+            </div>
           </div>
         </SoftCard>
 
@@ -1291,70 +1381,73 @@ return (
             </div>
 
             {/* Desktop / tablet: full 5-step timeline */}
-<div className="mt-1 hidden sm:flex items-center justify-between gap-3">
-  {steps.map((step, index) => {
-    const isDone = activeIndex >= index;
-    const isActiveStep = step.id === currentPhase;
+            <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
+              {steps.map((step, index) => {
+                const isDone = activeIndex >= index;
+                const isActiveStep = step.id === currentPhase;
 
-    return (
-      <div key={step.id} className="flex flex-1 flex-col items-center">
-        <div
-          className={[
-            'h-2 w-full rounded-full',
-            index === 0 ? '' : 'ml-1',
-            isDone ? 'bg-emerald-400' : 'bg-slate-800',
-          ].join(' ')}
-        />
-        <div className="mt-2 flex items-center gap-2">
-          <div
-            className={[
-              'h-2.5 w-2.5 rounded-full border',
-              isDone
-                ? 'bg-emerald-400 border-emerald-300'
-                : 'bg-slate-800 border-slate-600',
-              isActiveStep ? 'animate-[pulse_1.6s_ease-in-out_infinite]' : '',
-            ].join(' ')}
-          />
-          <span
-            className={[
-              'tracking-wide',
-              isDone
-                ? 'text-[12px] font-semibold text-slate-300'
-                : 'text-[12px] font-medium text-slate-500',
-            ].join(' ')}
-          >
-            {step.label}
-          </span>
-        </div>
-      </div>
-    );
-  })}
-</div>
+                return (
+                  <div
+                    key={step.id}
+                    className="flex flex-1 flex-col items-center"
+                  >
+                    <div
+                      className={[
+                        'h-2 w-full rounded-full',
+                        index === 0 ? '' : 'ml-1',
+                        isDone ? 'bg-emerald-400' : 'bg-slate-800',
+                      ].join(' ')}
+                    />
+                    <div className="mt-2 flex items-center gap-2">
+                      <div
+                        className={[
+                          'h-2.5 w-2.5 rounded-full border',
+                          isDone
+                            ? 'bg-emerald-400 border-emerald-300'
+                            : 'bg-slate-800 border-slate-600',
+                          isActiveStep
+                            ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
+                            : '',
+                        ].join(' ')}
+                      />
+                      <span
+                        className={[
+                          'tracking-wide',
+                          isDone
+                            ? 'text-[12px] font-semibold text-slate-300'
+                            : 'text-[12px] font-medium text-slate-500',
+                        ].join(' ')}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-{/* Mobile: simple bar + current phase label */}
-<div className="mt-2 sm:hidden space-y-2">
-  {/* Single progress bar */}
-  <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-    <div
-      className="h-full rounded-full bg-emerald-400 transition-all"
-      style={{
-        width:
-          activeIndex >= 0
-            ? `${((activeIndex + 1) / steps.length) * 100}%`
-            : '0%',
-      }}
-    />
-  </div>
+            {/* Mobile: simple bar + current phase label */}
+            <div className="mt-2 sm:hidden space-y-2">
+              {/* Single progress bar */}
+              <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-emerald-400 transition-all"
+                  style={{
+                    width:
+                      activeIndex >= 0
+                        ? `${((activeIndex + 1) / steps.length) * 100}%`
+                        : '0%',
+                  }}
+                />
+              </div>
 
-  {/* Current step label */}
-  <p className="text-[11px] text-slate-400">
-    {activeStep ? activeStep.label : 'Round progress'}
-  </p>
-</div>
+              {/* Current step label */}
+              <p className="text-[11px] text-slate-400">
+                {activeStep ? activeStep.label : 'Round progress'}
+              </p>
+            </div>
 
-            <p className="mt-3 text-[12px] text-slate-200">
-  {progressMessage}
-</p>
+            <p className="mt-3 text-[12px] text-slate-200">{progressMessage}</p>
           </div>
         </SoftCard>
 
@@ -1367,17 +1460,20 @@ return (
             </p>
 
             <div className="mt-2 space-y-1">
-  <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
-    {rewardAmountText}
-    <span className="ml-1 text-[15px] sm:text-[16px] text-emerald-400">
-      CLAIM
-    </span>
-  </p>
+              <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+                {rewardAmountText}
+                <span className="ml-1 text-[15px] sm:text-[16px] text-emerald-400">
+                  CLAIM
+                </span>
+              </p>
 
-  <p className="text-[13px] text-slate-400">
-    ≈ <span className="font-semibold text-emerald-300">{rewardUsdText} USD</span>
-  </p>
-</div>
+              <p className="text-[13px] text-slate-400">
+                ≈{' '}
+                <span className="font-semibold text-emerald-300">
+                  {rewardUsdText} USD
+                </span>
+              </p>
+            </div>
 
             <div className="mt-4 border-t border-slate-800/70 pt-3 flex items-center justify-between gap-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -1403,27 +1499,27 @@ return (
           </SoftCard>
 
           {/* Minimum holding */}
-<SoftCard>
-  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-    Minimum holding
-  </p>
+          <SoftCard>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Minimum holding
+            </p>
 
-  <div className="mt-2 space-y-1">
-    <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
-      {MIN_HOLDING.toLocaleString('en-US')} CLAIM
-    </p>
-    <p className="text-[13px] text-slate-400">
-      Held in the connected wallet at snapshot.
-    </p>
-  </div>
+            <div className="mt-2 space-y-1">
+              <p className="text-[18px] sm:text-[20px] font-semibold text-slate-50">
+                {MIN_HOLDING.toLocaleString('en-US')} CLAIM
+              </p>
+              <p className="text-[13px] text-slate-400">
+                Held in the connected wallet at snapshot.
+              </p>
+            </div>
 
-  {/* In-card BUY button – aligns with other cards */}
-  <div className="mt-4">
-    <a
-      href={JUPITER_BUY_URL}
-      target="_blank"
-      rel="noreferrer"
-      className="
+            {/* In-card BUY button – aligns with other cards */}
+            <div className="mt-4">
+              <a
+                href={JUPITER_BUY_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="
         inline-flex w-full items-center justify-center
         rounded-full
         bg-emerald-500/15 px-4 py-2.5
@@ -1432,11 +1528,11 @@ return (
         hover:bg-emerald-500/25
         transition-colors
       "
-    >
-      Buy $CLAIM on Jupiter
-    </a>
-  </div>
-</SoftCard>
+              >
+                Buy $CLAIM on Jupiter
+              </a>
+            </div>
+          </SoftCard>
 
           {/* Your eligibility */}
           <SoftCard>
@@ -1445,19 +1541,19 @@ return (
             </p>
 
             <div className="mt-2 space-y-1">
-  <p
-    className={
-      eligibilityTitle === 'Wallet not connected'
-        ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
-        : isEligible
-        ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
-        : 'text-[18px] sm:text-[20px] font-semibold text-amber-300'
-    }
-  >
-    {eligibilityTitle}
-  </p>
-  <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
-</div>
+              <p
+                className={
+                  eligibilityTitle === 'Wallet not connected'
+                    ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
+                    : isEligible
+                    ? 'text-[18px] sm:text-[20px] font-semibold text-emerald-300'
+                    : 'text-[18px] sm:text-[20px] font-semibold text-amber-300'
+                }
+              >
+                {eligibilityTitle}
+              </p>
+              <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
+            </div>
 
             {effectiveWalletConnected && (
               <div className="mt-4 border-t border-slate-800/70 pt-3">
@@ -1472,169 +1568,187 @@ return (
           </SoftCard>
         </div>
 
-{/* Info + rules section (tabs + snapshot info) */}
-<section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
-  {/* LEFT: Tabs – eligibility / reward logic / history */}
-  <SoftCard>
-    {/* Tabs */}
-    <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
-      {(['eligibility', 'rewards', 'history'] as PortalTab[]).map((tab) => {
-        const isActive = activeTab === tab;
-        const label =
-          tab === 'eligibility'
-            ? 'Eligibility rules'
-            : tab === 'rewards'
-            ? 'Reward logic'
-            : 'Claim history';
+        {/* Info + rules section (tabs + snapshot info) */}
+        <section className="mt-10 grid gap-6 md:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
+          {/* LEFT: Tabs – eligibility / reward logic / history */}
+          <SoftCard>
+            {/* Tabs */}
+            <div className="mb-5 inline-flex rounded-full bg-slate-900/80 p-1 text-[11px] font-semibold uppercase tracking-[0.22em]">
+              {(['eligibility', 'rewards', 'history'] as PortalTab[]).map(
+                (tab) => {
+                  const isActive = activeTab === tab;
+                  const label =
+                    tab === 'eligibility'
+                      ? 'Eligibility rules'
+                      : tab === 'rewards'
+                      ? 'Reward logic'
+                      : 'Claim history';
 
-        return (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setActiveTab(tab)}
-            className={[
-              'rounded-full px-4 py-1.5 transition-colors',
-              isActive
-                ? 'bg-slate-50 text-slate-950'
-                : 'text-slate-400 hover:text-slate-100',
-            ].join(' ')}
-          >
-            {label}
-          </button>
-        );
-      })}
-    </div>
-
-    <hr className="border-slate-800/80" />
-
-    {/* TAB CONTENT */}
-<div className="mt-5 space-y-4 leading-relaxed text-slate-300">
-
-  {/* Eligibility rules */}
-  {activeTab === 'eligibility' && (
-    <div className="space-y-4">
-      <p className="text-[13px]">
-        The CLAIM pool is driven by proof-of-presence. Eligibility comes from
-        balances at specific snapshot blocks, not random forms.
-      </p>
-
-      <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
-        <li>
-          Hold at least {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the snapshot block.
-        </li>
-        <li>A single on-chain snapshot is taken each round and its timing is intentionally flexible.</li>
-        <li>Optional bonus rules may reward long-term or early participants.</li>
-      </ul>
-
-      <p className="text-[11px] text-slate-500">
-  Eligibility is derived solely from the wallet’s token balance as it existed at the snapshot slot for each round.
-</p>
-    </div>
-  )}
-
-  {/* Reward logic */}
-  {activeTab === 'rewards' && (
-    <div className="space-y-4">
-      <p className="text-[13px]">
-        Rewards are earned by presence. If you show up during the live claim
-        window and lock your share, you receive an equal split of that round’s pool.
-      </p>
-
-      <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
-        <li>Everyone who locks in receives an equal share.</li>
-        <li>Fewer wallets claiming = larger share per wallet.</li>
-        <li>Rewards are distributed automatically after the window closes.</li>
-      </ul>
-
-      <p className="text-[11px] text-slate-500">
-        Claim windows follow strict timing via Solana timestamps.
-      </p>
-    </div>
-  )}
-
-  {/* Claim history */}
-  {activeTab === 'history' && (
-    <div className="space-y-4">
-      <p className="text-[13px]">Past rounds and distributions will appear here.</p>
-
-      {claimHistory.length === 0 ? (
-        <p className="text-[11px] text-slate-500">No claim history yet.</p>
-      ) : (
-        <ul className="space-y-3 text-[13px] text-slate-400">
-          {claimHistory.map((entry, i) => (
-            <li key={i} className="rounded-lg bg-slate-900/50 p-3 text-[13px]">
-              <p className="font-medium text-slate-200">
-                Round {entry.round} —{' '}
-                {entry.amount.toLocaleString('en-US')} CLAIM
-              </p>
-              {entry.date && (
-                <p className="text-[11px] text-slate-500">
-                  {new Date(entry.date).toLocaleString()}
-                </p>
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setActiveTab(tab)}
+                      className={[
+                        'rounded-full px-4 py-1.5 transition-colors',
+                        isActive
+                          ? 'bg-slate-50 text-slate-950'
+                          : 'text-slate-400 hover:text-slate-100',
+                      ].join(' ')}
+                    >
+                      {label}
+                    </button>
+                  );
+                }
               )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )}
+            </div>
 
-</div>
+            <hr className="border-slate-800/80" />
 
-    {/* Tab content goes here */}
-  </SoftCard>
+            {/* TAB CONTENT */}
+            <div className="mt-5 space-y-4 leading-relaxed text-slate-300">
+              {/* Eligibility rules */}
+              {activeTab === 'eligibility' && (
+                <div className="space-y-4">
+                  <p className="text-[13px]">
+                    The CLAIM pool is driven by proof-of-presence. Eligibility
+                    comes from balances at specific snapshot blocks, not random
+                    forms.
+                  </p>
 
-  {/* RIGHT: Snapshot info */}
-  <SoftCard className="space-y-4">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-      Snapshot info
-    </p>
+                  <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
+                    <li>
+                      Hold at least{' '}
+                      {MIN_HOLDING.toLocaleString('en-US')} CLAIM at the
+                      snapshot block.
+                    </li>
+                    <li>
+                      A single on-chain snapshot is taken each round and its
+                      timing is intentionally flexible.
+                    </li>
+                    <li>
+                      Optional bonus rules may reward long-term or early
+                      participants.
+                    </li>
+                  </ul>
 
-    <div className="space-y-2">
-      <p className="text-lg font-semibold text-slate-50">
-        Snapshot #{snapshotBlock}{' '}
-        <span className="text-slate-400">• {networkLabel}</span>
-      </p>
-      <p className="text-[13px] leading-relaxed text-slate-400">
-  Each round uses a single snapshot taken before the claim window opens.
-  Wallets holding at least the minimum required amount of $CLAIM at that
-  moment are eligible for that round - wallets below the minimum sit out
-  until the next snapshot.
-</p>
-    </div>
+                  <p className="text-[11px] text-slate-500">
+                    Eligibility is derived solely from the wallet’s token
+                    balance as it existed at the snapshot slot for each round.
+                  </p>
+                </div>
+              )}
 
-    <div className="pt-2 border-t border-slate-800/70">
-      <p className="text-[11px] text-slate-500">
-        Latest snapshot:{' '}
-        <span className="text-slate-300">{snapshotDateLabel}</span>
-      </p>
-    </div>
+              {/* Reward logic */}
+              {activeTab === 'rewards' && (
+                <div className="space-y-4">
+                  <p className="text-[13px]">
+                    Rewards are earned by presence. If you show up during the
+                    live claim window and lock your share, you receive an equal
+                    split of that round’s pool.
+                  </p>
 
-    <p className="pt-3 text-[11px] text-slate-500">
-      © 2025 CLAIM portal · Subject to change. Built for serious holders, not
-      random forms.
-    </p>
-  </SoftCard>
-</section>
+                  <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
+                    <li>Everyone who locks in receives an equal share.</li>
+                    <li>Fewer wallets claiming = larger share per wallet.</li>
+                    <li>
+                      Rewards are distributed automatically after the window
+                      closes.
+                    </li>
+                  </ul>
 
+                  <p className="text-[11px] text-slate-500">
+                    Claim windows follow strict timing via Solana timestamps.
+                  </p>
+                </div>
+              )}
+
+              {/* Claim history */}
+              {activeTab === 'history' && (
+                <div className="space-y-4">
+                  <p className="text-[13px]">
+                    Past rounds and distributions will appear here.
+                  </p>
+
+                  {claimHistory.length === 0 ? (
+                    <p className="text-[11px] text-slate-500">
+                      No claim history yet.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3 text-[13px] text-slate-400">
+                      {claimHistory.map((entry, i) => (
+                        <li
+                          key={i}
+                          className="rounded-lg bg-slate-900/50 p-3 text-[13px]"
+                        >
+                          <p className="font-medium text-slate-200">
+                            Round {entry.round} —{' '}
+                            {entry.amount.toLocaleString('en-US')} CLAIM
+                          </p>
+                          {entry.date && (
+                            <p className="text-[11px] text-slate-500">
+                              {new Date(entry.date).toLocaleString()}
+                            </p>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </div>
+          </SoftCard>
+
+          {/* RIGHT: Snapshot info */}
+          <SoftCard className="space-y-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Snapshot info
+            </p>
+
+            <div className="space-y-2">
+              <p className="text-lg font-semibold text-slate-50">
+                Snapshot #{snapshotBlock}{' '}
+                <span className="text-slate-400">• {networkLabel}</span>
+              </p>
+              <p className="text-[13px] leading-relaxed text-slate-400">
+                Each round uses a single snapshot taken before the claim window
+                opens. Wallets holding at least the minimum required amount of
+                $CLAIM at that moment are eligible for that round - wallets
+                below the minimum sit out until the next snapshot.
+              </p>
+            </div>
+
+            <div className="pt-2 border-t border-slate-800/70">
+              <p className="text-[11px] text-slate-500">
+                Latest snapshot:{' '}
+                <span className="text-slate-300">{snapshotDateLabel}</span>
+              </p>
+            </div>
+
+            <p className="pt-3 text-[11px] text-slate-500">
+              © 2025 CLAIM portal · Subject to change. Built for serious
+              holders, not random forms.
+            </p>
+          </SoftCard>
+        </section>
       </div>
 
-{/* Sticky Buy on Jupiter CTA – only on larger screens */}
-<div className="hidden sm:block fixed bottom-4 right-4 z-50">
-  <a
-    href={JUPITER_BUY_URL}
-    target="_blank"
-    rel="noreferrer"
-    className="inline-flex items-center rounded-full
+      {/* Sticky Buy on Jupiter CTA – only on larger screens */}
+      <div className="hidden sm:block fixed bottom-4 right-4 z-50">
+        <a
+          href={JUPITER_BUY_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center rounded-full
                bg-emerald-500/90 px-4 py-2.5
                text-[11px] font-semibold uppercase tracking-[0.22em]
                text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)]
                hover:bg-emerald-400 hover:text-slate-950
                transition-colors"
-  >
-    Buy $CLAIM on Jupiter
-  </a>
-</div>
+        >
+          Buy $CLAIM on Jupiter
+        </a>
+      </div>
       <ToastContainer />
     </main>
   );
