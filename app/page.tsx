@@ -524,23 +524,34 @@ if (countdownTarget) {
     distributionDoneAt,
   } = state;
 
+  // Normalised currentPhase from backend
+const { snapshotTakenAt, distributionDoneAt: distributionCompletedAt } = state;
+
+let currentPhase: WindowPhase;
+
+// Canonical phase for the current round
+if (windowPhase === 'open') {
+  currentPhase = 'open';
+} else if (windowPhase === 'distribution') {
+  // If backend later starts sending “done”, use that
+  currentPhase = distributionCompletedAt ? 'done' : 'distribution';
+} else if (windowPhase === 'closed') {
+  currentPhase = 'closed';
+} else if (windowPhase === 'done') {
+  currentPhase = 'done';
+} else {
+  // windowPhase === 'scheduled'
+  // Before snapshot: "Opens soon"
+  // After snapshotTakenAt but before open: "Snapshot complete"
+  currentPhase = snapshotTakenAt ? 'snapshot' : 'scheduled';
+}
+
   // has this round actually finished distributing?
   const distributionDone = !!distributionDoneAt;
 
-  // Derived from phase
-  const isLive = phase === 'open';
-  const isClosed = phase === 'closed';
-
-  let currentPhase: WindowPhase;
-  if (isLive) {
-    currentPhase = 'open';
-  } else if (isClosed) {
-    currentPhase = windowPhase === 'distribution' ? 'distribution' : 'closed';
-  } else if (windowPhase === 'snapshot') {
-    currentPhase = 'snapshot';
-  } else {
-    currentPhase = 'scheduled';
-  }
+ // Derived from canonical currentPhase
+const isLive = currentPhase === 'open';
+const isClosed = currentPhase === 'closed';
 
   // Tone for claim window line
   const claimTone: Tone =
@@ -746,7 +757,7 @@ if (countdownTarget) {
 
     const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
-    { id: 'snapshot', label: 'Snapshot complete' },
+    { id: 'snapshot', label: 'Snapshot taken' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
     {
