@@ -796,7 +796,11 @@ if (hasBackendIssue || hasContractIssue) {
 }
 
 if (currentPhase === 'closed') {
-  statusDotColor = 'bg-slate-500'; // resting / no active processes
+  // Resting state — no active processes
+  statusDotColor = 'bg-slate-500';
+} else if (currentPhase === 'done') {
+  // Final happy state — rewards delivered
+  statusDotColor = 'bg-emerald-400';
 }
 
 return (
