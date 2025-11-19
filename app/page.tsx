@@ -533,7 +533,7 @@ if (countdownTarget) {
     currentPhase = 'scheduled';
   }
 
-  // Tone for claim window line
+    // Tone for claim window line
   const claimTone: Tone =
     currentPhase === 'open'
       ? 'success'
@@ -542,21 +542,36 @@ if (countdownTarget) {
       : 'muted';
 
   // Snapshot timing label – show nothing if there’s no snapshot yet
-    const snapshotDateLabel = snapshotAt ?? '';
+  const snapshotDateLabel = snapshotAt ?? '';
+
+  // Normalised backend / contract status
+  const backendStatus = (frontEndStatus || '').toLowerCase();
+  const contractStatusLower = (contractStatus || '').toLowerCase();
+
+  const hasBackendIssue =
+    backendStatus === 'error' ||
+    backendStatus === 'down' ||
+    backendStatus === 'offline';
+
+  const hasContractIssue =
+    contractStatusLower === 'error' ||
+    contractStatusLower === 'down' ||
+    contractStatusLower === 'offline';
+
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
   // Rows for Mission Control (NASA layout)
   type MissionRowMode = 'plain' | 'pill';
 
-type MissionRow = {
-  label: string;
-  value: string;
-  tone: Tone;
-  mode?: MissionRowMode; // default = 'plain'
-};
+  type MissionRow = {
+    label: string;
+    value: string;
+    tone: Tone;
+    mode?: MissionRowMode; // default = 'plain'
+  };
 
-const RIGHT_COL_WIDTH = 'w-[120px]';
+  const RIGHT_COL_WIDTH = 'w-[120px]';
 
-// Rows for Mission Control (NASA layout)
   const missionRows: MissionRow[] = [
     {
       label: 'Portal backend',
@@ -570,35 +585,7 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
       tone: hasContractIssue ? 'warning' : 'success',
       mode: 'plain',
     },
-    {
-      // Network now ABOVE Claim window
-      label: 'Network',
-      value: 'Solana Mainnet',
-      tone:
-        networkLabel && networkLabel.toLowerCase().includes('mainnet')
-          ? 'success'
-          : 'muted',
-      mode: 'plain',
-    },
-    {
-      label: 'Claim window',
-      value:
-        currentPhase === 'open'
-          ? 'Live'
-          : currentPhase === 'scheduled'
-          ? 'Scheduled'
-          : currentPhase === 'distribution'
-          ? 'Distributing'
-          : 'Closed',
-      tone: claimTone,
-      mode: 'pill',
-    },
-    {
-      label: 'Contract revision',
-      value: 'CR-0.9.14',
-      tone: 'muted',
-      mode: 'plain',
-    },
+    ...
   ];
 
   const effectiveWalletConnected = !!connectedWallet || walletConnected;
@@ -761,22 +748,6 @@ const RIGHT_COL_WIDTH = 'w-[120px]';
   } else if (currentPhase === 'distribution') {
     progressMessage = 'Distribution sequence active — standby for completion.';
   }
-
-    // Normalised backend / contract status
-  const backendStatus = (frontEndStatus || '').toLowerCase();
-  const contractStatusLower = (contractStatus || '').toLowerCase();
-
-  const hasBackendIssue =
-    backendStatus === 'error' ||
-    backendStatus === 'down' ||
-    backendStatus === 'offline';
-
-  const hasContractIssue =
-    contractStatusLower === 'error' ||
-    contractStatusLower === 'down' ||
-    contractStatusLower === 'offline';
-
-  const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
   // Live-style status summary for Mission Control
   let statusSummary =
