@@ -377,60 +377,64 @@ export default function ClaimPoolPage() {
 
   useEffect(() => {
   let cancelled = false;
+  let intervalId: number | null = null;
 
   async function loadPortalState() {
-  try {
-    const res = await getClaimPortalState();
+    try {
+      const res = await getClaimPortalState();
 
-    // Normalise names coming from the backend (old vs new)
-    const snapshotAt =
-      (res as any).snapshotAt ?? (res as any).snapshotTakenAt ?? null;
+      const snapshotAt =
+        (res as any).snapshotAt ??
+        (res as any).snapshotTakenAt ??
+        null;
 
-    const distributionDoneAt =
-      (res as any).distributionDoneAt ??
-      (res as any).distributionCompletedAt ??
-      null;
+      const distributionDoneAt =
+        (res as any).distributionDoneAt ??
+        (res as any).distributionCompletedAt ??
+        null;
 
-    // Schedule → phase calculation (using claim-schedule.json)
-    const phaseInfo = getPhaseForNow(SCHEDULE);
-    const countdown = formatCountdown(phaseInfo.countdownTarget);
+      const phaseInfo = getPhaseForNow(SCHEDULE);
+      const countdown = formatCountdown(phaseInfo.countdownTarget);
 
-    // Merge schedule + normalised fields into the loaded state
-    const mergedState: ClaimPortalState = {
-      ...res, // everything from API
+      const mergedState: ClaimPortalState = {
+        ...res,
+        snapshotAt,
+        distributionDoneAt,
 
-      // normalised new names
-      snapshotAt,
-      distributionDoneAt,
+        roundNumber: SCHEDULE.roundNumber,
+        claimWindowOpensAt: SCHEDULE.windowOpensAt,
+        claimWindowClosesAt: SCHEDULE.windowClosesAt,
+        distributionStartsAt: SCHEDULE.distributionStartsAt,
 
-      // schedule-driven fields (from JSON)
-      roundNumber: SCHEDULE.roundNumber,
-      claimWindowOpensAt: SCHEDULE.windowOpensAt,
-      claimWindowClosesAt: SCHEDULE.windowClosesAt,
-      distributionStartsAt: SCHEDULE.distributionStartsAt,
+        windowPhase: phaseInfo.phase,
+        snapshotLabel: phaseInfo.snapshotLabel,
+        claimWindowStatus: phaseInfo.claimWindowStatus,
+        frontEndStatus: phaseInfo.frontEndStatus,
+        numericCountdown: countdown,
+      };
 
-      windowPhase: phaseInfo.phase,
-      snapshotLabel: phaseInfo.snapshotLabel,
-      claimWindowStatus: phaseInfo.claimWindowStatus,
-      frontEndStatus: phaseInfo.frontEndStatus,
-      numericCountdown: countdown,
-    };
-
-    if (!cancelled) {
-      setState(mergedState);
-    }
-  } catch (err: any) {
-    console.error('Failed to load portal state', err);
-    if (!cancelled) {
-      setError(err?.message ?? 'Failed to load portal state');
+      if (!cancelled) {
+        setState(mergedState);
+      }
+    } catch (err: any) {
+      console.error('Failed to load portal state', err);
+      if (!cancelled) {
+        setError(err?.message ?? 'Failed to load portal state');
+      }
     }
   }
-}
 
+  // Initial load
   loadPortalState();
+
+  // Background polling every 30 seconds
+  intervalId = window.setInterval(loadPortalState, 5_000);
 
   return () => {
     cancelled = true;
+    if (intervalId !== null) {
+      window.clearInterval(intervalId);
+    }
   };
 }, []);
 
