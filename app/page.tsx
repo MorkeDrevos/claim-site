@@ -7,50 +7,43 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-function useAutoReloadOnNewBuild() {
-  React.useEffect(() => {
-    let cancelled = false;
-    let timeoutId: number | null = null;
-    let initialBuildId: string | null = null;
-
-    const check = async () => {
-      try {
-        const res = await fetch('/api/build-info', { cache: 'no-store' });
-        if (!res.ok) return;
-
-        const data = await res.json();
-        const latest = data?.buildId ?? null;
-
-        // First run: store the current build ID
-        if (!initialBuildId) {
-          initialBuildId = latest;
-        } else if (
-          latest &&
-          initialBuildId &&
-          latest !== initialBuildId
-        ) {
-          // New deployment detected → reload once
-          window.location.reload();
-          return;
-        }
-      } catch (e) {
-        console.error('build-info check failed', e);
-      } finally {
-        if (!cancelled) {
-          // 🔁 Check every 10 seconds – good for “game” feeling
-          timeoutId = window.setTimeout(check, 10_000);
-        }
-      }
-    };
-
-    check();
-
-    return () => {
-      cancelled = true;
-      if (timeoutId !== null) window.clearTimeout(timeoutId);
-    };
-  }, []);
-}
+// function useAutoReloadOnNewBuild() {
+//   React.useEffect(() => {
+//     let cancelled = false;
+//     let timeoutId: number | null = null;
+//     let initialBuildId: string | null = null;
+//
+//     const check = async () => {
+//       try {
+//         const res = await fetch('/api/build-info', { cache: 'no-store' });
+//         if (!res.ok) return;
+//
+//         const data = await res.json();
+//         const latest = data?.buildId ?? null;
+//
+//         if (!initialBuildId) {
+//           initialBuildId = latest;
+//         } else if (latest && initialBuildId && latest !== initialBuildId) {
+//           window.location.reload();
+//           return;
+//         }
+//       } catch (e) {
+//         console.error('build-info check failed', e);
+//       } finally {
+//         if (!cancelled) {
+//           timeoutId = window.setTimeout(check, 10_000);
+//         }
+//       }
+//     };
+//
+//     check();
+//
+//     return () => {
+//       cancelled = true;
+//       if (timeoutId !== null) window.clearTimeout(timeoutId);
+//     };
+//   }, []);
+// }
 
 /* ───────────────────────────
    Types
@@ -271,8 +264,6 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  useAutoReloadOnNewBuild();   // first line inside
-
   const { addToast, ToastContainer } = useToast();
   const [state, setState] = useState<ClaimPortalState | null>(null);
   const [error, setError] = useState<string | null>(null);
