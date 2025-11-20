@@ -1017,7 +1017,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
-        <div className="fixed top-[60px] left-0 right-0 z-50 flex justify-center">
+        <div className="fixed top-[62px] left-0 right-0 z-50 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
             <span>Autonomous update complete · Systems recalibrated</span>
