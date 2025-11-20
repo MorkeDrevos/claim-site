@@ -1,27 +1,29 @@
 'use client';
 
 import React from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-export default function ConnectWalletButton() {
-  const { publicKey } = useWallet();
+type ConnectWalletButtonProps = {
+  className?: string;
+};
 
-  // You can either use WalletMultiButton default styling
-  // or wrap it in your own classes
+export default function ConnectWalletButton({
+  className = '',
+}: ConnectWalletButtonProps) {
   return (
-    <div className="inline-flex">
-      <WalletMultiButton
-        style={{
-          borderRadius: 999,
-          fontSize: 11,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          padding: '8px 20px',
-        }}
-      >
-        {publicKey ? undefined : 'Connect wallet'}
-      </WalletMultiButton>
-    </div>
+    <WalletMultiButton
+      className={[
+        // base shape + text
+        'rounded-full text-[11px] font-semibold uppercase tracking-[0.22em]',
+        // colours
+        'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
+        'border border-emerald-400/40 text-emerald-200',
+        'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
+        'hover:from-emerald-400/35 hover:to-emerald-500/40',
+        'hover:border-emerald-400 hover:text-white',
+        'transition-all',
+        className,
+      ].join(' ')}
+    />
   );
 }
