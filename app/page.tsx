@@ -293,6 +293,8 @@ export default function ClaimPoolPage() {
   const walletProviderRef = useRef<any | null>(null);
 
   const [preFlash, setPreFlash] = useState(false);
+  const [justSnapshotFired, setJustSnapshotFired] = useState(false);
+  const snapshotFiredRef = useRef(false);
 
     /* ───────────────────────────
      Phase + countdown (safe when state is null)
@@ -622,15 +624,33 @@ const snapshotTimeLabel =
       })
     : null;
 
-// For the “Latest snapshot:” line
-const snapshotDateLabel = effectiveSnapshotIso ?? '';
+  // For the “Latest snapshot:” line
+  const snapshotDateLabel = effectiveSnapshotIso ?? '';
 
-// UI helpers for hero strip
-const showSnapshotPreFomo =
+  // UI helpers for hero strip
+  const showSnapshotPreFomo =
   currentPhase === 'scheduled' && isSnapshotSoon;
 
-const showSnapshotLocked =
+  const showSnapshotLocked =
   currentPhase === 'snapshot' && !!snapshotTimeLabel;
+
+  // Fire a one-shot flash when the snapshot happens
+  useEffect(() => {
+  let timeoutId: number | undefined;
+
+  if (hasSnapshotHappened && !snapshotFiredRef.current) {
+    snapshotFiredRef.current = true;
+    setJustSnapshotFired(true);
+
+    timeoutId = window.setTimeout(() => {
+      setJustSnapshotFired(false);
+    }, 4000); // 4 second highlight
+  }
+
+  return () => {
+    if (timeoutId) window.clearTimeout(timeoutId);
+  };
+}, [hasSnapshotHappened]);
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
@@ -898,12 +918,12 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* DRILL MODE BANNER */}
-      <div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-300 backdrop-blur">
-        <p className="text-[13px] font-medium tracking-wide flex items-center gap-2">
-          <span className="text-[15px]">⚡</span>
-          Accelerated testing mode active — timings are running in fast-forward.
-        </p>
-      </div>
+      {/*
+<div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-300 backdrop-blur">
+  <span className="mt-[1.5px] mr-2 inline-block text-center" />
+  Accelerated testing mode active — timings are running in fast-forward.
+</div>
+*/}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
@@ -1015,17 +1035,17 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 {/* CLAIM WINDOW CARD */}
                 <div
                   className={[
-                    'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-                    'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-                    preFlash ? 'animate-pulse' : '',
-                    isLive
-                      ? 'border-emerald-500/50'
-                      : isRestingClosed
-                      ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-                      : isDistributing || isDone
-                      ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
-                      : 'border-emerald-400/60'
-                  ].join(' ')}
+  'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+  'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+  (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
+  isLive
+    ? 'border-emerald-500/50'
+    : isRestingClosed
+    ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
+    : isDistributing || isDone
+    ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
+    : 'border-emerald-400/60'
+].join(' ')}
                 >
                   {/* TOP ROW */}
                   <div className="flex items-center justify-between gap-6">
@@ -1148,18 +1168,16 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       </div>
     )}
 
-    {/* Snapshot locked (after it fired) */}
     {showSnapshotLocked && (
-      <div
-        className="
-          mt-2 inline-flex items-center gap-2
-          rounded-full
-          bg-emerald-500/8
-          px-3 py-1.5
-          border border-emerald-400/40
-          shadow-[0_0_12px_rgba(16,185,129,0.4)]
-        "
-      >
+  <div
+    className={[
+      'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+      'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+      justSnapshotFired
+        ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
+        : ''
+    ].join(' ')}
+  >
         <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
           <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
         </span>
