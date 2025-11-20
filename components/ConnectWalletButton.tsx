@@ -3,27 +3,54 @@
 import React from 'react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-type ConnectWalletButtonProps = {
-  className?: string;
-};
-
 export default function ConnectWalletButton({
-  className = '',
-}: ConnectWalletButtonProps) {
+  fullWidth = false,
+}: {
+  fullWidth?: boolean;
+}) {
   return (
-    <WalletMultiButton
+    <div
       className={[
-        // base shape + text
-        'rounded-full text-[11px] font-semibold uppercase tracking-[0.22em]',
-        // colours
-        'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
-        'border border-emerald-400/40 text-emerald-200',
-        'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
-        'hover:from-emerald-400/35 hover:to-emerald-500/40',
-        'hover:border-emerald-400 hover:text-white',
-        'transition-all',
-        className,
+        // Width handling
+        fullWidth ? 'w-full' : 'w-auto',
+
+        // Shared styling wrapper
+        'relative group',
       ].join(' ')}
-    />
+    >
+      {/* Outer glow frame */}
+      <div
+        className="
+          absolute inset-0 rounded-2xl 
+          bg-gradient-to-br from-emerald-400/20 via-slate-600/10 to-transparent
+          blur-[14px] opacity-0 group-hover:opacity-40 transition
+        "
+      />
+
+      {/* Actual button */}
+      <WalletMultiButton
+        className={[
+          'z-[5] relative rounded-2xl',
+
+          // Typography
+          'text-[16px] font-semibold',
+
+          // Background
+          'bg-slate-900/80 backdrop-blur',
+          'border border-slate-700/70',
+
+          // Hover styling
+          'hover:bg-slate-800/80 hover:border-emerald-500/60 hover:text-emerald-300',
+
+          // Padding / size
+          fullWidth
+            ? 'w-full px-5 py-4 flex justify-center'
+            : 'px-5 py-2',
+
+          // Animation
+          'transition-all duration-200',
+        ].join(' ')}
+      />
+    </div>
   );
 }
