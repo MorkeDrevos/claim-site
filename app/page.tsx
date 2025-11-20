@@ -1167,7 +1167,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   
 <div className="flex flex-col">
   {/* Label + icon */}
-  <p className="mt-[12px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <p className="-mt-[12px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-[13px] w-[13px] text-emerald-300 opacity-90"
@@ -1293,7 +1293,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         </div>
                       </div>
 
-                      <div className="mt-5.5 flex items-end justify-end">
+                      <div className="mt-1.5 flex items-end justify-end">
                         <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
                           {rewardAmountText}
                           <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
