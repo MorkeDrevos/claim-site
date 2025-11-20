@@ -7,21 +7,27 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-const CURRENT_BUILD_ID =
-  process.env.NEXT_PUBLIC_BUILD_ID || 'dev';
-
 function useAutoReloadOnNewBuild() {
+  const initialIdRef = React.useRef<string | null>(null);
+
   React.useEffect(() => {
     let cancelled = false;
-    let timeoutId: number | null = null;
+    let timeoutId: number | undefined;
 
     const check = async () => {
       try {
         const res = await fetch('/api/build-info', { cache: 'no-store' });
         if (!res.ok) return;
-        const data = await res.json();
 
-        if (!cancelled && data?.buildId && data.buildId !== CURRENT_BUILD_ID) {
+        const data = await res.json();
+        const remoteId: string | null = data?.buildId || null;
+        if (cancelled || !remoteId) return;
+
+        // First successful check: remember the current build ID
+        if (initialIdRef.current === null) {
+          initialIdRef.current = remoteId;
+        } else if (remoteId !== initialIdRef.current) {
+          // Build ID changed compared to what we started with → reload once
           window.location.reload();
           return;
         }
@@ -38,7 +44,9 @@ function useAutoReloadOnNewBuild() {
 
     return () => {
       cancelled = true;
-      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, []);
 }
