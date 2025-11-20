@@ -253,8 +253,6 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  // Toast & state, etc...
-  const { addToast, ToastContainer } = useToast();
 
   const [state, setState] = useState<ClaimPortalState | null>(null);
   const [justUpdated, setJustUpdated] = useState(false);  // 👈 ADD THIS
