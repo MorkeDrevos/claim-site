@@ -365,6 +365,9 @@ export default function ClaimPoolPage() {
   const isDone = currentPhase === 'done';
   const isClosedOnly = currentPhase === 'closed';
 
+  const isRestingClosed =
+  isClosedOnly && !isDistributionPhase && !isDone;
+
   const isClosed =
     currentPhase === 'closed' ||
     currentPhase === 'distribution' ||
@@ -999,145 +1002,106 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 >
                   {/* TOP ROW */}
                   <div className="flex items-center justify-between gap-6">
-                    {/* LEFT SIDE */}
-                    {isDone ? (
-                      <div className="flex flex-col pl-1 sm:pl-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                          REWARDS DISTRIBUTED
-                        </p>
-                        <p className="mt-2 text-[13px] text-emerald-100/90">
-                          Next window will be scheduled soon.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col pl-1 sm:pl-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                          {isLive ? (
-                            <span className="inline-flex items-center gap-2">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="9"
-                                  className="opacity-30"
-                                />
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="5"
-                                  className="opacity-60"
-                                />
-                                <circle cx="12" cy="12" r="2" />
-                              </svg>
-                              WINDOW CLOSES IN
-                            </span>
-                          ) : isClosedOnly ? (
-                            <span className="inline-flex items-center gap-2">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="9"
-                                  className="opacity-30"
-                                />
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="5"
-                                  className="opacity-60"
-                                />
-                                <circle cx="12" cy="12" r="2" />
-                              </svg>
-                              REWARDS DISTRIBUTION STARTS IN
-                            </span>
-                          ) : isDistributing ? (
-                            <span className="inline-flex items-center gap-2">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="9"
-                                  className="opacity-30"
-                                />
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="5"
-                                  className="opacity-60"
-                                />
-                                <circle cx="12" cy="12" r="2" />
-                              </svg>
-                              DISTRIBUTION COMPLETES IN
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-2">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                              >
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="9"
-                                  className="opacity-30"
-                                />
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="5"
-                                  className="opacity-60"
-                                />
-                                <circle cx="12" cy="12" r="2" />
-                              </svg>
-                              NEXT WINDOW IN
-                            </span>
-                          )}
-                        </p>
-
-                        {countdownTargetIso && (
-  <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
-    {isLive && (
-      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-    )}
-    <p
-      className={[
-        'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-        isFinalTen
-          ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
-          : '',
-      ].join(' ')}
-    >
-      {countdownLabel || '--:--:--'}
+                    
+{/* LEFT SIDE */}
+{isDone ? (
+  <div className="flex flex-col pl-1 sm:pl-2">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+      REWARDS DISTRIBUTED
+    </p>
+    <p className="mt-2 text-[13px] text-emerald-100/90">
+      Standing by for the next round.
     </p>
   </div>
-)}
+) : (
+  <div className="flex flex-col pl-1 sm:pl-2">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive ? (
+        <span className="inline-flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="9" className="opacity-30" />
+            <circle cx="12" cy="12" r="5" className="opacity-60" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+          WINDOW CLOSES IN
+        </span>
+      ) : isClosedOnly ? (
+        <span className="inline-flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="9" className="opacity-30" />
+            <circle cx="12" cy="12" r="5" className="opacity-60" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+          REWARDS DISTRIBUTION STARTS IN
+        </span>
+      ) : isDistributing ? (
+        <span className="inline-flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="9" className="opacity-30" />
+            <circle cx="12" cy="12" r="5" className="opacity-60" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+          DISTRIBUTION COMPLETES IN
+        </span>
+      ) : (
+        <span className="inline-flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="9" className="opacity-30" />
+            <circle cx="12" cy="12" r="5" className="opacity-60" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+          NEXT WINDOW IN
+        </span>
+      )}
+    </p>
 
-{/* Snapshot FOMO strip */}
+    {countdownTargetIso && (
+      <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
+        <p
+          className={[
+            'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+            isFinalTen
+              ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+              : '',
+          ].join(' ')}
+        >
+          {countdownLabel || '--:--:--'}
+        </p>
+      </div>
+    )}
+
+    {/* Snapshot FOMO strip */}
 {isSnapshotPhase && (
   <div
     className="
@@ -1155,7 +1119,6 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     </span>
   </div>
 )}
-
                     {/* RIGHT: pool label + amount */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
