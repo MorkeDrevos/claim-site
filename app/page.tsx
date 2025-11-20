@@ -613,27 +613,6 @@ const isSnapshotSoon =
   snapshotDiffMs > 0 &&
   snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
 
-const isSnapshotActive = currentPhase === 'snapshot';
-
-// Short human label, e.g. "09:58"
-const snapshotTimeLabel =
-  effectiveSnapshotIso && hasSnapshotHappened
-    ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-    : null;
-
-// For the “Latest snapshot:” line
-const snapshotDateLabel = effectiveSnapshotIso ?? '';
-
-// UI helpers for hero strip
-const showSnapshotPreFomo =
-  currentPhase === 'scheduled' && isSnapshotSoon;
-
-const showSnapshotLocked =
-  currentPhase === 'snapshot' && !!snapshotTimeLabel;
-
 // Short human label, e.g. "09:58"
 const snapshotTimeLabel =
   snapshotAt && hasSnapshotHappened
