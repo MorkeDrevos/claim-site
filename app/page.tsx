@@ -838,23 +838,23 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   progressMessage = isSnapshotSoon
     ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
     : 'Claim window scheduled. Countdown shows when it opens.';
-} else if (currentPhase === 'snapshot') {
+  } else if (currentPhase === 'snapshot') {
   progressMessage = snapshotTimeLabel
     ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
     : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
-} else if (currentPhase === 'open') {
-    progressMessage =
+  } else if (currentPhase === 'open') {
+  progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-    progressMessage =
+  progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } } else if (currentPhase === 'distribution') {
   progressMessage =
     'Rewards are being sent out - watch your wallet, this round is paying.';
-} } else if (currentPhase === 'done') {
+  } else if (currentPhase === 'done') {
   progressMessage =
     'Round complete. Rewards landed – get ready for the next cycle.';
-}
+  }
 
 
   let statusSummary =
@@ -871,12 +871,12 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     statusSummary =
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
-  statusSummary =
+    statusSummary =
     'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
-  statusSummary =
+    statusSummary =
     'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
-} else if (currentPhase === 'closed') {
+  } else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
