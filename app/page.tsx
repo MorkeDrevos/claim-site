@@ -958,7 +958,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
-        <div className="fixed top-[62px] left-0 right-0 z-50 flex justify-center">
+        <div className="fixed top-[66px] left-0 right-0 z-50 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
             <span>Autonomous update complete · Systems recalibrated</span>
@@ -1314,99 +1314,75 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 </div>
             </div>
 
-            {/* RIGHT COLUMN – Mission Control */}
-            <div className="w-full md:max-w-xs mt-8 md:mt-[18px]">
-              <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
-                {/* Header row */}
-                <div className="flex items-baseline justify-between pr-1">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-                    Round {roundNumber ?? 1}
-                  </p>
-                  <span
-                    className={[
-                      'text-[12px] font-semibold uppercase tracking-[0.32em]',
-                      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
-                    ].join(' ')}
-                  >
-                    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
-                  </span>
-                </div>
+            {/* RIGHT COLUMN — Mission Control */}
+<div className="w-full md:max-w-xs md:mt-[18px] mt-8 px-2 md:px-0">
+  <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
 
-                {/* Snapshot info */}
-                <div className="space-y-1">
-                  <p className="text-[20px] font-semibold text-slate-100">
-                    Snapshot #{snapshotBlock}
-                  </p>
-                  <p className="text-[12px] text-slate-400">
-                    {currentPhase === 'open'
-                      ? 'window open'
-                      : currentPhase === 'scheduled'
-                      ? 'window scheduled'
-                      : currentPhase === 'distribution'
-                      ? 'distributing'
-                      : 'window closed'}
-                  </p>
-                </div>
+    {/* Header row */}
+    <div className="flex items-baseline justify-between pr-1">
+      <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+        Round {roundNumber ?? 1}
+      </p>
 
-                {/* Status rows */}
-                <div className="mt-3 space-y-3">
-                  {missionRows.map((row) => {
-                    const isPill = row.mode === 'pill';
-                    const plainValueClass =
-                      row.tone === 'success'
-                        ? 'text-[12px] text-emerald-300'
-                        : row.tone === 'warning'
-                        ? 'text-[12px] text-amber-300'
-                        : 'text-[12px] text-slate-400';
+      <span
+        className={[
+          'text-[12px] font-semibold uppercase tracking-[0.32em]',
+          hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
+        ].join(' ')}
+      >
+        {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
+      </span>
+    </div>
 
-                    const showWarningUnderline =
-                      row.tone === 'warning' && !isPill;
+    {/* Snapshot info */}
+    <div className="space-y-1">
+      <p className="text-[20px] font-semibold text-slate-100">
+        Snapshot #{snapshotBlock}
+      </p>
 
-                    return (
-                      <div
-                        key={row.label}
-                        className="flex items-center justify-between gap-3"
-                      >
-                        <span className="text-[12.5px] text-slate-300 whitespace-nowrap">
-                          {row.label}
-                        </span>
+      <p className="text-[12px] text-slate-400 leading-relaxed">
+        {currentPhase === 'open' && 'window open'}
+        {currentPhase === 'scheduled' && 'window scheduled'}
+        {currentPhase === 'distribution' && 'distributing'}
+        {currentPhase === 'closed' && 'window closed'}
+      </p>
+    </div>
 
-                        {isPill ? (
-                          <span
-                            className={[
-                              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5',
-                              'text-[10px] font-semibold uppercase tracking-[0.22em] whitespace-nowrap border',
-                              row.tone === 'success'
-                                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                                : row.tone === 'warning'
-                                ? 'bg-amber-500/10 text-amber-200 border-amber-500/40'
-                                : 'bg-slate-900/80 text-slate-300 border-slate-700/70',
-                            ].join(' ')}
-                          >
-                            <span
-                              className={[
-                                'h-1.5 w-1.5 rounded-full',
-                                row.tone === 'success'
-                                  ? 'bg-emerald-400'
-                                  : row.tone === 'warning'
-                                  ? 'bg-amber-400'
-                                  : 'bg-slate-500/70',
-                              ].join(' ')}
-                            />
-                            {row.value}
-                          </span>
-                        ) : (
-                          <div className="flex flex-col items-end">
-                            <span className={plainValueClass}>{row.value}</span>
-                            {showWarningUnderline && (
-                              <span className="mt-0.5 h-[1px] w-full rounded-full bg-amber-400/90 shadow-[0_0_12px_rgba(251,191,36,0.9)] animate-pulse" />
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+    {/* Status rows */}
+    <div className="mt-3 space-y-3">
+      {missionRows.map((row) => {
+        const isPill = row.mode === 'pill';
+        const pillValueClass =
+          row.tone === 'success'
+            ? 'text-[12px] text-emerald-300'
+            : row.tone === 'warning'
+            ? 'text-[12px] text-amber-300'
+            : 'text-[12px] text-slate-300';
+
+        return (
+          <div key={row.label} className="flex items-start justify-between">
+            <p className="text-[12px] text-slate-400">{row.label}</p>
+
+            {isPill ? (
+              <span
+                className={[
+                  'px-2 py-[3px] rounded-full bg-slate-800 text-[12px] font-semibold',
+                  row.tone === 'success'
+                    ? 'text-emerald-300'
+                    : row.tone === 'warning'
+                    ? 'text-amber-300'
+                    : 'text-slate-300',
+                ].join(' ')}
+              >
+                {row.value}
+              </span>
+            ) : (
+              <span className={pillValueClass}>{row.value}</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
 
                 {/* Autopilot strip */}
                 <div className="mt-3 flex items-center gap-3">
