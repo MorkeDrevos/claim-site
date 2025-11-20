@@ -1123,40 +1123,46 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     )}
 
     {/* Snapshot pre-warning (before it fires) */}
-{showSnapshotPreFomo && (
-  <div
-    className="
-      mt-2 inline-flex items-center gap-2
-      rounded-full
-      bg-amber-500/8
-      px-3 py-1.5
-      border border-amber-400/40
-      shadow-[0_0_12px_rgba(251,191,36,0.28)]
-    "
-  >
-    <span className="h-1.5 w-1.5 rounded-full bg-amber-300 shadow-[0_0_6px_rgba(251,191,36,0.8)] animate-pulse" />
-    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
-      Snapshot engine is arming – make sure your wallet holds the minimum.
-    </span>
-  </div>
-)}
+    {showSnapshotPreFomo && (
+      <div
+        className="
+          mt-2 inline-flex items-center gap-2
+          rounded-full
+          bg-amber-500/8
+          px-3 py-1.5
+          border border-amber-400/40
+          shadow-[0_0_12px_rgba(251,191,36,0.28)]
+        "
+      >
+        <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-amber-300/70 bg-amber-300/10 shadow-[0_0_14px_rgba(251,191,36,0.9)]">
+          <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.95)] animate-pulse" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+          Snapshot engine is arming - make sure your wallet holds the minimum.
+        </span>
+      </div>
+    )}
 
-{/* Snapshot locked (after it fired, before/around claim window) */}
-{showSnapshotLocked && (
-  <div
-    className="
-      mt-2 inline-flex items-center gap-2
-      rounded-full
-      bg-emerald-500/8
-      px-3 py-1.5
-      border border-emerald-400/40
-      shadow-[0_0_12px_rgba(16,185,129,0.4)]
-    "
-  >
-    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_6px_rgba(16,185,129,0.9)]" />
-    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-      Snapshot locked at {snapshotTimeLabel} – eligibility for this round is set.
-    </span>
+    {/* Snapshot locked (after it fired) */}
+    {showSnapshotLocked && (
+      <div
+        className="
+          mt-2 inline-flex items-center gap-2
+          rounded-full
+          bg-emerald-500/8
+          px-3 py-1.5
+          border border-emerald-400/40
+          shadow-[0_0_12px_rgba(16,185,129,0.4)]
+        "
+      >
+        <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
+          <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+          Snapshot locked at {snapshotTimeLabel} - eligibility for this round is set.
+        </span>
+      </div>
+    )}
   </div>
 )}
 
