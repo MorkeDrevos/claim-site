@@ -749,9 +749,13 @@ export default function ClaimPoolPage() {
         : 'Reward distribution in progress',
     },
   ];
+  
+// Treat the final "done" phase as the same step as "distribution"
+const effectivePhaseForSteps =
+  currentPhase === 'done' ? 'distribution' : currentPhase;
 
-  const activeIndex = steps.findIndex((s) => s.id === currentPhase);
-  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   let progressMessage = '';
 
