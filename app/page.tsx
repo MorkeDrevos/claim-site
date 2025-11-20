@@ -1251,7 +1251,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       ].join(' ')}
     >
       <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
-        <span className="ml-[23px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
       </span>
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
         Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
@@ -1271,7 +1271,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         <div className="relative group">
                           <button
   type="button"
-  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition mt-[-2px]"
+  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition mt-[-4px]"
 >
   ?
 </button>
