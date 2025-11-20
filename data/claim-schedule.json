@@ -1,8 +1,8 @@
 {
-  "roundNumber": 121,
-  "snapshotAt": "2025-11-20T08:53:00Z",
-  "windowOpensAt": "2025-11-20T09:02:00Z",
-  "windowClosesAt": "2025-11-20T09:03:00Z",
-  "distributionStartsAt": "2025-11-20T09:04:00Z",
-  "distributionDoneAt": "2025-11-20T09:05:00Z"
+  "roundNumber": 2,
+  "snapshotAt": "2025-11-20T09:00:00Z",
+  "windowOpensAt": "2025-11-20T09:10:00Z",
+  "windowClosesAt": "2025-11-20T09:11:00Z",
+  "distributionStartsAt": "2025-11-20T09:12:00Z",
+  "distributionDoneAt": "2025-11-20T09:15:00Z"
 }
