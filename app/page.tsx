@@ -1027,7 +1027,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-CURRENT ROUND POOLemerald-500/60 via-emerald-500/20 to-slate-950" />
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
@@ -1251,7 +1251,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       ].join(' ')}
     >
       <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
-        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+        <span className="ml-[23px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
       </span>
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
         Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
@@ -1264,17 +1264,17 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
+                        <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
     CURRENT ROUND POOL
   </p>
 
                         <div className="relative group">
                           <button
-                            type="button"
-                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
-                          >
-                            ?
-                          </button>
+  type="button"
+  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition mt-[-2px]"
+>
+  ?
+</button>
                           <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                             <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
                               <p className="text-[12px] text-slate-200 leading-relaxed">
