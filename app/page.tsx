@@ -271,9 +271,8 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  // Toast & portal state
-  const { addToast, ToastContainer } = useToast();
-  const [state, setState] = useState<ClaimPortalState | null>(null);
+  // Toast & state, etc...
+
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
@@ -295,8 +294,8 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // NEW: “portal updated” banner state
-  const [justUpdated, setJustUpdated] = useState(false);
+  // 🔥 NEW: random FOMO banner text
+  const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
   // Enable the auto-reload hook
   useAutoReloadOnNewBuild();
@@ -351,7 +350,9 @@ function getRandomFomoMessage() {
   const opensMs =
     SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
   const closesMs =
-    SCHEDULE.windowClosesAt ? new Date(SCHEDULE.windowClosesAt).getTime() : null;
+    SCHEDULE.windowClosesAt
+      ? new Date(SCHEDULE.windowClosesAt).getTime()
+      : null;
   const distStartMs =
     SCHEDULE.distributionStartsAt
       ? new Date(SCHEDULE.distributionStartsAt).getTime()
@@ -360,6 +361,55 @@ function getRandomFomoMessage() {
     SCHEDULE.distributionDoneAt
       ? new Date(SCHEDULE.distributionDoneAt).getTime()
       : null;
+
+    // 🔥 Random FOMO banner between 30min and 5min before window opens
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!opensMs) return; // no window = nothing to do
+
+    // 30min and 5min before open (in ms)
+    const thirtyMin = 30 * 60 * 1000;
+    const fiveMin = 5 * 60 * 1000;
+
+    const fireWindowStart = opensMs - thirtyMin;
+    const fireWindowEnd = opensMs - fiveMin;
+
+    const now = Date.now();
+
+    // If it's already too late (inside last 5min or after), skip
+    if (now >= fireWindowEnd) return;
+
+    // Clamp random time so it's always >= now
+    const effectiveStart = Math.max(now, fireWindowStart);
+    const range = Math.max(fireWindowEnd - effectiveStart, 0);
+
+    if (range === 0) return;
+
+    const randomTime = effectiveStart + Math.random() * range;
+    const delay = randomTime - now;
+
+    // schedule hype banner
+    const id = window.setTimeout(() => {
+      setFomoBanner(getRandomFomoMessage());
+
+      // optional: auto-hide after ~20s
+      const hideId = window.setTimeout(() => {
+        setFomoBanner(null);
+      }, 20_000);
+
+      // store hideId on window so cleanup can cancel it if needed
+      (window as any).__claimFomoHideId && window.clearTimeout(
+        (window as any).__claimFomoHideId
+      );
+      (window as any).__claimFomoHideId = hideId;
+    }, delay);
+
+    return () => {
+      window.clearTimeout(id);
+      const hideId = (window as any).__claimFomoHideId;
+      if (hideId) window.clearTimeout(hideId);
+    };
+  }, [opensMs]);
 
   // Monotonic phase ladder
   let currentPhase: WindowPhase = 'scheduled';
@@ -1163,33 +1213,27 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     </p>
   )}
 
-  {/* Snapshot pre-warning (before it fires) */}
-  {showSnapshotPreFomo && (
-    <div
-      className="
-        relative mt-2 inline-flex items-center gap-3
-        rounded-full border border-amber-400/70
-        bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-emerald-400/15
-        px-4 py-1.5
-        shadow-[0_0_24px_rgba(251,191,36,0.65)]
-      "
-    >
-      {/* Glow ring + ping dot */}
-      <div className="relative flex h-[18px] w-[32px] items-center justify-center">
-        {/* soft outer glow */}
-        <span className="absolute h-[18px] w-[32px] rounded-full bg-amber-400/25 blur-md opacity-80" />
-        {/* inner ring */}
-        <span className="absolute h-[14px] w-[28px] rounded-full border border-amber-300/70 bg-amber-300/10" />
-        {/* hot core */}
-        <span className="relative h-[8px] w-[8px] rounded-full bg-amber-300 shadow-[0_0_14px_rgba(251,191,36,0.95)] animate-ping" />
+    {/* 🔥 Random FOMO hype banner (30–5min before open) */}
+    {fomoBanner && (
+      <div
+        className="
+          mt-3
+          inline-flex items-center gap-3
+          rounded-full border border-amber-300/70
+          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
+          px-4 py-2
+          shadow-[0_0_32px_rgba(251,191,36,0.65)]
+          animate-[pulse_1.4s_ease-in-out_infinite]
+        "
+      >
+        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
+          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+          {fomoBanner}
+        </span>
       </div>
-
-      {/* Text */}
-      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-        Snapshot engine is arming - make sure your wallet holds the minimum.
-      </p>
-    </div>
-  )}
+    )}
 
   {/* Snapshot locked pill */}
   {showSnapshotLocked && (
