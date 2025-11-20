@@ -1,48 +1,47 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { clusterApiUrl } from '@solana/web3.js';
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-
-// @ts-ignore – using runtime types from wallet-adapter
+import React, { ReactNode, useMemo } from 'react';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
   BackpackWalletAdapter,
+  GlowWalletAdapter,
   LedgerWalletAdapter,
-  BraveWalletAdapter,
   CoinbaseWalletAdapter,
-  ExodusWalletAdapter,
   TokenPocketWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 
-type Props = {
-  children: React.ReactNode;
-};
+// If you prefer a custom RPC, put it here:
+const RPC_ENDPOINT =
+  process.env.NEXT_PUBLIC_SOLANA_RPC ??
+  'https://api.mainnet-beta.solana.com';
 
-export default function WalletContextProvider({ children }: Props) {
-  const endpoint = useMemo(() => clusterApiUrl('mainnet-beta'), []);
+export default function WalletContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const network = WalletAdapterNetwork.Mainnet;
 
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
+      new SolflareWalletAdapter({ network }),
       new BackpackWalletAdapter(),
+      new GlowWalletAdapter(),
       new LedgerWalletAdapter(),
-      new BraveWalletAdapter(),
       new CoinbaseWalletAdapter(),
-      new ExodusWalletAdapter(),
       new TokenPocketWalletAdapter(),
+      // You can add more here if you want
     ],
-    []
+    [network]
   );
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
+    <ConnectionProvider endpoint={RPC_ENDPOINT}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
