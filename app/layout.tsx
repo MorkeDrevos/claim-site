@@ -4,7 +4,6 @@ import "./globals.css";
 import Image from "next/image";
 import { Analytics } from "@vercel/analytics/react";
 
-import '../styles/globals.css';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import WalletContextProvider from '../components/WalletContextProvider';
 
