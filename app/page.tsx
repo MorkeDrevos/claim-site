@@ -631,22 +631,22 @@ const snapshotFiredRef = useRef(false);
     currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
   // One-shot flash when snapshot fires
-  useEffect(() => {
-    let timeoutId: number | undefined;
-
-    if (hasSnapshotHappened && !snapshotFiredRef.current) {
-      snapshotFiredRef.current = true;
-      setJustSnapshotFired(true);
-
-      timeoutId = window.setTimeout(() => {
-        setJustSnapshotFired(false);
-      }, 4000); // 4 seconds of extra “boom” after snapshot
-    }
-
-    return () => {
-      if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, [hasSnapshotHappened]);
+// useEffect(() => {
+//   let timeoutId: number | undefined;
+//
+//   if (hasSnapshotHappened && !snapshotFiredRef.current) {
+//     snapshotFiredRef.current = true;
+//     setJustSnapshotFired(true);
+//
+//     timeoutId = window.setTimeout(() => {
+//       setJustSnapshotFired(false);
+//     }, 4000); // 4 seconds of extra “boom” after snapshot
+//   }
+//
+//   return () => {
+//     if (timeoutId) window.clearTimeout(timeoutId);
+//   };
+// }, [hasSnapshotHappened]);
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
