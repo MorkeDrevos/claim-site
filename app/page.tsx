@@ -130,7 +130,7 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
-// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
+// TEMP: JSON schedule doesn't define `mode` yet, ignore type warning here
 // @ts-ignore
 const SCHEDULE = schedule as ClaimSchedule;
 const SNAPSHOT_FOMO_WINDOW_MINUTES = 5; // or 10, whatever you want
@@ -326,7 +326,7 @@ export default function ClaimPoolPage() {
 
   const fomoMessages = [
   "Snapshot engine is arming - make sure your wallet holds the minimum.",
-  "Live window approaching - don’t miss your share.",
+  "Live window approaching - don't miss your share.",
   "Reminder: Only eligible wallets share the pool — check your balance."
 ];
 
@@ -743,7 +743,7 @@ function getRandomFomoMessage() {
 //
 //     timeoutId = window.setTimeout(() => {
 //       setJustSnapshotFired(false);
-//     }, 4000); // 4 seconds of extra “boom” after snapshot
+//     }, 4000); // 4 seconds of extra "boom" after snapshot
 //   }
 //
 //   return () => {
@@ -1739,7 +1739,7 @@ function getRandomFomoMessage() {
                     </li>
                   </ul>
                   <p className="text-[11px] text-slate-500">
-                    Eligibility is derived solely from the wallet’s token
+                    Eligibility is derived solely from the wallet's token
                     balance as it existed at the snapshot slot for each round.
                   </p>
                 </div>
@@ -1750,7 +1750,7 @@ function getRandomFomoMessage() {
                   <p className="text-[13px]">
                     Rewards are earned by presence. If you show up during the
                     live claim window and lock your share, you receive an equal
-                    split of that round’s pool.
+                    split of that round's pool.
                   </p>
                   <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
                     <li>Everyone who locks in receives an equal share.</li>
