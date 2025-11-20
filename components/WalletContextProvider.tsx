@@ -19,8 +19,6 @@ import {
   TokenPocketWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 
-import { JupiterWalletAdapter } from './JupiterWalletAdapter';
-
 type Props = {
   children: React.ReactNode;
 };
@@ -30,7 +28,6 @@ export default function WalletContextProvider({ children }: Props) {
 
   const wallets = useMemo(
     () => [
-      new JupiterWalletAdapter(),
       new PhantomWalletAdapter(),
       new BackpackWalletAdapter(),
       new SolflareWalletAdapter({ network: 'mainnet-beta' }),
