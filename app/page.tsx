@@ -1019,12 +1019,11 @@ return (
         : 'border-slate-700/60 bg-slate-900/80',
   ].join(' ')}
 >
-  {/* One row: countdown left, CLAIM right */}
-  <div className="flex items-start justify-between gap-6">
+    {/* One row: countdown left, CLAIM right */}
+  <div className="flex items-center justify-between gap-6">
     {/* LEFT: label + countdown */}
     <div className="flex flex-col pl-1 sm:pl-2">
-      
-            <p className="mt-[22px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
         {isLive ? (
           // Live window
           <span className="inline-flex items-center gap-2">
@@ -1113,15 +1112,14 @@ return (
         )}
       </p>
 
-      {/* Countdown pulled higher */}
-      <div className={`mt-21 ${isLive ? 'relative' : ''}`}>
+      {/* Countdown – same vertical rhythm as CLAIM amount */}
+      <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
         {isLive && (
           <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
         )}
         <p
           className={[
-            '-mt-2',
-            'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50',
+            'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
             isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
@@ -1131,18 +1129,17 @@ return (
     </div>
 
     {/* RIGHT: label + $CLAIM amount */}
-    <div className="flex flex-col items-end gap-0.5 text-right">
-      {/* Label + info icon + tooltip */}
-      <div className="relative flex items-baseline gap-2">
+    <div className="flex flex-col items-end text-right">
+      {/* Label + info icon + tooltip – aligned with left label */}
+      <div className="flex items-center gap-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
           Current round pool
         </p>
 
-        {/* Hover icon wrapper */}
-        <div className="group relative mt-[-22px]">
+        <div className="relative group">
           <button
             type="button"
-            className="relative top-[-1px] inline-flex h-4 w-4 items-center justify-center 
+            className="inline-flex h-4 w-4 items-center justify-center 
                        rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold
                        border border-slate-700 
                        hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
@@ -1164,8 +1161,7 @@ return (
               <p className="text-[12px] text-slate-200 leading-relaxed">
                 Rewards are paid in{' '}
                 <span className="text-emerald-300 font-medium">$CLAIM</span>
-                {' '}and shared equally among wallets that locked in during the live window.
-                {' '}
+                {' '}and shared equally among wallets that locked in during the live window.{' '}
                 <span className="text-emerald-300 font-medium">
                   USD values are approximate.
                 </span>
@@ -1175,14 +1171,8 @@ return (
         </div>
       </div>
 
-      {/* CLAIM pool – closer to the label and higher overall */}
-      <div
-        className="
-          flex gap-2 mt-[8px]
-          items-end justify-end
-          max-sm:flex-col max-sm:items-center max-sm:gap-1
-        "
-      >
+      {/* CLAIM pool – same top margin as countdown */}
+      <div className="mt-1.5 flex items-end justify-end">
         <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
           {rewardAmountText}
           <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
