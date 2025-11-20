@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
-import ConnectWalletButton from '../components/ConnectWalletButton';
+import ConnectWalletButton from './components/ConnectWalletButton';
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
@@ -1010,11 +1010,11 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
+    // ───────────────────────────
+  // Render
+  // ───────────────────────────
 
-   return (
+  return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
@@ -1028,7 +1028,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-CURRENT ROUND POOLemerald-500/60 via-emerald-500/20 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
