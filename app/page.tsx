@@ -8,11 +8,10 @@ import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
 function useAutoReloadOnNewBuild() {
-  const initialIdRef = React.useRef<string | null>(null);
-
   React.useEffect(() => {
     let cancelled = false;
-    let timeoutId: number | undefined;
+    let timeoutId: number | null = null;
+    let initialBuildId: string | null = null;
 
     const check = async () => {
       try {
@@ -20,14 +19,17 @@ function useAutoReloadOnNewBuild() {
         if (!res.ok) return;
 
         const data = await res.json();
-        const remoteId: string | null = data?.buildId || null;
-        if (cancelled || !remoteId) return;
+        const latest = data?.buildId ?? null;
 
-        // First successful check: remember the current build ID
-        if (initialIdRef.current === null) {
-          initialIdRef.current = remoteId;
-        } else if (remoteId !== initialIdRef.current) {
-          // Build ID changed compared to what we started with → reload once
+        // First run: store the current build ID
+        if (!initialBuildId) {
+          initialBuildId = latest;
+        } else if (
+          latest &&
+          initialBuildId &&
+          latest !== initialBuildId
+        ) {
+          // New deployment detected → reload once
           window.location.reload();
           return;
         }
@@ -35,7 +37,8 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 30_000);
+          // 🔁 Check every 10 seconds – good for “game” feeling
+          timeoutId = window.setTimeout(check, 10_000);
         }
       }
     };
@@ -44,9 +47,7 @@ function useAutoReloadOnNewBuild() {
 
     return () => {
       cancelled = true;
-      if (timeoutId !== undefined) {
-        window.clearTimeout(timeoutId);
-      }
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
     };
   }, []);
 }
