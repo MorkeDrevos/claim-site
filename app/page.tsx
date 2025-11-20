@@ -1167,7 +1167,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   
 <div className="flex flex-col">
   {/* Label + icon */}
-  <p className="mt-[3px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <p className="mt-[5px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-[13px] w-[13px] text-emerald-300 opacity-90"
