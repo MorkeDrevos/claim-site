@@ -738,14 +738,14 @@ export default function ClaimPoolPage() {
      Progress bar + status summary
   ─────────────────────────── */
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot taken' },
     { id: 'open', label: 'Claim window open' },
     { id: 'closed', label: 'Claim window closed' },
     {
       id: 'distribution',
-      label: distributionDone
+      label: isDone
         ? 'Rewards distributed'
         : 'Reward distribution in progress',
     },
