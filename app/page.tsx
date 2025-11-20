@@ -1146,7 +1146,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 ].join(' ')}
                 >
                   {/* TOP ROW */}
-                  <div className="flex items-start justify-between gap-6">
+                  <div className="flex items-start justify-between gap-6 pt-1">
                     
 {/* LEFT SIDE */}
 {isDone ? (
@@ -1306,11 +1306,11 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   onClick={handleClaimClick}
   disabled={!canClaim}
   className={[
-    // shape / text
-    'mt-5 flex items-center justify-center rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+    // layout
+    'mt-6 w-full flex items-center justify-center',
+    // shape + text
+    'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
     'transition-all duration-300',
-    // width behaviour
-    'w-full sm:max-w-xl sm:mx-auto', // full width on mobile, big centered pill on desktop
     // states
     canClaim
       ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
