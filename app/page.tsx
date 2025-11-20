@@ -1101,23 +1101,21 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     )}
 
     {/* Snapshot FOMO strip */}
-    {isSnapshotPhase && (
-      <div
-        className="
-          mt-3 inline-flex items-center gap-2
-          rounded-full
-          bg-amber-500/10
-          px-3 py-1.5
-          border border-amber-400/60
-          shadow-[0_0_18px_rgba(251,191,36,0.55)]
-        "
-      >
-        <span className="h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,0.9)] animate-pulse" />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-100">
-          Snapshot may trigger at any time – make sure you hold the minimum.
-        </span>
-      </div>
-    )}
+{isSnapshotPhase && (
+  <div
+    className="
+      mt-2 inline-flex items-center gap-2
+      rounded-full
+      bg-amber-500/8
+      px-3 py-1.5
+      border border-amber-400/40
+      shadow-[0_0_12px_rgba(251,191,36,0.28)]
+    "
+  >
+    <span className="h-1.5 w-1.5 rounded-full bg-amber-300 shadow-[0_0_6px_rgba(251,191,36,0.8)] animate-pulse" />
+    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+      Snapshot may trigger at any time - make sure you hold the minimum.
+    </span>
   </div>
 )}
 
