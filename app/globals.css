@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@solana/wallet-adapter-react-ui/styles.css';
-
 /* Simple global styles */
 html,
 body {
