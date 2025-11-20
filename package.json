@@ -1,31 +1,11 @@
-{
-  "name": "claim-site",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "update:claim-schedule": "node scripts/update-claim-schedule.cjs"
-  },
-  "dependencies": {
-    "next": "14.2.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+"dependencies": {
+  "next": "14.2.5",
+  "react": "18.2.0",
+  "react-dom": "18.2.0",
 
-    "@solana/web3.js": "^1.95.0",
-    "@solana/wallet-adapter-base": "latest",
-    "@solana/wallet-adapter-react": "latest",
-    "@solana/wallet-adapter-react-ui": "latest",
-    "@solana/wallet-adapter-wallets": "latest"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
-    "tailwindcss": "^3.4.10",
-    "postcss": "^8.4.47",
-    "@vercel/analytics": "1.2.2",
-    "autoprefixer": "^10.4.20"
-  }
+  "@solana/web3.js": "^1.95.0",
+  "@solana/wallet-adapter-base": "0.9.23",
+  "@solana/wallet-adapter-react": "0.15.19",
+  "@solana/wallet-adapter-react-ui": "0.9.19",
+  "@solana/wallet-adapter-wallets": "0.19.19"
 }
