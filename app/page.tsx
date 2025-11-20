@@ -1167,7 +1167,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   
 <div className="flex flex-col">
   {/* Label + icon */}
-  <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <p className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-[13px] w-[13px] text-emerald-300 opacity-90"
@@ -1271,7 +1271,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         <div className="relative group">
                           <button
   type="button"
-  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition mt-[-4px]"
+  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition mt-[-14px]"
 >
   ?
 </button>
