@@ -324,8 +324,8 @@ export default function ClaimPoolPage() {
   }, []);
 
   const fomoMessages = [
-  "Snapshot engine is arming — make sure your wallet holds the minimum.",
-  "Live window approaching — don’t miss your share.",
+  "Snapshot engine is arming - make sure your wallet holds the minimum.",
+  "Live window approaching - don’t miss your share.",
   "Reminder: Only eligible wallets share the pool — check your balance."
 ];
 
@@ -1122,66 +1122,36 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
-          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-            {/* LEFT COLUMN */}
-            <div className="flex-1 space-y-6">
-              <div className="space-y-2">
-                <h1
-  className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]"
->
-  Rewards earned by presence.
-  <br />
-  Show up. Lock in. Get your share.
-</h1>
-
-                {/* CLAIM WINDOW CARD */}
-                <div
-                  className={[
-  'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-  'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-  (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
-  isLive
-    ? 'border-emerald-500/50'
-    : isRestingClosed
-    ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-    : isDistributing || isDone
-    ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
-    : 'border-emerald-400/60'
-].join(' ')}
-                >
-                  {/* TOP ROW */}
-                  <div className="flex items-start justify-between gap-6 pt-1">
-                    
-{/* LEFT SIDE */}
-{isDone ? (
-  <div className="flex flex-col">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      ROUND COMPLETE • REWARDS SENT
-    </p>
-    <p className="mt-2 text-[13px] text-emerald-100/90">
-      Check your wallet – this round just paid out. Next window will be
-      announced soon.
-    </p>
-  </div>
-) : (
-  
+          <div className="flex items-start justify-between gap-6">
+            
+           {/* LEFT COLUMN */}
 <div className="flex flex-col">
   {/* Label + icon */}
-  <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="9" className="opacity-30" />
-      <circle cx="12" cy="12" r="5" className="opacity-60" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
+  <p
+    className={[
+      'flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em]',
+      isDone ? 'text-emerald-300' : 'text-slate-400',
+    ].join(' ')}
+  >
+    {/* icon only when not done */}
+    {!isDone && (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <circle cx="12" cy="12" r="9" className="opacity-30" />
+        <circle cx="12" cy="12" r="5" className="opacity-60" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
+    )}
 
-    {isLive
+    {isDone
+      ? 'ROUND COMPLETE • REWARDS SENT'
+      : isLive
       ? 'WINDOW CLOSES IN'
       : isClosedOnly
       ? 'REWARDS DISTRIBUTION STARTS IN'
@@ -1191,8 +1161,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   </p>
 
   {/* Countdown OR phase text */}
-  {shouldShowCountdown && countdownTargetIso && (
-    <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+  {shouldShowCountdown && countdownTargetIso && !isDone && (
+    <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
       {isLive && (
         <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
       )}
@@ -1208,36 +1178,36 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   )}
 
   {!shouldShowCountdown && (
-    <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+    <p className="mt-2 text-[13px] text-slate-400/90 max-w-xl">
       {currentPhase === 'closed'
         ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
         : currentPhase === 'distribution'
         ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
-        : 'Round complete. Rewards landed - next window will be announced here.'}
+        : 'Check your wallet - this round just paid out. Next window will be announced soon.'}
     </p>
   )}
 
-    {/* 🔥 Random FOMO hype banner (30–5min before open) */}
-    {fomoBanner && (
-      <div
-        className="
-          mt-3
-          inline-flex items-center gap-3
-          rounded-full border border-amber-300/70
-          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
-          px-4 py-2
-          shadow-[0_0_32px_rgba(251,191,36,0.65)]
-          animate-[pulse_1.4s_ease-in-out_infinite]
-        "
-      >
-        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
-          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
-        </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-          {fomoBanner}
-        </span>
+  {/* Snapshot pre-warning (before it fires) */}
+  {showSnapshotPreFomo && (
+    <div
+      className="
+        mt-2 inline-flex items-center gap-3
+        rounded-full border border-amber-400/70
+        bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-emerald-400/15
+        px-4 py-1.5
+        shadow-[0_0_24px_rgba(251,191,36,0.65)]
+      "
+    >
+      <div className="relative flex h-[18px] w-[32px] items-center justify-center">
+        <span className="absolute h-[18px] w-[32px] rounded-full bg-amber-400/25 blur-md opacity-80" />
+        <span className="absolute h-[14px] w-[28px] rounded-full border border-amber-300/70 bg-amber-300/10" />
+        <span className="relative h-[8px] w-[8px] rounded-full bg-amber-300 shadow-[0_0_14px_rgba(251,191,36,0.95)] animate-ping" />
       </div>
-    )}
+      <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+        Snapshot engine is arming - make sure your wallet holds the minimum.
+      </p>
+    </div>
+  )}
 
   {/* Snapshot locked pill */}
   {showSnapshotLocked && (
@@ -1258,7 +1228,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       </span>
     </div>
   )}
-</div>  
+</div> 
 
 )}
 
