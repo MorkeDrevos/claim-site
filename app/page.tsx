@@ -615,12 +615,15 @@ const isSnapshotSoon =
 
 // Short human label, e.g. "09:58"
 const snapshotTimeLabel =
-  snapshotAt && hasSnapshotHappened
-    ? new Date(snapshotAt).toLocaleTimeString(undefined, {
+  effectiveSnapshotIso && hasSnapshotHappened
+    ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
         hour: '2-digit',
         minute: '2-digit',
       })
     : null;
+
+// For the “Latest snapshot:” line
+const snapshotDateLabel = effectiveSnapshotIso ?? '';
 
 // UI helpers for hero strip
 const showSnapshotPreFomo =
