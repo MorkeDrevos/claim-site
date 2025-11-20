@@ -8,6 +8,7 @@ import {
 } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 
+// @ts-ignore  – using runtime types from wallet-adapter, TS can chill
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
