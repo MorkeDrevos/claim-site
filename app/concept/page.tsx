@@ -4,11 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useToast } from './Toast';
-import schedule from '../data/claim-schedule.json';
-import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
+import schedule from '../../data/claim-schedule.json';
+import { getPhaseForNow, ClaimSchedule } from '../../lib/claimSchedule';
+import ConnectWalletButton from '../../components/ConnectWalletButton';
 
 import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
-import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
