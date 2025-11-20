@@ -1040,106 +1040,104 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                   <div className="flex items-center justify-between gap-6">
                     
 {/* LEFT SIDE */}
-<div className="flex flex-col pl-1 sm:pl-2">
-  {/* Icon + dynamic label */}
-  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="9" className="opacity-30" />
-      <circle cx="12" cy="12" r="5" className="opacity-60" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
-
-    <span>
-      {isLive
-        ? 'WINDOW CLOSES IN'
-        : isClosedOnly
-        ? 'REWARD DISTRIBUTION STARTS IN'
-        : isDistributing
-        ? 'REWARDS ON THE WAY'
-        : isDone
-        ? 'ROUND COMPLETE'
-        : 'NEXT WINDOW IN'}
-    </span>
-  </div>
-
-  {/* Countdown (hidden once round is done) */}
-  {countdownTargetIso && !isDone && (
-    <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
-      <p
-        className={[
-          '-mt-1.5', // moves ONLY the number upward a bit
-          'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {countdownLabel || '--:--:--'}
-      </p>
-    </div>
-  )}
-
-  {/* Done message */}
-  {isDone && (
+{isDone ? (
+  <div className="flex flex-col pl-1 sm:pl-2">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+      ROUND COMPLETE • REWARDS SENT
+    </p>
     <p className="mt-2 text-[13px] text-emerald-100/90">
       Check your wallet – this round just paid out. Next window will be
       announced soon.
     </p>
-  )}
+  </div>
+) : (
+  <div className="flex flex-col pl-1 sm:pl-2">
+    {/* Label + icon */}
+    <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <circle cx="12" cy="12" r="9" className="opacity-30" />
+        <circle cx="12" cy="12" r="5" className="opacity-60" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
 
-  {/* Snapshot pre-warning (before it fires) */}
-  {showSnapshotPreFomo && (
-    <div
-      className="
-        mt-2 inline-flex items-center gap-2
-        rounded-full
-        bg-amber-500/8
-        px-3 py-1.5
-        border border-amber-400/40
-        shadow-[0_0_12px_rgba(251,191,36,0.28)]
-      "
-    >
-      <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-amber-300/70 bg-amber-300/10 shadow-[0_0_14px_rgba(251,191,36,0.9)]">
-        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.95)] animate-pulse" />
-      </span>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
-        Snapshot engine is arming - make sure your wallet holds the minimum.
-      </span>
-    </div>
-  )}
+      {isLive
+        ? 'WINDOW CLOSES IN'
+        : isClosedOnly
+        ? 'REWARDS DISTRIBUTION STARTS IN'
+        : isDistributing
+        ? 'REWARDS ON THE WAY'
+        : 'NEXT WINDOW IN'}
+    </p>
 
-  {/* Snapshot locked pill */}
-  {showSnapshotLocked && (
-    <div
-      className={[
-        'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
-        'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-        justSnapshotFired
-          ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
-          : '',
-      ].join(' ')}
-    >
-      <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
-        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
-      </span>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-        Snapshot locked at {snapshotTimeLabel} - eligibility for this round is
-        locked.
-      </span>
-    </div>
-  )}
-</div>
+    {/* Countdown */}
+    {countdownTargetIso && (
+      <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
+        <p
+          className={[
+            '-mt-1.5', // number slightly higher
+            'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+          ].join(' ')}
+        >
+          {isClosed ? '' : countdownLabel || '--:--:--'}
+        </p>
+      </div>
+    )}
+
+    {/* Snapshot pre-warning (before it fires) */}
+    {showSnapshotPreFomo && (
+      <div
+        className="
+          mt-2 inline-flex items-center gap-2
+          rounded-full
+          bg-amber-500/8
+          px-3 py-1.5
+          border border-amber-400/40
+          shadow-[0_0_12px_rgba(251,191,36,0.28)]
+        "
+      >
+        <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-amber-300/70 bg-amber-300/10 shadow-[0_0_14px_rgba(251,191,36,0.9)]">
+          <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.95)] animate-pulse" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+          Snapshot engine is arming - make sure your wallet holds the minimum.
+        </span>
+      </div>
+    )}
+
+    {/* Snapshot locked pill */}
+    {showSnapshotLocked && (
+      <div
+        className={[
+          'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+          'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+          justSnapshotFired
+            ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
+            : '',
+        ].join(' ')}
+      >
+        <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
+          <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+          Snapshot locked at {snapshotTimeLabel} - eligibility for this round is
+          locked.
+        </span>
+      </div>
+    )}
+  </div>
 )}
 
-                    {/* RIGHT: pool label + amount */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
