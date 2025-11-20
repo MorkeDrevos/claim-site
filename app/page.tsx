@@ -1211,7 +1211,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     </div>
   )}
 </div>  
-  
+
 )}
 
                     <div className="flex flex-col items-end text-right">
@@ -1262,21 +1262,34 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   onClick={handleClaimClick}
   disabled={!canClaim}
   className={[
-    'mt-5 mx-auto flex w-full max-w-md items-center justify-center rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+    // shape / text
+    'mt-5 flex items-center justify-center rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
     'transition-all duration-300',
-    // states...
+    // width behaviour
+    'w-full sm:max-w-xl sm:mx-auto', // full width on mobile, big centered pill on desktop
+    // states
+    canClaim
+      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
+      : isClosedOnly
+      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+      : isDistributing
+      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+      : isDone
+      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
+    canClaim && isPulseOn ? 'animate-pulse' : '',
   ].join(' ')}
 >
-                    {canClaim
-                      ? 'Lock in my share'
-                      : isClosedOnly
-                      ? 'Claim window closed'
-                      : isDistributing
-                      ? 'Rewards distribution in progress'
-                      : isDone
-                      ? 'Rewards distributed'
-                      : 'Opens soon'}
-                  </button>
+  {canClaim
+    ? 'Lock in my share'
+    : isClosedOnly
+    ? 'Claim window closed'
+    : isDistributing
+    ? 'Distribution in progress'
+    : isDone
+    ? 'Rewards distributed'
+    : 'Opens soon'}
+</button>
 
                   {/* Bullets */}
                   <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
