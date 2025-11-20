@@ -131,21 +131,13 @@ function SoftCard({
    Schedule helpers
 ─────────────────────────── */
 
-const SCHEDULE = schedule as ClaimSchedule;
+// Force a default mode so the JSON doesn't need to provide it
+const SCHEDULE: ClaimSchedule = {
+  mode: (schedule as any).mode ?? 'auto',
+  ...(schedule as any),
+};
 
 function formatCountdown(target: Date | null): string {
-  if (!target) return '--:--:--';
-
-  const diff = target.getTime() - Date.now();
-  if (diff <= 0) return '00:00:00';
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-  const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-  const s = String(totalSeconds % 60).padStart(2, '0');
-
-  return `${h}:${m}:${s}`;
-}
 
 /* ───────────────────────────
    Countdown helpers
@@ -287,13 +279,14 @@ export default function ClaimPoolPage() {
       : null;
 
   // Monotonic phase ladder
-  let currentPhase: WindowPhase = 'scheduled';
+let currentPhase: WindowPhase = 'scheduled';
 
-  if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
-  if (opensMs && nowMs >= opensMs) currentPhase = 'open';
-  if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
-  if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
-  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
+if (scheduleSnapshotMs && nowMs >= scheduleSnapshotMs)
+  currentPhase = 'snapshot';
+if (opensMs && nowMs >= opensMs) currentPhase = 'open';
+if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
+if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
+if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
 
   const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
   if (distributionDone) currentPhase = 'done';
