@@ -933,12 +933,17 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
      Render
   ─────────────────────────── */
 
-  return (
+    return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
         <div className="fixed top-[56px] left-0 right-0 z-50 flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-400/70 px-4 py-2 text-[10
+          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-400/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.6)] backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.9)] animate-pulse" />
+            <span>$CLAIM Portal updated to latest build</span>
+          </div>
+        </div>
+      )}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
