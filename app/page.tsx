@@ -913,8 +913,6 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-      
-      {/* DRILL MODE BANNER (disabled) */}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
