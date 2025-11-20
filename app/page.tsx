@@ -266,9 +266,7 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  const { addToast, ToastContainer } = useToast();
-  useAutoReloadOnNewBuild(); // 🔁 auto-reload on new build
-  const [state, setState] = useState<ClaimPortalState | null>(null);
+
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
@@ -289,6 +287,27 @@ export default function ClaimPoolPage() {
 const [preFlash, setPreFlash] = useState(false);
 const [justSnapshotFired, setJustSnapshotFired] = useState(false);
 const snapshotFiredRef = useRef(false);
+
+  // Detect "we just reloaded because of a new build"
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const flag = window.localStorage.getItem(
+        'claim_portal_recently_updated'
+      );
+      if (flag === '1') {
+        setJustUpdated(true);
+        window.localStorage.removeItem('claim_portal_recently_updated');
+
+        // hide after a few seconds
+        const id = window.setTimeout(() => setJustUpdated(false), 6000);
+        return () => window.clearTimeout(id);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
     /* ───────────────────────────
      Phase + countdown (safe when state is null)
@@ -916,6 +935,10 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
+      {/* Update banner – shows after auto reload from new build */}
+      {justUpdated && (
+        <div className="fixed top-[56px] left-0 right-0 z-50 flex justify-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-400/70 px-4 py-2 text-[10
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
