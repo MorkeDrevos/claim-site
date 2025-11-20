@@ -364,6 +364,7 @@ export default function ClaimPoolPage() {
   const isDistributionPhase = currentPhase === 'distribution';
   const isDone = currentPhase === 'done';
   const isClosedOnly = currentPhase === 'closed';
+  const isDistributing = isDistributionPhase;
 
   const isRestingClosed =
   isClosedOnly && !isDistributionPhase && !isDone;
@@ -1091,9 +1092,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
         <p
           className={[
             'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-            isFinalTen
-              ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
-              : '',
+            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
           ].join(' ')}
         >
           {countdownLabel || '--:--:--'}
@@ -1102,23 +1101,26 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     )}
 
     {/* Snapshot FOMO strip */}
-{isSnapshotPhase && (
-  <div
-    className="
-      mt-3 inline-flex items-center gap-2
-      rounded-full
-      bg-amber-500/10
-      px-3 py-1.5
-      border border-amber-400/60
-      shadow-[0_0_18px_rgba(251,191,36,0.55)]
-    "
-  >
-    <span className="h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,0.9)] animate-pulse" />
-    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-100">
-      Snapshot may trigger at any time – make sure you hold the minimum.
-    </span>
+    {isSnapshotPhase && (
+      <div
+        className="
+          mt-3 inline-flex items-center gap-2
+          rounded-full
+          bg-amber-500/10
+          px-3 py-1.5
+          border border-amber-400/60
+          shadow-[0_0_18px_rgba(251,191,36,0.55)]
+        "
+      >
+        <span className="h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,0.9)] animate-pulse" />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+          Snapshot may trigger at any time – make sure you hold the minimum.
+        </span>
+      </div>
+    )}
   </div>
 )}
+
                     {/* RIGHT: pool label + amount */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
