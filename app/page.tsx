@@ -393,9 +393,7 @@ if (distributionDone) {
       const res = await getClaimPortalState();
 
       const snapshotAt =
-        (res as any).snapshotAt ??
-        (res as any).snapshotTakenAt ??
-        null;
+        (res as any).snapshotAt ?? (res as any).snapshotTakenAt ?? null;
 
       const distributionDoneAt =
         (res as any).distributionDoneAt ??
@@ -433,16 +431,16 @@ if (distributionDone) {
     }
   }
 
-  // Initial load
+  // initial load
   loadPortalState();
 
-  // Background polling every 30 seconds
-  intervalId = window.setInterval(loadPortalState, 5_000);
+  // 🔁 poll every 15s
+  intervalId = window.setInterval(loadPortalState, 15000);
 
   return () => {
     cancelled = true;
     if (intervalId !== null) {
-      window.clearInterval(intervalId);
+      clearInterval(intervalId);
     }
   };
 }, []);
