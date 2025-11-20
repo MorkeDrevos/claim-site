@@ -551,6 +551,19 @@ const {
   // Snapshot timing label – show nothing if there is no snapshot yet
   const snapshotDateLabel = snapshotAt ?? '';
 
+  // Snapshot “tease” + “locked” states
+  const rawSnapshotIso = snapshotAt ?? SCHEDULE.snapshotAt ?? null;
+  const snapshotMs = rawSnapshotIso ? new Date(rawSnapshotIso).getTime() : null;
+  const snapshotDiffMs =
+    snapshotMs && !Number.isNaN(snapshotMs) ? snapshotMs - Date.now() : null;
+
+  // Within 2 minutes of snapshot -> tease
+  const isSnapshotSoon =
+    snapshotDiffMs !== null && snapshotDiffMs > 0 && snapshotDiffMs <= 2 * 60 * 1000;
+
+  // Between snapshot and open -> snapshot phase
+  const isSnapshotActive = currentPhase === 'snapshot';
+
   // Normalize backend / contract status
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
@@ -1028,6 +1041,55 @@ return (
     ) : (
       // NORMAL LABEL + COUNTDOWN
       <div className="flex flex-col pl-1 sm:pl-2">
+
+    <div className="flex flex-col pl-1 sm:pl-2">
+
+      {/* SNAPSHOT TEASE / LOCKED BANNERS */}
+      {isSnapshotSoon && !isLive && !isClosed && (
+        <div
+          className="
+            mb-1 inline-flex items-center gap-2 rounded-full
+            bg-amber-500/10 border border-amber-400/60
+            px-3 py-1
+            shadow-[0_0_18px_rgba(251,191,36,0.6)]
+          "
+        >
+          <span
+            className="
+              h-1.5 w-1.5 rounded-full bg-amber-300
+              animate-[pulse_0.9s_ease-in-out_infinite]
+            "
+          />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200">
+            Snapshot incoming – top up before it hits.
+          </span>
+        </div>
+      )}
+
+      {isSnapshotActive && (
+        <div
+          className="
+            mb-1 inline-flex items-center gap-2 rounded-full
+            bg-emerald-500/10 border border-emerald-400/60
+            px-3 py-1
+            shadow-[0_0_22px_rgba(16,185,129,0.8)]
+          "
+        >
+          <span
+            className="
+              h-1.5 w-1.5 rounded-full bg-emerald-300
+              animate-[pulse_1.1s_ease-in-out_infinite]
+            "
+          />
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
+            Snapshot locked – balances for this round are frozen.
+          </span>
+        </div>
+      )}
+
+      <p className="mt-[2px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {isLive ? (
+        
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
           {isLive ? (
             <span className="inline-flex items-center gap-2">
