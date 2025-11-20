@@ -1309,8 +1309,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </div>
 
               {/* MOBILE CONNECT CTA */}
-<div className="block sm:hidden mt-2 mb-2">
-  <ConnectWalletButton />
+<div className="mt-4 mb-4 block sm:hidden">
+  <ConnectWalletButton fullWidth />
 </div>
             </div>
 
