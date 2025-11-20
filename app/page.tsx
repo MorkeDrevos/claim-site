@@ -7,6 +7,9 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
+import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
+import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
+
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
     let cancelled = false;
@@ -236,27 +239,6 @@ function useCountdown(targetIso?: string | null): string | null {
 }
 
 /* ───────────────────────────
-   Wallet detection (multi-wallet)
-─────────────────────────── */
-
-type DetectedWallet = {
-  name: string;
-  provider: any;
-};
-
-function detectWallet(): DetectedWallet | null {
-  if (typeof window === 'undefined') return null;
-  const w = window as any;
-
-  if (w.solana?.isPhantom) return { name: 'Phantom', provider: w.solana };
-  if (w.backpack?.solana) return { name: 'Backpack', provider: w.backpack.solana };
-  if (w.solflare?.connect) return { name: 'Solflare', provider: w.solflare };
-  if (w.xnft?.solana) return { name: 'Backpack xNFT', provider: w.xnft.solana };
-
-  return null;
-}
-
-/* ───────────────────────────
    API fetcher
 ─────────────────────────── */
 
@@ -286,13 +268,6 @@ export default function ClaimPoolPage() {
     title: string;
     message: string;
   } | null>(null);
-
-  const [connectedWallet, setConnectedWallet] = useState<{
-    address: string;
-    name: string;
-  } | null>(null);
-
-  const walletProviderRef = useRef<any | null>(null);
 
   const [preFlash, setPreFlash] = useState(false);
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
@@ -599,37 +574,6 @@ function getRandomFomoMessage() {
     }
   };
 
-  const handleConnectClick = async () => {
-    try {
-      if (connectedWallet && walletProviderRef.current?.disconnect) {
-        await walletProviderRef.current.disconnect();
-        walletProviderRef.current = null;
-        setConnectedWallet(null);
-        return;
-      }
-
-      const detected = detectWallet();
-      if (!detected) {
-        window.open('https://phantom.app/', '_blank');
-        return;
-      }
-
-      const { name, provider } = detected;
-      const resp = await provider.connect();
-      const pubkey =
-        resp?.publicKey?.toString?.() ??
-        provider.publicKey?.toString?.() ??
-        null;
-
-      if (pubkey) {
-        setConnectedWallet({ address: pubkey, name });
-        walletProviderRef.current = provider;
-      }
-    } catch (err) {
-      console.error('Wallet connect error', err);
-    }
-  };
-
   /* ───────────────────────────
      Loading / error guards
   ─────────────────────────── */
@@ -808,12 +752,9 @@ function getRandomFomoMessage() {
     },
   ];
 
-  const effectiveWalletConnected = !!connectedWallet || walletConnected;
-  const effectiveWalletShort = connectedWallet
-    ? `${connectedWallet.address.slice(0, 4)}…${connectedWallet.address.slice(
-        -4
-      )}`
-    : walletShort;
+// Use backend info only – no more local connected Wallet
+const walletIsConnected = walletConnected;
+const walletLabelShort = walletShort;
 
   const isEligible = eligibleAmount >= MIN_HOLDING;
 
@@ -830,21 +771,21 @@ function getRandomFomoMessage() {
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
   const canClaim = !isPreview && isLive;
 
-  const eligibilityTitle = effectiveWalletConnected
-    ? isEligible
-      ? 'Eligible this round'
-      : 'Not eligible this round'
-    : 'Wallet not connected';
+  const eligibilityTitle = walletIsConnected
+  ? isEligible
+    ? 'Eligible this round'
+    : 'Not eligible this round'
+  : 'Wallet not connected';
 
-  const eligibilityBody = effectiveWalletConnected
-    ? isEligible
-      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM minimum at the snapshot used for this round.`
-      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM at the snapshot used for this round.`
-    : 'Connect a Solana wallet to check eligibility for this round.';
+const eligibilityBody = walletIsConnected
+  ? isEligible
+    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM minimum at the snapshot used for this round.`
+    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM at the snapshot used for this round.`
+  : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
      Claim handler
@@ -866,20 +807,20 @@ function getRandomFomoMessage() {
       return;
     }
 
-    if (!effectiveWalletConnected || !connectedWallet) {
-      setInlineMessage({
-        type: 'warning',
-        title: 'Connect a wallet first',
-        message:
-          'Connect the wallet you used at snapshot before locking your share.',
-      });
-      addToast(
-        'warning',
-        'Connect a wallet first',
-        'Connect the wallet you used at snapshot before locking your share.'
-      );
-      return;
-    }
+    if (!walletIsConnected) {
+  setInlineMessage({
+    type: 'warning',
+    title: 'Connect a wallet first',
+    message:
+      'Connect the wallet you used at snapshot before locking your share.',
+  });
+  addToast(
+    'warning',
+    'Connect a wallet first',
+    'Connect the wallet you used at snapshot before locking your share.'
+  );
+  return;
+}
 
     if (!isEligible) {
       setInlineMessage({
@@ -900,7 +841,7 @@ function getRandomFomoMessage() {
     }
 
     try {
-      console.log('Claiming for wallet:', connectedWallet.address);
+      console.log('Claiming for wallet (short):', walletLabelShort || walletShort || 'unknown');
 
       setInlineMessage({
         type: 'success',
@@ -1027,7 +968,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-CURRENT ROUND POOLemerald-500/60 via-emerald-500/20 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
@@ -1103,17 +1044,10 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               {networkLabel}
             </span>
 
-            <button
-              type="button"
-              onClick={handleConnectClick}
-              className="hidden sm:inline-flex items-center rounded-full px-5 py-2 bg-gradient-to-r from-emerald-400/25 to-emerald-500/30 border border-emerald-400/40 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.25)] hover:from-emerald-400/35 hover:to-emerald-500/40 hover:border-emerald-400 hover:text-white transition-all"
-            >
-              {connectedWallet
-                ? `${connectedWallet.name} connected`
-                : effectiveWalletConnected
-                ? 'Wallet connected'
-                : 'Connect wallet'}
-            </button>
+{/* Desktop wallet button */}
+<div className="hidden sm:inline-flex">
+  <ConnectWalletButton />
+</div>
           </div>
         </div>
       </header>
@@ -1375,19 +1309,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </div>
 
               {/* MOBILE CONNECT CTA */}
-              <div className="block sm:hidden mt-2 mb-2">
-                <button
-                  type="button"
-                  onClick={handleConnectClick}
-                  className="w-full flex items-center justify-center rounded-[28px] px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.32em] bg-gradient-to-b from-emerald-500/10 via-slate-900/80 to-slate-900/90 text-slate-100 border border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.45)] active:scale-[0.98] transition-all"
-                >
-                  {connectedWallet
-                    ? `${connectedWallet.name} connected`
-                    : effectiveWalletConnected
-                    ? 'Wallet connected'
-                    : 'Connect wallet'}
-                </button>
-              </div>
+<div className="block sm:hidden mt-2 mb-2">
+  <ConnectWalletButton />
+</div>
             </div>
 
             {/* RIGHT COLUMN – Mission Control */}
@@ -1685,16 +1609,16 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </p>
               <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
             </div>
-            {effectiveWalletConnected && (
-              <div className="mt-4 border-t border-slate-800/70 pt-3">
-                <p className="text-[11px] text-slate-500">
-                  Wallet:{' '}
-                  <span className="font-mono text-slate-200">
-                    {effectiveWalletShort || '—'}
-                  </span>
-                </p>
-              </div>
-            )}
+            {walletIsConnected && (
+  <div className="mt-4 border-t border-slate-800/70 pt-3">
+    <p className="text-[11px] text-slate-500">
+      Wallet:{' '}
+      <span className="font-mono text-slate-200">
+        {walletLabelShort || '—'}
+      </span>
+    </p>
+  </div>
+)}
           </SoftCard>
         </div>
 
