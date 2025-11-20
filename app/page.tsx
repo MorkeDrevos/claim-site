@@ -794,17 +794,17 @@ export default function ClaimPoolPage() {
   ─────────────────────────── */
 
       const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Opens soon' },
-    { id: 'snapshot', label: 'Snapshot taken' },
-    { id: 'open', label: 'Claim window open' },
-    { id: 'closed', label: 'Claim window closed' },
-    {
-      id: 'distribution',
-      label: isDone
-        ? 'Rewards distributed'
-        : 'Reward distribution in progress',
-    },
-  ];
+  { id: 'scheduled', label: 'Opens soon' },
+  { id: 'snapshot', label: 'Snapshot window' }, // or 'Snapshot phase'
+  { id: 'open', label: 'Claim window open' },
+  { id: 'closed', label: 'Claim window closed' },
+  {
+    id: 'distribution',
+    label: isDone
+      ? 'Rewards distributed'
+      : 'Reward distribution in progress',
+  },
+];
   
 // Treat the final "done" phase as the same step as "distribution"
 const effectivePhaseForSteps =
@@ -1129,7 +1129,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         <div className="relative group">
                           <button
                             type="button"
-                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition -mt-[3px]"
                           >
                             ?
                           </button>
