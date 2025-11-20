@@ -132,6 +132,7 @@ const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
 // TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
 // @ts-ignore
 const SCHEDULE = schedule as ClaimSchedule;
+const SNAPSHOT_FOMO_WINDOW_MINUTES = 5; // or 10, whatever you want
 
 /* ───────────────────────────
    UI helpers
@@ -598,8 +599,12 @@ const snapshotBaseMs = effectiveSnapshotIso
   ? new Date(effectiveSnapshotIso).getTime()
   : null;
 
+// Has the snapshot for this round actually happened?
+const hasSnapshotHappened =
+  snapshotBaseMs !== null && Date.now() >= snapshotBaseMs;
+
 const snapshotDiffMs =
-  snapshotBaseMs && !Number.isNaN(snapshotBaseMs)
+  snapshotBaseMs !== null && !Number.isNaN(snapshotBaseMs)
     ? snapshotBaseMs - Date.now()
     : null;
 
@@ -608,7 +613,9 @@ const isSnapshotSoon =
   snapshotDiffMs > 0 &&
   snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
 
-// Simple label like "21:00"
+const isSnapshotActive = currentPhase === 'snapshot';
+
+// Short human label, e.g. "09:58"
 const snapshotTimeLabel =
   effectiveSnapshotIso && hasSnapshotHappened
     ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
@@ -620,16 +627,12 @@ const snapshotTimeLabel =
 // For the “Latest snapshot:” line
 const snapshotDateLabel = effectiveSnapshotIso ?? '';
 
-const isSnapshotSoon =
-  snapshotDiffMs !== null &&
-  snapshotDiffMs > 0 &&
-  snapshotDiffMs <= 2 * 60 * 1000;
+// UI helpers for hero strip
+const showSnapshotPreFomo =
+  currentPhase === 'scheduled' && isSnapshotSoon;
 
-const isSnapshotActive = currentPhase === 'snapshot';
-
-// Has the snapshot for this round actually happened?
-const hasSnapshotHappened =
-  snapshotBaseMs !== null && Date.now() >= snapshotBaseMs;
+const showSnapshotLocked =
+  currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
 // Short human label, e.g. "09:58"
 const snapshotTimeLabel =
