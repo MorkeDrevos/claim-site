@@ -1230,8 +1230,6 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   )}
 </div> 
 
-)}
-
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
