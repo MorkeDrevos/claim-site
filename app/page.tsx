@@ -1059,25 +1059,29 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 ) : (
   // existing non-done branch...
   <div className="flex flex-col pl-1 sm:pl-2">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      {isLive ? (
-        <span className="inline-flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="12" cy="12" r="9" className="opacity-30" />
-            <circle cx="12" cy="12" r="5" className="opacity-60" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
-          WINDOW CLOSES IN
-        </span>
-      ) : isClosedOnly ? (
-        <span className="inline-flex items-center gap-2">
+    <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <circle cx="12" cy="12" r="9" className="opacity-30" />
+    <circle cx="12" cy="12" r="5" className="opacity-60" />
+    <circle cx="12" cy="12" r="2" />
+  </svg>
+
+  {isLive
+    ? 'WINDOW CLOSES IN'
+    : isClosedOnly
+    ? 'REWARDS DISTRIBUTION STARTS IN'
+    : isDistributing
+    ? 'REWARDS ON THE WAY'
+    : 'NEXT WINDOW IN'}
+</div>
+        <span className="flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
@@ -1093,7 +1097,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
           REWARDS DISTRIBUTION STARTS IN
         </span>
       ) : isDistributing ? (
-  <span className="inline-flex items-center gap-2">
+  <span className="flex items-center gap-2">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
@@ -1109,7 +1113,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     REWARDS ON THE WAY
   </span>
 ) : (
-        <span className="inline-flex items-center gap-2">
+        <span className="flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
@@ -1179,7 +1183,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
           <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
         </span>
         <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-          Snapshot locked at {snapshotTimeLabel} - eligibility for this round is set.
+          Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
         </span>
       </div>
     )}
@@ -1189,9 +1193,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                     {/* RIGHT: pool label + amount */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-center gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                          Current round pool
-                        </p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
+    CURRENT ROUND POOL
+  </p>
 
                         <div className="relative group">
                           <button
