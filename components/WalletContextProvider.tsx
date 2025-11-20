@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { clusterApiUrl } from '@solana/web3.js'; 
+import { clusterApiUrl } from '@solana/web3.js';
 import {
   ConnectionProvider,
   WalletProvider,
