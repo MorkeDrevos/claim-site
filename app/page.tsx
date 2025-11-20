@@ -589,17 +589,36 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-const snapshotDateLabel = snapshotAt ?? '';
+// Choose where snapshot time comes from
+// For now: trust JSON schedule first, then backend if needed
+const effectiveSnapshotIso =
+  SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
-// snapshot timing
-const rawSnapshotIso = snapshotAt ?? SCHEDULE.snapshotAt ?? null;
-const snapshotBaseMs = rawSnapshotIso
-  ? new Date(rawSnapshotIso).getTime()
+const snapshotBaseMs = effectiveSnapshotIso
+  ? new Date(effectiveSnapshotIso).getTime()
   : null;
+
 const snapshotDiffMs =
   snapshotBaseMs && !Number.isNaN(snapshotBaseMs)
     ? snapshotBaseMs - Date.now()
     : null;
+
+const isSnapshotSoon =
+  snapshotDiffMs !== null &&
+  snapshotDiffMs > 0 &&
+  snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
+
+// Simple label like "21:00"
+const snapshotTimeLabel =
+  effectiveSnapshotIso && hasSnapshotHappened
+    ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : null;
+
+// For the “Latest snapshot:” line
+const snapshotDateLabel = effectiveSnapshotIso ?? '';
 
 const isSnapshotSoon =
   snapshotDiffMs !== null &&
@@ -848,7 +867,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   } else if (currentPhase === 'closed') {
   progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
-  } } else if (currentPhase === 'distribution') {
+  } else if (currentPhase === 'distribution') {
   progressMessage =
     'Rewards are being sent out - watch your wallet, this round is paying.';
   } else if (currentPhase === 'done') {
