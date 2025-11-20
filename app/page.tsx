@@ -848,13 +848,13 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   } else if (currentPhase === 'closed') {
     progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
-  } else if (currentPhase === 'distribution') {
-    progressMessage =
-      'Distribution sequence active - standby for completion.';
-  } else if (currentPhase === 'done') {
-    progressMessage =
-      'Payout finalized. Stand by for the next cycle.';
-  }
+  } } else if (currentPhase === 'distribution') {
+  progressMessage =
+    'Rewards are being sent out - watch your wallet, this round is paying.';
+} } else if (currentPhase === 'done') {
+  progressMessage =
+    'Round complete. Rewards landed – get ready for the next cycle.';
+}
 
 
   let statusSummary =
@@ -871,12 +871,12 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     statusSummary =
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
-    statusSummary =
-      'All systems nominal. Reward distribution sequence is executing on-chain.';
+  statusSummary =
+    'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
-    statusSummary =
-      'All systems nominal. Rewards distributed. Next window will be scheduled soon.';
-  } else if (currentPhase === 'closed') {
+  statusSummary =
+    'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+} else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
@@ -1019,8 +1019,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                       : isRestingClosed
                       ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
                       : isDistributing || isDone
-                      ? 'border-emerald-400/60'
-                      : 'border-slate-700/60 bg-slate-900/80',
+                      ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
+                      : 'border-emerald-400/60'
                   ].join(' ')}
                 >
                   {/* TOP ROW */}
@@ -1030,13 +1030,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 {isDone ? (
   <div className="flex flex-col pl-1 sm:pl-2">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      REWARDS DISTRIBUTED
+      ROUND COMPLETE • REWARDS SENT
     </p>
     <p className="mt-2 text-[13px] text-emerald-100/90">
-      Standing by for the next round.
+      Check your wallet – this round just paid out. Next window will be announced soon.
     </p>
   </div>
 ) : (
+  // existing non-done branch...
   <div className="flex flex-col pl-1 sm:pl-2">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       {isLive ? (
@@ -1072,22 +1073,22 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
           REWARDS DISTRIBUTION STARTS IN
         </span>
       ) : isDistributing ? (
-        <span className="inline-flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="12" cy="12" r="9" className="opacity-30" />
-            <circle cx="12" cy="12" r="5" className="opacity-60" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
-          DISTRIBUTION COMPLETES IN
-        </span>
-      ) : (
+  <span className="inline-flex items-center gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="9" className="opacity-30" />
+      <circle cx="12" cy="12" r="5" className="opacity-60" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+    REWARDS ON THE WAY
+  </span>
+) : (
         <span className="inline-flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
