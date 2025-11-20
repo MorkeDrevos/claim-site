@@ -358,21 +358,24 @@ export default function ClaimPoolPage() {
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
-  // Helpers used for styling + copy
-  const isLive         = currentPhase === 'open';
-  const isClosedOnly   = currentPhase === 'closed';
-  const isDistributing = currentPhase === 'distribution';
-  const isDone         = currentPhase === 'done';
+  // Helpers used for styling
+  const isLive = currentPhase === 'open';
+  const isSnapshotPhase = currentPhase === 'snapshot';
+  const isDistributionPhase = currentPhase === 'distribution';
+  const isDone = currentPhase === 'done';
+  const isClosedOnly = currentPhase === 'closed';
 
-  // "resting" styling for the card
-  const isRestingClosed = currentPhase === 'closed';
-  const isRestingDone   = currentPhase === 'done';
-  const isResting       = isRestingClosed || isRestingDone;
+  const isClosed =
+    currentPhase === 'closed' ||
+    currentPhase === 'distribution' ||
+    currentPhase === 'done';
 
   const claimTone: Tone =
     isLive
       ? 'success'
-      : currentPhase === 'distribution'
+      : isSnapshotPhase
+      ? 'warning'
+      : isDistributionPhase
       ? 'warning'
       : 'muted';
 
@@ -410,6 +413,8 @@ export default function ClaimPoolPage() {
     const diff = targetMs - Date.now();
     isFinalTen = diff > 0 && diff <= 10_000;
   }
+
+
 
   /* ───────────────────────────
      Load portal state (polling)
@@ -804,13 +809,13 @@ const effectivePhaseForSteps =
 const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
 const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  let progressMessage = '';
-
+    let progressMessage = '';
   if (currentPhase === 'scheduled') {
     progressMessage =
       'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
-    progressMessage = 'Snapshot complete. Next claim window coming soon.';
+    progressMessage =
+      'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
     progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
@@ -818,11 +823,13 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage = 'Distribution sequence active — standby for completion.';
+    progressMessage =
+      'Distribution sequence active - standby for completion.';
   } else if (currentPhase === 'done') {
     progressMessage =
       'Payout finalized. Stand by for the next cycle.';
   }
+
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -1113,24 +1120,41 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         </p>
 
                         {countdownTargetIso && (
-                          <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
-                            {isLive && (
-                              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-                            )}
-                            <p
-                              className={[
-                                'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-                                isFinalTen
-                                  ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
-                                  : '',
-                              ].join(' ')}
-                            >
-                              {countdownLabel || '--:--:--'}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
+  <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
+    {isLive && (
+      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+    )}
+    <p
+      className={[
+        'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+        isFinalTen
+          ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+          : '',
+      ].join(' ')}
+    >
+      {countdownLabel || '--:--:--'}
+    </p>
+  </div>
+)}
+
+{/* Snapshot FOMO strip */}
+{isSnapshotPhase && (
+  <div
+    className="
+      mt-3 inline-flex items-center gap-2
+      rounded-full
+      bg-amber-500/10
+      px-3 py-1.5
+      border border-amber-400/60
+      shadow-[0_0_18px_rgba(251,191,36,0.55)]
+    "
+  >
+    <span className="h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_10px_rgba(251,191,36,0.9)] animate-pulse" />
+    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-100">
+      Snapshot may trigger at any time – make sure you hold the minimum.
+    </span>
+  </div>
+)}
 
                     {/* RIGHT: pool label + amount */}
                     <div className="flex flex-col items-end text-right">
