@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
-import ConnectWalletButton from '../components/ConnectWalletButton';I
+import ConnectWalletButton from '../components/ConnectWalletButton';
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
