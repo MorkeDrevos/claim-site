@@ -1062,16 +1062,18 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
               <div className="space-y-2">
-                <h1 className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pl-[6px] pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]">
-                  Rewards earned by presence.
-                  <br />
-                  Show up. Lock in. Get your share.
-                </h1>
+                <h1
+  className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]"
+>
+  Rewards earned by presence.
+  <br />
+  Show up. Lock in. Get your share.
+</h1>
 
                 {/* CLAIM WINDOW CARD */}
                 <div
                   className={[
-  'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+  'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
   'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
   (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
   isLive
@@ -1088,7 +1090,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                     
 {/* LEFT SIDE */}
 {isDone ? (
-  <div className="flex flex-col pl-1 sm:pl-2">
+  <div className="flex flex-col">
     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
       ROUND COMPLETE • REWARDS SENT
     </p>
@@ -1098,7 +1100,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     </p>
   </div>
 ) : (
-  <div className="flex flex-col pl-1 sm:pl-2">
+  <div className="flex flex-col">
     {/* Label + icon */}
     <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
       <svg
