@@ -84,6 +84,8 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
+// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
+// @ts-ignore
 const SCHEDULE = schedule as ClaimSchedule;
 
 /* ───────────────────────────
