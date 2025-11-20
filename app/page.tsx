@@ -1293,7 +1293,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         </div>
                       </div>
 
-                      <div className="mt-1.5 flex items-end justify-end">
+                      <div className="mt-5.5 flex items-end justify-end">
                         <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
                           {rewardAmountText}
                           <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
