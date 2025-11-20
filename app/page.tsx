@@ -247,38 +247,38 @@ export default function ClaimPoolPage() {
 
   const [preFlash, setPreFlash] = useState(false);
 
-  // small re-render tick so schedule-based phase can flip
-  const [, forceTick] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => {
-      forceTick((x) => x + 1);
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  /* ───────────────────────────
-     Phase + countdown from schedule.json
+    /* ───────────────────────────
+     Phase + countdown (safe when state is null)
   ─────────────────────────── */
 
+  // Force a re-render every second so time-based logic updates live
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      forceTick((x) => x + 1);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  // Purely schedule-based timings (no `state` used here)
   const nowMs = Date.now();
 
-  const snapshotMs = SCHEDULE.snapshotAt
-    ? new Date(SCHEDULE.snapshotAt).getTime()
-    : null;
-  const opensMs = SCHEDULE.windowOpensAt
-    ? new Date(SCHEDULE.windowOpensAt).getTime()
-    : null;
-  const closesMs = SCHEDULE.windowClosesAt
-    ? new Date(SCHEDULE.windowClosesAt).getTime()
-    : null;
-  const distStartMs = SCHEDULE.distributionStartsAt
-    ? new Date(SCHEDULE.distributionStartsAt).getTime()
-    : null;
-  const distDoneMs = SCHEDULE.distributionDoneAt
-    ? new Date(SCHEDULE.distributionDoneAt).getTime()
-    : null;
+  const snapshotMs =
+    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
+  const opensMs =
+    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
+  const closesMs =
+    SCHEDULE.windowClosesAt ? new Date(SCHEDULE.windowClosesAt).getTime() : null;
+  const distStartMs =
+    SCHEDULE.distributionStartsAt
+      ? new Date(SCHEDULE.distributionStartsAt).getTime()
+      : null;
+  const distDoneMs =
+    SCHEDULE.distributionDoneAt
+      ? new Date(SCHEDULE.distributionDoneAt).getTime()
+      : null;
 
-  // monotonic ladder
+  // Monotonic phase ladder
   let currentPhase: WindowPhase = 'scheduled';
 
   if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
@@ -287,14 +287,13 @@ export default function ClaimPoolPage() {
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
   if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
 
-  const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
-
-  // which timestamp do we count toward?
+  // What are we counting toward?
   let countdownTargetIso: string | null = null;
 
   switch (currentPhase) {
     case 'scheduled':
     case 'snapshot':
+      // We hype the claim window, not the snapshot
       countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
       break;
     case 'open':
@@ -308,19 +307,21 @@ export default function ClaimPoolPage() {
       break;
     case 'done':
     default:
-      countdownTargetIso = null;
+      countdownTargetIso = null; // no countdown once done
   }
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
-  const isLive = currentPhase === 'open';
-  const isClosedOnly = currentPhase === 'closed';
+  // Helpers used for styling + copy
+  const isLive         = currentPhase === 'open';
+  const isClosedOnly   = currentPhase === 'closed';
   const isDistributing = currentPhase === 'distribution';
-  const isDone = currentPhase === 'done';
+  const isDone         = currentPhase === 'done';
 
+  // "resting" styling for the card
   const isRestingClosed = currentPhase === 'closed';
-  const isRestingDone = currentPhase === 'done';
-  const isResting = isRestingClosed || isRestingDone;
+  const isRestingDone   = currentPhase === 'done';
+  const isResting       = isRestingClosed || isRestingDone;
 
   const claimTone: Tone =
     isLive
@@ -329,7 +330,7 @@ export default function ClaimPoolPage() {
       ? 'warning'
       : 'muted';
 
-  // pre-flash last 3s before phase change
+  // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
     if (!countdownTargetIso) {
       setPreFlash(false);
@@ -349,18 +350,18 @@ export default function ClaimPoolPage() {
     };
 
     check();
-    const id = setInterval(check, 300);
+    const id = window.setInterval(check, 300);
     return () => {
-      clearInterval(id);
+      window.clearInterval(id);
       setPreFlash(false);
     };
   }, [countdownTargetIso]);
 
-  // final 10-second pulse
+  // Final 10-second pulse
   let isFinalTen = false;
   if (countdownTargetIso) {
-    const t = new Date(countdownTargetIso).getTime();
-    const diff = t - Date.now();
+    const targetMs = new Date(countdownTargetIso).getTime();
+    const diff = targetMs - Date.now();
     isFinalTen = diff > 0 && diff <= 10_000;
   }
 
@@ -774,7 +775,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     progressMessage = 'Distribution sequence active — standby for completion.';
   } else if (currentPhase === 'done') {
     progressMessage =
-      'Rewards distributed. Next window will be scheduled soon.';
+      'Payout finalized. Stand by for the next cycle.';
   }
 
   let statusSummary =
