@@ -913,13 +913,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-      {/* DRILL MODE BANNER */}
-      {/*
-<div className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-amber-300 backdrop-blur">
-  <span className="mt-[1.5px] mr-2 inline-block text-center" />
-  Accelerated testing mode active — timings are running in fast-forward.
-</div>
-*/}
+      
+      {/* DRILL MODE BANNER (disabled) */}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
