@@ -24,8 +24,13 @@ function useAutoReloadOnNewBuild() {
         if (!initialBuildId) {
           // First run – remember current build id
           initialBuildId = latest;
-        } else if (latest && initialBuildId && latest !== initialBuildId) {
-          // New build detected -> hard reload
+                } else if (latest && initialBuildId && latest !== initialBuildId) {
+          // New build detected -> mark and reload
+          try {
+            window.localStorage.setItem('claim_portal_recently_updated', '1');
+          } catch {
+            // ignore storage errors
+          }
           window.location.reload();
           return;
         }
@@ -266,7 +271,9 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-
+  // Toast & portal state
+  const { addToast, ToastContainer } = useToast();
+  const [state, setState] = useState<ClaimPortalState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
@@ -284,18 +291,22 @@ export default function ClaimPoolPage() {
 
   const walletProviderRef = useRef<any | null>(null);
 
-const [preFlash, setPreFlash] = useState(false);
-const [justSnapshotFired, setJustSnapshotFired] = useState(false);
-const snapshotFiredRef = useRef(false);
+  const [preFlash, setPreFlash] = useState(false);
+  const [justSnapshotFired, setJustSnapshotFired] = useState(false);
+  const snapshotFiredRef = useRef(false);
+
+  // NEW: “portal updated” banner state
+  const [justUpdated, setJustUpdated] = useState(false);
+
+  // Enable the auto-reload hook
+  useAutoReloadOnNewBuild();
 
   // Detect "we just reloaded because of a new build"
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     try {
-      const flag = window.localStorage.getItem(
-        'claim_portal_recently_updated'
-      );
+      const flag = window.localStorage.getItem('claim_portal_recently_updated');
       if (flag === '1') {
         setJustUpdated(true);
         window.localStorage.removeItem('claim_portal_recently_updated');
@@ -381,6 +392,11 @@ const snapshotFiredRef = useRef(false);
   const isDone = currentPhase === 'done';
   const isClosedOnly = currentPhase === 'closed';
   const isDistributing = isDistributionPhase;
+
+  const shouldShowCountdown =
+  currentPhase === 'scheduled' ||
+  currentPhase === 'snapshot' ||
+  currentPhase === 'open';
 
   const isRestingClosed =
   isClosedOnly && !isDistributionPhase && !isDone;
@@ -933,14 +949,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
      Render
   ─────────────────────────── */
 
-    return (
+   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
         <div className="fixed top-[56px] left-0 right-0 z-50 flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-400/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.6)] backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.9)] animate-pulse" />
-            <span>$CLAIM Portal updated to latest build</span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
+            <span>Portal updated · You&apos;re on the latest build</span>
           </div>
         </div>
       )}
@@ -1107,23 +1123,34 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
         : 'NEXT WINDOW IN'}
     </p>
 
-    {/* Countdown */}
-    {countdownTargetIso && (
-      <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
-        {isLive && (
-          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-        )}
-        <p
-          className={[
-            '-mt-1.5', // number slightly higher
-            'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-            isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-          ].join(' ')}
-        >
-          {isClosed ? '' : countdownLabel || '--:--:--'}
-        </p>
-      </div>
+    {/* Countdown OR phase text */}
+{shouldShowCountdown && countdownTargetIso && (
+  <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
+    {isLive && (
+      <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
     )}
+    <p
+      className={[
+        '-mt-1.5',
+        'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+        isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+      ].join(' ')
+      }
+    >
+      {countdownLabel || '--:--:--'}
+    </p>
+  </div>
+)}
+
+{!shouldShowCountdown && (
+  <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+    {currentPhase === 'closed'
+      ? 'Claim window closed. Rewards for this round are being prepared – payout starts shortly.'
+      : currentPhase === 'distribution'
+      ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
+      : 'Round complete. Rewards landed – next window will be announced here.'}
+  </p>
+)}
 
     {/* Snapshot pre-warning (before it fires) */}
     {showSnapshotPreFomo && (
