@@ -292,9 +292,9 @@ export default function ClaimPoolPage() {
 
   const walletProviderRef = useRef<any | null>(null);
 
-  const [preFlash, setPreFlash] = useState(false);
-  const [justSnapshotFired, setJustSnapshotFired] = useState(false);
-  const snapshotFiredRef = useRef(false);
+const [preFlash, setPreFlash] = useState(false);
+const [justSnapshotFired, setJustSnapshotFired] = useState(false);
+const snapshotFiredRef = useRef(false);
 
     /* ───────────────────────────
      Phase + countdown (safe when state is null)
@@ -592,65 +592,70 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-// Choose where snapshot time comes from
-// For now: trust JSON schedule first, then backend if needed
-const effectiveSnapshotIso =
-  SCHEDULE.snapshotAt ?? snapshotAt ?? null;
+  // Choose where snapshot time comes from
+  // Prefer JSON schedule; fall back to backend field if needed
+  const effectiveSnapshotIso =
+    SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
-const snapshotBaseMs = effectiveSnapshotIso
-  ? new Date(effectiveSnapshotIso).getTime()
-  : null;
-
-// Has the snapshot for this round actually happened?
-const hasSnapshotHappened =
-  snapshotBaseMs !== null && Date.now() >= snapshotBaseMs;
-
-const snapshotDiffMs =
-  snapshotBaseMs !== null && !Number.isNaN(snapshotBaseMs)
-    ? snapshotBaseMs - Date.now()
+  const snapshotBaseMs = effectiveSnapshotIso
+    ? new Date(effectiveSnapshotIso).getTime()
     : null;
 
-const isSnapshotSoon =
-  snapshotDiffMs !== null &&
-  snapshotDiffMs > 0 &&
-  snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
+  // Has the snapshot for this round actually happened?
+  const hasSnapshotHappened =
+    snapshotBaseMs !== null &&
+    !Number.isNaN(snapshotBaseMs) &&
+    Date.now() >= snapshotBaseMs;
 
-// Short human label, e.g. "09:58"
-const snapshotTimeLabel =
-  effectiveSnapshotIso && hasSnapshotHappened
-    ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-    : null;
+  const snapshotDiffMs =
+    snapshotBaseMs !== null && !Number.isNaN(snapshotBaseMs)
+      ? snapshotBaseMs - Date.now()
+      : null;
 
-  // For the “Latest snapshot:” line
-  const snapshotDateLabel = effectiveSnapshotIso ?? '';
+  const isSnapshotSoon =
+    snapshotDiffMs !== null &&
+    snapshotDiffMs > 0 &&
+    snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
+
+  // Short human label, e.g. "09:15"
+  const snapshotTimeLabel =
+    effectiveSnapshotIso && hasSnapshotHappened
+      ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      : null;
+
+  // For "Latest snapshot:" line
+  const snapshotDateLabel =
+    effectiveSnapshotIso
+      ? new Date(effectiveSnapshotIso).toLocaleString()
+      : '—';
 
   // UI helpers for hero strip
   const showSnapshotPreFomo =
-  currentPhase === 'scheduled' && isSnapshotSoon;
+    currentPhase === 'scheduled' && isSnapshotSoon;
 
   const showSnapshotLocked =
-  currentPhase === 'snapshot' && !!snapshotTimeLabel;
+    currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
-  // Fire a one-shot flash when the snapshot happens
+  // One-shot flash when snapshot fires
   useEffect(() => {
-  let timeoutId: number | undefined;
+    let timeoutId: number | undefined;
 
-  if (hasSnapshotHappened && !snapshotFiredRef.current) {
-    snapshotFiredRef.current = true;
-    setJustSnapshotFired(true);
+    if (hasSnapshotHappened && !snapshotFiredRef.current) {
+      snapshotFiredRef.current = true;
+      setJustSnapshotFired(true);
 
-    timeoutId = window.setTimeout(() => {
-      setJustSnapshotFired(false);
-    }, 4000); // 4 second highlight
-  }
+      timeoutId = window.setTimeout(() => {
+        setJustSnapshotFired(false);
+      }, 4000); // 4 seconds of extra “boom” after snapshot
+    }
 
-  return () => {
-    if (timeoutId) window.clearTimeout(timeoutId);
-  };
-}, [hasSnapshotHappened]);
+    return () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [hasSnapshotHappened]);
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
@@ -1178,7 +1183,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
         : ''
     ].join(' ')}
   >
-        <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
+
+          <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
           <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
         </span>
         <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
