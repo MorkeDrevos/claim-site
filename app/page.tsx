@@ -589,24 +589,44 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-  const snapshotDateLabel = snapshotAt ?? '';
+const snapshotDateLabel = snapshotAt ?? '';
 
-  // snapshot timing
-  const rawSnapshotIso = snapshotAt ?? SCHEDULE.snapshotAt ?? null;
-  const snapshotBaseMs = rawSnapshotIso
-    ? new Date(rawSnapshotIso).getTime()
+// snapshot timing
+const rawSnapshotIso = snapshotAt ?? SCHEDULE.snapshotAt ?? null;
+const snapshotBaseMs = rawSnapshotIso
+  ? new Date(rawSnapshotIso).getTime()
+  : null;
+const snapshotDiffMs =
+  snapshotBaseMs && !Number.isNaN(snapshotBaseMs)
+    ? snapshotBaseMs - Date.now()
     : null;
-  const snapshotDiffMs =
-    snapshotBaseMs && !Number.isNaN(snapshotBaseMs)
-      ? snapshotBaseMs - Date.now()
-      : null;
 
-  const isSnapshotSoon =
-    snapshotDiffMs !== null &&
-    snapshotDiffMs > 0 &&
-    snapshotDiffMs <= 2 * 60 * 1000;
+const isSnapshotSoon =
+  snapshotDiffMs !== null &&
+  snapshotDiffMs > 0 &&
+  snapshotDiffMs <= 2 * 60 * 1000;
 
-  const isSnapshotActive = currentPhase === 'snapshot';
+const isSnapshotActive = currentPhase === 'snapshot';
+
+// Has the snapshot for this round actually happened?
+const hasSnapshotHappened =
+  snapshotBaseMs !== null && Date.now() >= snapshotBaseMs;
+
+// Short human label, e.g. "09:58"
+const snapshotTimeLabel =
+  snapshotAt && hasSnapshotHappened
+    ? new Date(snapshotAt).toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : null;
+
+// UI helpers for hero strip
+const showSnapshotPreFomo =
+  currentPhase === 'scheduled' && isSnapshotSoon;
+
+const showSnapshotLocked =
+  currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
@@ -815,12 +835,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
     let progressMessage = '';
   if (currentPhase === 'scheduled') {
-    progressMessage =
-      'Claim window scheduled. Countdown shows when it opens.';
-  } else if (currentPhase === 'snapshot') {
-    progressMessage =
-      'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
-  } else if (currentPhase === 'open') {
+  progressMessage = isSnapshotSoon
+    ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+    : 'Claim window scheduled. Countdown shows when it opens.';
+} else if (currentPhase === 'snapshot') {
+  progressMessage = snapshotTimeLabel
+    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+} else if (currentPhase === 'open') {
     progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
@@ -1100,8 +1122,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       </div>
     )}
 
-    {/* Snapshot FOMO strip */}
-{isSnapshotPhase && (
+    {/* Snapshot pre-warning (before it fires) */}
+{showSnapshotPreFomo && (
   <div
     className="
       mt-2 inline-flex items-center gap-2
@@ -1114,7 +1136,26 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   >
     <span className="h-1.5 w-1.5 rounded-full bg-amber-300 shadow-[0_0_6px_rgba(251,191,36,0.8)] animate-pulse" />
     <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-100">
-      Snapshot may trigger at any time - make sure you hold the minimum.
+      Snapshot engine is arming – make sure your wallet holds the minimum.
+    </span>
+  </div>
+)}
+
+{/* Snapshot locked (after it fired, before/around claim window) */}
+{showSnapshotLocked && (
+  <div
+    className="
+      mt-2 inline-flex items-center gap-2
+      rounded-full
+      bg-emerald-500/8
+      px-3 py-1.5
+      border border-emerald-400/40
+      shadow-[0_0_12px_rgba(16,185,129,0.4)]
+    "
+  >
+    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_6px_rgba(16,185,129,0.9)]" />
+    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+      Snapshot locked at {snapshotTimeLabel} – eligibility for this round is set.
     </span>
   </div>
 )}
