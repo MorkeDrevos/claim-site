@@ -227,7 +227,7 @@ export default function ConceptPage() {
                 <li>Create predictable cycles of activity</li>
                 <li>Make timing matter again</li>
                 <li>Allow anyone to participate equally</li>
-                <li>Run autonomously</li>
+                <li>Runs autonomously</li>
               </ul>
             </div>
 
