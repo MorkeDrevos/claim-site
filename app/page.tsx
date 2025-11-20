@@ -1114,7 +1114,7 @@ return (
       </p>
 
       {/* Countdown pulled higher */}
-      <div className={`mt-1 ${isLive ? 'relative' : ''}`}>
+      <div className={`mt-21 ${isLive ? 'relative' : ''}`}>
         {isLive && (
           <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
         )}
