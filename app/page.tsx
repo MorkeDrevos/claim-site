@@ -1189,19 +1189,21 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                     onClick={handleClaimClick}
                     disabled={!canClaim}
                     className={[
-                      'mt-4 mb-4 flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.32em]',
-                      'transition-all duration-300 border',
-                      canClaim
-                        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
-                        : isClosedOnly
-                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-                        : isDistributing
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
-                        : isDone
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
-                        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
-                      canClaim && isPulseOn ? 'animate-pulse' : '',
-                    ].join(' ')}
+  // spacing / shape
+  'mt-5 flex w-full items-center justify-center rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+  'transition-all duration-300',
+  // states
+  canClaim
+    ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
+    : isClosedOnly
+    ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+    : isDistributing
+    ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+    : isDone
+    ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+    : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
+  canClaim && isPulseOn ? 'animate-pulse' : '',
+].join(' ')}
                   >
                     {canClaim
                       ? 'Lock in my share'
