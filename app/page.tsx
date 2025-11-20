@@ -7,6 +7,42 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
+const CURRENT_BUILD_ID =
+  process.env.NEXT_PUBLIC_BUILD_ID || 'dev';
+
+function useAutoReloadOnNewBuild() {
+  React.useEffect(() => {
+    let cancelled = false;
+    let timeoutId: number | null = null;
+    const check = async () => {
+      try {
+        const res = await fetch('/api/build-info', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+
+        if (!cancelled && data?.buildId && data.buildId !== CURRENT_BUILD_ID) {
+          // New deployment detected → hard reload
+          window.location.reload();
+          return;
+        }
+      } catch (e) {
+        console.error('build-info check failed', e);
+      } finally {
+        if (!cancelled) {
+          timeoutId = window.setTimeout(check, 30_000); // check every 30s
+        }
+      }
+    };
+
+    check();
+
+    return () => {
+      cancelled = true;
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+    };
+  }, []);
+}
+
 /* ───────────────────────────
    Types
 ─────────────────────────── */
@@ -225,9 +261,9 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  const { addToast, ToastContainer } = useToast();
+  useAutoReloadOnNewBuild();   // ⬅️ add this as the first line
 
-  const [state, setState] = useState<ClaimPortalState | null>(null);
+  const { addToast, ToastContainer } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
@@ -738,7 +774,7 @@ export default function ClaimPoolPage() {
      Progress bar + status summary
   ─────────────────────────── */
 
-    const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+      const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
     { id: 'snapshot', label: 'Snapshot taken' },
     { id: 'open', label: 'Claim window open' },
