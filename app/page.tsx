@@ -295,13 +295,8 @@ export default function ClaimPoolPage() {
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
   if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
 
-// whether this round has actually finished distributing, from schedule
-const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
-
-// ✅ if distribution is fully done, force final happy phase
-if (distributionDone) {
-  currentPhase = 'done';
-}
+  const distributionDone = !!(distDoneMs && nowMs >= distDoneMs);
+  if (distributionDone) currentPhase = 'done';
 
   // What are we counting toward?
   let countdownTargetIso: string | null = null;
@@ -322,32 +317,33 @@ if (distributionDone) {
     case 'distribution':
       countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
       break;
+    case 'done':
     default:
-      countdownTargetIso = null;
+      countdownTargetIso = null; // ✅ no countdown once done
   }
 
-  // ⬅️ This hook MUST be above any conditional returns
   const countdownLabel = useCountdown(countdownTargetIso);
 
-  // Helpers used for styling
-  const isLive = currentPhase === 'open';
-  const isClosed =
-    currentPhase === 'closed' ||
-    currentPhase === 'distribution' ||
-    currentPhase === 'done';
-
+  // Helpers used for styling + copy
+  const isLive         = currentPhase === 'open';
+  const isClosedOnly   = currentPhase === 'closed';
   const isDistributing = currentPhase === 'distribution';
-  const isDone = currentPhase === 'done';
-  const isClosedOnly = currentPhase === 'closed';
+  const isDone         = currentPhase === 'done';
+
+  // "resting" styling for the card (only true when the round is actually over
+  // or the claim window is closed but not distributing yet)
+  const isRestingClosed = currentPhase === 'closed';
+  const isRestingDone   = currentPhase === 'done';
+  const isResting       = isRestingClosed || isRestingDone;
 
   const claimTone: Tone =
     isLive
       ? 'success'
-      : currentPhase === 'scheduled'
-      ? 'muted'
       : currentPhase === 'distribution'
       ? 'warning'
-      : 'muted';
+      : currentPhase === 'scheduled' || currentPhase === 'snapshot'
+      ? 'muted'
+      : 'muted';  
 
   // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
@@ -1001,30 +997,221 @@ return (
 </h1>
               </div>
 
-             {/* CLAIM WINDOW CARD */}
+                       {/* CLAIM WINDOW CARD */}
 <div
   className={[
-    // shape + padding
     'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
     'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-
-    // soft flash just before phase change
     preFlash ? 'animate-pulse' : '',
-
-    // LIVE = green; CLOSED = greyed; everything else = neutral
     isLive
-      ? 'border-emerald-500/40'
-      : isClosed
-        ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-        : 'border-slate-700/60 bg-slate-900/80',
+      ? 'border-emerald-500/50'
+      : isRestingClosed
+      ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
+      : isDistributing || isDone
+      ? 'border-emerald-400/60'
+      : 'border-slate-700/60 bg-slate-900/80',
   ].join(' ')}
 >
-    {/* One row: countdown left, CLAIM right */}
+  {/* TOP ROW */}
   <div className="flex items-center justify-between gap-6">
-    {/* LEFT: label + countdown */}
-    <div className="flex flex-col pl-1 sm:pl-2">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive ? (
+    {/* LEFT SIDE */}
+    {isDone ? (
+      // ✅ FINAL HAPPY STATE
+      <div className="flex flex-col pl-1 sm:pl-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+          REWARDS DISTRIBUTED
+        </p>
+        <p className="mt-2 text-[13px] text-emerald-100/90">
+          Next window will be scheduled soon.
+        </p>
+      </div>
+    ) : (
+      // NORMAL LABEL + COUNTDOWN
+      <div className="flex flex-col pl-1 sm:pl-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+          {isLive ? (
+            <span className="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="9" className="opacity-30" />
+                <circle cx="12" cy="12" r="5" className="opacity-60" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              WINDOW CLOSES IN
+            </span>
+          ) : isClosedOnly ? (
+            <span className="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="9" className="opacity-30" />
+                <circle cx="12" cy="12" r="5" className="opacity-60" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              REWARDS DISTRIBUTION STARTS IN
+            </span>
+          ) : isDistributing ? (
+            <span className="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="9" className="opacity-30" />
+                <circle cx="12" cy="12" r="5" className="opacity-60" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              DISTRIBUTION COMPLETES IN
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-[13px] w-[13px] text-emerald-300 opacity-90 translate-y-[-1px]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="9" className="opacity-30" />
+                <circle cx="12" cy="12" r="5" className="opacity-60" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              NEXT WINDOW IN
+            </span>
+          )}
+        </p>
+
+        {/* Countdown – hidden when there is no target */}
+        {countdownTargetIso && (
+          <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
+            {isLive && (
+              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+            )}
+            <p
+              className={[
+                'text-[32px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+                isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+              ].join(' ')}
+            >
+              {countdownLabel || '--:--:--'}
+            </p>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* RIGHT: label + pool */}
+    <div className="flex flex-col items-end text-right">
+      <div className="flex items-center gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+          Current round pool
+        </p>
+
+        <div className="relative group">
+          <button
+            type="button"
+            className="inline-flex h-4 w-4 items-center justify-center 
+                       rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold
+                       border border-slate-700 
+                       hover:bg-slate-700 hover:text-white hover:border-slate-500 transition"
+          >
+            ?
+          </button>
+          <div
+            className="pointer-events-none absolute left-full ml-3 top-2 
+                       w-72 opacity-0 group-hover:opacity-100 
+                       transition-opacity duration-200 z-50"
+          >
+            <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+              <p className="text-[12px] text-slate-200 leading-relaxed">
+                Rewards are paid in{' '}
+                <span className="text-emerald-300 font-medium">$CLAIM</span>
+                {' '}and shared equally among wallets that locked in during the live window.{' '}
+                <span className="text-emerald-300 font-medium">
+                  USD values are approximate.
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-1.5 flex items-end justify-end">
+        <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
+          {rewardAmountText}
+          <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+            $CLAIM
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* CTA bar */}
+  <button
+    type="button"
+    onClick={handleClaimClick}
+    disabled={!canClaim}
+    className={[
+      'mt-4 mb-4 flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.32em]',
+      'transition-all duration-300 border',
+      canClaim
+        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
+        : isClosedOnly
+        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+        : isDistributing || isDone
+        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
+      canClaim && isPulseOn ? 'animate-pulse' : '',
+    ].join(' ')}
+  >
+    {canClaim
+      ? 'Lock in my share'
+      : isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
+      : 'Opens soon'}
+  </button>
+
+  {/* Eligibility text (unchanged) */}
+  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
+    <p>
+      • <span className="text-emerald-300/70 font-medium">Show up</span> during the
+      live window and{' '}
+      <span className="text-emerald-300/70 font-medium">lock in your share</span>.
+    </p>
+    <p>
+      • Eligibility: hold 1,000,000 $CLAIM at the{' '}
+      <span className="text-emerald-300/70 font-medium">snapshot</span> – wallets
+      below the minimum sit out that round.
+    </p>
+    <p>
+      • Rewards are auto-distributed in{' '}
+      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
+      via the{' '}
+      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
+    </p>
+  </div>
+</div>
+{/* end CLAIM WINDOW CARD */}   
           // Live window
           <span className="inline-flex items-center gap-2">
             <svg
