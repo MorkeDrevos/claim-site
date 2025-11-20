@@ -14,6 +14,7 @@ function useAutoReloadOnNewBuild() {
   React.useEffect(() => {
     let cancelled = false;
     let timeoutId: number | null = null;
+
     const check = async () => {
       try {
         const res = await fetch('/api/build-info', { cache: 'no-store' });
@@ -21,7 +22,6 @@ function useAutoReloadOnNewBuild() {
         const data = await res.json();
 
         if (!cancelled && data?.buildId && data.buildId !== CURRENT_BUILD_ID) {
-          // New deployment detected → hard reload
           window.location.reload();
           return;
         }
@@ -29,7 +29,7 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 30_000); // check every 30s
+          timeoutId = window.setTimeout(check, 30_000);
         }
       }
     };
@@ -261,9 +261,10 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  useAutoReloadOnNewBuild();   // ⬅️ add this as the first line
+  useAutoReloadOnNewBuild();   // first line inside
 
   const { addToast, ToastContainer } = useToast();
+  const [state, setState] = useState<ClaimPortalState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
