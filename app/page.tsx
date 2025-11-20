@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
-import ConnectWalletButton from '../components/ConnectWalletButton';
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
@@ -130,7 +129,7 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
-// TEMP: JSON schedule doesn't define `mode` yet, ignore type warning here
+// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
 // @ts-ignore
 const SCHEDULE = schedule as ClaimSchedule;
 const SNAPSHOT_FOMO_WINDOW_MINUTES = 5; // or 10, whatever you want
@@ -326,7 +325,7 @@ export default function ClaimPoolPage() {
 
   const fomoMessages = [
   "Snapshot engine is arming - make sure your wallet holds the minimum.",
-  "Live window approaching - don't miss your share.",
+  "Live window approaching - don’t miss your share.",
   "Reminder: Only eligible wallets share the pool — check your balance."
 ];
 
@@ -743,7 +742,7 @@ function getRandomFomoMessage() {
 //
 //     timeoutId = window.setTimeout(() => {
 //       setJustSnapshotFired(false);
-//     }, 4000); // 4 seconds of extra "boom" after snapshot
+//     }, 4000); // 4 seconds of extra “boom” after snapshot
 //   }
 //
 //   return () => {
@@ -932,50 +931,53 @@ function getRandomFomoMessage() {
     }
   };
 
-    /* ───────────────────────────
+  /* ───────────────────────────
      Progress bar + status summary
   ─────────────────────────── */
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Opens soon' },
-    { id: 'snapshot', label: 'Snapshot window' },
-    { id: 'open', label: 'Claim window open' },
-    { id: 'closed', label: 'Claim window closed' },
-    {
-      id: 'distribution',
-      label: isDone ? 'Rewards distributed' : 'Reward distribution in progress',
-    },
-  ];
+      const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+  { id: 'scheduled', label: 'Opens soon' },
+  { id: 'snapshot', label: 'Snapshot window' }, // or 'Snapshot phase'
+  { id: 'open', label: 'Claim window open' },
+  { id: 'closed', label: 'Claim window closed' },
+  {
+    id: 'distribution',
+    label: isDone
+      ? 'Rewards distributed'
+      : 'Reward distribution in progress',
+  },
+];
+  
+// Treat the final "done" phase as the same step as "distribution"
+const effectivePhaseForSteps =
+  currentPhase === 'done' ? 'distribution' : currentPhase;
 
-  // Treat the final "done" phase as the same step as "distribution"
-  const effectivePhaseForSteps =
-    currentPhase === 'done' ? 'distribution' : currentPhase;
+const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
-  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
-
-  let progressMessage = '';
+    let progressMessage = '';
   if (currentPhase === 'scheduled') {
-    progressMessage = isSnapshotSoon
-      ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
-      : 'Claim window scheduled. Countdown shows when it opens.';
+  progressMessage = isSnapshotSoon
+    ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+    : 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
-    progressMessage = snapshotTimeLabel
-      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+  progressMessage = snapshotTimeLabel
+    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
-    progressMessage =
+  progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-    progressMessage =
+  progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-    progressMessage =
-      'Rewards are being sent out - watch your wallet, this round is paying.';
+  progressMessage =
+    'Rewards are being sent out - watch your wallet, this round is paying.';
   } else if (currentPhase === 'done') {
-    progressMessage =
-      'Round complete. Rewards landed – get ready for the next cycle.';
+  progressMessage =
+    'Round complete. Rewards landed – get ready for the next cycle.';
   }
+
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -992,27 +994,27 @@ function getRandomFomoMessage() {
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
     statusSummary =
-      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
+    'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
     statusSummary =
-      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+    'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
   } else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
   let statusDotColor = 'bg-emerald-400';
+
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  // ───────────────────────────
-  // Render
-  // ───────────────────────────
+  /* ───────────────────────────
+     Render
+  ─────────────────────────── */
 
-  return (
+   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
         <div className="fixed top-[62px] left-0 right-0 z-50 flex justify-center">
@@ -1025,7 +1027,7 @@ function getRandomFomoMessage() {
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/60 via-emerald-500/20 to-slate-950" />
+        <div className="absolute inset-0 bg-gradient-to-b from-CURRENT ROUND POOLemerald-500/60 via-emerald-500/20 to-slate-950" />
         <div className="absolute -left-40 top-4 h-80 w-80 rounded-full bg-emerald-400/60 blur-3xl opacity-90" />
         <div className="absolute -right-40 top-10 h-80 w-80 rounded-full bg-sky-400/55 blur-3xl opacity-80" />
         <div className="absolute inset-x-[-40px] bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
@@ -1101,9 +1103,17 @@ function getRandomFomoMessage() {
               {networkLabel}
             </span>
 
-            <div className="hidden sm:inline-flex">
-  <ConnectWalletButton />
-</div>
+            <button
+              type="button"
+              onClick={handleConnectClick}
+              className="hidden sm:inline-flex items-center rounded-full px-5 py-2 bg-gradient-to-r from-emerald-400/25 to-emerald-500/30 border border-emerald-400/40 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.25)] hover:from-emerald-400/35 hover:to-emerald-500/40 hover:border-emerald-400 hover:text-white transition-all"
+            >
+              {connectedWallet
+                ? `${connectedWallet.name} connected`
+                : effectiveWalletConnected
+                ? 'Wallet connected'
+                : 'Connect wallet'}
+            </button>
           </div>
         </div>
       </header>
@@ -1365,9 +1375,18 @@ function getRandomFomoMessage() {
               </div>
 
               {/* MOBILE CONNECT CTA */}
-<div className="block sm:hidden mt-2 mb-2">
-  <ConnectWalletButton />
-</div>
+              <div className="block sm:hidden mt-2 mb-2">
+                <button
+                  type="button"
+                  onClick={handleConnectClick}
+                  className="w-full flex items-center justify-center rounded-[28px] px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.32em] bg-gradient-to-b from-emerald-500/10 via-slate-900/80 to-slate-900/90 text-slate-100 border border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.45)] active:scale-[0.98] transition-all"
+                >
+                  {connectedWallet
+                    ? `${connectedWallet.name} connected`
+                    : effectiveWalletConnected
+                    ? 'Wallet connected'
+                    : 'Connect wallet'}
+                </button>
               </div>
             </div>
 
@@ -1739,7 +1758,7 @@ function getRandomFomoMessage() {
                     </li>
                   </ul>
                   <p className="text-[11px] text-slate-500">
-                    Eligibility is derived solely from the wallet's token
+                    Eligibility is derived solely from the wallet’s token
                     balance as it existed at the snapshot slot for each round.
                   </p>
                 </div>
@@ -1750,7 +1769,7 @@ function getRandomFomoMessage() {
                   <p className="text-[13px]">
                     Rewards are earned by presence. If you show up during the
                     live claim window and lock your share, you receive an equal
-                    split of that round's pool.
+                    split of that round’s pool.
                   </p>
                   <ul className="list-disc pl-5 space-y-2 text-[13px] text-slate-400">
                     <li>Everyone who locks in receives an equal share.</li>
