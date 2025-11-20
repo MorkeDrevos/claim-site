@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
-import ConnectWalletButton from './components/ConnectWalletButton';
+import ConnectWalletButton from '../components/ConnectWalletButton';I
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
@@ -932,53 +932,50 @@ function getRandomFomoMessage() {
     }
   };
 
-  /* ───────────────────────────
+    /* ───────────────────────────
      Progress bar + status summary
   ─────────────────────────── */
 
-      const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-  { id: 'scheduled', label: 'Opens soon' },
-  { id: 'snapshot', label: 'Snapshot window' }, // or 'Snapshot phase'
-  { id: 'open', label: 'Claim window open' },
-  { id: 'closed', label: 'Claim window closed' },
-  {
-    id: 'distribution',
-    label: isDone
-      ? 'Rewards distributed'
-      : 'Reward distribution in progress',
-  },
-];
-  
-// Treat the final "done" phase as the same step as "distribution"
-const effectivePhaseForSteps =
-  currentPhase === 'done' ? 'distribution' : currentPhase;
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    { id: 'scheduled', label: 'Opens soon' },
+    { id: 'snapshot', label: 'Snapshot window' },
+    { id: 'open', label: 'Claim window open' },
+    { id: 'closed', label: 'Claim window closed' },
+    {
+      id: 'distribution',
+      label: isDone ? 'Rewards distributed' : 'Reward distribution in progress',
+    },
+  ];
 
-const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
-const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+  // Treat the final "done" phase as the same step as "distribution"
+  const effectivePhaseForSteps =
+    currentPhase === 'done' ? 'distribution' : currentPhase;
 
-    let progressMessage = '';
+  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+
+  let progressMessage = '';
   if (currentPhase === 'scheduled') {
-  progressMessage = isSnapshotSoon
-    ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
-    : 'Claim window scheduled. Countdown shows when it opens.';
+    progressMessage = isSnapshotSoon
+      ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+      : 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
-  progressMessage = snapshotTimeLabel
-    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+    progressMessage = snapshotTimeLabel
+      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
-  progressMessage =
+    progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-  progressMessage =
+    progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-  progressMessage =
-    'Rewards are being sent out - watch your wallet, this round is paying.';
+    progressMessage =
+      'Rewards are being sent out - watch your wallet, this round is paying.';
   } else if (currentPhase === 'done') {
-  progressMessage =
-    'Round complete. Rewards landed – get ready for the next cycle.';
+    progressMessage =
+      'Round complete. Rewards landed – get ready for the next cycle.';
   }
-
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -995,27 +992,27 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
     statusSummary =
-    'All systems nominal. This round is paying out - rewards are streaming on-chain.';
+      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
     statusSummary =
-    'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
   } else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
   let statusDotColor = 'bg-emerald-400';
-
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-    // ───────────────────────────
+  // ───────────────────────────
   // Render
   // ───────────────────────────
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
+
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
         <div className="fixed top-[62px] left-0 right-0 z-50 flex justify-center">
