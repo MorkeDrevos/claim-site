@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
+import ConnectWalletButton from '../components/ConnectWalletButton';
 
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
@@ -1103,17 +1104,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               {networkLabel}
             </span>
 
-            <button
-              type="button"
-              onClick={handleConnectClick}
-              className="hidden sm:inline-flex items-center rounded-full px-5 py-2 bg-gradient-to-r from-emerald-400/25 to-emerald-500/30 border border-emerald-400/40 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.25)] hover:from-emerald-400/35 hover:to-emerald-500/40 hover:border-emerald-400 hover:text-white transition-all"
-            >
-              {connectedWallet
-                ? `${connectedWallet.name} connected`
-                : effectiveWalletConnected
-                ? 'Wallet connected'
-                : 'Connect wallet'}
-            </button>
+            <div className="hidden sm:inline-flex">
+  <ConnectWalletButton />
+</div>
           </div>
         </div>
       </header>
@@ -1375,18 +1368,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </div>
 
               {/* MOBILE CONNECT CTA */}
-              <div className="block sm:hidden mt-2 mb-2">
-                <button
-                  type="button"
-                  onClick={handleConnectClick}
-                  className="w-full flex items-center justify-center rounded-[28px] px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.32em] bg-gradient-to-b from-emerald-500/10 via-slate-900/80 to-slate-900/90 text-slate-100 border border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.45)] active:scale-[0.98] transition-all"
-                >
-                  {connectedWallet
-                    ? `${connectedWallet.name} connected`
-                    : effectiveWalletConnected
-                    ? 'Wallet connected'
-                    : 'Connect wallet'}
-                </button>
+<div className="block sm:hidden mt-2 mb-2">
+  <ConnectWalletButton />
+</div>
               </div>
             </div>
 
