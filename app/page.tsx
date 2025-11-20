@@ -1008,9 +1008,8 @@ return (
   <br />
   Show up. Lock in. Get your share.
 </h1>
-              </div>
 
-                       {/* CLAIM WINDOW CARD */}
+{/* CLAIM WINDOW CARD */}
 <div
   className={[
     'mt-3 rounded-3xl border px-6 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
@@ -1029,7 +1028,7 @@ return (
   <div className="flex items-center justify-between gap-6">
     {/* LEFT SIDE */}
     {isDone ? (
-      // ✅ FINAL HAPPY STATE
+      // final happy state
       <div className="flex flex-col pl-1 sm:pl-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
           REWARDS DISTRIBUTED
@@ -1039,55 +1038,8 @@ return (
         </p>
       </div>
     ) : (
-      // NORMAL LABEL + COUNTDOWN
+      // normal label + countdown
       <div className="flex flex-col pl-1 sm:pl-2">
-
-      {/* SNAPSHOT TEASE / LOCKED BANNERS */}
-      {isSnapshotSoon && !isLive && !isClosedOnly && (
-        <div
-          className="
-            mb-1 inline-flex items-center gap-2 rounded-full
-            bg-amber-500/10 border border-amber-400/60
-            px-3 py-1
-            shadow-[0_0_18px_rgba(251,191,36,0.6)]
-          "
-        >
-          <span
-            className="
-              h-1.5 w-1.5 rounded-full bg-amber-300
-              animate-[pulse_0.9s_ease-in-out_infinite]
-            "
-          />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200">
-            Snapshot incoming – top up before it hits.
-          </span>
-        </div>
-      )}
-
-      {isSnapshotActive && (
-        <div
-          className="
-            mb-1 inline-flex items-center gap-2 rounded-full
-            bg-emerald-500/10 border border-emerald-400/60
-            px-3 py-1
-            shadow-[0_0_22px_rgba(16,185,129,0.8)]
-          "
-        >
-          <span
-            className="
-              h-1.5 w-1.5 rounded-full bg-emerald-300
-              animate-[pulse_1.1s_ease-in-out_infinite]
-            "
-          />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
-            Snapshot locked – balances for this round are frozen.
-          </span>
-        </div>
-      )}
-
-      <p className="mt-[2px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive ? (
-
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
           {isLive ? (
             <span className="inline-flex items-center gap-2">
@@ -1156,7 +1108,7 @@ return (
           )}
         </p>
 
-        {/* Countdown – hidden when there is no target */}
+        {/* Countdown */}
         {countdownTargetIso && (
           <div className={isLive ? 'relative mt-1.5' : 'mt-1.5'}>
             {isLive && (
@@ -1175,7 +1127,7 @@ return (
       </div>
     )}
 
-    {/* RIGHT: label + pool */}
+    {/* RIGHT: pool label + amount */}
     <div className="flex flex-col items-end text-right">
       <div className="flex items-center gap-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
@@ -1200,8 +1152,9 @@ return (
             <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
               <p className="text-[12px] text-slate-200 leading-relaxed">
                 Rewards are paid in{' '}
-                <span className="text-emerald-300 font-medium">$CLAIM</span>
-                {' '}and shared equally among wallets that locked in during the live window.{' '}
+                <span className="text-emerald-300 font-medium">$CLAIM</span>{' '}
+                and shared equally among wallets that locked in during the live
+                window.{' '}
                 <span className="text-emerald-300 font-medium">
                   USD values are approximate.
                 </span>
@@ -1222,7 +1175,7 @@ return (
     </div>
   </div>
 
-  {/* CTA bar */}
+  {/* CTA */}
   <button
     type="button"
     onClick={handleClaimClick}
@@ -1234,8 +1187,10 @@ return (
         ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_32px_rgba(16,185,129,0.8)] hover:bg-emerald-400'
         : isClosedOnly
         ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-        : isDistributing || isDone
+        : isDistributing
         ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+        : isDone
+        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
         : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_28px_rgba(16,185,129,0.35)] cursor-not-allowed',
       canClaim && isPulseOn ? 'animate-pulse' : '',
     ].join(' ')}
@@ -1251,29 +1206,32 @@ return (
       : 'Opens soon'}
   </button>
 
-  {/* Eligibility text (unchanged) */}
+  {/* Eligibility bullets */}
   <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
     <p>
-      • <span className="text-emerald-300/70 font-medium">Show up</span> during the
-      live window and{' '}
+      • <span className="text-emerald-300/70 font-medium">Show up</span> during
+      the live window and{' '}
       <span className="text-emerald-300/70 font-medium">lock in your share</span>.
     </p>
     <p>
       • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-      <span className="text-emerald-300/70 font-medium">snapshot</span> – wallets
+      <span className="text-emerald-300/70 font-medium">snapshot</span> - wallets
       below the minimum sit out that round.
     </p>
     <p>
       • Rewards are auto-distributed in{' '}
-      <span className="text-emerald-300/70 font-medium">$CLAIM</span>{' '}
-      via the{' '}
-      <span className="text-emerald-300/70 font-medium">on-chain rewards engine</span>.
+      <span className="text-emerald-300/70 font-medium">$CLAIM</span> via the{' '}
+      <span className="text-emerald-300/70 font-medium">
+        on-chain rewards engine
+      </span>
+      .
     </p>
   </div>
 </div>
-{/* end CLAIM WINDOW CARD */}   
-              
-            </div>
+{/* end CLAIM WINDOW CARD */}
+
+  </div>
+   </div>
 
 {/* Mobile-only Connect Wallet CTA */}
 <div className="block sm:hidden mt-2 mb-2">
