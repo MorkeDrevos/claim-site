@@ -1,8 +1,9 @@
 {
-  "roundNumber": 16,
-  "snapshotAt": "2025-11-20T00:40:00.566Z",
-  "windowOpensAt": "2025-11-20T04:40:30.566Z",
-  "windowClosesAt": "2025-11-20T00:41:00.566Z",
-  "distributionStartsAt": "2025-11-20T00:41:30.566Z",
-  "distributionDoneAt": "2025-11-20T00:42:00.566Z"
+  "roundNumber": 10,
+  "snapshotAt": "2025-11-19T20:19:31.756Z",
+  "windowOpensAt": "2025-11-19T20:20:31.756Z",
+  "windowClosesAt": "2025-11-19T20:21:31.756Z",
+  "distributionStartsAt": "2025-11-19T20:22:15.756Z",
+  "distributionDoneAt": "2025-11-19T20:23:07.756Z",
+  "notes": "Drill mode / fast-forward timings for UI testing."
 }
