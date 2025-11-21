@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import type React from "react";
+'use client';
 
-import "@solana/wallet-adapter-react-ui/styles.css";
-import "./globals.css";
+import '@/globals.css';
+import type { Metadata } from 'next';
+import type React from 'react';
+import '@solana/wallet-adapter-react-ui/styles.css';
 
-import Image from "next/image";
-import { Analytics } from "@vercel/analytics/react";
-import WalletContextProvider from "../components/WalletContextProvider";
+import { Analytics } from '@vercel/analytics/react';
+import WalletContextProvider from '../components/WalletContextProvider';
 
 export const metadata: Metadata = {
-  title: "$CLAIM Portal",
-  description: "The official $CLAIM pool portal.",
+  title: '$CLAIM Portal',
+  description: 'The official $CLAIM pool portal.',
 };
 
 export default function RootLayout({
@@ -21,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <WalletContextProvider>{children}</WalletContextProvider>
+        <WalletContextProvider>
+          {children}
+        </WalletContextProvider>
         <Analytics />
       </body>
     </html>
