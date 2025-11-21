@@ -58,26 +58,31 @@ body::before {
 
 /* CLAIM Portal – wallet button styling */
 @layer components {
-  /* root wallet button (covers all wallets) */
-  .wallet-adapter-button,
-  .wallet-adapter-button-trigger {
+  /* Our custom class applied via className on WalletMultiButton */
+  .claim-wallet-btn {
     @apply inline-flex items-center justify-center gap-2
-      w-full
       rounded-full border border-emerald-400/80
-      bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500
       text-slate-950 text-[13px] font-semibold uppercase tracking-[0.22em]
       shadow-[0_18px_60px_rgba(16,185,129,0.6)]
-      transition-all duration-200
-      focus:outline-none focus:ring-2 focus:ring-emerald-400/80 focus:ring-offset-0;
+      transition-all duration-200;
+
+    /* Force Jupiter-style gradient + full width */
+    background-image: linear-gradient(
+      to right,
+      #22c55e,
+      #34d399,
+      #22c55e
+    ) !important;
+    width: 100% !important;
+    padding: 0.9rem 1.9rem !important;
   }
 
-  .wallet-adapter-button:not([disabled]):hover,
-  .wallet-adapter-button-trigger:not([disabled]):hover {
-    @apply brightness-[1.06];
+  .claim-wallet-btn:not([disabled]):hover {
+    filter: brightness(1.06) !important;
   }
 
-  .wallet-adapter-button[disabled],
-  .wallet-adapter-button-trigger[disabled] {
-    @apply opacity-60 cursor-default;
+  .claim-wallet-btn[disabled] {
+    opacity: 0.6 !important;
+    cursor: default !important;
   }
 }
