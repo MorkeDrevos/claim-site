@@ -90,7 +90,10 @@ body::before {
 }
 .wallet-adapter-button {
   @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
-  font-size: 14px !important;
+  font-size: 13px !important;
   line-height: 1 !important;
   border-radius: 9999px !important;
+}
+.wallet-adapter-button {
+  font-size: 14px !important;
 }
