@@ -106,23 +106,25 @@ body::before {
   height: 14px !important;
 }
 
-.wallet-adapter-button span {
-  color: #e5e7eb !important; /* same as OPENS SOON text */
-  letter-spacing: 0.32em;
+/* ONLY override inside our CLAIM pill buttons */
+.claim-wallet-btn-header .wallet-adapter-button,
+.claim-wallet-btn-mobile .wallet-adapter-button {
+  @apply bg-transparent shadow-none border-none text-white px-3 py-0;
+  height: 26px !important;
+  min-height: 26px !important;
+  line-height: 1 !important;
+  border-radius: 9999px !important;
 }
 
-/* No hover background from adapter */
-.wallet-adapter-button:not([disabled]):hover {
-  background: transparent !important;
-}
-
-/* Shrink inner icon */
-.wallet-adapter-button-start-icon svg {
+/* Icon ONLY inside claim buttons */
+.claim-wallet-btn-header .wallet-adapter-button-start-icon svg,
+.claim-wallet-btn-mobile .wallet-adapter-button-start-icon svg {
   width: 14px !important;
   height: 14px !important;
 }
 
-/* Make CONNECT text white */
-.wallet-adapter-button span {
+/* Text ONLY inside claim buttons */
+.claim-wallet-btn-header .wallet-adapter-button span,
+.claim-wallet-btn-mobile .wallet-adapter-button span {
   color: white !important;
 }
