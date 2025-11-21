@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global CLAIM portal styling – CSS ONLY, no JS/TSX here */
+
+html,
+body {
+  min-height: 100%;
+  background-color: #020617; /* slate-950 */
+  color: #f9fafb;            /* slate-50 */
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", sans-serif;
+}
+
+/* You can add more global classes here if needed – but ONLY CSS */
