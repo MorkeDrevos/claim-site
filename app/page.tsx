@@ -1270,7 +1270,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     ? 'Distribution in progress'
     : isDone
     ? 'Rewards distributed'
-    : 'Claim Window Opens soon'}
+    : 'Window Opens soon'}
 </button>
 
                   {/* Bullets */}
@@ -1309,9 +1309,11 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </div>
 
 {/* MOBILE CONNECT CTA */}
-<div className="mt-4 mb-4 block sm:hidden">
-  <ConnectWalletButton variant="mobile" />
-</div>            </div>
+<div className="mt-4 mb-4 block sm:hidden wallet-mobile-btn">
+  <ConnectWalletButton />
+</div>
+
+            </div>
 
             {/* RIGHT COLUMN — Mission Control */}
 <div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
