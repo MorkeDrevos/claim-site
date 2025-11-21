@@ -15,21 +15,22 @@ export default function ConnectWalletButton({
 }: ConnectWalletButtonProps) {
   const { connected } = useWallet();
 
-  // When disconnected we force the label.
-  // When connected, WalletMultiButton will show icon + short address.
   const label = connected ? undefined : 'Connect wallet';
 
+  // Jupiter-like clean desktop style
   const desktopClasses = [
     'inline-flex items-center',
     'rounded-full',
-    'bg-slate-900/90',
-    'border border-slate-700/70',
-    'px-4 py-1.5',
-    'text-[13px] font-semibold text-slate-50',
-    'hover:bg-slate-800 hover:border-emerald-400/70',
+    'px-3 py-1.5',
+    'text-[12px] font-semibold',  // smaller font
+    'text-white',
+    'bg-transparent',             // NO background
+    'border border-transparent',  // no border
+    'hover:text-emerald-300',     // nice subtle hover
     'transition-all',
   ].join(' ');
 
+  // Keep mobile CLAIM pill exactly as before
   const mobileClasses = [
     'inline-flex items-center justify-center',
     'w-full rounded-full',
@@ -43,12 +44,11 @@ export default function ConnectWalletButton({
     'transition-all',
   ].join(' ');
 
-  const variantClasses = variant === 'mobile' ? mobileClasses : desktopClasses;
+  const variantClasses =
+    variant === 'mobile' ? mobileClasses : desktopClasses;
 
   return (
-    <WalletMultiButton
-      className={[variantClasses, className].join(' ')}
-    >
+    <WalletMultiButton className={[variantClasses, className].join(' ')}>
       {label}
     </WalletMultiButton>
   );
