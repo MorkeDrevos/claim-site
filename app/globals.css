@@ -54,7 +54,6 @@ body::before {
   }
 }
 
-/* Remove default/* CLAIM Portal – wallet button styling */
 @layer components {
   .claim-wallet-btn {
     @apply inline-flex items-center gap-2
