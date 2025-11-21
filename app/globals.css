@@ -174,3 +174,10 @@ body::before {
     margin-right: 10px;
   }
 }
+
+/* Hide the snapshot teaser circle on mobile */
+@media (max-width: 640px) {
+  .snapshot-teaser {
+    display: none !important;
+  }
+}
