@@ -115,3 +115,15 @@ body::before {
 .wallet-desktop-btn .wallet-adapter-button:hover {
   opacity: 0.85;
 }
+/* Show dropdown arrow on desktop wallet button */
+.wallet-desktop-btn .wallet-adapter-button-end-icon {
+  display: inline-flex !important;  /* restore arrow visibility */
+  opacity: 0.8;
+  margin-left: 6px;                 /* spacing like Jupiter */
+}
+
+.wallet-desktop-btn .wallet-adapter-button-end-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  fill: currentColor !important;    /* match text color */
+}
