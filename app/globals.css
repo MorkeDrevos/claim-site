@@ -2,40 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CLAIM Portal – wallet button styling */
-@layer components {
-  /* Base style – override Jupiter by targeting THEIR class + ours */
-  .wallet-adapter-button.claim-wallet-btn {
-    @apply inline-flex items-center gap-2
-      rounded-full border border-emerald-400/80
-      text-slate-950 font-semibold uppercase tracking-[0.22em]
-      shadow-[0_18px_60px_rgba(16,185,129,0.6)]
-      transition-all duration-200
-      focus:outline-none focus:ring-2 focus:ring-emerald-400/80 focus:ring-offset-0;
+/* Global page styling */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #020617; /* dark navy */
+  color: #e5e7eb;            /* light gray text */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    sans-serif;
+}
 
-    background-image: linear-gradient(
-      90deg,
-      rgba(16, 185, 129, 1),
-      rgba(52, 211, 153, 1),
-      rgba(16, 185, 129, 1)
-    );
+html {
+  font-size: 17px;
+}
+
+body {
+  font-weight: 400;
+  color: #e2e8f0;
+  background: radial-gradient(
+    ellipse at 50% -20%,
+    #0f172a 0%,
+    #020617 40%,
+    #000 90%
+  );
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* Grain overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("/img/noise.png");
+  opacity: 0.07;
+  mix-blend-mode: screen;
+  z-index: -1;
+}
+
+/* Glow keyframes */
+@keyframes flashGreen {
+  0%, 100% {
+    background-color: rgba(16, 185, 129, 0.08);
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
   }
-
-  /* Desktop header pill */
-  .wallet-adapter-button.claim-wallet-btn-header {
-    @apply px-4 py-2 text-[11px];
-  }
-
-  /* Mobile full-width pill */
-  .wallet-adapter-button.claim-wallet-btn-mobile {
-    @apply w-full justify-center px-4 py-3 text-[11px];
-  }
-
-  .wallet-adapter-button.claim-wallet-btn:not([disabled]):hover {
-    @apply brightness-[1.06];
-  }
-
-  .wallet-adapter-button.claim-wallet-btn[disabled] {
-    @apply opacity-60 cursor-default;
+  50% {
+    background-color: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 80px rgba(16, 185, 129, 0.9);
   }
 }
