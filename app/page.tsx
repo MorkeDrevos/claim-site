@@ -770,13 +770,6 @@ useEffect(() => {
     },
   ];
 
-// Use backend info only – no more local connected Wallet
-const walletIsConnected = walletConnected;
-
-// Label for “Your wallet” section
-// Use the short label coming from backend, or fallback to a dash
-const walletLabelShort = walletShort ? walletShort : '—';
-
   const isEligible = eligibleAmount >= MIN_HOLDING;
 
   const rewardAmountText =
@@ -985,7 +978,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
-  const hasAnyIssue = hasBackendIssue || hasContractIssue;
+  const hasAnyIssue = hasBackendI ssue || hasContractIssue;
 
   if (hasAnyIssue) {
     statusSummary =
