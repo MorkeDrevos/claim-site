@@ -112,3 +112,8 @@ body::before {
   width: 16px !important;
   height: 16px !important;
 }
+/* Desktop Connect Wallet text override */
+.wallet-adapter-button span {
+  font-size: 12px !important;   /* smaller text */
+  font-weight: 600 !important;
+}
