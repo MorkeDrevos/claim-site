@@ -572,16 +572,15 @@ export default function ClaimPoolPage() {
      Loading / error guards
   ─────────────────────────── */
 
-  if (!state && !error) {
-    return (
-      <main className="relative min-h-screen bg-slate-950 text-s
-late-50 overflow-hidden">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
-          <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
-        </div>
-      </main>
-    );
-  }
+if (!state && !error) {
+  return (
+    <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
+        <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
+      </div>
+    </main>
+  );
+}
 
   if (error || !state) {
     return (
