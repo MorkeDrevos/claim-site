@@ -1045,7 +1045,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
             </span>
 
 {/* Desktop wallet button */}
-<div className="hidden sm:inline-flex mr-2 wallet-header-btn">
+<div className="hidden sm:inline-flex pr-4 wallet-header-btn">
   <ConnectWalletButton variant="desktop" />
 </div>
           </div>
@@ -1308,11 +1308,10 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 </div>
               </div>
 
-              {/* MOBILE CONNECT CTA */}
-<div className="mt-5 mb-4 block sm:hidden">
+{/* MOBILE CONNECT CTA */}
+<div className="mt-4 mb-4 block sm:hidden">
   <ConnectWalletButton variant="mobile" />
-</div>
-            </div>
+</div>            </div>
 
             {/* RIGHT COLUMN — Mission Control */}
 <div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
