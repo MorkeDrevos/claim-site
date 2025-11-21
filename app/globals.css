@@ -93,3 +93,8 @@ body::before {
   width: 18px !important;
   height: 18px !important;
 }
+/* Make desktop icon small & clean */
+.wallet-adapter-button-start-icon svg {
+  width: 16px !important;
+  height: 16px !important;
+}
