@@ -950,19 +950,21 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  // (optional) you can keep a tiny comment like this:
-  // Render
-  return (
+  /* ───────────────────────────
+     Render
+  ─────────────────────────── */
+
+   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
-  <div className="fixed top-[68px] left-0 right-0 z-50 flex justify-center">
-    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
-      <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
-      <span>Autonomous update complete · Systems recalibrated</span>
-    </div>
-  </div>
-)}
+        <div className="fixed top-[68px] left-0 right-0 z-50 flex justify-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
+            <span>Autonomous update complete · Systems recalibrated</span>
+          </div>
+        </div>
+      )}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
@@ -1099,7 +1101,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   
 <div className="flex flex-col">
   {/* Label + icon */}
-  <p className="mt-[9px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="h-[13px] w-[13px] text-emerald-300 opacity-90"
@@ -1129,14 +1131,13 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
         <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
       )}
       <p
-  className={[
-    '-mt-[2px]',                  // ⬅️ moves ONLY the number up
-    'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50',
-    isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-  ].join(' ')}
->
-  {countdownLabel || '--:--:--'}
-</p>
+        className={[
+          'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+        ].join(' ')}
+      >
+        {countdownLabel || '--:--:--'}
+      </p>
     </div>
   )}
 
@@ -1173,18 +1174,16 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     )}
 
   {/* Snapshot locked pill */}
-{showSnapshotLocked && (
-  <div
-    className={[
-      'snapshot-teaser', // 👈 add this
-      'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
-      'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-      justSnapshotFired
-        ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_3]'
-        : '',
-      '',
-    ].join(' ')}
-  >
+  {showSnapshotLocked && (
+    <div
+      className={[
+        'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+        'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+        justSnapshotFired
+          ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
+          : '',
+      ].join(' ')}
+    >
       <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
         <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
       </span>
@@ -1196,35 +1195,38 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 </div>  
 
 )}
-<div className="flex flex-col items-end text-right">
-  <div className="flex items-baseline gap-2">
-    <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
-      CURRENT ROUND POOL
-    </p>
 
-    {/* Snapshot teaser tooltip */}
-<div className="relative group">
-  <button
-    type="button"
-    className="snapshot-teaser inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
-  >
-    ?
-  </button>
+                    <div className="flex flex-col items-end text-right">
+                      <div className="flex items-baseline gap-2">
+                        <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
+    CURRENT ROUND POOL
+  </p>
 
-  {/* Tooltip Content */}
-  <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-    <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
-      <p className="text-[12px] text-slate-200 leading-relaxed">
-        Rewards are paid in{' '}
-        <span className="text-emerald-300 font-medium">$CLAIM</span>{' '}
-        and shared equally among wallets that locked in during the live window.{` `}
-        <span className="text-emerald-300 font-medium">
-          USD values are approximate.
-        </span>
-      </p>
-    </div>
-  </div>
-</div>
+                        <div className="relative group">
+                          <button
+  type="button"
+  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+>
+  ?
+</button>
+                          <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                            <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+                              <p className="text-[12px] text-slate-200 leading-relaxed">
+                                Rewards are paid in{' '}
+                                <span className="text-emerald-300 font-medium">
+                                  $CLAIM
+                                </span>{' '}
+                                and shared equally among wallets that locked in
+                                during the live window.{' '}
+                                <span className="text-emerald-300 font-medium">
+                                  USD values are approximate.
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="mt-1.5 flex items-end justify-end">
                         <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
                           {rewardAmountText}
