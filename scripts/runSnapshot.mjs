@@ -27,36 +27,21 @@ const MAX_HOLDERS = parseInt(
 );
 
 /* ───────────────────────────
-   Load schedule
+   Load schedule (single-object format)
+   {
+     "roundNumber": 1,
+     "snapshotAt": "...",
+     "windowOpensAt": "...",
+     ...
+   }
 ──────────────────────────── */
 
 const schedulePath = path.join(process.cwd(), 'data', 'claim-schedule.json');
-const raw = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
+const schedule = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
 
-let scheduleArray;
-let scheduleMode;
-
-/**
- * We support either:
- *  - [ { round, phase, ... }, ... ]
- *  - { rounds: [ { round, phase, ... }, ... ] }
- */
-if (Array.isArray(raw)) {
-  scheduleArray = raw;
-  scheduleMode = 'array';
-} else if (Array.isArray(raw.rounds)) {
-  scheduleArray = raw.rounds;
-  scheduleMode = 'wrapped';
-} else {
-  console.error(
-    '❌ claim-schedule.json has unexpected shape. Expected an array or { rounds: [...] }.'
-  );
-  console.error('Got:', JSON.stringify(raw, null, 2).slice(0, 300));
-  process.exit(1);
-}
-
-function getNextScheduledWindow() {
-  return scheduleArray.find((r) => r.phase === 'scheduled');
+// for now we assume single round, current round:
+function getCurrentRound() {
+  return schedule;
 }
 
 /* ───────────────────────────
@@ -105,15 +90,15 @@ async function fetchTokenHolders(connection) {
 ──────────────────────────── */
 
 async function run() {
-  console.log('🚀 CLAIM snapshot script running');
+  console.log('🚀 CLAIM snapshot script running (single-round schedule)');
 
-  const round = getNextScheduledWindow();
+  const round = getCurrentRound();
   if (!round) {
-    console.error('❌ No scheduled round found in claim-schedule.json');
+    console.error('❌ No round data found in claim-schedule.json');
     process.exit(1);
   }
 
-  const roundNo = round.round;
+  const roundNo = round.roundNumber || round.round || 1;
   console.log(`📡 Taking snapshot for round ${roundNo}`);
 
   const connection = new Connection(RPC, 'confirmed');
@@ -144,22 +129,13 @@ async function run() {
 
   console.log(`💾 Snapshot saved at data/snapshots/${filename}`);
 
-  // update scheduleArray entry
-  round.phase = 'snapshot';
-  round.snapshotAt = now;
-  round.snapshotFile = filename;
+  // ✅ IMPORTANT: don't break existing fields used by stage rotation.
+  // Just add extra metadata fields that other scripts can safely ignore.
+  schedule.lastSnapshotTakenAt = now;
+  schedule.snapshotFile = filename;
 
-  // write back in the same shape we loaded
-  let toWrite;
-  if (scheduleMode === 'array') {
-    toWrite = scheduleArray;
-  } else if (scheduleMode === 'wrapped') {
-    raw.rounds = scheduleArray;
-    toWrite = raw;
-  }
-
-  fs.writeFileSync(schedulePath, JSON.stringify(toWrite, null, 2));
-  console.log('🔄 Updated claim-schedule.json');
+  fs.writeFileSync(schedulePath, JSON.stringify(schedule, null, 2));
+  console.log('🔄 Updated claim-schedule.json with lastSnapshotTakenAt + snapshotFile');
 
   console.log('✅ Snapshot complete');
 }
