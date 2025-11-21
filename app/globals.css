@@ -66,33 +66,25 @@ body::before {
       focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
   }
 
-  /* Desktop header pill */
+  /* Desktop header pill (top right) */
   .claim-wallet-btn-header {
     @apply px-4 py-1.5 text-[11px];
   }
 
-  /* Mobile CTA – smaller + not so giant */
+  /* Mobile full-width CTA – smaller and capped */
   .claim-wallet-btn-mobile {
     @apply w-full max-w-sm mx-auto
       justify-center
-      px-13 py-2
-      text-[15px];
+      px-3 py-2
+      text-[11px];
   }
 
-  .claim-wallet-btn:not([disabled]):hover {
-    @apply brightness-[1.05];
+  /* Kill default purple styles from the adapter */
+  .wallet-adapter-button {
+    @apply bg-transparent shadow-none border-none text-white;
   }
 
-  .claim-wallet-btn[disabled] {
-    @apply opacity-60 cursor-default;
+  .wallet-adapter-button:not([disabled]):hover {
+    @apply bg-transparent;
   }
-}
-
-/* Override default purple adapter button */
-.wallet-adapter-button {
-  @apply bg-transparent shadow-none border-none text-white;
-}
-
-.wallet-adapter-button:not([disabled]):hover {
-  @apply bg-transparent;
 }
