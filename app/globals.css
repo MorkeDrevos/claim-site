@@ -75,7 +75,7 @@ body::before {
   .claim-wallet-btn-mobile {
     @apply w-full max-w-sm mx-auto
       justify-center
-      px-3 py-2
+      px-13 py-2
       text-[15px];
   }
 
