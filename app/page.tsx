@@ -1046,9 +1046,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
 {/* Desktop wallet button */}
 <div className="hidden sm:inline-flex">
-  <ConnectWalletButton>
-    CONNECT WALLET
-  </ConnectWalletButton>
+  <ConnectWalletButton variant="desktop" />
 </div>
           </div>
         </div>
