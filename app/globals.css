@@ -121,23 +121,28 @@ body::before {
    MOBILE CONNECT WALLET — FULL WIDTH GLOW PILL
    ========================= */
 @media (max-width: 640px) {
-  /* Make the wrapper itself full-width */
+  /* Wrapper must be full width */
   .wallet-mobile-btn {
     width: 100%;
   }
 
-  /* Force the WalletMultiButton to be a true full-width bar */
+  /* Ensure the inner wrapper (React tree) also doesn’t shrink */
+  .wallet-mobile-btn > * {
+    width: 100%;
+  }
+
+  /* Force WalletMultiButton to stretch */
   .wallet-mobile-btn .wallet-adapter-button {
     display: flex !important;
     width: 100% !important;
-    min-width: 100% !important;
+    max-width: none !important;       /* ⬅️ kills any internal max-width */
+    align-self: stretch !important;
 
     justify-content: center;
     align-items: center;
 
     border-radius: 9999px !important;
-    padding: 0.9rem 1.5rem; /* tweak height here if needed */
-
+    padding: 0.9rem 1.5rem;           /* height tweak */
     font-size: 15px !important;
     font-weight: 600;
     color: #ffffff;
