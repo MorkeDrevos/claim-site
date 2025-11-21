@@ -1197,7 +1197,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 )}
 
                     <div className="flex flex-col items-end text-right">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
     CURRENT ROUND POOL
   </p>
@@ -1205,7 +1205,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         <div className="relative group">
                           <button
   type="button"
-  className="mt-[-14px] inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
 >
   ?
 </button>
