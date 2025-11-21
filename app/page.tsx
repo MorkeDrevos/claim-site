@@ -1331,53 +1331,32 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         </p>
                       </div>
                     </div>
-                  </div>
 
-    let claimButtonLabel = 'Lock in my share';
-
-  if (hasLockedIn) {
-    claimButtonLabel = 'Presence locked in';
-  } else if (!isLive) {
-    claimButtonLabel = isClosedOnly
-      ? 'Claim window closed'
-      : isDistributing
-      ? 'Distribution in progress'
-      : isDone
-      ? 'Rewards distributed'
-      : 'Upcoming Claim Window';
-  } else if (!walletIsConnected) {
-    claimButtonLabel = 'Connect wallet to lock in';
-  } else if (!isEligible) {
-    claimButtonLabel = 'Not eligible this round';
-  } else if (isPreview) {
-    claimButtonLabel = 'Preview mode';
-  } else {
-    claimButtonLabel = 'Lock in my share';
-  }                
+                   </div>
 
                   {/* CTA */}
                   <button
-  type="button"
-  onClick={handleClaimClick}
-  disabled={!canClaim}
-  className={[
-    'mt-6 w-full flex items-center justify-center',
-    'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
-    'transition-all duration-300',
-    canClaim
-      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
-      : isClosedOnly
-      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-      : isDistributing
-      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
-      : isDone
-      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
-      : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
-    canClaim && isPulseOn ? 'animate-pulse' : '',
-  ].join(' ')}
->
-  {claimButtonLabel}
-</button>
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={[
+                      'mt-6 w-full flex items-center justify-center',
+                      'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+                      'transition-all duration-300',
+                      canClaim
+                        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
+                        : isClosedOnly
+                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+                        : isDistributing
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+                        : isDone
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+                        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
+                      canClaim && isPulseOn ? 'animate-pulse' : '',
+                    ].join(' ')}
+                  >
+                    {claimButtonLabel}
+                  </button>
 
                   {/* Bullets */}
                   <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
