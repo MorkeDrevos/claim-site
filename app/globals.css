@@ -88,9 +88,22 @@ body::before {
     @apply opacity-60 cursor-default;
   }
 }
-
+  
+/* CONNECT WALLET */
 .wallet-adapter-button {
   @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
   font-size: 14px !important;
   border-radius: 9999px !important;
+}
+/* Show dropdown arrow on DESKTOP wallet button */
+.wallet-desktop-btn .wallet-adapter-button-end-icon {
+  display: inline-flex !important;
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
+.wallet-desktop-btn .wallet-adapter-button-end-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  fill: currentColor !important;
 }
