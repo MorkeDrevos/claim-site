@@ -989,11 +989,9 @@ late-50 overflow-hidden">
   } else if (isPreview) {
     claimButtonLabel = 'Preview mode';
   }
-
-  // ───────────────────────────
-  // Render
-  // ───────────────────────────
-
+// ───────────────────────────
+// Render
+// ───────────────────────────
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
