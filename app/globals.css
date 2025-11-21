@@ -93,30 +93,7 @@ body::before {
   width: 18px !important;
   height: 18px !important;
 }
-/* Desktop header wallet – flat text, no background */
-.wallet-header-btn .wallet-adapter-button {
-  @apply bg-transparent border-none shadow-none px-0 py-0;
-  background-color: transparent !important;
-  border-radius: 9999px !important;
-}
 
-/* Text style: smaller, clean white */
-.wallet-header-btn .wallet-adapter-button span {
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
-}
-
-/* Icon size (desktop + modal look fine with this) */
-.wallet-header-btn .wallet-adapter-button-start-icon svg {
-  width: 16px !important;
-  height: 16px !important;
-}
-/* ONLY shrink desktop header Connect Wallet text */
-.wallet-desktop-btn .wallet-adapter-button span {
-  font-size: 12px !important;   /* try 11px if needed */
-  font-weight: 600 !important;
-}
 .wallet-adapter-button {
   @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
   font-size: 12px !important;   /* or 11px if you want it smaller */
