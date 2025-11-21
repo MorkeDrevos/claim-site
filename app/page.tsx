@@ -10,6 +10,30 @@ import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
 import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
 
+import schedule from '../data/claim-schedule.json';
+import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
+
+import { useWallet } from '@solana/wallet-adapter-react';
+import ConnectWalletButton from '../components/ConnectWalletButton';
+
+// ⬇️ ADD THIS
+import snapshotRaw from '../data/snapshots/round-1.json';
+
+type SnapshotHolder = {
+  wallet: string;
+  amount: number;
+};
+
+type SnapshotFile = {
+  takenAt: string;
+  round: number;
+  mint: string;
+  network: string;
+  holders: SnapshotHolder[];
+};
+
+const SNAPSHOT = snapshotRaw as SnapshotFile;
+
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
     let cancelled = false;
@@ -253,25 +277,26 @@ async function getClaimPortalState(): Promise<ClaimPortalState> {
 ─────────────────────────── */
 
 export default function ClaimPoolPage() {
-  // Toast & state, etc...
   const { addToast, ToastContainer } = useToast();
 
   const [state, setState] = useState<ClaimPortalState | null>(null);
-  const [justUpdated, setJustUpdated] = useState(false);  // 👈 ADD THIS
-
+  const [justUpdated, setJustUpdated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
   const [isPulseOn, setIsPulseOn] = useState(false);
-
   const [inlineMessage, setInlineMessage] = useState<{
     type: 'error' | 'warning' | 'success';
     title: string;
     message: string;
   } | null>(null);
-
   const [preFlash, setPreFlash] = useState(false);
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
+
+  // ⬇️ NEW
+  const [hasLockedIn, setHasLockedIn] = useState(false);
+  const { publicKey } = useWallet();
+  const walletAddress = publicKey?.toBase58() ?? null;
 
   // 🔥 NEW: random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
@@ -669,6 +694,14 @@ function getRandomFomoMessage() {
       ? new Date(effectiveSnapshotIso).toLocaleString()
       : '—';
 
+  // Use backend info only – no more local connected Wallet
+const walletIsConnected = walletConnected;
+
+// Label for “Your wallet” section
+const walletLabelShort =
+  walletLabelShort ||
+  (walletShort ? walletShort : '—');
+
   // UI helpers for hero strip
   const showSnapshotPreFomo =
     currentPhase === 'scheduled' && isSnapshotSoon;
@@ -754,7 +787,10 @@ function getRandomFomoMessage() {
 
 // Use backend info only – no more local connected Wallet
 const walletIsConnected = walletConnected;
-const walletLabelShort = walletShort;
+
+// Label for “Your wallet” section
+// Use the short label coming from backend, or fallback to a dash
+const walletLabelShort = walletShort ? walletShort : '—';
 
   const isEligible = eligibleAmount >= MIN_HOLDING;
 
@@ -768,8 +804,20 @@ const walletLabelShort = walletShort;
       ? `${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-  const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
-  const canClaim = !isPreview && isLive;
+const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
+
+// You can only click when:
+// - not in preview
+// - window is live
+// - wallet connected
+// - wallet eligible in snapshot
+// - not already locked in
+const canClaim =
+  !isPreview &&
+  isLive &&
+  walletIsConnected &&
+  isEligible &&
+  !hasLockedIn;
 
   const eligibilityTitle = walletIsConnected
   ? isEligible
@@ -788,89 +836,119 @@ const eligibilityBody = walletIsConnected
   : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
-     Claim handler
-  ─────────────────────────── */
+   Claim handler
+─────────────────────────── */
 
-  const handleClaimClick = async () => {
-    if (!isLive) {
-      setInlineMessage({
-        type: 'warning',
-        title: 'Claim window is not live',
-        message:
-          'You can only lock your share once the live claim window is open.',
-      });
-      addToast(
-        'warning',
-        'Claim window is not live',
-        'You can only lock your share once the live claim window is open.'
-      );
-      return;
-    }
+const handleClaimClick = async () => {
+  // 🔒 Prevent double-claim (already locked this round)
+  if (hasLockedIn) {
+    addToast(
+      'warning',
+      'Already locked in',
+      'This wallet has already locked in for this round.'
+    );
+    setInlineMessage({
+      type: 'warning',
+      title: 'Already locked in',
+      message: 'This wallet has already locked in for this round.',
+    });
+    return;
+  }
 
-    if (!walletIsConnected) {
-  setInlineMessage({
-    type: 'warning',
-    title: 'Connect a wallet first',
-    message:
-      'Connect the wallet you used at snapshot before locking your share.',
-  });
-  addToast(
-    'warning',
-    'Connect a wallet first',
-    'Connect the wallet you used at snapshot before locking your share.'
-  );
-  return;
-}
+  if (!isLive) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Claim window is not live',
+      message:
+        'You can only lock your share once the live claim window is open.',
+    });
+    addToast(
+      'warning',
+      'Claim window is not live',
+      'You can only lock your share once the live claim window is open.'
+    );
+    return;
+  }
 
-    if (!isEligible) {
-      setInlineMessage({
-        type: 'warning',
-        title: 'Not eligible for this round',
-        message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM at the snapshot.`,
-      });
-      addToast(
-        'warning',
-        'Not eligible for this round',
-        `This wallet held less than ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM at the snapshot.`
-      );
-      return;
-    }
+  if (!walletIsConnected) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Connect a wallet first',
+      message:
+        'Connect the wallet you used at snapshot before locking your share.',
+    });
+    addToast(
+      'warning',
+      'Connect a wallet first',
+      'Connect the wallet you used at snapshot before locking your share.'
+    );
+    return;
+  }
 
-    try {
-      console.log('Claiming for wallet (short):', walletLabelShort || walletShort || 'unknown');
+  if (!isEligible) {
+    setInlineMessage({
+      type: 'warning',
+      title: 'Not eligible for this round',
+      message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM at the snapshot.`,
+    });
+    addToast(
+      'warning',
+      'Not eligible for this round',
+      `This wallet held less than ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM at the snapshot.`
+    );
+    return;
+  }
 
-      setInlineMessage({
-        type: 'success',
-        title: 'Share locked in',
-        message:
-          'Your wallet will be included when this reward pool is distributed.',
-      });
+  try {
+    console.log(
+      'Claiming for wallet (short):',
+      walletLabelShort || walletShort || 'unknown'
+    );
 
-      addToast(
-        'success',
-        'Share locked in',
-        'Your wallet will be included when this reward pool is distributed.'
-      );
-    } catch (err) {
-      console.error('Claim error', err);
+    // 🔥 Mark locked-in for this round (frontend memory)
+const roundKey = `claim_locked_round_${roundNumber}`;
 
-      setInlineMessage({
-        type: 'error',
-        title: 'Something went wrong',
-        message: 'We could not lock your share. Please try again in a moment.',
-      });
+window.localStorage.setItem(
+  roundKey,
+  walletLabelShort || walletShort || '1'
+);
 
-      addToast(
-        'error',
-        'Something went wrong',
-        'We could not lock your share. Please try again in a moment.'
-      );
-    }
-  };
+setHasLockedIn(true);
+
+    // ✅ Success UI
+    setInlineMessage({
+      type: 'success',
+      title: 'Share locked in',
+      message:
+        'Your wallet will be included when this reward pool is distributed.',
+    });
+
+    addToast(
+      'success',
+      'Share locked in',
+      'Your wallet will be included when this reward pool is distributed.'
+    );
+  } catch (err) {
+    console.error('Claim error', err);
+
+    setInlineMessage({
+      type: 'error',
+      title: 'Something went wrong',
+      message:
+        'We could not lock your share. Please try again in a moment.',
+    });
+
+    addToast(
+      'error',
+      'Something went wrong',
+      'We could not lock your share. Please try again in a moment.'
+    );
+  }
+};
 
   /* ───────────────────────────
      Progress bar + status summary
@@ -1153,26 +1231,25 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
     {/* 🔥 Random FOMO hype banner (30–5min before open) */}
     {fomoBanner && (
-  <div
-    className="
-      hidden sm:inline-flex     /* ← hides on mobile, shows on desktop */
-      mt-3
-      items-center gap-3
-      rounded-full border border-amber-300/70
-      bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
-      px-4 py-2
-      shadow-[0_0_32px_rgba(251,191,36,0.65)]
-      animate-[pulse_1.4s_ease-in-out_infinite]
-    "
-  >
-    <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
-      <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
-    </span>
-    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-      {fomoBanner}
-    </span>
-  </div>
-)}
+      <div
+        className="
+          mt-3
+          inline-flex items-center gap-3
+          rounded-full border border-amber-300/70
+          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
+          px-4 py-2
+          shadow-[0_0_32px_rgba(251,191,36,0.65)]
+          animate-[pulse_1.4s_ease-in-out_infinite]
+        "
+      >
+        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
+          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+        </span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+          {fomoBanner}
+        </span>
+      </div>
+    )}
 
   {/* Snapshot locked pill */}
   {showSnapshotLocked && (
@@ -1239,18 +1316,37 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                     </div>
                   </div>
 
+    let claimButtonLabel = 'Lock in my share';
+
+  if (hasLockedIn) {
+    claimButtonLabel = 'Presence locked in';
+  } else if (!isLive) {
+    claimButtonLabel = isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
+      : 'Upcoming Claim Window';
+  } else if (!walletIsConnected) {
+    claimButtonLabel = 'Connect wallet to lock in';
+  } else if (!isEligible) {
+    claimButtonLabel = 'Not eligible this round';
+  } else if (isPreview) {
+    claimButtonLabel = 'Preview mode';
+  } else {
+    claimButtonLabel = 'Lock in my share';
+  }                
+
                   {/* CTA */}
                   <button
   type="button"
   onClick={handleClaimClick}
   disabled={!canClaim}
   className={[
-    // layout
     'mt-6 w-full flex items-center justify-center',
-    // shape + text
     'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
     'transition-all duration-300',
-    // states
     canClaim
       ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
       : isClosedOnly
@@ -1263,15 +1359,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     canClaim && isPulseOn ? 'animate-pulse' : '',
   ].join(' ')}
 >
-  {canClaim
-    ? 'Lock in my share'
-    : isClosedOnly
-    ? 'Claim window closed'
-    : isDistributing
-    ? 'Distribution in progress'
-    : isDone
-    ? 'Rewards distributed'
-    : 'Upcoming Claim Window'}
+  {claimButtonLabel}
 </button>
 
                   {/* Bullets */}
@@ -1592,7 +1680,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     <p className="text-[11px] text-slate-500">
       Wallet:{' '}
       <span className="font-mono text-slate-200">
-        {walletLabelShort || '—'}
+        {walletLabelShort}
       </span>
     </p>
   </div>
