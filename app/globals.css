@@ -53,6 +53,10 @@ body::before {
     box-shadow: 0 0 80px rgba(16, 185, 129, 0.9);
   }
 }
+
+/* =========================
+   CLAIM BUTTON COMPONENTS
+   ========================= */
 @layer components {
   .claim-wallet-btn {
     @apply inline-flex items-center gap-2
@@ -61,29 +65,18 @@ body::before {
       text-slate-950 font-semibold uppercase tracking-[0.22em]
       shadow-[0_8px_28px_rgba(16,185,129,0.45)]
       transition-all duration-150
-      focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
+      focus:outline-none focus:ring-1 focus:ring-emerald-400/60;
   }
 
+  /* Desktop header pill */
   .claim-wallet-btn-header {
-    @apply px-5 py-1
-      text-[10px]
-      rounded-full
-      shadow-[0_0_22px_rgba(16,185,129,0.85)]
-      border-2 border-emerald-300;
+    @apply px-4 py-1 text-[10px];
   }
 
-  .claim-wallet-btn-mobile .wallet-adapter-button {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-
-  padding: 8px 18px;
-  font-size: 12px;
-  line-height: 1.1;
-
-  min-height: 0;
-  height: auto;
-}
+  /* Mobile full-width CTA */
+  .claim-wallet-btn-mobile {
+    @apply w-full justify-center px-4 py-1.5 text-[11px];
+  }
 
   .claim-wallet-btn:not([disabled]):hover {
     @apply brightness-[1.05];
@@ -93,45 +86,35 @@ body::before {
     @apply opacity-60 cursor-default;
   }
 }
-/* Shrink the actual wallet adapter button inside our pill */
-.claim-wallet-btn-header .wallet-adapter-button {
+
+/* =========================
+   WALLET ADAPTER OVERRIDES
+   ========================= */
+
+/* Remove purple background + remove extra padding */
+.wallet-adapter-button {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 
-  padding: 2px 16px;        /* height + width */
-  font-size: 10px;
-  line-height: 1;
-
-  min-height: 0;
-  height: auto;
-}
-/* OVERRIDE WALLET ADAPTER BUTTON HEIGHT + PADDING */
-.wallet-adapter-button {
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  height: 32px !important;             /* shrink total height */
-  min-height: 32px !important;         /* force it */
+  padding: 4px 12px !important; /* FINAL height control */
+  height: 32px !important;
+  min-height: 32px !important;
   border-radius: 9999px !important;
+
   font-size: 12px !important;
   line-height: 1 !important;
+
+  color: white !important;
 }
 
-/* Shrink the inner icon */
+/* Shrink inner icon */
 .wallet-adapter-button-start-icon svg {
   width: 14px !important;
   height: 14px !important;
 }
 
-/* Remove the purple background */
-.wallet-adapter-button-trigger,
-.wallet-adapter-button {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* Make the CONNECT text white for now */
+/* Make CONNECT text white */
 .wallet-adapter-button span {
   color: white !important;
 }
