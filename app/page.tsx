@@ -950,9 +950,6 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
