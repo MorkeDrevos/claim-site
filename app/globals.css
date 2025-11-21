@@ -4,29 +4,38 @@
 
 /* CLAIM Portal – wallet button styling */
 @layer components {
-  .claim-wallet-btn {
+  /* Base style – override Jupiter by targeting THEIR class + ours */
+  .wallet-adapter-button.claim-wallet-btn {
     @apply inline-flex items-center gap-2
       rounded-full border border-emerald-400/80
-      bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500
       text-slate-950 font-semibold uppercase tracking-[0.22em]
       shadow-[0_18px_60px_rgba(16,185,129,0.6)]
       transition-all duration-200
       focus:outline-none focus:ring-2 focus:ring-emerald-400/80 focus:ring-offset-0;
+
+    background-image: linear-gradient(
+      90deg,
+      rgba(16, 185, 129, 1),
+      rgba(52, 211, 153, 1),
+      rgba(16, 185, 129, 1)
+    );
   }
 
-  .claim-wallet-btn-header {
+  /* Desktop header pill */
+  .wallet-adapter-button.claim-wallet-btn-header {
     @apply px-4 py-2 text-[11px];
   }
 
-  .claim-wallet-btn-mobile {
+  /* Mobile full-width pill */
+  .wallet-adapter-button.claim-wallet-btn-mobile {
     @apply w-full justify-center px-4 py-3 text-[11px];
   }
 
-  .claim-wallet-btn:not([disabled]):hover {
+  .wallet-adapter-button.claim-wallet-btn:not([disabled]):hover {
     @apply brightness-[1.06];
   }
 
-  .claim-wallet-btn[disabled] {
+  .wallet-adapter-button.claim-wallet-btn[disabled] {
     @apply opacity-60 cursor-default;
   }
 }
