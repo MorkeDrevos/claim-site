@@ -95,18 +95,7 @@ body::before {
   font-size: 14px !important;
   border-radius: 9999px !important;
 }
-/* Show dropdown arrow on DESKTOP wallet button */
-.wallet-desktop-btn .wallet-adapter-button-end-icon {
-  display: inline-flex !important;
-  opacity: 0.8;
-  margin-left: 4px;
-}
-
-.wallet-desktop-btn .wallet-adapter-button-end-icon svg {
-  width: 14px !important;
-  height: 14px !important;
-  fill: currentColor !important;
-}
+  
 /* Add inner padding to the desktop wallet pill */
 .wallet-adapter-button {
   padding-left: 14px !important;
