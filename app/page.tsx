@@ -944,7 +944,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
-  let statusDotColor = 'bg-emerald-400';
+    let statusDotColor = 'bg-emerald-400';
 
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
@@ -953,8 +953,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
   /* ───────────────────────────
      Render
   ─────────────────────────── */
-
-   return (
+  return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
@@ -965,6 +964,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
           </div>
         </div>
       )}
+      {/* …rest of your JSX… */}
 
       {/* HERO BG */}
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] overflow-hidden">
@@ -1219,7 +1219,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       <p className="text-[12px] text-slate-200 leading-relaxed">
         Rewards are paid in{' '}
         <span className="text-emerald-300 font-medium">$CLAIM</span>{' '}
-        and shared equally among wallets that locked in during the live window.{' '}
+        and shared equally among wallets that locked in during the live window.{` `}
         <span className="text-emerald-300 font-medium">
           USD values are approximate.
         </span>
