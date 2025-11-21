@@ -1204,28 +1204,25 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     </p>
 
     {/* Snapshot teaser tooltip */}
-    <div className="relative group">
-      <button
-        type="button"
-        className="snapshot-teaser inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
-      >
-        ?
-      </button>
+<div className="relative group">
+  <button
+    type="button"
+    className="snapshot-teaser inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+  >
+    ?
+  </button>
 
-      {/* Tooltip content */}
-      <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-        <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
-          <p className="text-[12px] text-slate-200 leading-relaxed">
-            Rewards are paid in{' '}
-            <span className="text-emerald-300 font-medium">$CLAIM</span>{' '}
-            and shared equally among wallets that locked in during the live
-            window.{' '}
-            <span className="text-emerald-300 font-medium">
-              USD values are approximate.
-            </span>
-          </p>
-        </div>
-      </div>
+  {/* Tooltip Content */}
+  <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+    <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+      <p className="text-[12px] text-slate-200 leading-relaxed">
+        Rewards are paid in{' '}
+        <span className="text-emerald-300 font-medium">$CLAIM</span>{' '}
+        and shared equally among wallets that locked in during the live window.{' '}
+        <span className="text-emerald-300 font-medium">
+          USD values are approximate.
+        </span>
+      </p>
     </div>
   </div>
 </div>
