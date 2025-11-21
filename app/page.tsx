@@ -1270,7 +1270,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     ? 'Distribution in progress'
     : isDone
     ? 'Rewards distributed'
-    : 'Window Opens soon'}
+    : 'Ppcoming Claim Window'}
 </button>
 
                   {/* Bullets */}
