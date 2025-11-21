@@ -1,8 +1,12 @@
+'use client';
+
+import '@/globals.css';
 import type { Metadata } from 'next';
-import React from 'react';
-import './globals.css';
+import type React from 'react';
+import '@solana/wallet-adapter-react-ui/styles.css';
+
 import { Analytics } from '@vercel/analytics/react';
-import ClientProviders from './ClientProviders';
+import WalletContextProvider from '../components/WalletContextProvider';
 
 export const metadata: Metadata = {
   title: '$CLAIM Portal',
@@ -17,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ClientProviders>{children}</ClientProviders>
+        <WalletContextProvider>
+          {children}
+        </WalletContextProvider>
         <Analytics />
       </body>
     </html>
