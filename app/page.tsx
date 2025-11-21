@@ -648,16 +648,6 @@ function getRandomFomoMessage() {
     distributionDoneAt,
   } = state;
 
-    // Use backend info only – simple aliases
-  const walletIsConnected = walletConnected;
-
-  // Short label for "Wallet:" line
-  const walletLabelShort =
-    walletShort ||
-    (walletAddress
-      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
-      : '—');
-
   // Choose where snapshot time comes from
   // Prefer JSON schedule; fall back to backend field if needed
   const effectiveSnapshotIso =
@@ -780,6 +770,13 @@ useEffect(() => {
     },
   ];
 
+// Use backend info only – no more local connected Wallet
+const walletIsConnected = walletConnected;
+
+// Label for “Your wallet” section
+// Use the short label coming from backend, or fallback to a dash
+const walletLabelShort = walletShort ? walletShort : '—';
+
   const isEligible = eligibleAmount >= MIN_HOLDING;
 
   const rewardAmountText =
@@ -807,13 +804,13 @@ const canClaim =
   isEligible &&
   !hasLockedIn;
 
-const eligibilityTitle = walletConnected
+  const eligibilityTitle = walletIsConnected
   ? isEligible
     ? 'Eligible this round'
     : 'Not eligible this round'
   : 'Wallet not connected';
 
-const eligibilityBody = walletConnected
+const eligibilityBody = walletIsConnected
   ? isEligible
     ? `This wallet met the ${MIN_HOLDING.toLocaleString(
         'en-US'
@@ -858,7 +855,7 @@ const handleClaimClick = async () => {
     return;
   }
 
-  if (!walletConnected) {
+  if (!walletIsConnected) {
     setInlineMessage({
       type: 'warning',
       title: 'Connect a wallet first',
@@ -1665,7 +1662,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </p>
               <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
             </div>
-            {walletConnected && (
+            {walletIsConnected && (
   <div className="mt-4 border-t border-slate-800/70 pt-3">
     <p className="text-[11px] text-slate-500">
       Wallet:{' '}
