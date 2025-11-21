@@ -1753,13 +1753,24 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       {/* Sticky Buy CTA (desktop) */}
       <div className="hidden sm:block fixed bottom-4 right-4 z-50">
         <a
-          href={JUPITER_BUY_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center rounded-full bg-emerald-500/90 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-950 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400 hover:text-slate-950 transition-colors"
-        >
-          Buy $CLAIM on Jupiter
-        </a>
+  href={JUPITER_BUY_URL}
+  target="_blank"
+  rel="noreferrer"
+  className="
+    inline-flex items-center justify-center
+    rounded-full
+    px-4 py-2.5
+    text-[11px] font-semibold uppercase tracking-[0.22em]
+    bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+    border border-emerald-400/40 text-white
+    shadow-[0_0_18px_rgba(16,185,129,0.35)]
+    hover:from-emerald-400/35 hover:to-emerald-500/40
+    hover:border-emerald-400 hover:text-white
+    transition-all
+  "
+>
+  Buy $CLAIM on Jupiter
+</a>
       </div>
 
       <ToastContainer />
