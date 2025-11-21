@@ -568,7 +568,7 @@ export default function ClaimPoolPage() {
     }
   };
 
-    /* ───────────────────────────
+  /* ───────────────────────────
      Loading / error guards
   ─────────────────────────── */
 
@@ -985,7 +985,7 @@ export default function ClaimPoolPage() {
     claimButtonLabel = 'Connect wallet to lock in';
   } else if (!isEligible) {
     claimButtonLabel = 'Not eligible this round';
-    } else if (isPreview) {
+  } else if (isPreview) {
     claimButtonLabel = 'Preview mode';
   }
 
@@ -994,7 +994,6 @@ export default function ClaimPoolPage() {
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
-        
         <div className="fixed top-[68px] left-0 right-0 z-50 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
@@ -1036,54 +1035,45 @@ export default function ClaimPoolPage() {
             </div>
           </Link>
 
-          {/* Right nav */}
-          {/* <Link
-  href="/concept"
-  className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
->
-  Concept
-</Link> */}
+          <a
+            href="https://x.com/clam_window"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+          >
+            X
+          </a>
 
-            <a
-              href="https://x.com/clam_window"
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
-            >
-              X
-            </a>
+          <a
+            href="https://t.me/claimtokenoftiming"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+          >
+            TG
+          </a>
 
-            <a
-              href="https://t.me/claimtokenoftiming"
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
-            >
-              TG
-            </a>
-
-            {/* CA pill */}
-            <button
-              type="button"
-              onClick={handleCopyCa}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200 transition-all"
-            >
-              <span className="text-[10px] tracking-[0.22em] text-slate-400">
-                CA
-              </span>
-              <span className="font-mono text-[11px] text-slate-100">
-                {shortCa}
-              </span>
-            </button>
-
-            <span className="hidden text-xs text-slate-500 sm:inline">
-              {networkLabel}
+          {/* CA pill */}
+          <button
+            type="button"
+            onClick={handleCopyCa}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200 transition-all"
+          >
+            <span className="text-[10px] tracking-[0.22em] text-slate-400">
+              CA
             </span>
+            <span className="font-mono text-[11px] text-slate-100">
+              {shortCa}
+            </span>
+          </button>
 
-{/* Desktop wallet button */}
-<div className="hidden sm:inline-flex mr-2">
-  <ConnectWalletButton />
-</div>
+          <span className="hidden text-xs text-slate-500 sm:inline">
+            {networkLabel}
+          </span>
+
+          {/* Desktop wallet button */}
+          <div className="hidden sm:inline-flex mr-2">
+            <ConnectWalletButton />
           </div>
         </div>
       </header>
@@ -1096,155 +1086,162 @@ export default function ClaimPoolPage() {
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
               <div className="space-y-2">
-                <h1
-  className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]"
->
-  Rewards earned by presence.
-  <br />
-  Show up. Lock in. Get your share.
-</h1>
+                <h1 className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]">
+                  Rewards earned by presence.
+                  <br />
+                  Show up. Lock in. Get your share.
+                </h1>
 
                 {/* CLAIM WINDOW CARD */}
                 <div
                   className={[
-  'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-  'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-  (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
-  isLive
-    ? 'border-emerald-500/50'
-    : isRestingClosed
-    ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-    : isDistributing || isDone
-    ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
-    : 'border-emerald-400/60'
-].join(' ')}
+                    'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+                    'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+                    (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
+                    isLive
+                      ? 'border-emerald-500/50'
+                      : isRestingClosed
+                      ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
+                      : isDistributing || isDone
+                      ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
+                      : 'border-emerald-400/60',
+                  ].join(' ')}
                 >
                   {/* TOP ROW */}
                   <div className="flex items-start justify-between gap-6 pt-1">
-                    
-{/* LEFT SIDE */}
-{isDone ? (
-  <div className="flex flex-col">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      ROUND COMPLETE • REWARDS SENT
-    </p>
-    <p className="mt-2 text-[13px] text-emerald-100/90">
-      Check your wallet – this round just paid out. Next window will be
-      announced soon.
-    </p>
-  </div>
-) : (
-  
-<div className="flex flex-col">
-  {/* Label + icon */}
-  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="9" className="opacity-30" />
-      <circle cx="12" cy="12" r="5" className="opacity-60" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
+                    {/* LEFT SIDE */}
+                    {isDone ? (
+                      <div className="flex flex-col">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                          ROUND COMPLETE • REWARDS SENT
+                        </p>
+                        <p className="mt-2 text-[13px] text-emerald-100/90">
+                          Check your wallet – this round just paid out. Next
+                          window will be announced soon.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col">
+                        {/* Label + icon */}
+                        <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              className="opacity-30"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="5"
+                              className="opacity-60"
+                            />
+                            <circle cx="12" cy="12" r="2" />
+                          </svg>
 
-    {isLive
-      ? 'WINDOW CLOSES IN'
-      : isClosedOnly
-      ? 'REWARDS DISTRIBUTION STARTS IN'
-      : isDistributing
-      ? 'REWARDS ON THE WAY'
-      : 'NEXT WINDOW IN'}
-  </p>
+                          {isLive
+                            ? 'WINDOW CLOSES IN'
+                            : isClosedOnly
+                            ? 'REWARDS DISTRIBUTION STARTS IN'
+                            : isDistributing
+                            ? 'REWARDS ON THE WAY'
+                            : 'NEXT WINDOW IN'}
+                        </p>
 
-  {/* Countdown OR phase text */}
-  {shouldShowCountdown && countdownTargetIso && (
-    <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
-      <p
-        className={[
-          'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {countdownLabel || '--:--:--'}
-      </p>
-    </div>
-  )}
+                        {/* Countdown OR phase text */}
+                        {shouldShowCountdown && countdownTargetIso && (
+                          <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+                            {isLive && (
+                              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+                            )}
+                            <p
+                              className={[
+                                'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+                                isFinalTen
+                                  ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+                                  : '',
+                              ].join(' ')}
+                            >
+                              {countdownLabel || '--:--:--'}
+                            </p>
+                          </div>
+                        )}
 
-  {!shouldShowCountdown && (
-    <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
-      {currentPhase === 'closed'
-        ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
-        : currentPhase === 'distribution'
-        ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
-        : 'Round complete. Rewards landed - next window will be announced here.'}
-    </p>
-  )}
+                        {!shouldShowCountdown && (
+                          <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+                            {currentPhase === 'closed'
+                              ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
+                              : currentPhase === 'distribution'
+                              ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
+                              : 'Round complete. Rewards landed - next window will be announced here.'}
+                          </p>
+                        )}
 
-    {/* 🔥 Random FOMO hype banner (30–5min before open) */}
-    {fomoBanner && (
-      <div
-        className="
-          mt-3
-          inline-flex items-center gap-3
-          rounded-full border border-amber-300/70
-          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
-          px-4 py-2
-          shadow-[0_0_32px_rgba(251,191,36,0.65)]
-          animate-[pulse_1.4s_ease-in-out_infinite]
-        "
-      >
-        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
-          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
-        </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-          {fomoBanner}
-        </span>
-      </div>
-    )}
+                        {/* 🔥 Random FOMO hype banner (30–5min before open) */}
+                        {fomoBanner && (
+                          <div
+                            className="
+                              mt-3
+                              inline-flex items-center gap-3
+                              rounded-full border border-amber-300/70
+                              bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
+                              px-4 py-2
+                              shadow-[0_0_32px_rgba(251,191,36,0.65)]
+                              animate-[pulse_1.4s_ease-in-out_infinite]
+                            "
+                          >
+                            <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
+                              <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+                              {fomoBanner}
+                            </span>
+                          </div>
+                        )}
 
-  {/* Snapshot locked pill */}
-  {showSnapshotLocked && (
-    <div
-      className={[
-        'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
-        'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-        justSnapshotFired
-          ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
-          : '',
-      ].join(' ')}
-    >
-      <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
-        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
-      </span>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-        Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
-      </span>
-    </div>
-  )}
-</div>  
-
-)}
+                        {/* Snapshot locked pill */}
+                        {showSnapshotLocked && (
+                          <div
+                            className={[
+                              'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+                              'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+                              justSnapshotFired
+                                ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
+                                : '',
+                            ].join(' ')}
+                          >
+                            <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
+                              <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+                              Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
-    CURRENT ROUND POOL
-  </p>
+                          CURRENT ROUND POOL
+                        </p>
 
                         <div className="relative group">
                           <button
-  type="button"
-  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
->
-  ?
-</button>
+                            type="button"
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+                          >
+                            ?
+                          </button>
                           <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                             <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
                               <p className="text-[12px] text-slate-200 leading-relaxed">
@@ -1272,8 +1269,7 @@ export default function ClaimPoolPage() {
                         </p>
                       </div>
                     </div>
-
-                   </div>
+                  </div>
 
                   {/* CTA */}
                   <button
@@ -1334,82 +1330,85 @@ export default function ClaimPoolPage() {
                 </div>
               </div>
 
-{/* MOBILE CONNECT CTA */}
-<div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
-  <ConnectWalletButton />
-</div>
-
+              {/* MOBILE CONNECT CTA */}
+              <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
+                <ConnectWalletButton />
+              </div>
             </div>
 
             {/* RIGHT COLUMN — Mission Control */}
-<div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
-  <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+            <div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
+              <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+                {/* Header row */}
+                <div className="flex items-baseline justify-between pr-1">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+                    Round {roundNumber ?? 1}
+                  </p>
 
-    {/* Header row */}
-    <div className="flex items-baseline justify-between pr-1">
-      <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
+                  <span
+                    className={[
+                      'text-[12px] font-semibold uppercase tracking-[0.32em]',
+                      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
+                    ].join(' ')}
+                  >
+                    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
+                  </span>
+                </div>
 
-      <span
-        className={[
-          'text-[12px] font-semibold uppercase tracking-[0.32em]',
-          hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
-        ].join(' ')}
-      >
-        {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
-      </span>
-    </div>
+                {/* Snapshot info */}
+                <div className="space-y-1">
+                  <p className="text-[20px] font-semibold text-slate-100">
+                    Snapshot #{snapshotBlock}
+                  </p>
 
-    {/* Snapshot info */}
-    <div className="space-y-1">
-      <p className="text-[20px] font-semibold text-slate-100">
-        Snapshot #{snapshotBlock}
-      </p>
+                  <p className="text-[12px] text-slate-400 leading-relaxed">
+                    {currentPhase === 'open' && 'window open'}
+                    {currentPhase === 'scheduled' && 'window scheduled'}
+                    {currentPhase === 'distribution' && 'distributing'}
+                    {currentPhase === 'closed' && 'window closed'}
+                  </p>
+                </div>
 
-      <p className="text-[12px] text-slate-400 leading-relaxed">
-        {currentPhase === 'open' && 'window open'}
-        {currentPhase === 'scheduled' && 'window scheduled'}
-        {currentPhase === 'distribution' && 'distributing'}
-        {currentPhase === 'closed' && 'window closed'}
-      </p>
-    </div>
+                {/* Status rows */}
+                <div className="mt-3 space-y-3">
+                  {missionRows.map((row) => {
+                    const isPill = row.mode === 'pill';
+                    const pillValueClass =
+                      row.tone === 'success'
+                        ? 'text-[12px] text-emerald-300'
+                        : row.tone === 'warning'
+                        ? 'text-[12px] text-amber-300'
+                        : 'text-[12px] text-slate-300';
 
-    {/* Status rows */}
-    <div className="mt-3 space-y-3">
-      {missionRows.map((row) => {
-        const isPill = row.mode === 'pill';
-        const pillValueClass =
-          row.tone === 'success'
-            ? 'text-[12px] text-emerald-300'
-            : row.tone === 'warning'
-            ? 'text-[12px] text-amber-300'
-            : 'text-[12px] text-slate-300';
+                    return (
+                      <div
+                        key={row.label}
+                        className="flex items-start justify-between"
+                      >
+                        <p className="text-[12px] text-slate-400">
+                          {row.label}
+                        </p>
 
-        return (
-          <div key={row.label} className="flex items-start justify-between">
-            <p className="text-[12px] text-slate-400">{row.label}</p>
-
-            {isPill ? (
-              <span
-                className={[
-                  'px-2 py-[3px] rounded-full bg-slate-800 text-[12px] font-semibold',
-                  row.tone === 'success'
-                    ? 'text-emerald-300'
-                    : row.tone === 'warning'
-                    ? 'text-amber-300'
-                    : 'text-slate-300',
-                ].join(' ')}
-              >
-                {row.value}
-              </span>
-            ) : (
-              <span className={pillValueClass}>{row.value}</span>
-            )}
-          </div>
-        );
-      })}
-    </div>
+                        {isPill ? (
+                          <span
+                            className={[
+                              'px-2 py-[3px] rounded-full bg-slate-800 text-[12px] font-semibold',
+                              row.tone === 'success'
+                                ? 'text-emerald-300'
+                                : row.tone === 'warning'
+                                ? 'text-amber-300'
+                                : 'text-slate-300',
+                            ].join(' ')}
+                          >
+                            {row.value}
+                          </span>
+                        ) : (
+                          <span className={pillValueClass}>{row.value}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
                 {/* Autopilot strip */}
                 <div className="mt-3 flex items-center gap-3">
@@ -1463,7 +1462,7 @@ export default function ClaimPoolPage() {
             {/* desktop timeline */}
             <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
               {steps.map((step, index) => {
-                const isDone = activeIndex >= index;
+                const isDoneStep = activeIndex >= index;
                 const isActiveStep = step.id === currentPhase;
 
                 return (
@@ -1475,14 +1474,14 @@ export default function ClaimPoolPage() {
                       className={[
                         'h-2 w-full rounded-full',
                         index === 0 ? '' : 'ml-1',
-                        isDone ? 'bg-emerald-400' : 'bg-slate-800',
+                        isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
                       ].join(' ')}
                     />
                     <div className="mt-2 flex items-center gap-2">
                       <div
                         className={[
                           'h-2.5 w-2.5 rounded-full border',
-                          isDone
+                          isDoneStep
                             ? 'bg-emerald-400 border-emerald-300'
                             : 'bg-slate-800 border-slate-600',
                           isActiveStep
@@ -1493,7 +1492,7 @@ export default function ClaimPoolPage() {
                       <span
                         className={[
                           'tracking-wide',
-                          isDone
+                          isDoneStep
                             ? 'text-[12px] font-semibold text-slate-300'
                             : 'text-[12px] font-medium text-slate-500',
                         ].join(' ')}
@@ -1613,15 +1612,15 @@ export default function ClaimPoolPage() {
               <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
             </div>
             {walletConnected && (
-  <div className="mt-4 border-t border-slate-800/70 pt-3">
-    <p className="text-[11px] text-slate-500">
-      Wallet:{' '}
-      <span className="font-mono text-slate-200">
-        {walletLabelShort}
-      </span>
-    </p>
-  </div>
-)}
+              <div className="mt-4 border-t border-slate-800/70 pt-3">
+                <p className="text-[11px] text-slate-500">
+                  Wallet:{' '}
+                  <span className="font-mono text-slate-200">
+                    {walletLabelShort}
+                  </span>
+                </p>
+              </div>
+            )}
           </SoftCard>
         </div>
 
@@ -1780,24 +1779,24 @@ export default function ClaimPoolPage() {
       {/* Sticky Buy CTA (desktop) */}
       <div className="hidden sm:block fixed bottom-4 right-4 z-50">
         <a
-  href={JUPITER_BUY_URL}
-  target="_blank"
-  rel="noreferrer"
-  className="
-    inline-flex items-center justify-center
-    rounded-full
-    px-4 py-2.5
-    text-[11px] font-semibold uppercase tracking-[0.22em]
-    bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-    border border-emerald-400/40 text-white
-    shadow-[0_0_18px_rgba(16,185,129,0.35)]
-    hover:from-emerald-400/35 hover:to-emerald-500/40
-    hover:border-emerald-400 hover:text-white
-    transition-all
-  "
->
-  Buy $CLAIM on Jupiter
-</a>
+          href={JUPITER_BUY_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="
+            inline-flex items-center justify-center
+            rounded-full
+            px-4 py-2.5
+            text-[11px] font-semibold uppercase tracking-[0.22em]
+            bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+            border border-emerald-400/40 text-white
+            shadow-[0_0_18px_rgba(16,185,129,0.35)]
+            hover:from-emerald-400/35 hover:to-emerald-500/40
+            hover:border-emerald-400 hover:text-white
+            transition-all
+          "
+        >
+          Buy $CLAIM on Jupiter
+        </a>
       </div>
 
       <ToastContainer />
