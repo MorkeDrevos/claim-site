@@ -11,7 +11,7 @@ import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
 import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
 
 // ⬇️ ADD THIS
-import snapshotRaw from '../data/snapshots/round-1.json';
+import snapshotRaw from '../data/snapshots/round-1.json'; 
 
 type SnapshotHolder = {
   wallet: string;
