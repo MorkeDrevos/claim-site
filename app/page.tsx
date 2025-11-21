@@ -688,14 +688,6 @@ function getRandomFomoMessage() {
       ? new Date(effectiveSnapshotIso).toLocaleString()
       : '—';
 
-  // Use backend info only – no more local connected Wallet
-const walletIsConnected = walletConnected;
-
-// Label for “Your wallet” section
-const walletLabelShort =
-  walletLabelShort ||
-  (walletShort ? walletShort : '—');
-
   // UI helpers for hero strip
   const showSnapshotPreFomo =
     currentPhase === 'scheduled' && isSnapshotSoon;
