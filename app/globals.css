@@ -131,18 +131,20 @@ body::before {
     width: 100%;
   }
 
-  /* Force WalletMultiButton to stretch */
-  .wallet-mobile-btn .wallet-adapter-button {
+ .wallet-mobile-btn .wallet-adapter-button {
     display: flex !important;
     width: 100% !important;
-    max-width: none !important;       /* ⬅️ kills any internal max-width */
-    align-self: stretch !important;
+    max-width: none !important;
 
     justify-content: center;
     align-items: center;
 
     border-radius: 9999px !important;
-    padding: 0.9rem 1.5rem;           /* height tweak */
+    padding-top: 0.65rem !important;   /* match upcoming pill */
+    padding-bottom: 0.65rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+
     font-size: 15px !important;
     font-weight: 600;
     color: #ffffff;
@@ -155,11 +157,4 @@ body::before {
     border: 1px solid rgba(16, 185, 129, 0.4);
     box-shadow: 0 0 32px rgba(16, 185, 129, 0.45);
     backdrop-filter: blur(18px);
-  }
-
-  .wallet-mobile-btn .wallet-adapter-button-start-icon svg {
-    width: 22px !important;
-    height: 22px !important;
-    margin-right: 10px;
-  }
 }
