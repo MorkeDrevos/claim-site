@@ -1016,17 +1016,40 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
-  let statusDotColor = 'bg-emerald-400';
+    let statusDotColor = 'bg-emerald-400';
 
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
+  // Button label helper
+  let claimButtonLabel = 'Lock in my share';
+
+  if (hasLockedIn) {
+    claimButtonLabel = 'Presence locked in';
+  } else if (!isLive) {
+    claimButtonLabel = isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
+      : 'Upcoming Claim Window';
+  } else if (!walletIsConnected) {
+    claimButtonLabel = 'Connect wallet to lock in';
+  } else if (!isEligible) {
+    claimButtonLabel = 'Not eligible this round';
+  } else if (isPreview) {
+    claimButtonLabel = 'Preview mode';
+  } else {
+    claimButtonLabel = 'Lock in my share';
+  }
+
   /* ───────────────────────────
      Render
   ─────────────────────────── */
 
-   return (
+  return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
