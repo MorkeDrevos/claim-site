@@ -76,7 +76,7 @@ body::before {
     @apply w-full max-w-sm mx-auto
       justify-center
       px-3 py-2
-      text-[11px];
+      text-[15px];
   }
 
   .claim-wallet-btn:not([disabled]):hover {
