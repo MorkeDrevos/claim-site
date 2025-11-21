@@ -116,20 +116,21 @@ body::before {
   height: 14px !important;
   fill: currentColor !important;    /* match text color */
 }
+  
 /* =========================
    MOBILE WALLET PILL (CLAIM STYLE)
    ========================= */
 @media (max-width: 640px) {
   .wallet-mobile-btn .wallet-adapter-button {
     @apply w-full justify-center
-      rounded-full px-5 py-3.5
+      rounded-full
+      px-5 py-3          /* tweak height here: 2.5 = slimmer, 3.5 = taller */
       text-[13px] font-semibold text-white
       bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
       border border-emerald-400/40
       shadow-[0_0_18px_rgba(16,185,129,0.35)];
   }
 
-  /* Slightly larger icon on mobile for vibe */
   .wallet-mobile-btn .wallet-adapter-button-start-icon svg {
     width: 18px !important;
     height: 18px !important;
