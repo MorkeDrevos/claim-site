@@ -155,7 +155,6 @@ body::before {
     box-shadow: 0 0 32px rgba(16, 185, 129, 0.45);
     backdrop-filter: blur(18px);
   }
-}
 
   .wallet-mobile-btn .wallet-adapter-button-start-icon svg {
     width: 22px !important;
