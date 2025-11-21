@@ -106,3 +106,32 @@ body::before {
   min-height: 0;
   height: auto;
 }
+/* OVERRIDE WALLET ADAPTER BUTTON HEIGHT + PADDING */
+.wallet-adapter-button {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  height: 32px !important;             /* shrink total height */
+  min-height: 32px !important;         /* force it */
+  border-radius: 9999px !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+/* Shrink the inner icon */
+.wallet-adapter-button-start-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* Remove the purple background */
+.wallet-adapter-button-trigger,
+.wallet-adapter-button {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Make the CONNECT text white for now */
+.wallet-adapter-button span {
+  color: white !important;
+}
