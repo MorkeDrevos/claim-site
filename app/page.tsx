@@ -7,6 +7,9 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
+import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
+import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
+
 // ⬇️ ADD THIS
 import snapshotRaw from '../data/snapshots/round-1.json';
 
@@ -286,6 +289,8 @@ export default function ClaimPoolPage() {
 
   // ⬇️ NEW
   const [hasLockedIn, setHasLockedIn] = useState(false);
+  const { publicKey } = useWallet();
+  const walletAddress = publicKey?.toBase58() ?? null;
 
   // 🔥 NEW: random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
@@ -647,7 +652,11 @@ function getRandomFomoMessage() {
   const walletIsConnected = walletConnected;
 
   // Short label for "Wallet:" line
-  const walletLabelShort = walletShort || '—';
+  const walletLabelShort =
+    walletShort ||
+    (walletAddress
+      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+      : '—');
 
   // Choose where snapshot time comes from
   // Prefer JSON schedule; fall back to backend field if needed
@@ -696,23 +705,24 @@ function getRandomFomoMessage() {
   const showSnapshotLocked =
     currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
+
 // One-shot flash when snapshot fires
-useEffect(() => {
-  if (!hasSnapshotHappened) return;
-
-  // already fired once – don't repeat
-  if (snapshotFiredRef.current) return;
-
-  snapshotFiredRef.current = true;
-  setJustSnapshotFired(true);
-
-  const timeoutId = window.setTimeout(() => {
-    setJustSnapshotFired(false);
-  }, 4000); // 4 seconds of extra “boom” after snapshot
-
-  return () => window.clearTimeout(timeoutId);
-}, [hasSnapshotHappened]);
-
+// useEffect(() => {
+//   let timeoutId: number | undefined;
+//
+//   if (hasSnapshotHappened && !snapshotFiredRef.current) {
+//     snapshotFiredRef.current = true;
+//     setJustSnapshotFired(true);
+//
+//     timeoutId = window.setTimeout(() => {
+//       setJustSnapshotFired(false);
+//     }, 4000); // 4 seconds of extra “boom” after snapshot
+//   }
+//
+//   return () => {
+//     if (timeoutId) window.clearTimeout(timeoutId);
+//   };
+// }, [hasSnapshotHappened]);
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
 
@@ -1124,14 +1134,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               {networkLabel}
             </span>
 
-{/* Desktop wallet placeholder (no wallet logic yet) */}
+{/* Desktop wallet button */}
 <div className="hidden sm:inline-flex mr-2">
-  <button
-    type="button"
-    className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 cursor-default"
-  >
-    Wallet soon
-  </button>
+  <ConnectWalletButton />
 </div>
           </div>
         </div>
@@ -1383,14 +1388,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 </div>
               </div>
 
-{/* MOBILE CONNECT CTA (placeholder) */}
+{/* MOBILE CONNECT CTA */}
 <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
-  <button
-    type="button"
-    className="w-full inline-flex items-center justify-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-200 cursor-default"
-  >
-    Wallet soon
-  </button>
+  <ConnectWalletButton />
 </div>
 
             </div>
