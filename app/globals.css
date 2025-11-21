@@ -128,3 +128,14 @@ body::before {
 .claim-wallet-btn-mobile .wallet-adapter-button span {
   color: white !important;
 }
+/* Desktop SELECT WALLET text override */
+.claim-wallet-btn-header .wallet-adapter-button span {
+  color: #000 !important;        /* black text */
+  font-weight: normal !important; 
+  letter-spacing: 0.22em !important; 
+  text-transform: uppercase !important;
+}
+.claim-wallet-btn-header .wallet-adapter-button {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
