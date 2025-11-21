@@ -163,7 +163,7 @@ body::before {
 
   .wallet-mobile-btn .wallet-adapter-button-start-icon svg {
     width: 22px !important;
-    height: 22px !important;
+    height: 12px !important;
     margin-right: 10px;
   }
 }
