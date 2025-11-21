@@ -58,6 +58,8 @@ body::before {
 
 /* CLAIM Portal – wallet button styling */
 @layer components {
+  /* root wallet button (covers all wallets) */
+  .wallet-adapter-button,
   .wallet-adapter-button-trigger {
     @apply inline-flex items-center justify-center gap-2
       w-full
@@ -69,10 +71,12 @@ body::before {
       focus:outline-none focus:ring-2 focus:ring-emerald-400/80 focus:ring-offset-0;
   }
 
+  .wallet-adapter-button:not([disabled]):hover,
   .wallet-adapter-button-trigger:not([disabled]):hover {
     @apply brightness-[1.06];
   }
 
+  .wallet-adapter-button[disabled],
   .wallet-adapter-button-trigger[disabled] {
     @apply opacity-60 cursor-default;
   }
