@@ -118,42 +118,23 @@ body::before {
 }
   
 /* =========================
-   CONNECT WALLET
+   MOBILE CONNECT WALLET — FULL WIDTH GLOW PILL
    ========================= */
+@media (max-width: 640px) {
+  .wallet-mobile-btn .wallet-adapter-button {
+    @apply flex w-full justify-center           /* <- flex + w-full = full-width pill */
+      rounded-full
+      px-6 py-4
+      text-[15px] font-semibold text-white
+      bg-gradient-to-b from-emerald-400/10 via-slate-900/80 to-slate-900/90
+      border border-emerald-400/30
+      shadow-[0_0_32px_rgba(16,185,129,0.45)]
+      backdrop-blur;
+  }
 
-/* Base: flatten button so it fits our layout, but
-   DON'T touch font-size globally (keeps modal nice). */
-.wallet-adapter-button {
-  @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
-  line-height: 1 !important;
-  border-radius: 9999px !important;
-}
-
-/* Desktop header pill (top-right) */
-.wallet-desktop-btn .wallet-adapter-button {
-  font-size: 14px !important;
-  padding-left: 14px !important;
-  padding-right: 14px !important;
-}
-
-/* Simple hover on desktop */
-.wallet-desktop-btn .wallet-adapter-button:hover {
-  opacity: 0.85;
-}
-
-/* CONNECT WALLET – shared reset */
-.wallet-adapter-button {
-  @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
-  font-size: 14px !important;
-  border-radius: 9999px !important;
-}
-
-/* Desktop pill – add back inner padding */
-.wallet-desktop-btn .wallet-adapter-button {
-  padding-left: 18px !important;
-  padding-right: 18px !important;
-}
-
-.wallet-desktop-btn .wallet-adapter-button:hover {
-  opacity: 0.85;
+  .wallet-mobile-btn .wallet-adapter-button-start-icon svg {
+    width: 22px !important;
+    height: 22px !important;
+    margin-right: 10px;
+  }
 }
