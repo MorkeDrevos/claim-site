@@ -99,13 +99,13 @@ body::before {
 
   padding: 4px 12px !important; /* FINAL height control */
   height: 32px !important;
-  min-height: 22px !important;
+  min-height: 20px !important;
   border-radius: 9999px !important;
 
   font-size: 12px !important;
   line-height: 1 !important;
 
-  color: white !important;
+  color: black !important;
 }
 
 /* Shrink inner icon */
