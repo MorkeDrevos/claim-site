@@ -1174,16 +1174,18 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     )}
 
   {/* Snapshot locked pill */}
-  {showSnapshotLocked && (
-    <div
-      className={[
-        'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
-        'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-        justSnapshotFired
-          ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
-          : '',
-      ].join(' ')}
-    >
+{showSnapshotLocked && (
+  <div
+    className={[
+      'snapshot-teaser', // 👈 add this
+      'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+      'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+      justSnapshotFired
+        ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_3]'
+        : '',
+      '',
+    ].join(' ')}
+  >
       <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
         <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
       </span>
@@ -1202,13 +1204,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     CURRENT ROUND POOL
   </p>
 
-                        <div className="relative group">
-                          <button
-  type="button"
-  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
->
-  ?
-</button>
+                        
                           <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                             <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
                               <p className="text-[12px] text-slate-200 leading-relaxed">
