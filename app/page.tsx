@@ -695,23 +695,22 @@ function getRandomFomoMessage() {
   const showSnapshotLocked =
     currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
-  // One-shot flash when snapshot fires
-// useEffect(() => {
-//   let timeoutId: number | undefined;
-//
-//   if (hasSnapshotHappened && !snapshotFiredRef.current) {
-//     snapshotFiredRef.current = true;
-//     setJustSnapshotFired(true);
-//
-//     timeoutId = window.setTimeout(() => {
-//       setJustSnapshotFired(false);
-//     }, 4000); // 4 seconds of extra “boom” after snapshot
-//   }
-//
-//   return () => {
-//     if (timeoutId) window.clearTimeout(timeoutId);
-//   };
-// }, [hasSnapshotHappened]);
+// One-shot flash when snapshot fires
+useEffect(() => {
+  if (!hasSnapshotHappened) return;
+
+  // already fired once – don't repeat
+  if (snapshotFiredRef.current) return;
+
+  snapshotFiredRef.current = true;
+  setJustSnapshotFired(true);
+
+  const timeoutId = window.setTimeout(() => {
+    setJustSnapshotFired(false);
+  }, 4000); // 4 seconds of extra “boom” after snapshot
+
+  return () => window.clearTimeout(timeoutId);
+}, [hasSnapshotHappened]);
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
