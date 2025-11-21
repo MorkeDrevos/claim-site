@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 
 type ConnectWalletButtonProps = {
   className?: string;
@@ -14,30 +14,29 @@ export default function ConnectWalletButton({
   variant,
 }: ConnectWalletButtonProps) {
   const { publicKey } = useWallet();
-  const { setVisible } = useWalletModal();
 
-  const variantPadding =
+  const shortAddress = publicKey
+    ? `${publicKey.toBase58().slice(0, 4)}…${publicKey.toBase58().slice(-4)}`
+    : null;
+
+  // Label:
+  // - not connected → "Connect wallet"
+  // - connected → short address
+  const label = shortAddress ?? 'Connect wallet';
+
+  const variantClasses =
     variant === 'mobile'
-      ? 'px-4 py-2.5'
-      : 'px-4 py-2.5';
-
-  const label = publicKey
-    ? `${publicKey.toBase58().slice(0, 4)}…${publicKey
-        .toBase58()
-        .slice(-4)}`
-    : 'Connect wallet';
-
-  const handleClick = () => {
-    setVisible(true); // always open wallet modal
-  };
+      ? // mobile: full width, taller
+        'w-full justify-center px-5 py-3.5'
+      : // desktop: compact pill
+        'px-4 py-2.5';
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
+    <WalletMultiButton
       className={[
+        'flex items-center',
         'rounded-full',
-        variantPadding,
+        variantClasses,
         'text-[11px] font-semibold tracking-wide text-white',
         'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
         'border border-emerald-400/40',
@@ -45,11 +44,10 @@ export default function ConnectWalletButton({
         'hover:from-emerald-400/35 hover:to-emerald-500/40',
         'hover:border-emerald-400 hover:text-white',
         'transition-all',
-        'flex items-center justify-center',
         className,
       ].join(' ')}
     >
       {label}
-    </button>
+    </WalletMultiButton>
   );
 }
