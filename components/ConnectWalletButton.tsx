@@ -15,32 +15,39 @@ export default function ConnectWalletButton({
 }: ConnectWalletButtonProps) {
   const { connected } = useWallet();
 
-  // disconnected → show “Connect wallet”
-  // connected → let WalletMultiButton show the wallet address label
+  // When disconnected we force the label.
+  // When connected, WalletMultiButton will show icon + short address.
   const label = connected ? undefined : 'Connect wallet';
 
-  const variantClasses =
-    variant === 'mobile'
-      ? // mobile: full-width, taller
-        'w-full justify-center px-5 py-3.5'
-      : // desktop: compact pill
-        'px-4 py-2.5';
+  const desktopClasses = [
+    'inline-flex items-center',
+    'rounded-full',
+    'bg-slate-900/90',
+    'border border-slate-700/70',
+    'px-4 py-1.5',
+    'text-[13px] font-semibold text-slate-50',
+    'hover:bg-slate-800 hover:border-emerald-400/70',
+    'transition-all',
+  ].join(' ');
+
+  const mobileClasses = [
+    'inline-flex items-center justify-center',
+    'w-full rounded-full',
+    'px-5 py-3.5',
+    'text-[13px] font-semibold text-white',
+    'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
+    'border border-emerald-400/40',
+    'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
+    'hover:from-emerald-400/35 hover:to-emerald-500/40',
+    'hover:border-emerald-400',
+    'transition-all',
+  ].join(' ');
+
+  const variantClasses = variant === 'mobile' ? mobileClasses : desktopClasses;
 
   return (
     <WalletMultiButton
-      className={[
-        'flex items-center',
-        'rounded-full',
-        variantClasses,
-        'text-[11px] font-semibold tracking-wide text-white',
-        'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
-        'border border-emerald-400/40',
-        'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
-        'hover:from-emerald-400/35 hover:to-emerald-500/40',
-        'hover:border-emerald-400 hover:text-white',
-        'transition-all',
-        className,
-      ].join(' ')}
+      className={[variantClasses, className].join(' ')}
     >
       {label}
     </WalletMultiButton>
