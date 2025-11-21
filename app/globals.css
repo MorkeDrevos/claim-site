@@ -68,12 +68,12 @@ body::before {
 
     /* Desktop header pill (top right) */
   .claim-wallet-btn-header {
-    @apply px-5 py-1
-      text-[10px]
-      rounded-full
-      shadow-[0_0_22px_rgba(16,185,129,0.85)]
-      border-2 border-emerald-300;
-  }
+  @apply px-5 py-1
+    text-[10px]
+    rounded-full
+    shadow-[0_0_22px_rgba(16,185,129,0.85)]
+    border-2 border-emerald-300;
+}
 
   /* Mobile full-width CTA – smaller and capped */
   .claim-wallet-btn-mobile {
