@@ -21,17 +21,42 @@ if (!TOKEN_MINT_STR) {
 }
 
 const TOKEN_MINT = new PublicKey(TOKEN_MINT_STR);
-const MAX_HOLDERS = parseInt(process.env.CLAIM_SNAPSHOT_MAX_HOLDERS || '500', 10);
+const MAX_HOLDERS = parseInt(
+  process.env.CLAIM_SNAPSHOT_MAX_HOLDERS || '500',
+  10
+);
 
 /* ───────────────────────────
    Load schedule
 ──────────────────────────── */
 
 const schedulePath = path.join(process.cwd(), 'data', 'claim-schedule.json');
-const schedule = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
+const raw = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
+
+let scheduleArray;
+let scheduleMode;
+
+/**
+ * We support either:
+ *  - [ { round, phase, ... }, ... ]
+ *  - { rounds: [ { round, phase, ... }, ... ] }
+ */
+if (Array.isArray(raw)) {
+  scheduleArray = raw;
+  scheduleMode = 'array';
+} else if (Array.isArray(raw.rounds)) {
+  scheduleArray = raw.rounds;
+  scheduleMode = 'wrapped';
+} else {
+  console.error(
+    '❌ claim-schedule.json has unexpected shape. Expected an array or { rounds: [...] }.'
+  );
+  console.error('Got:', JSON.stringify(raw, null, 2).slice(0, 300));
+  process.exit(1);
+}
 
 function getNextScheduledWindow() {
-  return schedule.find((r) => r.phase === 'scheduled');
+  return scheduleArray.find((r) => r.phase === 'scheduled');
 }
 
 /* ───────────────────────────
@@ -84,7 +109,7 @@ async function run() {
 
   const round = getNextScheduledWindow();
   if (!round) {
-    console.error('❌ No scheduled round found.');
+    console.error('❌ No scheduled round found in claim-schedule.json');
     process.exit(1);
   }
 
@@ -119,12 +144,21 @@ async function run() {
 
   console.log(`💾 Snapshot saved at data/snapshots/${filename}`);
 
-  // update schedule
+  // update scheduleArray entry
   round.phase = 'snapshot';
   round.snapshotAt = now;
   round.snapshotFile = filename;
 
-  fs.writeFileSync(schedulePath, JSON.stringify(schedule, null, 2));
+  // write back in the same shape we loaded
+  let toWrite;
+  if (scheduleMode === 'array') {
+    toWrite = scheduleArray;
+  } else if (scheduleMode === 'wrapped') {
+    raw.rounds = scheduleArray;
+    toWrite = raw;
+  }
+
+  fs.writeFileSync(schedulePath, JSON.stringify(toWrite, null, 2));
   console.log('🔄 Updated claim-schedule.json');
 
   console.log('✅ Snapshot complete');
