@@ -53,8 +53,6 @@ body::before {
     box-shadow: 0 0 80px rgba(16, 185, 129, 0.9);
   }
 }
-
-/* CLAIM Portal – wallet button styling */
 @layer components {
   .claim-wallet-btn {
     @apply inline-flex items-center gap-2
@@ -66,29 +64,36 @@ body::before {
       focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
   }
 
-    /* Desktop header pill (top right) */
   .claim-wallet-btn-header {
-  @apply px-5 py-0.5
-    text-[10px]
-    rounded-full
-    shadow-[0_0_22px_rgba(16,185,129,0.85)]
-    border-2 border-emerald-300;
-}
+    @apply px-5 py-1
+      text-[10px]
+      rounded-full
+      shadow-[0_0_22px_rgba(16,185,129,0.85)]
+      border-2 border-emerald-300;
+  }
 
-  /* Mobile full-width CTA – smaller and capped */
   .claim-wallet-btn-mobile {
-    @apply w-full max-w-sm mx-auto
-      justify-center
-      px-3 py-2
-      text-[11px];
+    @apply w-full justify-center px-4 py-2.5 text-[12px];
   }
 
-  /* Kill default purple styles from the adapter */
-  .wallet-adapter-button {
-    @apply bg-transparent shadow-none border-none text-white;
+  .claim-wallet-btn:not([disabled]):hover {
+    @apply brightness-[1.05];
   }
 
-  .wallet-adapter-button:not([disabled]):hover {
-    @apply bg-transparent;
+  .claim-wallet-btn[disabled] {
+    @apply opacity-60 cursor-default;
   }
+}
+/* Shrink the actual wallet adapter button inside our pill */
+.claim-wallet-btn-header .wallet-adapter-button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  padding: 2px 16px;        /* height + width */
+  font-size: 10px;
+  line-height: 1;
+
+  min-height: 0;
+  height: auto;
 }
