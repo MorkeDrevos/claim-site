@@ -7,10 +7,10 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
-import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
+import { useWallet } from '@solana/wallet-adapter-react';
+import ConnectWalletButton from '../components/ConnectWalletButton';
 
-// ⬇️ ADD THIS
+// If you ever need snapshots in the UI later:
 import snapshotRaw from '../data/snapshots/round-1.json';
 
 type SnapshotHolder = {
@@ -28,6 +28,7 @@ type SnapshotFile = {
 
 const SNAPSHOT = snapshotRaw as SnapshotFile;
 
+/* Auto-reload on new build (keeps portal fresh when you deploy) */
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
     let cancelled = false;
@@ -43,14 +44,12 @@ function useAutoReloadOnNewBuild() {
         const latest = data?.buildId ?? null;
 
         if (!initialBuildId) {
-          // First run – remember current build id
           initialBuildId = latest;
-                } else if (latest && initialBuildId && latest !== initialBuildId) {
-          // New build detected -> mark and reload
+        } else if (latest && initialBuildId && latest !== initialBuildId) {
           try {
             window.localStorage.setItem('claim_portal_recently_updated', '1');
           } catch {
-            // ignore storage errors
+            // ignore
           }
           window.location.reload();
           return;
@@ -59,7 +58,7 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 10_000); // every 10s
+          timeoutId = window.setTimeout(check, 10_000);
         }
       }
     };
@@ -106,41 +105,33 @@ type ClaimHistoryEntry = {
 };
 
 type ClaimPortalState = {
-  // round
   roundNumber?: number;
 
-  // wallet / network
   walletConnected: boolean;
   walletShort: string;
   networkLabel: string;
 
-  // snapshot
   snapshotLabel: string;
   snapshotBlock: string;
 
-  // window status
   claimWindowStatus: string;
   windowPhase?: WindowPhase;
 
-  // schedule timings (match JSON)
   snapshotAt?: string | null;
   claimWindowOpensAt?: string | null;
   claimWindowClosesAt?: string | null;
   distributionStartsAt?: string | null;
   distributionDoneAt?: string | null;
 
-  // backend / contract status
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
 
-  // pool + eligibility
   eligibleAmount: number;
   claimHistory: ClaimHistoryEntry[];
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
 
-  // helper
   numericCountdown?: string;
 };
 
@@ -150,10 +141,9 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
-// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
-// @ts-ignore
+// @ts-ignore – schedule doesn't type mode yet
 const SCHEDULE = schedule as ClaimSchedule;
-const SNAPSHOT_FOMO_WINDOW_MINUTES = 5; // or 10, whatever you want
+const SNAPSHOT_FOMO_WINDOW_MINUTES = 5;
 
 /* ───────────────────────────
    UI helpers
@@ -287,37 +277,47 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // Locked-in flag for this round
+  // Per-round "locked in" memory
   const [hasLockedIn, setHasLockedIn] = useState(false);
 
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
 
-  // 🔥 Random FOMO banner text
+  // Random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
-  // ✅ Make sure roundNumber is declared BEFORE we use it in effects
-  const roundNumber =
-    state?.roundNumber ?? SCHEDULE.roundNumber ?? 1;
+  // Auto-reload hook
+  useAutoReloadOnNewBuild();
 
-  // ✅ Restore "locked in" state for this round from localStorage
+  // Detect "we just reloaded from a new build"
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     try {
-      const roundKey = `claim_locked_round_${roundNumber}`;
-      const stored = window.localStorage.getItem(roundKey);
-      if (stored) {
-        setHasLockedIn(true);
+      const flag = window.localStorage.getItem('claim_portal_recently_updated');
+      if (flag === '1') {
+        setJustUpdated(true);
+        window.localStorage.removeItem('claim_portal_recently_updated');
+
+        const id = window.setTimeout(() => setJustUpdated(false), 6000);
+        return () => window.clearTimeout(id);
       }
     } catch {
-      // ignore storage errors
+      // ignore
     }
-  }, [roundNumber]);
+  }, []);
 
-  // ...rest of your component (unchanged)
+  const fomoMessages = [
+    'Snapshot engine is arming – make sure your wallet holds the minimum.',
+    "Live window approaching – don’t miss your share.",
+    'Reminder: Only eligible wallets share the pool – check your balance.',
+  ];
 
-    /* ───────────────────────────
+  function getRandomFomoMessage() {
+    return fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
+  }
+
+  /* ───────────────────────────
      Phase + countdown (safe when state is null)
   ─────────────────────────── */
 
@@ -333,29 +333,27 @@ export default function ClaimPoolPage() {
   // Purely schedule-based timings (no `state` used here)
   const nowMs = Date.now();
 
-  const snapshotMs =
-    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
-  const opensMs =
-    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
-  const closesMs =
-    SCHEDULE.windowClosesAt
-      ? new Date(SCHEDULE.windowClosesAt).getTime()
-      : null;
-  const distStartMs =
-    SCHEDULE.distributionStartsAt
-      ? new Date(SCHEDULE.distributionStartsAt).getTime()
-      : null;
-  const distDoneMs =
-    SCHEDULE.distributionDoneAt
-      ? new Date(SCHEDULE.distributionDoneAt).getTime()
-      : null;
+  const snapshotMs = SCHEDULE.snapshotAt
+    ? new Date(SCHEDULE.snapshotAt).getTime()
+    : null;
+  const opensMs = SCHEDULE.windowOpensAt
+    ? new Date(SCHEDULE.windowOpensAt).getTime()
+    : null;
+  const closesMs = SCHEDULE.windowClosesAt
+    ? new Date(SCHEDULE.windowClosesAt).getTime()
+    : null;
+  const distStartMs = SCHEDULE.distributionStartsAt
+    ? new Date(SCHEDULE.distributionStartsAt).getTime()
+    : null;
+  const distDoneMs = SCHEDULE.distributionDoneAt
+    ? new Date(SCHEDULE.distributionDoneAt).getTime()
+    : null;
 
-    // 🔥 Random FOMO banner between 30min and 5min before window opens
+  // FOMO banner between 30min and 5min before window opens
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!opensMs) return; // no window = nothing to do
+    if (!opensMs) return;
 
-    // 30min and 5min before open (in ms)
     const thirtyMin = 30 * 60 * 1000;
     const fiveMin = 5 * 60 * 1000;
 
@@ -363,32 +361,24 @@ export default function ClaimPoolPage() {
     const fireWindowEnd = opensMs - fiveMin;
 
     const now = Date.now();
-
-    // If it's already too late (inside last 5min or after), skip
     if (now >= fireWindowEnd) return;
 
-    // Clamp random time so it's always >= now
     const effectiveStart = Math.max(now, fireWindowStart);
     const range = Math.max(fireWindowEnd - effectiveStart, 0);
-
     if (range === 0) return;
 
     const randomTime = effectiveStart + Math.random() * range;
     const delay = randomTime - now;
 
-    // schedule hype banner
     const id = window.setTimeout(() => {
       setFomoBanner(getRandomFomoMessage());
 
-      // optional: auto-hide after ~20s
       const hideId = window.setTimeout(() => {
         setFomoBanner(null);
       }, 20_000);
 
-      // store hideId on window so cleanup can cancel it if needed
-      (window as any).__claimFomoHideId && window.clearTimeout(
-        (window as any).__claimFomoHideId
-      );
+      (window as any).__claimFomoHideId &&
+        window.clearTimeout((window as any).__claimFomoHideId);
       (window as any).__claimFomoHideId = hideId;
     }, delay);
 
@@ -414,7 +404,6 @@ export default function ClaimPoolPage() {
   switch (currentPhase) {
     case 'scheduled':
     case 'snapshot':
-      // We hype the claim window, not the snapshot
       countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
       break;
     case 'open':
@@ -428,12 +417,11 @@ export default function ClaimPoolPage() {
       break;
     case 'done':
     default:
-      countdownTargetIso = null; // no countdown once done
+      countdownTargetIso = null;
   }
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
-  // Helpers used for styling
   const isLive = currentPhase === 'open';
   const isSnapshotPhase = currentPhase === 'snapshot';
   const isDistributionPhase = currentPhase === 'distribution';
@@ -442,26 +430,25 @@ export default function ClaimPoolPage() {
   const isDistributing = isDistributionPhase;
 
   const shouldShowCountdown =
-  currentPhase === 'scheduled' ||
-  currentPhase === 'snapshot' ||
-  currentPhase === 'open';
+    currentPhase === 'scheduled' ||
+    currentPhase === 'snapshot' ||
+    currentPhase === 'open';
 
   const isRestingClosed =
-  isClosedOnly && !isDistributionPhase && !isDone;
+    isClosedOnly && !isDistributionPhase && !isDone;
 
   const isClosed =
     currentPhase === 'closed' ||
     currentPhase === 'distribution' ||
     currentPhase === 'done';
 
-  const claimTone: Tone =
-    isLive
-      ? 'success'
-      : isSnapshotPhase
-      ? 'warning'
-      : isDistributionPhase
-      ? 'warning'
-      : 'muted';
+  const claimTone: Tone = isLive
+    ? 'success'
+    : isSnapshotPhase
+    ? 'warning'
+    : isDistributionPhase
+    ? 'warning'
+    : 'muted';
 
   // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
@@ -497,8 +484,6 @@ export default function ClaimPoolPage() {
     const diff = targetMs - Date.now();
     isFinalTen = diff > 0 && diff <= 10_000;
   }
-
-
 
   /* ───────────────────────────
      Load portal state (polling)
@@ -589,7 +574,8 @@ export default function ClaimPoolPage() {
 
   if (!state && !error) {
     return (
-      <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-hidden">
+      <main className="relative min-h-screen bg-slate-950 text-s
+late-50 overflow-hidden">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-16 sm:px-6">
           <p className="text-sm text-slate-400">Loading CLAIM portal…</p>
         </div>
@@ -615,7 +601,7 @@ export default function ClaimPoolPage() {
   }
 
   /* ───────────────────────────
-     Safe destructure
+     Safe destructure + helpers
   ─────────────────────────── */
 
   const {
@@ -638,18 +624,14 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-    // Use backend info only – simple aliases
   const walletIsConnected = walletConnected;
 
-  // Short label for "Wallet:" line
   const walletLabelShort =
     walletShort ||
     (walletAddress
       ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
       : '—');
 
-  // Choose where snapshot time comes from
-  // Prefer JSON schedule; fall back to backend field if needed
   const effectiveSnapshotIso =
     SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
@@ -657,7 +639,6 @@ export default function ClaimPoolPage() {
     ? new Date(effectiveSnapshotIso).getTime()
     : null;
 
-  // Has the snapshot for this round actually happened?
   const hasSnapshotHappened =
     snapshotBaseMs !== null &&
     !Number.isNaN(snapshotBaseMs) &&
@@ -673,7 +654,6 @@ export default function ClaimPoolPage() {
     snapshotDiffMs > 0 &&
     snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
 
-  // Short human label, e.g. "09:15"
   const snapshotTimeLabel =
     effectiveSnapshotIso && hasSnapshotHappened
       ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
@@ -682,13 +662,11 @@ export default function ClaimPoolPage() {
         })
       : null;
 
-  // For "Latest snapshot:" line
   const snapshotDateLabel =
     effectiveSnapshotIso
       ? new Date(effectiveSnapshotIso).toLocaleString()
       : '—';
 
-  // UI helpers for hero strip
   const showSnapshotPreFomo =
     currentPhase === 'scheduled' && isSnapshotSoon;
 
@@ -765,199 +743,203 @@ export default function ClaimPoolPage() {
       ? `${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
+  const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
-// You can only click when:
-// - not in preview
-// - window is live
-// - wallet connected
-// - wallet eligible in snapshot
-// - not already locked in
-const canClaim =
-  !isPreview &&
-  isLive &&
-  walletIsConnected &&
-  isEligible &&
-  !hasLockedIn;
+  const canClaim =
+    !isPreview &&
+    isLive &&
+    walletIsConnected &&
+    isEligible &&
+    !hasLockedIn;
 
-const eligibilityTitle = walletConnected
-  ? isEligible
-    ? 'Eligible this round'
-    : 'Not eligible this round'
-  : 'Wallet not connected';
+  const eligibilityTitle = walletConnected
+    ? isEligible
+      ? 'Eligible this round'
+      : 'Not eligible this round'
+    : 'Wallet not connected';
 
-const eligibilityBody = walletConnected
-  ? isEligible
-    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM minimum at the snapshot used for this round.`
-    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot used for this round.`
-  : 'Connect a Solana wallet to check eligibility for this round.';
+  const eligibilityBody = walletConnected
+    ? isEligible
+      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM minimum at the snapshot used for this round.`
+      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot used for this round.`
+    : 'Connect a Solana wallet to check eligibility for this round.';
+
+  // Restore "locked in" from localStorage when state/round changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const effectiveRound = roundNumber ?? SCHEDULE.roundNumber ?? 1;
+      const roundKey = `claim_locked_round_${effectiveRound}`;
+      const stored = window.localStorage.getItem(roundKey);
+      if (stored) setHasLockedIn(true);
+    } catch {
+      // ignore
+    }
+  }, [roundNumber]);
 
   /* ───────────────────────────
    Claim handler
-─────────────────────────── */
+  ─────────────────────────── */
 
-const handleClaimClick = async () => {
-  // 🔒 Prevent double-claim (already locked this round)
-  if (hasLockedIn) {
-    addToast(
-      'warning',
-      'Already locked in',
-      'This wallet has already locked in for this round.'
-    );
-    setInlineMessage({
-      type: 'warning',
-      title: 'Already locked in',
-      message: 'This wallet has already locked in for this round.',
-    });
-    return;
-  }
+  const handleClaimClick = async () => {
+    if (hasLockedIn) {
+      addToast(
+        'warning',
+        'Already locked in',
+        'This wallet has already locked in for this round.'
+      );
+      setInlineMessage({
+        type: 'warning',
+        title: 'Already locked in',
+        message: 'This wallet has already locked in for this round.',
+      });
+      return;
+    }
 
-  if (!isLive) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Claim window is not live',
-      message:
-        'You can only lock your share once the live claim window is open.',
-    });
-    addToast(
-      'warning',
-      'Claim window is not live',
-      'You can only lock your share once the live claim window is open.'
-    );
-    return;
-  }
+    if (!isLive) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Claim window is not live',
+        message:
+          'You can only lock your share once the live claim window is open.',
+      });
+      addToast(
+        'warning',
+        'Claim window is not live',
+        'You can only lock your share once the live claim window is open.'
+      );
+      return;
+    }
 
-  if (!walletConnected) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Connect a wallet first',
-      message:
-        'Connect the wallet you used at snapshot before locking your share.',
-    });
-    addToast(
-      'warning',
-      'Connect a wallet first',
-      'Connect the wallet you used at snapshot before locking your share.'
-    );
-    return;
-  }
+    if (!walletConnected) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Connect a wallet first',
+        message:
+          'Connect the wallet you used at snapshot before locking your share.',
+      });
+      addToast(
+        'warning',
+        'Connect a wallet first',
+        'Connect the wallet you used at snapshot before locking your share.'
+      );
+      return;
+    }
 
-  if (!isEligible) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Not eligible for this round',
-      message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot.`,
-    });
-    addToast(
-      'warning',
-      'Not eligible for this round',
-      `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot.`
-    );
-    return;
-  }
+    if (!isEligible) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Not eligible for this round',
+        message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot.`,
+      });
+      addToast(
+        'warning',
+        'Not eligible for this round',
+        `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot.`
+      );
+      return;
+    }
 
-  try {
-    console.log(
-      'Claiming for wallet (short):',
-      walletLabelShort || walletShort || 'unknown'
-    );
+    try {
+      console.log(
+        'Claiming for wallet (short):',
+        walletLabelShort || walletShort || 'unknown'
+      );
 
-    // 🔥 Mark locked-in for this round (frontend memory)
-const roundKey = `claim_locked_round_${roundNumber}`;
+      const effectiveRound = roundNumber ?? SCHEDULE.roundNumber ?? 1;
+      const roundKey = `claim_locked_round_${effectiveRound}`;
 
-window.localStorage.setItem(
-  roundKey,
-  walletLabelShort || walletShort || '1'
-);
+      window.localStorage.setItem(
+        roundKey,
+        walletLabelShort || walletShort || '1'
+      );
 
-setHasLockedIn(true);
+      setHasLockedIn(true);
 
-    // ✅ Success UI
-    setInlineMessage({
-      type: 'success',
-      title: 'Share locked in',
-      message:
-        'Your wallet will be included when this reward pool is distributed.',
-    });
+      setInlineMessage({
+        type: 'success',
+        title: 'Share locked in',
+        message:
+          'Your wallet will be included when this reward pool is distributed.',
+      });
 
-    addToast(
-      'success',
-      'Share locked in',
-      'Your wallet will be included when this reward pool is distributed.'
-    );
-  } catch (err) {
-    console.error('Claim error', err);
+      addToast(
+        'success',
+        'Share locked in',
+        'Your wallet will be included when this reward pool is distributed.'
+      );
+    } catch (err) {
+      console.error('Claim error', err);
 
-    setInlineMessage({
-      type: 'error',
-      title: 'Something went wrong',
-      message:
-        'We could not lock your share. Please try again in a moment.',
-    });
+      setInlineMessage({
+        type: 'error',
+        title: 'Something went wrong',
+        message:
+          'We could not lock your share. Please try again in a moment.',
+      });
 
-    addToast(
-      'error',
-      'Something went wrong',
-      'We could not lock your share. Please try again in a moment.'
-    );
-  }
-};
+      addToast(
+        'error',
+        'Something went wrong',
+        'We could not lock your share. Please try again in a moment.'
+      );
+    }
+  };
 
   /* ───────────────────────────
      Progress bar + status summary
   ─────────────────────────── */
 
-      const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-  { id: 'scheduled', label: 'Opens soon' },
-  { id: 'snapshot', label: 'Snapshot window' }, // or 'Snapshot phase'
-  { id: 'open', label: 'Claim window open' },
-  { id: 'closed', label: 'Claim window closed' },
-  {
-    id: 'distribution',
-    label: isDone
-      ? 'Rewards distributed'
-      : 'Reward distribution in progress',
-  },
-];
-  
-// Treat the final "done" phase as the same step as "distribution"
-const effectivePhaseForSteps =
-  currentPhase === 'done' ? 'distribution' : currentPhase;
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    { id: 'scheduled', label: 'Opens soon' },
+    { id: 'snapshot', label: 'Snapshot window' },
+    { id: 'open', label: 'Claim window open' },
+    { id: 'closed', label: 'Claim window closed' },
+    {
+      id: 'distribution',
+      label: isDone
+        ? 'Rewards distributed'
+        : 'Reward distribution in progress',
+    },
+  ];
 
-const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
-const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+  const effectivePhaseForSteps =
+    currentPhase === 'done' ? 'distribution' : currentPhase;
 
-    let progressMessage = '';
+  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+
+  let progressMessage = '';
   if (currentPhase === 'scheduled') {
-  progressMessage = isSnapshotSoon
-    ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
-    : 'Claim window scheduled. Countdown shows when it opens.';
+    progressMessage = isSnapshotSoon
+      ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+      : 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
-  progressMessage = snapshotTimeLabel
-    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+    progressMessage = snapshotTimeLabel
+      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
-  progressMessage =
+    progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-  progressMessage =
+    progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-  progressMessage =
-    'Rewards are being sent out - watch your wallet, this round is paying.';
+    progressMessage =
+      'Rewards are being sent out - watch your wallet, this round is paying.';
   } else if (currentPhase === 'done') {
-  progressMessage =
-    'Round complete. Rewards landed – get ready for the next cycle.';
+    progressMessage =
+      'Round complete. Rewards landed – get ready for the next cycle.';
   }
-
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -974,22 +956,20 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
     statusSummary =
-    'All systems nominal. This round is paying out - rewards are streaming on-chain.';
+      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
     statusSummary =
-    'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
   } else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
-    let statusDotColor = 'bg-emerald-400';
-
+  let statusDotColor = 'bg-emerald-400';
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  // Button label helper
   let claimButtonLabel = 'Lock in my share';
 
   if (hasLockedIn) {
@@ -1008,8 +988,6 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     claimButtonLabel = 'Not eligible this round';
   } else if (isPreview) {
     claimButtonLabel = 'Preview mode';
-  } else {
-    claimButtonLabel = 'Lock in my share';
   }
 
   /* ───────────────────────────
