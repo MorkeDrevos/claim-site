@@ -88,6 +88,53 @@ body::before {
     @apply opacity-60 cursor-default;
   }
 }
+
+/* =========================
+   WALLET ADAPTER OVERRIDES
+   ========================= */
+
+/* Flatten wallet adapter button inside our pill */
+.wallet-adapter-button {
+  @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  border-radius: 9999px !important;
+}
+
+.wallet-adapter-button-start-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* ONLY override inside our CLAIM pill buttons */
+.claim-wallet-btn-header .wallet-adapter-button,
+.claim-wallet-btn-mobile .wallet-adapter-button {
+  @apply bg-transparent shadow-none border-none text-white px-3 py-0;
+  height: 26px !important;
+  min-height: 26px !important;
+  line-height: 1 !important;
+  border-radius: 9999px !important;
+}
+
+/* Icon ONLY inside claim buttons */
+.claim-wallet-btn-header .wallet-adapter-button-start-icon svg,
+.claim-wallet-btn-mobile .wallet-adapter-button-start-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* Text ONLY inside claim buttons */
+.claim-wallet-btn-header .wallet-adapter-button span,
+.claim-wallet-btn-mobile .wallet-adapter-button span {
+  color: white !important;
+}
+/* Desktop SELECT WALLET text override */
+.claim-wallet-btn-header .wallet-adapter-button span {
+  color: #000 !important;        /* black text */
+  font-weight: normal !important; 
+  letter-spacing: 0.22em !important; 
+  text-transform: uppercase !important;
+}
 .claim-wallet-btn-header .wallet-adapter-button {
   padding-left: 14px !important;
   padding-right: 14px !important;
