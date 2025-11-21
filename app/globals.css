@@ -58,28 +58,30 @@ body::before {
    CLAIM BUTTON COMPONENTS
    ========================= */
 @layer components {
+  /* Outer CLAIM-style pill wrapper */
   .claim-wallet-btn {
-    @apply inline-flex items-center gap-2
-      rounded-full border border-emerald-400/70
-      bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500
-      text-slate-950 font-semibold uppercase tracking-[0.22em]
-      shadow-[0_8px_28px_rgba(16,185,129,0.45)]
-      transition-all duration-150
-      focus:outline-none focus:ring-1 focus:ring-emerald-400/60;
+    @apply inline-flex items-center justify-center
+      rounded-[999px] border border-emerald-400/40
+      bg-slate-950/80
+      text-slate-200 text-[11px] font-semibold uppercase tracking-[0.32em]
+      shadow-[0_0_18px_rgba(16,185,129,0.35)]
+      transition-all duration-200
+      focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
   }
 
-  /* Desktop header pill */
+  /* Desktop header pill (top right) */
   .claim-wallet-btn-header {
-    @apply px-4 py-1 text-[10px];
+    @apply px-5 py-1.5;
   }
 
-  /* Mobile full-width CTA */
+  /* Mobile full-width CTA under hero */
   .claim-wallet-btn-mobile {
-    @apply w-full justify-center px-4 py-1.5 text-[11px];
+    @apply w-full px-5 py-2;
   }
 
   .claim-wallet-btn:not([disabled]):hover {
-    @apply brightness-[1.05];
+    @apply border-emerald-300 bg-slate-950/95
+      shadow-[0_0_26px_rgba(16,185,129,0.6)];
   }
 
   .claim-wallet-btn[disabled] {
@@ -91,21 +93,27 @@ body::before {
    WALLET ADAPTER OVERRIDES
    ========================= */
 
-/* Remove purple background + remove extra padding */
+/* Flatten wallet adapter button inside our pill */
 .wallet-adapter-button {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-
-  padding: 4px 12px !important; /* FINAL height control */
-  height: 32px !important;
-  min-height: 20px !important;
-  border-radius: 9999px !important;
-
-  font-size: 12px !important;
+  @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
+  font-size: 11px !important;
   line-height: 1 !important;
+  border-radius: 9999px !important;
+}
 
-  color: black !important;
+.wallet-adapter-button-start-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.wallet-adapter-button span {
+  color: #e5e7eb !important; /* same as OPENS SOON text */
+  letter-spacing: 0.32em;
+}
+
+/* No hover background from adapter */
+.wallet-adapter-button:not([disabled]):hover {
+  background: transparent !important;
 }
 
 /* Shrink inner icon */
