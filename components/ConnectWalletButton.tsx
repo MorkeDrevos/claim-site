@@ -15,21 +15,24 @@ export default function ConnectWalletButton({
 }: ConnectWalletButtonProps) {
   const { connected } = useWallet();
 
-  const variantPadding =
-    variant === 'mobile'
-      ? 'px-4 py-2.5'
-      : 'px-4 py-2.5';
-
   // disconnected → show “Connect wallet”
-  // connected → let WalletMultiButton show the wallet address
+  // connected → let WalletMultiButton show the wallet address label
   const label = connected ? undefined : 'Connect wallet';
+
+  const variantClasses =
+    variant === 'mobile'
+      ? // mobile: full-width, taller
+        'w-full justify-center px-5 py-3.5'
+      : // desktop: compact pill
+        'px-4 py-2.5';
 
   return (
     <WalletMultiButton
       className={[
+        'flex items-center',
         'rounded-full',
-        variantPadding,
-        'text-[11px] font-semibold tracking-wide text-white', // removed uppercase
+        variantClasses,
+        'text-[11px] font-semibold tracking-wide text-white',
         'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
         'border border-emerald-400/40',
         'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
