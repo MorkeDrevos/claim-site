@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// ⬇️ ADD THIS LINE
+import { useToast } from '../Toast';
 
 import schedule from '../../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../../lib/claimSchedule';
