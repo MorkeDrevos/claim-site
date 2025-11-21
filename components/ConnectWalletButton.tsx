@@ -24,7 +24,7 @@ export default function ConnectWalletButton({
     'border-none',
     'shadow-none',
     'px-0 py-0',
-    'text-[14px] font-semibold text-white', // ⬅️ smaller font here
+    'text-[24px] font-semibold text-white', // ⬅️ smaller font here
     'hover:opacity-80',
     'transition-all',
   ].join(' ');
