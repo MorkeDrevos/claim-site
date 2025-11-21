@@ -6,13 +6,16 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 type ConnectWalletButtonProps = {
   className?: string;
   variant?: 'desktop' | 'mobile';
+  children?: React.ReactNode;
+  // allow any extra props so TS never freaks out
+  [key: string]: any;
 };
 
 export default function ConnectWalletButton({
   className = '',
   variant,
+  children,
 }: ConnectWalletButtonProps) {
-  // Same spacing for now — easy to change later if you want mobile smaller
   const variantPadding =
     variant === 'mobile'
       ? 'px-4 py-2.5'
@@ -35,15 +38,15 @@ export default function ConnectWalletButton({
         // glow
         'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
 
-        // hover states
+        // hover
         'hover:from-emerald-400/35 hover:to-emerald-500/40',
         'hover:border-emerald-400 hover:text-white',
 
-        // transitions
         'transition-all',
-
         className,
       ].join(' ')}
-    />
+    >
+      {children ?? null}
+    </WalletMultiButton>
   );
 }
