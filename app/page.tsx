@@ -10,12 +10,6 @@ import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
 import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
 
-import schedule from '../data/claim-schedule.json';
-import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
-
-import { useWallet } from '@solana/wallet-adapter-react';
-import ConnectWalletButton from '../components/ConnectWalletButton';
-
 // ⬇️ ADD THIS
 import snapshotRaw from '../data/snapshots/round-1.json';
 
