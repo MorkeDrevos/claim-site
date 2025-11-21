@@ -118,6 +118,30 @@ body::before {
 }
   
 /* =========================
+   CONNECT WALLET
+   ========================= */
+
+/* Base: flatten button so it fits our layout, but
+   DON'T touch font-size globally (keeps modal nice). */
+.wallet-adapter-button {
+  @apply bg-transparent shadow-none border-none px-0 py-0 h-auto min-h-0;
+  line-height: 1 !important;
+  border-radius: 9999px !important;
+}
+
+/* Desktop header pill (top-right) */
+.wallet-desktop-btn .wallet-adapter-button {
+  font-size: 14px !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+/* Simple hover on desktop */
+.wallet-desktop-btn .wallet-adapter-button:hover {
+  opacity: 0.85;
+}
+
+/* =========================
    MOBILE CONNECT WALLET — FULL WIDTH GLOW PILL
    ========================= */
 @media (max-width: 640px) {
@@ -131,7 +155,7 @@ body::before {
     width: 100%;
   }
 
- .wallet-mobile-btn .wallet-adapter-button {
+  .wallet-mobile-btn .wallet-adapter-button {
     display: flex !important;
     width: 100% !important;
     max-width: none !important;
@@ -140,7 +164,7 @@ body::before {
     align-items: center;
 
     border-radius: 9999px !important;
-    padding-top: 0.65rem !important;   /* match upcoming pill */
+    padding-top: 0.65rem !important;   /* height matched to CLAIM pill */
     padding-bottom: 0.65rem !important;
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
@@ -157,4 +181,5 @@ body::before {
     border: 1px solid rgba(16, 185, 129, 0.4);
     box-shadow: 0 0 32px rgba(16, 185, 129, 0.45);
     backdrop-filter: blur(18px);
+  }
 }
