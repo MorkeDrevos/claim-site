@@ -17,20 +17,19 @@ export default function ConnectWalletButton({
 
   const label = connected ? undefined : 'Connect wallet';
 
-  // Jupiter-like clean desktop style
+  // Desktop: smaller font, no big pill
   const desktopClasses = [
     'inline-flex items-center',
-    'rounded-full',
-    'px-3 py-1.5',
-    'text-[12px] font-semibold',  // smaller font
-    'text-white',
-    'bg-transparent',             // NO background
-    'border border-transparent',  // no border
-    'hover:text-emerald-300',     // nice subtle hover
+    'bg-transparent',
+    'border-none',
+    'shadow-none',
+    'px-0 py-0',
+    'text-[11px] font-semibold text-white', // ⬅️ smaller font here
+    'hover:opacity-80',
     'transition-all',
   ].join(' ');
 
-  // Keep mobile CLAIM pill exactly as before
+  // Mobile: keep the nice big CLAIM-style button
   const mobileClasses = [
     'inline-flex items-center justify-center',
     'w-full rounded-full',
@@ -48,7 +47,9 @@ export default function ConnectWalletButton({
     variant === 'mobile' ? mobileClasses : desktopClasses;
 
   return (
-    <WalletMultiButton className={[variantClasses, className].join(' ')}>
+    <WalletMultiButton
+      className={[variantClasses, className].join(' ')}
+    >
       {label}
     </WalletMultiButton>
   );
