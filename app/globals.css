@@ -93,8 +93,22 @@ body::before {
   width: 18px !important;
   height: 18px !important;
 }
-/* Make desktop icon small & clean */
-.wallet-adapter-button-start-icon svg {
+/* Desktop header wallet – flat text, no background */
+.wallet-header-btn .wallet-adapter-button {
+  @apply bg-transparent border-none shadow-none px-0 py-0;
+  background-color: transparent !important;
+  border-radius: 9999px !important;
+}
+
+/* Text style: smaller, clean white */
+.wallet-header-btn .wallet-adapter-button span {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+/* Icon size (desktop + modal look fine with this) */
+.wallet-header-btn .wallet-adapter-button-start-icon svg {
   width: 16px !important;
   height: 16px !important;
 }
