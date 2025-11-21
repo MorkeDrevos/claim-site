@@ -1044,8 +1044,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               {networkLabel}
             </span>
 
+{/* Desktop wallet button */}
 <div className="hidden sm:inline-flex">
-  <ConnectWalletButton variant="header" />
+  <ConnectWalletButton />
 </div>
           </div>
         </div>
@@ -1308,8 +1309,8 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </div>
 
               {/* MOBILE CONNECT CTA */}
-<div className="block sm:hidden mt-4 mb-4">
-  <ConnectWalletButton variant="primary" fullWidth />
+<div className="mt-4 mb-4 block sm:hidden">
+  <ConnectWalletButton />
 </div>
             </div>
 
