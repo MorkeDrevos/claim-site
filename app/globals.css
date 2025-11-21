@@ -1,19 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ------------------------------
+   Global Stylesheet (CSS ONLY)
+------------------------------ */
 
-/* Global CLAIM portal styling – CSS ONLY, no JS/TSX here */
+:root {
+  --bg: #020617;
+  --card-bg: rgba(2, 6, 23, 0.9);
+  --emerald: #10b981;
+  --slate: #94a3b8;
+}
 
-html,
-body {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
   min-height: 100%;
-  background-color: #020617; /* slate-950 */
-  color: #f9fafb;            /* slate-50 */
+  background-color: #020617;
+  color: #f8fafc;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
 }
 
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Inter", sans-serif;
+/* Smooth animations */
+*, *::before, *::after {
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* You can add more global classes here if needed – but ONLY CSS */
+/* Utility classes */
+.text-emerald {
+  color: var(--emerald);
+}
+
+.bg-emerald {
+  background-color: var(--emerald);
+}
+
+.text-slate {
+  color: var(--slate);
+}
+
+.bg-slate {
+  background-color: var(--slate);
+}
+
+/* CLAIM Portal base cards */
+.soft-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+}
+
+/* Remove outlines for cleaner UI */
+button, input, select, textarea {
+  outline: none;
+}
+
+/* Remove blue tap highlight on mobile */
+button, a, input, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
