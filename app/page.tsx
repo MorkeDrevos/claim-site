@@ -287,61 +287,35 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // ⬇️ NEW
+  // Locked-in flag for this round
   const [hasLockedIn, setHasLockedIn] = useState(false);
-
-  // Restore "locked in" state for this round from localStorage
-useEffect(() => {
-  if (typeof window === 'undefined') return;
-
-  try {
-    const roundKey = `claim_locked_round_${roundNumber ?? 'unknown'}`;
-    const stored = window.localStorage.getItem(roundKey);
-    if (stored) {
-      setHasLockedIn(true);
-    }
-  } catch {
-    // ignore storage errors
-  }
-}, [roundNumber]);
 
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
 
-  // 🔥 NEW: random FOMO banner text
+  // 🔥 Random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
-  // Enable the auto-reload hook
-  useAutoReloadOnNewBuild();
+  // ✅ Make sure roundNumber is declared BEFORE we use it in effects
+  const roundNumber =
+    state?.roundNumber ?? SCHEDULE.roundNumber ?? 1;
 
-  // Detect "we just reloaded because of a new build"
+  // ✅ Restore "locked in" state for this round from localStorage
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     try {
-      const flag = window.localStorage.getItem('claim_portal_recently_updated');
-      if (flag === '1') {
-        setJustUpdated(true);
-        window.localStorage.removeItem('claim_portal_recently_updated');
-
-        // hide after a few seconds
-        const id = window.setTimeout(() => setJustUpdated(false), 6000);
-        return () => window.clearTimeout(id);
+      const roundKey = `claim_locked_round_${roundNumber}`;
+      const stored = window.localStorage.getItem(roundKey);
+      if (stored) {
+        setHasLockedIn(true);
       }
     } catch {
-      // ignore
+      // ignore storage errors
     }
-  }, []);
+  }, [roundNumber]);
 
-  const fomoMessages = [
-  "Snapshot engine is arming - make sure your wallet holds the minimum.",
-  "Live window approaching - don’t miss your share.",
-  "Reminder: Only eligible wallets share the pool — check your balance."
-];
-
-function getRandomFomoMessage() {
-  return fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
-}
+  // ...rest of your component (unchanged)
 
     /* ───────────────────────────
      Phase + countdown (safe when state is null)
@@ -1088,13 +1062,12 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
           </Link>
 
           {/* Right nav */}
-          <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
-            <Link
-              href="/concept"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-            >
-              Concept
-            </Link>
+          {/* <Link
+  href="/concept"
+  className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
+>
+  Concept
+</Link> */}
 
             <a
               href="https://x.com/clam_window"
