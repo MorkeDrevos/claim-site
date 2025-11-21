@@ -289,6 +289,22 @@ export default function ClaimPoolPage() {
 
   // ⬇️ NEW
   const [hasLockedIn, setHasLockedIn] = useState(false);
+
+  // Restore "locked in" state for this round from localStorage
+useEffect(() => {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const roundKey = `claim_locked_round_${roundNumber ?? 'unknown'}`;
+    const stored = window.localStorage.getItem(roundKey);
+    if (stored) {
+      setHasLockedIn(true);
+    }
+  } catch {
+    // ignore storage errors
+  }
+}, [roundNumber]);
+
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
 
@@ -705,24 +721,6 @@ function getRandomFomoMessage() {
   const showSnapshotLocked =
     currentPhase === 'snapshot' && !!snapshotTimeLabel;
 
-
-// One-shot flash when snapshot fires
-// useEffect(() => {
-//   let timeoutId: number | undefined;
-//
-//   if (hasSnapshotHappened && !snapshotFiredRef.current) {
-//     snapshotFiredRef.current = true;
-//     setJustSnapshotFired(true);
-//
-//     timeoutId = window.setTimeout(() => {
-//       setJustSnapshotFired(false);
-//     }, 4000); // 4 seconds of extra “boom” after snapshot
-//   }
-//
-//   return () => {
-//     if (timeoutId) window.clearTimeout(timeoutId);
-//   };
-// }, [hasSnapshotHappened]);
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
 
