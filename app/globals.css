@@ -174,3 +174,9 @@ body::before {
     margin-right: 10px;
   }
 }
+
+@media (max-width: 640px) {
+  .portal-teaser {
+    display: none;
+  }
+}
