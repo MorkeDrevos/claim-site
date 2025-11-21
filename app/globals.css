@@ -53,3 +53,12 @@ body::before {
     box-shadow: 0 0 80px rgba(16, 185, 129, 0.9);
   }
 }
+
+/* Remove default purple wallet button styling */
+.wallet-adapter-button {
+  @apply bg-transparent shadow-none border-none text-white;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  @apply bg-transparent;
+}
