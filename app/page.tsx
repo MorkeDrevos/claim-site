@@ -1046,7 +1046,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
 {/* Desktop wallet button */}
 <div className="hidden sm:inline-flex">
-  <ConnectWalletButton />
+  <ConnectWalletButton variant="header" />
 </div>
           </div>
         </div>
@@ -1310,7 +1310,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
               {/* MOBILE CONNECT CTA */}
 <div className="mt-4 mb-4 block sm:hidden">
-  <ConnectWalletButton />
+  <ConnectWalletButton variant="mobile" />
 </div>
             </div>
 
