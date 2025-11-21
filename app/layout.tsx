@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import React from 'react'; 
+import React from 'react';
 import './globals.css';
-
-import { ClientProviders } from './ClientProviders';
+import { Analytics } from '@vercel/analytics/react';
+import ClientProviders from './ClientProviders';
 
 export const metadata: Metadata = {
   title: '$CLAIM Portal',
@@ -18,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ClientProviders>{children}</ClientProviders>
+        <Analytics />
       </body>
     </html>
   );
