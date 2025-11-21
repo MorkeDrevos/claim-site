@@ -807,13 +807,13 @@ const canClaim =
   isEligible &&
   !hasLockedIn;
 
-  const eligibilityTitle = walletConnected
+const eligibilityTitle = walletConnected
   ? isEligible
     ? 'Eligible this round'
     : 'Not eligible this round'
   : 'Wallet not connected';
 
-const eligibilityTitle = walletConnected
+const eligibilityBody = walletConnected
   ? isEligible
     ? `This wallet met the ${MIN_HOLDING.toLocaleString(
         'en-US'
