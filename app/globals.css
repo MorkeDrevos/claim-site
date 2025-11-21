@@ -54,7 +54,36 @@ body::before {
   }
 }
 
-/* Remove default purple wallet button styling */
+/* Remove default/* CLAIM Portal – wallet button styling */
+@layer components {
+  .claim-wallet-btn {
+    @apply inline-flex items-center gap-2
+      rounded-full border border-emerald-400/70
+      bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500
+      text-slate-950 font-semibold uppercase tracking-[0.22em]
+      shadow-[0_8px_28px_rgba(16,185,129,0.45)]
+      transition-all duration-150
+      focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
+  }
+
+  /* Desktop header pill (top right) */
+  .claim-wallet-btn-header {
+    @apply px-4 py-1.5 text-[11px];
+  }
+
+  /* Mobile full-width CTA */
+  .claim-wallet-btn-mobile {
+    @apply w-full justify-center px-4 py-2.5 text-[12px];
+  }
+
+  .claim-wallet-btn:not([disabled]):hover {
+    @apply brightness-[1.05];
+  }
+
+  .claim-wallet-btn[disabled] {
+    @apply opacity-60 cursor-default;
+  }
+} purple wallet button styling */
 .wallet-adapter-button {
   @apply bg-transparent shadow-none border-none text-white;
 }
