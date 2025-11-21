@@ -107,3 +107,11 @@ body::before {
   height: 14px !important;
   fill: currentColor !important;
 }
+/* Add inner padding to the desktop wallet pill */
+.wallet-adapter-button {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+.wallet-desktop-btn .wallet-adapter-button:hover {
+  opacity: 0.85;
+}
