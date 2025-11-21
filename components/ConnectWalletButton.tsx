@@ -12,11 +12,11 @@ export default function ConnectWalletButton({
   className = '',
   variant,
 }: ConnectWalletButtonProps) {
-  // Small tweak per variant if you want
+  // Same spacing for now — easy to change later if you want mobile smaller
   const variantPadding =
     variant === 'mobile'
       ? 'px-4 py-2.5'
-      : 'px-4 py-2.5'; // same for now, but easy to change later
+      : 'px-4 py-2.5';
 
   return (
     <WalletMultiButton
@@ -28,16 +28,20 @@ export default function ConnectWalletButton({
         // text
         'text-[11px] font-semibold uppercase tracking-[0.22em] text-white',
 
-        // colours (match BUY $CLAIM button)
+        // colours (same as Buy $CLAIM)
         'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
         'border border-emerald-400/40',
+
+        // glow
         'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
 
-        // hover
+        // hover states
         'hover:from-emerald-400/35 hover:to-emerald-500/40',
         'hover:border-emerald-400 hover:text-white',
 
+        // transitions
         'transition-all',
+
         className,
       ].join(' ')}
     />
