@@ -7,10 +7,10 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
-import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 
-// ⬇️ ADD THIS
+// If you ever need snapshots in the UI later:
 import snapshotRaw from '../data/snapshots/round-1.json';
 
 type SnapshotHolder = {
@@ -28,6 +28,7 @@ type SnapshotFile = {
 
 const SNAPSHOT = snapshotRaw as SnapshotFile;
 
+/* Auto-reload on new build (keeps portal fresh when you deploy) */
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
     let cancelled = false;
@@ -43,14 +44,12 @@ function useAutoReloadOnNewBuild() {
         const latest = data?.buildId ?? null;
 
         if (!initialBuildId) {
-          // First run – remember current build id
           initialBuildId = latest;
-                } else if (latest && initialBuildId && latest !== initialBuildId) {
-          // New build detected -> mark and reload
+        } else if (latest && initialBuildId && latest !== initialBuildId) {
           try {
             window.localStorage.setItem('claim_portal_recently_updated', '1');
           } catch {
-            // ignore storage errors
+            // ignore
           }
           window.location.reload();
           return;
@@ -59,7 +58,7 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 10_000); // every 10s
+          timeoutId = window.setTimeout(check, 10_000);
         }
       }
     };
@@ -106,41 +105,33 @@ type ClaimHistoryEntry = {
 };
 
 type ClaimPortalState = {
-  // round
   roundNumber?: number;
 
-  // wallet / network
   walletConnected: boolean;
   walletShort: string;
   networkLabel: string;
 
-  // snapshot
   snapshotLabel: string;
   snapshotBlock: string;
 
-  // window status
   claimWindowStatus: string;
   windowPhase?: WindowPhase;
 
-  // schedule timings (match JSON)
   snapshotAt?: string | null;
   claimWindowOpensAt?: string | null;
   claimWindowClosesAt?: string | null;
   distributionStartsAt?: string | null;
   distributionDoneAt?: string | null;
 
-  // backend / contract status
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
 
-  // pool + eligibility
   eligibleAmount: number;
   claimHistory: ClaimHistoryEntry[];
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
 
-  // helper
   numericCountdown?: string;
 };
 
@@ -150,10 +141,9 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
-// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
-// @ts-ignore
+// @ts-ignore – schedule doesn't type mode yet
 const SCHEDULE = schedule as ClaimSchedule;
-const SNAPSHOT_FOMO_WINDOW_MINUTES = 5; // or 10, whatever you want
+const SNAPSHOT_FOMO_WINDOW_MINUTES = 5;
 
 /* ───────────────────────────
    UI helpers
@@ -287,18 +277,19 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // ⬇️ NEW
+  // Per-round "locked in" memory
   const [hasLockedIn, setHasLockedIn] = useState(false);
+
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
 
-  // 🔥 NEW: random FOMO banner text
+  // Random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
-  // Enable the auto-reload hook
+  // Auto-reload hook
   useAutoReloadOnNewBuild();
 
-  // Detect "we just reloaded because of a new build"
+  // Detect "we just reloaded from a new build"
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -308,7 +299,6 @@ export default function ClaimPoolPage() {
         setJustUpdated(true);
         window.localStorage.removeItem('claim_portal_recently_updated');
 
-        // hide after a few seconds
         const id = window.setTimeout(() => setJustUpdated(false), 6000);
         return () => window.clearTimeout(id);
       }
@@ -318,16 +308,16 @@ export default function ClaimPoolPage() {
   }, []);
 
   const fomoMessages = [
-  "Snapshot engine is arming - make sure your wallet holds the minimum.",
-  "Live window approaching - don’t miss your share.",
-  "Reminder: Only eligible wallets share the pool — check your balance."
-];
+    'Snapshot engine is arming – make sure your wallet holds the minimum.',
+    "Live window approaching – don’t miss your share.",
+    'Reminder: Only eligible wallets share the pool – check your balance.',
+  ];
 
-function getRandomFomoMessage() {
-  return fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
-}
+  function getRandomFomoMessage() {
+    return fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
+  }
 
-    /* ───────────────────────────
+  /* ───────────────────────────
      Phase + countdown (safe when state is null)
   ─────────────────────────── */
 
@@ -343,29 +333,27 @@ function getRandomFomoMessage() {
   // Purely schedule-based timings (no `state` used here)
   const nowMs = Date.now();
 
-  const snapshotMs =
-    SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
-  const opensMs =
-    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
-  const closesMs =
-    SCHEDULE.windowClosesAt
-      ? new Date(SCHEDULE.windowClosesAt).getTime()
-      : null;
-  const distStartMs =
-    SCHEDULE.distributionStartsAt
-      ? new Date(SCHEDULE.distributionStartsAt).getTime()
-      : null;
-  const distDoneMs =
-    SCHEDULE.distributionDoneAt
-      ? new Date(SCHEDULE.distributionDoneAt).getTime()
-      : null;
+  const snapshotMs = SCHEDULE.snapshotAt
+    ? new Date(SCHEDULE.snapshotAt).getTime()
+    : null;
+  const opensMs = SCHEDULE.windowOpensAt
+    ? new Date(SCHEDULE.windowOpensAt).getTime()
+    : null;
+  const closesMs = SCHEDULE.windowClosesAt
+    ? new Date(SCHEDULE.windowClosesAt).getTime()
+    : null;
+  const distStartMs = SCHEDULE.distributionStartsAt
+    ? new Date(SCHEDULE.distributionStartsAt).getTime()
+    : null;
+  const distDoneMs = SCHEDULE.distributionDoneAt
+    ? new Date(SCHEDULE.distributionDoneAt).getTime()
+    : null;
 
-    // 🔥 Random FOMO banner between 30min and 5min before window opens
+  // FOMO banner between 30min and 5min before window opens
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!opensMs) return; // no window = nothing to do
+    if (!opensMs) return;
 
-    // 30min and 5min before open (in ms)
     const thirtyMin = 30 * 60 * 1000;
     const fiveMin = 5 * 60 * 1000;
 
@@ -373,32 +361,24 @@ function getRandomFomoMessage() {
     const fireWindowEnd = opensMs - fiveMin;
 
     const now = Date.now();
-
-    // If it's already too late (inside last 5min or after), skip
     if (now >= fireWindowEnd) return;
 
-    // Clamp random time so it's always >= now
     const effectiveStart = Math.max(now, fireWindowStart);
     const range = Math.max(fireWindowEnd - effectiveStart, 0);
-
     if (range === 0) return;
 
     const randomTime = effectiveStart + Math.random() * range;
     const delay = randomTime - now;
 
-    // schedule hype banner
     const id = window.setTimeout(() => {
       setFomoBanner(getRandomFomoMessage());
 
-      // optional: auto-hide after ~20s
       const hideId = window.setTimeout(() => {
         setFomoBanner(null);
       }, 20_000);
 
-      // store hideId on window so cleanup can cancel it if needed
-      (window as any).__claimFomoHideId && window.clearTimeout(
-        (window as any).__claimFomoHideId
-      );
+      (window as any).__claimFomoHideId &&
+        window.clearTimeout((window as any).__claimFomoHideId);
       (window as any).__claimFomoHideId = hideId;
     }, delay);
 
@@ -424,7 +404,6 @@ function getRandomFomoMessage() {
   switch (currentPhase) {
     case 'scheduled':
     case 'snapshot':
-      // We hype the claim window, not the snapshot
       countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
       break;
     case 'open':
@@ -438,12 +417,11 @@ function getRandomFomoMessage() {
       break;
     case 'done':
     default:
-      countdownTargetIso = null; // no countdown once done
+      countdownTargetIso = null;
   }
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
-  // Helpers used for styling
   const isLive = currentPhase === 'open';
   const isSnapshotPhase = currentPhase === 'snapshot';
   const isDistributionPhase = currentPhase === 'distribution';
@@ -452,26 +430,25 @@ function getRandomFomoMessage() {
   const isDistributing = isDistributionPhase;
 
   const shouldShowCountdown =
-  currentPhase === 'scheduled' ||
-  currentPhase === 'snapshot' ||
-  currentPhase === 'open';
+    currentPhase === 'scheduled' ||
+    currentPhase === 'snapshot' ||
+    currentPhase === 'open';
 
   const isRestingClosed =
-  isClosedOnly && !isDistributionPhase && !isDone;
+    isClosedOnly && !isDistributionPhase && !isDone;
 
   const isClosed =
     currentPhase === 'closed' ||
     currentPhase === 'distribution' ||
     currentPhase === 'done';
 
-  const claimTone: Tone =
-    isLive
-      ? 'success'
-      : isSnapshotPhase
-      ? 'warning'
-      : isDistributionPhase
-      ? 'warning'
-      : 'muted';
+  const claimTone: Tone = isLive
+    ? 'success'
+    : isSnapshotPhase
+    ? 'warning'
+    : isDistributionPhase
+    ? 'warning'
+    : 'muted';
 
   // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
@@ -507,8 +484,6 @@ function getRandomFomoMessage() {
     const diff = targetMs - Date.now();
     isFinalTen = diff > 0 && diff <= 10_000;
   }
-
-
 
   /* ───────────────────────────
      Load portal state (polling)
@@ -625,7 +600,7 @@ function getRandomFomoMessage() {
   }
 
   /* ───────────────────────────
-     Safe destructure
+     Safe destructure + helpers
   ─────────────────────────── */
 
   const {
@@ -648,8 +623,14 @@ function getRandomFomoMessage() {
     distributionDoneAt,
   } = state;
 
-  // Choose where snapshot time comes from
-  // Prefer JSON schedule; fall back to backend field if needed
+  const walletIsConnected = walletConnected;
+
+  const walletLabelShort =
+    walletShort ||
+    (walletAddress
+      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+      : '—');
+
   const effectiveSnapshotIso =
     SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
@@ -657,7 +638,6 @@ function getRandomFomoMessage() {
     ? new Date(effectiveSnapshotIso).getTime()
     : null;
 
-  // Has the snapshot for this round actually happened?
   const hasSnapshotHappened =
     snapshotBaseMs !== null &&
     !Number.isNaN(snapshotBaseMs) &&
@@ -673,7 +653,6 @@ function getRandomFomoMessage() {
     snapshotDiffMs > 0 &&
     snapshotDiffMs <= SNAPSHOT_FOMO_WINDOW_MINUTES * 60 * 1000;
 
-  // Short human label, e.g. "09:15"
   const snapshotTimeLabel =
     effectiveSnapshotIso && hasSnapshotHappened
       ? new Date(effectiveSnapshotIso).toLocaleTimeString(undefined, {
@@ -682,35 +661,16 @@ function getRandomFomoMessage() {
         })
       : null;
 
-  // For "Latest snapshot:" line
   const snapshotDateLabel =
     effectiveSnapshotIso
       ? new Date(effectiveSnapshotIso).toLocaleString()
       : '—';
 
-  // UI helpers for hero strip
   const showSnapshotPreFomo =
     currentPhase === 'scheduled' && isSnapshotSoon;
 
   const showSnapshotLocked =
     currentPhase === 'snapshot' && !!snapshotTimeLabel;
-
-// One-shot flash when snapshot fires
-useEffect(() => {
-  if (!hasSnapshotHappened) return;
-
-  // already fired once – don't repeat
-  if (snapshotFiredRef.current) return;
-
-  snapshotFiredRef.current = true;
-  setJustSnapshotFired(true);
-
-  const timeoutId = window.setTimeout(() => {
-    setJustSnapshotFired(false);
-  }, 4000); // 4 seconds of extra “boom” after snapshot
-
-  return () => window.clearTimeout(timeoutId);
-}, [hasSnapshotHappened]);
 
   const backendStatus = (frontEndStatus || '').toLowerCase();
   const contractStatusLower = (contractStatus || '').toLowerCase();
@@ -770,13 +730,6 @@ useEffect(() => {
     },
   ];
 
-// Use backend info only – no more local connected Wallet
-const walletIsConnected = walletConnected;
-
-// Label for “Your wallet” section
-// Use the short label coming from backend, or fallback to a dash
-const walletLabelShort = walletShort ? walletShort : '—';
-
   const isEligible = eligibleAmount >= MIN_HOLDING;
 
   const rewardAmountText =
@@ -789,199 +742,203 @@ const walletLabelShort = walletShort ? walletShort : '—';
       ? `${rewardPoolAmountUsd.toLocaleString('en-US')}`
       : 'Soon';
 
-const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
+  const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
-// You can only click when:
-// - not in preview
-// - window is live
-// - wallet connected
-// - wallet eligible in snapshot
-// - not already locked in
-const canClaim =
-  !isPreview &&
-  isLive &&
-  walletIsConnected &&
-  isEligible &&
-  !hasLockedIn;
+  const canClaim =
+    !isPreview &&
+    isLive &&
+    walletIsConnected &&
+    isEligible &&
+    !hasLockedIn;
 
-  const eligibilityTitle = walletIsConnected
-  ? isEligible
-    ? 'Eligible this round'
-    : 'Not eligible this round'
-  : 'Wallet not connected';
+  const eligibilityTitle = walletConnected
+    ? isEligible
+      ? 'Eligible this round'
+      : 'Not eligible this round'
+    : 'Wallet not connected';
 
-const eligibilityBody = walletIsConnected
-  ? isEligible
-    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM minimum at the snapshot used for this round.`
-    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot used for this round.`
-  : 'Connect a Solana wallet to check eligibility for this round.';
+  const eligibilityBody = walletConnected
+    ? isEligible
+      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM minimum at the snapshot used for this round.`
+      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot used for this round.`
+    : 'Connect a Solana wallet to check eligibility for this round.';
+
+  // Restore "locked in" from localStorage when state/round changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const effectiveRound = roundNumber ?? SCHEDULE.roundNumber ?? 1;
+      const roundKey = `claim_locked_round_${effectiveRound}`;
+      const stored = window.localStorage.getItem(roundKey);
+      if (stored) setHasLockedIn(true);
+    } catch {
+      // ignore
+    }
+  }, [roundNumber]);
 
   /* ───────────────────────────
    Claim handler
-─────────────────────────── */
+  ─────────────────────────── */
 
-const handleClaimClick = async () => {
-  // 🔒 Prevent double-claim (already locked this round)
-  if (hasLockedIn) {
-    addToast(
-      'warning',
-      'Already locked in',
-      'This wallet has already locked in for this round.'
-    );
-    setInlineMessage({
-      type: 'warning',
-      title: 'Already locked in',
-      message: 'This wallet has already locked in for this round.',
-    });
-    return;
-  }
+  const handleClaimClick = async () => {
+    if (hasLockedIn) {
+      addToast(
+        'warning',
+        'Already locked in',
+        'This wallet has already locked in for this round.'
+      );
+      setInlineMessage({
+        type: 'warning',
+        title: 'Already locked in',
+        message: 'This wallet has already locked in for this round.',
+      });
+      return;
+    }
 
-  if (!isLive) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Claim window is not live',
-      message:
-        'You can only lock your share once the live claim window is open.',
-    });
-    addToast(
-      'warning',
-      'Claim window is not live',
-      'You can only lock your share once the live claim window is open.'
-    );
-    return;
-  }
+    if (!isLive) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Claim window is not live',
+        message:
+          'You can only lock your share once the live claim window is open.',
+      });
+      addToast(
+        'warning',
+        'Claim window is not live',
+        'You can only lock your share once the live claim window is open.'
+      );
+      return;
+    }
 
-  if (!walletIsConnected) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Connect a wallet first',
-      message:
-        'Connect the wallet you used at snapshot before locking your share.',
-    });
-    addToast(
-      'warning',
-      'Connect a wallet first',
-      'Connect the wallet you used at snapshot before locking your share.'
-    );
-    return;
-  }
+    if (!walletConnected) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Connect a wallet first',
+        message:
+          'Connect the wallet you used at snapshot before locking your share.',
+      });
+      addToast(
+        'warning',
+        'Connect a wallet first',
+        'Connect the wallet you used at snapshot before locking your share.'
+      );
+      return;
+    }
 
-  if (!isEligible) {
-    setInlineMessage({
-      type: 'warning',
-      title: 'Not eligible for this round',
-      message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot.`,
-    });
-    addToast(
-      'warning',
-      'Not eligible for this round',
-      `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot.`
-    );
-    return;
-  }
+    if (!isEligible) {
+      setInlineMessage({
+        type: 'warning',
+        title: 'Not eligible for this round',
+        message: `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot.`,
+      });
+      addToast(
+        'warning',
+        'Not eligible for this round',
+        `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot.`
+      );
+      return;
+    }
 
-  try {
-    console.log(
-      'Claiming for wallet (short):',
-      walletLabelShort || walletShort || 'unknown'
-    );
+    try {
+      console.log(
+        'Claiming for wallet (short):',
+        walletLabelShort || walletShort || 'unknown'
+      );
 
-    // 🔥 Mark locked-in for this round (frontend memory)
-const roundKey = `claim_locked_round_${roundNumber}`;
+      const effectiveRound = roundNumber ?? SCHEDULE.roundNumber ?? 1;
+      const roundKey = `claim_locked_round_${effectiveRound}`;
 
-window.localStorage.setItem(
-  roundKey,
-  walletLabelShort || walletShort || '1'
-);
+      window.localStorage.setItem(
+        roundKey,
+        walletLabelShort || walletShort || '1'
+      );
 
-setHasLockedIn(true);
+      setHasLockedIn(true);
 
-    // ✅ Success UI
-    setInlineMessage({
-      type: 'success',
-      title: 'Share locked in',
-      message:
-        'Your wallet will be included when this reward pool is distributed.',
-    });
+      setInlineMessage({
+        type: 'success',
+        title: 'Share locked in',
+        message:
+          'Your wallet will be included when this reward pool is distributed.',
+      });
 
-    addToast(
-      'success',
-      'Share locked in',
-      'Your wallet will be included when this reward pool is distributed.'
-    );
-  } catch (err) {
-    console.error('Claim error', err);
+      addToast(
+        'success',
+        'Share locked in',
+        'Your wallet will be included when this reward pool is distributed.'
+      );
+    } catch (err) {
+      console.error('Claim error', err);
 
-    setInlineMessage({
-      type: 'error',
-      title: 'Something went wrong',
-      message:
-        'We could not lock your share. Please try again in a moment.',
-    });
+      setInlineMessage({
+        type: 'error',
+        title: 'Something went wrong',
+        message:
+          'We could not lock your share. Please try again in a moment.',
+      });
 
-    addToast(
-      'error',
-      'Something went wrong',
-      'We could not lock your share. Please try again in a moment.'
-    );
-  }
-};
+      addToast(
+        'error',
+        'Something went wrong',
+        'We could not lock your share. Please try again in a moment.'
+      );
+    }
+  };
 
   /* ───────────────────────────
      Progress bar + status summary
   ─────────────────────────── */
 
-      const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-  { id: 'scheduled', label: 'Opens soon' },
-  { id: 'snapshot', label: 'Snapshot window' }, // or 'Snapshot phase'
-  { id: 'open', label: 'Claim window open' },
-  { id: 'closed', label: 'Claim window closed' },
-  {
-    id: 'distribution',
-    label: isDone
-      ? 'Rewards distributed'
-      : 'Reward distribution in progress',
-  },
-];
-  
-// Treat the final "done" phase as the same step as "distribution"
-const effectivePhaseForSteps =
-  currentPhase === 'done' ? 'distribution' : currentPhase;
+  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+    { id: 'scheduled', label: 'Opens soon' },
+    { id: 'snapshot', label: 'Snapshot window' },
+    { id: 'open', label: 'Claim window open' },
+    { id: 'closed', label: 'Claim window closed' },
+    {
+      id: 'distribution',
+      label: isDone
+        ? 'Rewards distributed'
+        : 'Reward distribution in progress',
+    },
+  ];
 
-const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
-const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+  const effectivePhaseForSteps =
+    currentPhase === 'done' ? 'distribution' : currentPhase;
 
-    let progressMessage = '';
+  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+
+  let progressMessage = '';
   if (currentPhase === 'scheduled') {
-  progressMessage = isSnapshotSoon
-    ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
-    : 'Claim window scheduled. Countdown shows when it opens.';
+    progressMessage = isSnapshotSoon
+      ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+      : 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
-  progressMessage = snapshotTimeLabel
-    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+    progressMessage = snapshotTimeLabel
+      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
-  progressMessage =
+    progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
   } else if (currentPhase === 'closed') {
-  progressMessage =
+    progressMessage =
       'Claim window closed. No new wallets can lock in for this round.';
   } else if (currentPhase === 'distribution') {
-  progressMessage =
-    'Rewards are being sent out - watch your wallet, this round is paying.';
+    progressMessage =
+      'Rewards are being sent out - watch your wallet, this round is paying.';
   } else if (currentPhase === 'done') {
-  progressMessage =
-    'Round complete. Rewards landed – get ready for the next cycle.';
+    progressMessage =
+      'Round complete. Rewards landed – get ready for the next cycle.';
   }
-
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
@@ -998,22 +955,20 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
   } else if (currentPhase === 'distribution') {
     statusSummary =
-    'All systems nominal. This round is paying out - rewards are streaming on-chain.';
+      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
   } else if (currentPhase === 'done') {
     statusSummary =
-    'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
   } else if (currentPhase === 'closed') {
     statusSummary =
       'All systems nominal. Claim window closed and standing by for the next round.';
   }
 
-    let statusDotColor = 'bg-emerald-400';
-
+  let statusDotColor = 'bg-emerald-400';
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  // Button label helper
   let claimButtonLabel = 'Lock in my share';
 
   if (hasLockedIn) {
@@ -1032,14 +987,9 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
     claimButtonLabel = 'Not eligible this round';
   } else if (isPreview) {
     claimButtonLabel = 'Preview mode';
-  } else {
-    claimButtonLabel = 'Lock in my share';
   }
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
-
+  // Render
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner – shows after auto reload from new build */}
@@ -1085,55 +1035,45 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
             </div>
           </Link>
 
-          {/* Right nav */}
-          <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
-            <Link
-              href="/concept"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-slate-600"
-            >
-              Concept
-            </Link>
+          <a
+            href="https://x.com/clam_window"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+          >
+            X
+          </a>
 
-            <a
-              href="https://x.com/clam_window"
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
-            >
-              X
-            </a>
+          <a
+            href="https://t.me/claimtokenoftiming"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
+          >
+            TG
+          </a>
 
-            <a
-              href="https://t.me/claimtokenoftiming"
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
-            >
-              TG
-            </a>
-
-            {/* CA pill */}
-            <button
-              type="button"
-              onClick={handleCopyCa}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200 transition-all"
-            >
-              <span className="text-[10px] tracking-[0.22em] text-slate-400">
-                CA
-              </span>
-              <span className="font-mono text-[11px] text-slate-100">
-                {shortCa}
-              </span>
-            </button>
-
-            <span className="hidden text-xs text-slate-500 sm:inline">
-              {networkLabel}
+          {/* CA pill */}
+          <button
+            type="button"
+            onClick={handleCopyCa}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-400/60 hover:text-emerald-200 transition-all"
+          >
+            <span className="text-[10px] tracking-[0.22em] text-slate-400">
+              CA
             </span>
+            <span className="font-mono text-[11px] text-slate-100">
+              {shortCa}
+            </span>
+          </button>
 
-{/* Desktop wallet button */}
-<div className="hidden sm:inline-flex mr-2">
-  <ConnectWalletButton />
-</div>
+          <span className="hidden text-xs text-slate-500 sm:inline">
+            {networkLabel}
+          </span>
+
+          {/* Desktop wallet button */}
+          <div className="hidden sm:inline-flex mr-2">
+            <ConnectWalletButton />
           </div>
         </div>
       </header>
@@ -1146,155 +1086,162 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
               <div className="space-y-2">
-                <h1
-  className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]"
->
-  Rewards earned by presence.
-  <br />
-  Show up. Lock in. Get your share.
-</h1>
+                <h1 className="text-[30px] sm:text-[36px] font-semibold leading-[1.12] tracking-[-0.01em] text-slate-100 pt-[4px] pb-[18px] drop-shadow-[0_0_18px_rgba(0,255,200,0.04)]">
+                  Rewards earned by presence.
+                  <br />
+                  Show up. Lock in. Get your share.
+                </h1>
 
                 {/* CLAIM WINDOW CARD */}
                 <div
                   className={[
-  'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-  'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-  (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
-  isLive
-    ? 'border-emerald-500/50'
-    : isRestingClosed
-    ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-    : isDistributing || isDone
-    ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
-    : 'border-emerald-400/60'
-].join(' ')}
+                    'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+                    'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+                    (preFlash || justSnapshotFired) ? 'animate-pulse' : '',
+                    isLive
+                      ? 'border-emerald-500/50'
+                      : isRestingClosed
+                      ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
+                      : isDistributing || isDone
+                      ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
+                      : 'border-emerald-400/60',
+                  ].join(' ')}
                 >
                   {/* TOP ROW */}
                   <div className="flex items-start justify-between gap-6 pt-1">
-                    
-{/* LEFT SIDE */}
-{isDone ? (
-  <div className="flex flex-col">
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      ROUND COMPLETE • REWARDS SENT
-    </p>
-    <p className="mt-2 text-[13px] text-emerald-100/90">
-      Check your wallet – this round just paid out. Next window will be
-      announced soon.
-    </p>
-  </div>
-) : (
-  
-<div className="flex flex-col">
-  {/* Label + icon */}
-  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="9" className="opacity-30" />
-      <circle cx="12" cy="12" r="5" className="opacity-60" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
+                    {/* LEFT SIDE */}
+                    {isDone ? (
+                      <div className="flex flex-col">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                          ROUND COMPLETE • REWARDS SENT
+                        </p>
+                        <p className="mt-2 text-[13px] text-emerald-100/90">
+                          Check your wallet – this round just paid out. Next
+                          window will be announced soon.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col">
+                        {/* Label + icon */}
+                        <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              className="opacity-30"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="5"
+                              className="opacity-60"
+                            />
+                            <circle cx="12" cy="12" r="2" />
+                          </svg>
 
-    {isLive
-      ? 'WINDOW CLOSES IN'
-      : isClosedOnly
-      ? 'REWARDS DISTRIBUTION STARTS IN'
-      : isDistributing
-      ? 'REWARDS ON THE WAY'
-      : 'NEXT WINDOW IN'}
-  </p>
+                          {isLive
+                            ? 'WINDOW CLOSES IN'
+                            : isClosedOnly
+                            ? 'REWARDS DISTRIBUTION STARTS IN'
+                            : isDistributing
+                            ? 'REWARDS ON THE WAY'
+                            : 'NEXT WINDOW IN'}
+                        </p>
 
-  {/* Countdown OR phase text */}
-  {shouldShowCountdown && countdownTargetIso && (
-    <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
-      <p
-        className={[
-          'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {countdownLabel || '--:--:--'}
-      </p>
-    </div>
-  )}
+                        {/* Countdown OR phase text */}
+                        {shouldShowCountdown && countdownTargetIso && (
+                          <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+                            {isLive && (
+                              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+                            )}
+                            <p
+                              className={[
+                                'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
+                                isFinalTen
+                                  ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+                                  : '',
+                              ].join(' ')}
+                            >
+                              {countdownLabel || '--:--:--'}
+                            </p>
+                          </div>
+                        )}
 
-  {!shouldShowCountdown && (
-    <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
-      {currentPhase === 'closed'
-        ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
-        : currentPhase === 'distribution'
-        ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
-        : 'Round complete. Rewards landed - next window will be announced here.'}
-    </p>
-  )}
+                        {!shouldShowCountdown && (
+                          <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+                            {currentPhase === 'closed'
+                              ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
+                              : currentPhase === 'distribution'
+                              ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
+                              : 'Round complete. Rewards landed - next window will be announced here.'}
+                          </p>
+                        )}
 
-    {/* 🔥 Random FOMO hype banner (30–5min before open) */}
-    {fomoBanner && (
-      <div
-        className="
-          mt-3
-          inline-flex items-center gap-3
-          rounded-full border border-amber-300/70
-          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
-          px-4 py-2
-          shadow-[0_0_32px_rgba(251,191,36,0.65)]
-          animate-[pulse_1.4s_ease-in-out_infinite]
-        "
-      >
-        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
-          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
-        </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-          {fomoBanner}
-        </span>
-      </div>
-    )}
+                        {/* 🔥 Random FOMO hype banner (30–5min before open) */}
+                        {fomoBanner && (
+                          <div
+                            className="
+                              mt-3
+                              inline-flex items-center gap-3
+                              rounded-full border border-amber-300/70
+                              bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
+                              px-4 py-2
+                              shadow-[0_0_32px_rgba(251,191,36,0.65)]
+                              animate-[pulse_1.4s_ease-in-out_infinite]
+                            "
+                          >
+                            <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
+                              <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+                              {fomoBanner}
+                            </span>
+                          </div>
+                        )}
 
-  {/* Snapshot locked pill */}
-  {showSnapshotLocked && (
-    <div
-      className={[
-        'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
-        'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-        justSnapshotFired
-          ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
-          : '',
-      ].join(' ')}
-    >
-      <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
-        <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
-      </span>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-        Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
-      </span>
-    </div>
-  )}
-</div>  
-
-)}
+                        {/* Snapshot locked pill */}
+                        {showSnapshotLocked && (
+                          <div
+                            className={[
+                              'mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 border',
+                              'bg-emerald-500/8 border-emerald-400/40 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+                              justSnapshotFired
+                                ? 'ring-2 ring-emerald-300/80 shadow-[0_0_24px_rgba(16,185,129,0.9)] animate-[pulse_0.7s_ease-in-out_infinite]'
+                                : '',
+                            ].join(' ')}
+                          >
+                            <span className="relative inline-flex h-[10px] w-[20px] items-center justify-start rounded-full border border-emerald-300/70 bg-emerald-300/10 shadow-[0_0_14px_rgba(16,185,129,0.9)]">
+                              <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+                              Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
-    CURRENT ROUND POOL
-  </p>
+                          CURRENT ROUND POOL
+                        </p>
 
                         <div className="relative group">
                           <button
-  type="button"
-  className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
->
-  ?
-</button>
+                            type="button"
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+                          >
+                            ?
+                          </button>
                           <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                             <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
                               <p className="text-[12px] text-slate-200 leading-relaxed">
@@ -1322,8 +1269,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                         </p>
                       </div>
                     </div>
-
-                   </div>
+                  </div>
 
                   {/* CTA */}
                   <button
@@ -1384,82 +1330,85 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 </div>
               </div>
 
-{/* MOBILE CONNECT CTA */}
-<div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
-  <ConnectWalletButton />
-</div>
-
+              {/* MOBILE CONNECT CTA */}
+              <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
+                <ConnectWalletButton />
+              </div>
             </div>
 
             {/* RIGHT COLUMN — Mission Control */}
-<div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
-  <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+            <div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
+              <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
+                {/* Header row */}
+                <div className="flex items-baseline justify-between pr-1">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
+                    Round {roundNumber ?? 1}
+                  </p>
 
-    {/* Header row */}
-    <div className="flex items-baseline justify-between pr-1">
-      <p className="text-[12px] font-semibold uppercase tracking-[0.32em] text-slate-500">
-        Round {roundNumber ?? 1}
-      </p>
+                  <span
+                    className={[
+                      'text-[12px] font-semibold uppercase tracking-[0.32em]',
+                      hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
+                    ].join(' ')}
+                  >
+                    {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
+                  </span>
+                </div>
 
-      <span
-        className={[
-          'text-[12px] font-semibold uppercase tracking-[0.32em]',
-          hasAnyIssue ? 'text-amber-300' : 'text-emerald-400',
-        ].join(' ')}
-      >
-        {hasAnyIssue ? '⚠ Mission Control' : 'Mission Control'}
-      </span>
-    </div>
+                {/* Snapshot info */}
+                <div className="space-y-1">
+                  <p className="text-[20px] font-semibold text-slate-100">
+                    Snapshot #{snapshotBlock}
+                  </p>
 
-    {/* Snapshot info */}
-    <div className="space-y-1">
-      <p className="text-[20px] font-semibold text-slate-100">
-        Snapshot #{snapshotBlock}
-      </p>
+                  <p className="text-[12px] text-slate-400 leading-relaxed">
+                    {currentPhase === 'open' && 'window open'}
+                    {currentPhase === 'scheduled' && 'window scheduled'}
+                    {currentPhase === 'distribution' && 'distributing'}
+                    {currentPhase === 'closed' && 'window closed'}
+                  </p>
+                </div>
 
-      <p className="text-[12px] text-slate-400 leading-relaxed">
-        {currentPhase === 'open' && 'window open'}
-        {currentPhase === 'scheduled' && 'window scheduled'}
-        {currentPhase === 'distribution' && 'distributing'}
-        {currentPhase === 'closed' && 'window closed'}
-      </p>
-    </div>
+                {/* Status rows */}
+                <div className="mt-3 space-y-3">
+                  {missionRows.map((row) => {
+                    const isPill = row.mode === 'pill';
+                    const pillValueClass =
+                      row.tone === 'success'
+                        ? 'text-[12px] text-emerald-300'
+                        : row.tone === 'warning'
+                        ? 'text-[12px] text-amber-300'
+                        : 'text-[12px] text-slate-300';
 
-    {/* Status rows */}
-    <div className="mt-3 space-y-3">
-      {missionRows.map((row) => {
-        const isPill = row.mode === 'pill';
-        const pillValueClass =
-          row.tone === 'success'
-            ? 'text-[12px] text-emerald-300'
-            : row.tone === 'warning'
-            ? 'text-[12px] text-amber-300'
-            : 'text-[12px] text-slate-300';
+                    return (
+                      <div
+                        key={row.label}
+                        className="flex items-start justify-between"
+                      >
+                        <p className="text-[12px] text-slate-400">
+                          {row.label}
+                        </p>
 
-        return (
-          <div key={row.label} className="flex items-start justify-between">
-            <p className="text-[12px] text-slate-400">{row.label}</p>
-
-            {isPill ? (
-              <span
-                className={[
-                  'px-2 py-[3px] rounded-full bg-slate-800 text-[12px] font-semibold',
-                  row.tone === 'success'
-                    ? 'text-emerald-300'
-                    : row.tone === 'warning'
-                    ? 'text-amber-300'
-                    : 'text-slate-300',
-                ].join(' ')}
-              >
-                {row.value}
-              </span>
-            ) : (
-              <span className={pillValueClass}>{row.value}</span>
-            )}
-          </div>
-        );
-      })}
-    </div>
+                        {isPill ? (
+                          <span
+                            className={[
+                              'px-2 py-[3px] rounded-full bg-slate-800 text-[12px] font-semibold',
+                              row.tone === 'success'
+                                ? 'text-emerald-300'
+                                : row.tone === 'warning'
+                                ? 'text-amber-300'
+                                : 'text-slate-300',
+                            ].join(' ')}
+                          >
+                            {row.value}
+                          </span>
+                        ) : (
+                          <span className={pillValueClass}>{row.value}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
                 {/* Autopilot strip */}
                 <div className="mt-3 flex items-center gap-3">
@@ -1513,7 +1462,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
             {/* desktop timeline */}
             <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
               {steps.map((step, index) => {
-                const isDone = activeIndex >= index;
+                const isDoneStep = activeIndex >= index;
                 const isActiveStep = step.id === currentPhase;
 
                 return (
@@ -1525,14 +1474,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                       className={[
                         'h-2 w-full rounded-full',
                         index === 0 ? '' : 'ml-1',
-                        isDone ? 'bg-emerald-400' : 'bg-slate-800',
+                        isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
                       ].join(' ')}
                     />
                     <div className="mt-2 flex items-center gap-2">
                       <div
                         className={[
                           'h-2.5 w-2.5 rounded-full border',
-                          isDone
+                          isDoneStep
                             ? 'bg-emerald-400 border-emerald-300'
                             : 'bg-slate-800 border-slate-600',
                           isActiveStep
@@ -1543,7 +1492,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                       <span
                         className={[
                           'tracking-wide',
-                          isDone
+                          isDoneStep
                             ? 'text-[12px] font-semibold text-slate-300'
                             : 'text-[12px] font-medium text-slate-500',
                         ].join(' ')}
@@ -1662,16 +1611,16 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               </p>
               <p className="text-[13px] text-slate-400">{eligibilityBody}</p>
             </div>
-            {walletIsConnected && (
-  <div className="mt-4 border-t border-slate-800/70 pt-3">
-    <p className="text-[11px] text-slate-500">
-      Wallet:{' '}
-      <span className="font-mono text-slate-200">
-        {walletLabelShort}
-      </span>
-    </p>
-  </div>
-)}
+            {walletConnected && (
+              <div className="mt-4 border-t border-slate-800/70 pt-3">
+                <p className="text-[11px] text-slate-500">
+                  Wallet:{' '}
+                  <span className="font-mono text-slate-200">
+                    {walletLabelShort}
+                  </span>
+                </p>
+              </div>
+            )}
           </SoftCard>
         </div>
 
@@ -1830,24 +1779,24 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
       {/* Sticky Buy CTA (desktop) */}
       <div className="hidden sm:block fixed bottom-4 right-4 z-50">
         <a
-  href={JUPITER_BUY_URL}
-  target="_blank"
-  rel="noreferrer"
-  className="
-    inline-flex items-center justify-center
-    rounded-full
-    px-4 py-2.5
-    text-[11px] font-semibold uppercase tracking-[0.22em]
-    bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
-    border border-emerald-400/40 text-white
-    shadow-[0_0_18px_rgba(16,185,129,0.35)]
-    hover:from-emerald-400/35 hover:to-emerald-500/40
-    hover:border-emerald-400 hover:text-white
-    transition-all
-  "
->
-  Buy $CLAIM on Jupiter
-</a>
+          href={JUPITER_BUY_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="
+            inline-flex items-center justify-center
+            rounded-full
+            px-4 py-2.5
+            text-[11px] font-semibold uppercase tracking-[0.22em]
+            bg-gradient-to-r from-emerald-400/25 to-emerald-500/30
+            border border-emerald-400/40 text-white
+            shadow-[0_0_18px_rgba(16,185,129,0.35)]
+            hover:from-emerald-400/35 hover:to-emerald-500/40
+            hover:border-emerald-400 hover:text-white
+            transition-all
+          "
+        >
+          Buy $CLAIM on Jupiter
+        </a>
       </div>
 
       <ToastContainer />
