@@ -978,7 +978,7 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
-  const hasAnyIssue = hasBackendI ssue || hasContractIssue;
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
 
   if (hasAnyIssue) {
     statusSummary =
