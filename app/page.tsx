@@ -7,9 +7,6 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-import { useWallet } from '@solana/wallet-adapter-react';   // ⬅️ NEW
-import ConnectWalletButton from '../components/ConnectWalletButton'; // ⬅️ NEW
-
 // ⬇️ ADD THIS
 import snapshotRaw from '../data/snapshots/round-1.json';
 
@@ -289,8 +286,6 @@ export default function ClaimPoolPage() {
 
   // ⬇️ NEW
   const [hasLockedIn, setHasLockedIn] = useState(false);
-  const { publicKey } = useWallet();
-  const walletAddress = publicKey?.toBase58() ?? null;
 
   // 🔥 NEW: random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
@@ -652,11 +647,7 @@ function getRandomFomoMessage() {
   const walletIsConnected = walletConnected;
 
   // Short label for "Wallet:" line
-  const walletLabelShort =
-    walletShort ||
-    (walletAddress
-      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
-      : '—');
+  const walletLabelShort = walletShort || '—';
 
   // Choose where snapshot time comes from
   // Prefer JSON schedule; fall back to backend field if needed
@@ -1133,9 +1124,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
               {networkLabel}
             </span>
 
-{/* Desktop wallet button */}
+{/* Desktop wallet placeholder (no wallet logic yet) */}
 <div className="hidden sm:inline-flex mr-2">
-  <ConnectWalletButton />
+  <button
+    type="button"
+    className="inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 cursor-default"
+  >
+    Wallet soon
+  </button>
 </div>
           </div>
         </div>
@@ -1387,9 +1383,14 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
                 </div>
               </div>
 
-{/* MOBILE CONNECT CTA */}
+{/* MOBILE CONNECT CTA (placeholder) */}
 <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
-  <ConnectWalletButton />
+  <button
+    type="button"
+    className="w-full inline-flex items-center justify-center rounded-full border border-slate-700/70 bg-slate-900/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-200 cursor-default"
+  >
+    Wallet soon
+  </button>
 </div>
 
             </div>
