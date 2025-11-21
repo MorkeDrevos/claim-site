@@ -7,8 +7,8 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: #020617; /* dark navy */
-  color: #e5e7eb;            /* light gray text */
+  background-color: #020617;
+  color: #e5e7eb;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     sans-serif;
 }
@@ -54,6 +54,7 @@ body::before {
   }
 }
 
+/* CLAIM Portal – wallet button styling */
 @layer components {
   .claim-wallet-btn {
     @apply inline-flex items-center gap-2
@@ -65,7 +66,7 @@ body::before {
       focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
   }
 
-  /* Desktop header pill (top right) */
+  /* Desktop header pill */
   .claim-wallet-btn-header {
     @apply px-4 py-1.5 text-[11px];
   }
@@ -82,7 +83,9 @@ body::before {
   .claim-wallet-btn[disabled] {
     @apply opacity-60 cursor-default;
   }
-} purple wallet button styling */
+}
+
+/* Override default purple adapter button */
 .wallet-adapter-button {
   @apply bg-transparent shadow-none border-none text-white;
 }
