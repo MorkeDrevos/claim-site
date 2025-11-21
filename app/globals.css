@@ -72,9 +72,18 @@ body::before {
       border-2 border-emerald-300;
   }
 
-  .claim-wallet-btn-mobile {
-    @apply w-full justify-center px-4 py-2.5 text-[12px];
-  }
+  .claim-wallet-btn-mobile .wallet-adapter-button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  padding: 8px 18px;
+  font-size: 12px;
+  line-height: 1.1;
+
+  min-height: 0;
+  height: auto;
+}
 
   .claim-wallet-btn:not([disabled]):hover {
     @apply brightness-[1.05];
