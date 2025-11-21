@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 type ConnectWalletButtonProps = {
@@ -9,14 +10,14 @@ type ConnectWalletButtonProps = {
 export default function ConnectWalletButton({
   variant = 'header',
 }: ConnectWalletButtonProps) {
+  const sizeClass =
+    variant === 'mobile'
+      ? 'claim-wallet-btn-mobile'
+      : 'claim-wallet-btn-header';
+
   return (
     <WalletMultiButton
-      className={[
-        'claim-wallet-btn',                      // shared styling
-        variant === 'mobile'
-          ? 'claim-wallet-btn-mobile'
-          : 'claim-wallet-btn-header',           // size tweak
-      ].join(' ')}
+      className={`claim-wallet-btn ${sizeClass}`}
     />
   );
 }
