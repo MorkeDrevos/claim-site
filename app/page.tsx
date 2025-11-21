@@ -1153,25 +1153,26 @@ const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
     {/* 🔥 Random FOMO hype banner (30–5min before open) */}
     {fomoBanner && (
-      <div
-        className="
-          mt-3
-          inline-flex items-center gap-3
-          rounded-full border border-amber-300/70
-          bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
-          px-4 py-2
-          shadow-[0_0_32px_rgba(251,191,36,0.65)]
-          animate-[pulse_1.4s_ease-in-out_infinite]
-        "
-      >
-        <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
-          <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
-        </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
-          {fomoBanner}
-        </span>
-      </div>
-    )}
+  <div
+    className="
+      hidden sm:inline-flex     /* ← hides on mobile, shows on desktop */
+      mt-3
+      items-center gap-3
+      rounded-full border border-amber-300/70
+      bg-gradient-to-r from-amber-500/15 via-amber-400/8 to-amber-200/10
+      px-4 py-2
+      shadow-[0_0_32px_rgba(251,191,36,0.65)]
+      animate-[pulse_1.4s_ease-in-out_infinite]
+    "
+  >
+    <span className="relative inline-flex items-center justify-center h-[22px] w-[36px] rounded-full bg-black/60 border border-amber-300/70 shadow-[0_0_18px_rgba(251,191,36,0.9)]">
+      <span className="h-[10px] w-[18px] rounded-full bg-amber-300/90 shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+    </span>
+    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-50">
+      {fomoBanner}
+    </span>
+  </div>
+)}
 
   {/* Snapshot locked pill */}
   {showSnapshotLocked && (
