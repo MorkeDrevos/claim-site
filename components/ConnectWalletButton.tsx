@@ -1,22 +1,25 @@
 'use client';
 
+import React from 'react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-export default function ConnectWalletButton({ variant }: { variant: 'desktop' | 'mobile' }) {
-  const base =
-    'inline-flex items-center rounded-full font-semibold uppercase tracking-[0.22em] transition-all duration-200';
+type ConnectWalletButtonProps = {
+  className?: string;
+};
 
-  const desktop =
-    'px-4 py-2 text-[11px] bg-emerald-400 text-slate-950 hover:bg-emerald-300 shadow-[0_0_24px_rgba(16,185,129,0.6)]';
-
-  const mobile =
-    'w-full justify-center px-5 py-3 text-[12px] bg-emerald-400 text-slate-950 hover:bg-emerald-300 shadow-[0_0_24px_rgba(16,185,129,0.6)]';
-
-  const style = variant === 'desktop' ? desktop : mobile;
-
+export default function ConnectWalletButton({ className = '' }: ConnectWalletButtonProps) {
   return (
-    <div className={base + ' ' + style}>
-      <WalletMultiButton />
-    </div>
+    <WalletMultiButton
+      className={[
+        'rounded-full px-4 py-2.5',
+        'text-[11px] font-semibold uppercase tracking-[0.22em] text-white',
+        'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
+        'border border-emerald-400/40',
+        'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
+        'hover:from-emerald-400/35 hover:to-emerald-500/40 hover:border-emerald-400 hover:text-white',
+        'transition-all',
+        className,
+      ].join(' ')}
+    />
   );
 }
