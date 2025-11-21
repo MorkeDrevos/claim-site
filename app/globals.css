@@ -66,9 +66,13 @@ body::before {
       focus:outline-none focus:ring-1 focus:ring-emerald-400/60 focus:ring-offset-0;
   }
 
-  /* Desktop header pill (top right) */
+    /* Desktop header pill (top right) */
   .claim-wallet-btn-header {
-    @apply px-4 py-1.5 text-[11px];
+    @apply px-5 py-1
+      text-[10px]
+      rounded-full
+      shadow-[0_0_22px_rgba(16,185,129,0.85)]
+      border-2 border-emerald-300;
   }
 
   /* Mobile full-width CTA – smaller and capped */
