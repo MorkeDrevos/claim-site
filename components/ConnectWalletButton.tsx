@@ -20,16 +20,16 @@ export default function ConnectWalletButton({
       ? 'px-4 py-2.5'
       : 'px-4 py-2.5';
 
-  // If not connected, we override the label.
-  // If connected, we pass no children so WalletMultiButton shows the address.
-  const label = connected ? undefined : 'CONNECT WALLET';
+  // disconnected → show “Connect wallet”
+  // connected → let WalletMultiButton show the wallet address
+  const label = connected ? undefined : 'Connect wallet';
 
   return (
     <WalletMultiButton
       className={[
         'rounded-full',
         variantPadding,
-        'text-[11px] font-semibold uppercase tracking-[0.22em] text-white',
+        'text-[11px] font-semibold tracking-wide text-white', // removed uppercase
         'bg-gradient-to-r from-emerald-400/25 to-emerald-500/30',
         'border border-emerald-400/40',
         'shadow-[0_0_18px_rgba(16,185,129,0.35)]',
