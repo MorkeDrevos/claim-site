@@ -1025,9 +1025,7 @@ export default function ClaimPoolPage() {
   const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-    // ───────────────────────────
-  // Render
-  // ───────────────────────────
+// -------------------------
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
@@ -1454,7 +1452,6 @@ export default function ClaimPoolPage() {
                       </div>
                     </div>
                   </div>{' '}
-                  {/* ← closes TOP ROW */}
 
                   {/* CTA */}
                   <button
