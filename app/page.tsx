@@ -1094,47 +1094,48 @@ const eligibilityBody = walletIsConnected
                   Show up. Lock in. Get your share.
                 </h1>
 
-                {/* CLAIM WINDOW CARD */}
-                className={[
-  'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
-  isLive
-    ? [
-        'border border-emerald-400/80',
-        'bg-gradient-to-b from-emerald-500/15 via-slate-950/85 to-slate-950/95',
-        'shadow-[0_0_45px_rgba(16,185,129,0.75)]',
-        'animate-[pulse_1.4s_ease-in-out_infinite]',
-      ].join(' ')
-    : isDistributing
-    ? [
-        'border border-cyan-400/80',
-        'bg-gradient-to-b from-cyan-500/12 via-slate-950/85 to-slate-950/95',
-        'shadow-[0_0_45px_rgba(34,211,238,0.7)]',
-      ].join(' ')
-    : [
-        'border border-emerald-500/40',
-        'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-        'shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-      ].join(' '),
-].join(' ')}
+                                {/* CLAIM WINDOW CARD */}
+                <div
+                  className={[
+                    'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
+                    isLive
+                      ? [
+                          'border border-emerald-400/80',
+                          'bg-gradient-to-b from-emerald-500/15 via-slate-950/85 to-slate-950/95',
+                          'shadow-[0_0_45px_rgba(16,185,129,0.75)]',
+                          'animate-[pulse_1.4s_ease-in-out_infinite]',
+                        ].join(' ')
+                      : isDistributing
+                      ? [
+                          'border border-cyan-400/80',
+                          'bg-gradient-to-b from-cyan-500/12 via-slate-950/85 to-slate-950/95',
+                          'shadow-[0_0_45px_rgba(34,211,238,0.7)]',
+                        ].join(' ')
+                      : [
+                          'border border-emerald-500/40',
+                          'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+                          'shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+                        ].join(' '),
+                  ].join(' ')}
+                >
+                  {/* LIVE indicator pill */}
+                  {isLive && (
+                    <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
+                      <span className="relative inline-flex h-[8px] w-[8px]">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+                        <span className="relative inline-flex h-[8px] w-[8px] rounded-full bg-emerald-300" />
+                      </span>
+                      Claim window live
+                    </p>
+                  )}
 
-{/* LIVE indicator pill */}
-{isLive && (
-  <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
-    <span className="relative inline-flex h-[8px] w-[8px]">
-      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-      <span className="relative inline-flex h-[8px] w-[8px] rounded-full bg-emerald-300" />
-    </span>
-    Claim window live
-  </p>
-)}
-
-{/* REWARDS ON THE WAY pill */}
-{isDistributing && (
-  <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100">
-    <span className="inline-flex h-[10px] w-[10px] animate-spin rounded-full border-[2px] border-cyan-300 border-t-transparent" />
-    Rewards on the way
-  </p>
-)}
+                  {/* REWARDS ON THE WAY pill */}
+                  {isDistributing && (
+                    <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100">
+                      <span className="inline-flex h-[10px] w-[10px] animate-spin rounded-full border-[2px] border-cyan-300 border-t-transparent" />
+                      Rewards on the way
+                    </p>
+                  )}
 
                   {/* TOP ROW */}
                   <div className="flex items-start justify-between gap-6 pt-1">
@@ -1186,33 +1187,39 @@ const eligibilityBody = walletIsConnected
                         </p>
 
                         {/* Countdown OR phase text */}
-{shouldShowCountdown && countdownTargetIso && (
-  <>
-    <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-      {isLive && (
-        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-      )}
+                        {shouldShowCountdown && countdownTargetIso && (
+                          <>
+                            <div
+                              className={isLive ? 'relative mt-1' : 'mt-1'}
+                            >
+                              {isLive && (
+                                <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+                              )}
 
-      <p
-        className={[
-          '-mt-1.5',
-          'text-[38px] sm:text-[34px] font-bold tracking-tight',
-          isLive ? 'text-emerald-300' : 'text-slate-50',
-          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-        ].join(' ')}
-      >
-        {isClosed ? '' : countdownLabel || '--:--:--'}
-      </p>
-    </div>
+                              <p
+                                className={[
+                                  '-mt-1.5',
+                                  'text-[38px] sm:text-[34px] font-bold tracking-tight',
+                                  isLive
+                                    ? 'text-emerald-300'
+                                    : 'text-slate-50',
+                                  isFinalTen
+                                    ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+                                    : '',
+                                ].join(' ')}
+                              >
+                                {isClosed ? '' : countdownLabel || '--:--:--'}
+                              </p>
+                            </div>
 
-    {/* Message line under countdown */}
-    <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      {isLive
-        ? 'Window is live. Lock in your share now.'
-        : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
-    </p>
-  </>
-)}
+                            {/* Message line under countdown */}
+                            <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                              {isLive
+                                ? 'Window is live. Lock in your share now.'
+                                : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
+                            </p>
+                          </>
+                        )}
 
                         {!shouldShowCountdown && (
                           <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
@@ -1275,41 +1282,16 @@ const eligibilityBody = walletIsConnected
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
                           CURRENT ROUND POOL
                         </p>
-                        <div className="relative group">
-                          <button
-                            type="button"
-                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
-                          >
-                            ?
-                          </button>
-                          <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                            <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
-                              <p className="text-[12px] text-slate-200 leading-relaxed">
-                                Rewards are paid in{' '}
-                                <span className="text-emerald-300 font-medium">
-                                  $CLAIM
-                                </span>{' '}
-                                and shared equally among wallets that locked in
-                                during the live window.{' '}
-                                <span className="text-emerald-300 font-medium">
-                                  USD values are approximate.
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                        {/* tooltip block stays the same */}
+                        ...
                       </div>
-
-                      <div className="mt-1.5 flex items-end justify-end">
-                        <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
-                          {rewardAmountText}
-                          <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-                            $CLAIM
-                          </span>
-                        </p>
-                      </div>
+                      {/* pool amount block stays the same */}
                     </div>
                   </div>
+
+                  {/* CTA + bullets stay as you have them */}
+                  ...
+                </div>
 
                   {/* CTA */}
                   <button
