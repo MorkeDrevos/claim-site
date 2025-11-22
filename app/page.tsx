@@ -110,6 +110,14 @@ type WindowPhase =
   | 'distribution'
   | 'done';
 
+// Optional sponsor metadata for this round (read from schedule JSON)
+type SponsorMeta = {
+  handle?: string;        // "@selor"
+  displayName?: string;   // "Selor"
+  avatarUrl?: string;     // https://...
+  kind?: 'free-intro' | 'paid' | 'internal';
+};
+
 type ClaimHistoryEntry = {
   round: number;
   amount: number;
@@ -161,6 +169,19 @@ const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
 // @ts-ignore – JSON doesn’t define mode yet
 const SCHEDULE = schedule as ClaimSchedule;
 const SNAPSHOT_FOMO_WINDOW_MINUTES = 5;
+
+// ───────────────────────────
+// Sponsorship (optional)
+// ───────────────────────────
+
+// read sponsor meta from schedule if present
+const sponsorRaw = ((SCHEDULE as any).sponsor ?? null) as SponsorMeta | null;
+
+const isSponsoredWindow = !!(sponsorRaw && sponsorRaw.handle);
+const sponsorHandle = sponsorRaw?.handle ?? null;
+const sponsorDisplayName = sponsorRaw?.displayName ?? null;
+const sponsorAvatarUrl = sponsorRaw?.avatarUrl ?? null;
+const sponsorKind = sponsorRaw?.kind ?? null;
 
 /* ───────────────────────────
    UI helpers
@@ -989,7 +1010,7 @@ export default function ClaimPoolPage() {
       </header>
 
       {/* MAIN CONTENT */}
-      <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
+<div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-24 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
           {/* Celebration banner when done */}
@@ -1084,30 +1105,79 @@ export default function ClaimPoolPage() {
                   <div className="flex items-start justify-between gap-6 pt-1">
                     {/* LEFT SIDE */}
 <div className="flex flex-col">
-  {/* Phase label (only when NOT done) */}
-  {!isDone && (
-    <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <circle cx="12" cy="12" r="9" className="opacity-30" />
-        <circle cx="12" cy="12" r="5" className="opacity-60" />
-        <circle cx="12" cy="12" r="2" />
-      </svg>
+  {/* Sponsorship row (optional) */}
+  {isSponsoredWindow && (
+    <div className="mb-[4px] flex items-center gap-2">
+      {/* Avatar / initial bubble */}
+      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/90 border border-slate-700/80 overflow-hidden">
+        {sponsorAvatarUrl ? (
+          <Image
+            src={sponsorAvatarUrl}
+            alt={sponsorDisplayName || sponsorHandle || 'Sponsor'}
+            width={24}
+            height={24}
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-[11px] font-semibold text-slate-200">
+            {(sponsorDisplayName || sponsorHandle || 'S')
+              .replace('@', '')
+              .slice(0, 1)
+              .toUpperCase()}
+          </span>
+        )}
+      </div>
 
-      {isLive
-        ? 'WINDOW CLOSES IN'
-        : isClosedOnly
-        ? 'REWARDS DISTRIBUTION STARTS IN'
-        : isDistributionPhase
-        ? 'REWARDS ON THE WAY'
-        : 'NEXT WINDOW IN'}
-    </p>
+      <div className="flex flex-col">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          {sponsorKind === 'free-intro'
+            ? 'Launch partner · Sponsored window'
+            : 'Sponsored reward window'}
+        </p>
+        <p className="text-[12px] text-slate-200">
+          Sponsored by{' '}
+          {sponsorHandle ? (
+            <a
+              href={`https://x.com/${sponsorHandle.replace('@', '')}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sky-300 hover:text-sky-200 underline underline-offset-2"
+            >
+              {sponsorHandle}
+            </a>
+          ) : (
+            <span className="text-emerald-300">
+              {sponsorDisplayName || 'Partner'}
+            </span>
+          )}
+        </p>
+      </div>
+    </div>
+  )}
+
+  {/* Timing label */}
+  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="9" className="opacity-30" />
+      <circle cx="12" cy="12" r="5" className="opacity-60" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+
+    {isLive
+      ? 'WINDOW CLOSES IN'
+      : isClosedOnly
+      ? 'REWARDS DISTRIBUTION STARTS IN'
+      : isDistributionPhase
+      ? 'REWARDS ON THE WAY'
+      : 'NEXT WINDOW IN'}
+  </p>
   )}
 
   {/* DONE STATE – green “Round X complete · Rewards distributed” */}
