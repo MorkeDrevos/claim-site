@@ -306,7 +306,7 @@ export default function ClaimPoolPage() {
   const fomoMessages = [
     'Snapshot engine is arming - make sure your wallet holds the minimum.',
     'Live window approaching - don’t miss your share.',
-    'Reminder: Only eligible wallets share the pool — check your balance.',
+    'Reminder: Only eligible wallets share the pool - check your balance.',
   ];
 
   function getRandomFomoMessage() {
@@ -421,10 +421,10 @@ export default function ClaimPoolPage() {
   const isDistributing = isDistributionPhase;
 
   const shouldShowCountdown =
-  currentPhase === 'scheduled' ||
-  currentPhase === 'snapshot' ||
-  currentPhase === 'open' ||
-  (currentPhase === 'closed' && !!SCHEDULE.distributionStartsAt);
+    currentPhase === 'scheduled' ||
+    currentPhase === 'snapshot' ||
+    currentPhase === 'open' ||
+    (currentPhase === 'closed' && !!SCHEDULE.distributionStartsAt);
 
   const isRestingClosed = isClosedOnly && !isDistributionPhase && !isDone;
 
@@ -524,7 +524,7 @@ export default function ClaimPoolPage() {
     }
 
     loadPortalState();
-    intervalId = window.setInterval(loadPortalState, 15000);
+    intervalId = window.setInterval(loadPortalState, 15_000);
 
     return () => {
       cancelled = true;
@@ -868,103 +868,6 @@ export default function ClaimPoolPage() {
 
   if (currentPhase === 'scheduled') {
     if (isSnapshotSoon) {
-      // FOMO cyan glowing line
-      progressMessage = (
-        <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
-          SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT - MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
-        </span>
-      );
-    } else {
-      progressMessage =
-        'Claim window scheduled. Countdown shows when it opens.';
-    }
-  } else if (currentPhase === 'snapshot') {
-    progressMessage = snapshotTimeLabel
-      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-      : 'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
-  }
-
-  // Hide message when the green "Snapshot locked" pill is visible
-  if (showSnapshotLocked) {
-    progressMessage = '';
-  } else if (currentPhase === 'open') {
-    progressMessage =
-      'Claim window open. Lock in your share before the countdown hits zero.';
-  } else if (currentPhase === 'closed') {
-    progressMessage =
-      'Claim window closed. No new wallets can lock in for this round.';
-  } else if (currentPhase === 'distribution') {
-    progressMessage =
-      'Rewards are being sent out - watch your wallet, this round is paying.';
-  } else if (currentPhase === 'done') {
-    progressMessage =
-      'Round complete. Rewards landed - get ready for the next cycle.';
-  }
-
-  // ───────────────────────────
-  // Status summary + button label
-  // ───────────────────────────
-
-  let statusSummary =
-    'All systems nominal. Autonomous settlement sequence is active.';
-  const hasAnyIssue = hasBackendIssue || hasContractIssue;
-
-  if (hasAnyIssue) {
-    statusSummary =
-      'Attention flagged. One or more subsystems are reporting a non-normal status.';
-  } else if (currentPhase === 'open') {
-    statusSummary =
-      'All systems nominal. Live claim window running under autonomous settlement.';
-  } else if (currentPhase === 'scheduled') {
-    statusSummary =
-      'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
-  } else if (currentPhase === 'distribution') {
-    statusSummary =
-      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
-  } else if (currentPhase === 'done') {
-    statusSummary =
-      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
-  } else if (currentPhase === 'closed') {
-    statusSummary =
-      'All systems nominal. Claim window closed and standing by for the next round.';
-  }
-
-  let statusDotColor = 'bg-emerald-400';
-  if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
-  if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
-  if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
-
-  let claimButtonLabel = 'Lock in my share';
-
-  if (hasLockedIn) {
-    claimButtonLabel = 'Presence locked in';
-  } else if (!isLive) {
-    claimButtonLabel = isClosedOnly
-      ? 'Claim window closed'
-      : isDistributing
-      ? 'Distribution in progress'
-      : isDone
-      ? 'Rewards distributed'
-      : 'Upcoming Claim Window';
-  } else if (!walletIsConnected) {
-    claimButtonLabel = 'Connect wallet to lock in';
-  } else if (!isEligible) {
-    claimButtonLabel = 'Not eligible this round';
-  } else if (isPreview) {
-    claimButtonLabel = 'Preview mode';
-  } else {
-    claimButtonLabel = 'Lock in my share';
-  }
-
-    // ───────────────────────────
-  // Progress message
-  // ───────────────────────────
-
-  let progressMessage: React.ReactNode = '';
-
-  if (currentPhase === 'scheduled') {
-    if (isSnapshotSoon) {
-      // FOMO cyan glowing line
       progressMessage = (
         <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
           SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT - MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
@@ -1075,9 +978,9 @@ export default function ClaimPoolPage() {
   const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  // ───────────────────────────
-  // Render
-  // ───────────────────────────
+  /* ───────────────────────────
+     Render
+  ─────────────────────────── */
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
@@ -1243,7 +1146,7 @@ export default function ClaimPoolPage() {
                           ROUND COMPLETE • REWARDS SENT
                         </p>
                         <p className="mt-2 text-[13px] text-emerald-100/90">
-                          Check your wallet – this round just paid out. Next
+                          Check your wallet - this round just paid out. Next
                           window will be announced soon.
                         </p>
                       </div>
@@ -1311,12 +1214,12 @@ export default function ClaimPoolPage() {
 
                             {/* Message line under countdown */}
                             <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-  {isLive
-    ? 'Window is live. Lock in your share now.'
-    : isClosedOnly
-    ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
-    : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
-</p>
+                              {isLive
+                                ? 'Window is live. Lock in your share now.'
+                                : isClosedOnly
+                                ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
+                                : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
+                            </p>
                           </>
                         )}
 
@@ -1367,15 +1270,14 @@ export default function ClaimPoolPage() {
                               <span className="ml-[3px] h-[6px] w-[6px] rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.95)]" />
                             </span>
                             <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-                              Snapshot locked at {snapshotTimeLabel} -
-                              eligibility for this round is locked.
+                              Snapshot locked at {snapshotTimeLabel} - eligibility for this round is locked.
                             </span>
                           </div>
                         )}
                       </div>
                     )}
 
-                                        {/* RIGHT SIDE: pool */}
+                    {/* RIGHT SIDE: pool */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
@@ -1415,41 +1317,37 @@ export default function ClaimPoolPage() {
                         </p>
                       </div>
                     </div>
-                  </div>{/* ← closes TOP ROW */}
+                  </div>{' '}
+                  {/* ← closes TOP ROW */}
 
                   {/* CTA */}
-<button
-  type="button"
-  onClick={handleClaimClick}
-  disabled={!canClaim}
-  className={[
-    'mt-6 w-full flex items-center justify-center',
-    'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
-    'transition-all duration-300',
-
-    // 🔥 Tone: bright green ONLY while window is live
-    isLive
-      ? [
-          'bg-emerald-500 text-emerald-950 border-emerald-400',
-          'shadow-[0_0_24px_rgba(16,185,129,0.65)]',
-          'hover:bg-emerald-400 hover:border-emerald-300',
-          // even if disabled, keep it bright but slightly dimmed + no pointer
-          'disabled:opacity-80 disabled:cursor-not-allowed',
-        ].join(' ')
-      : isClosedOnly
-      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-      : isDistributing
-      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
-      : isDone
-      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
-      : 'bg-slate-950/80 text-slate-200 border-slate-700/80 cursor-not-allowed',
-
-    // 💓 Pulse only when: window live + wallet can really claim
-    isLive && canClaim && isPulseOn ? 'animate-pulse' : '',
-  ].join(' ')}
->
-  {claimButtonLabel}
-</button>
+                  <button
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={[
+                      'mt-6 w-full flex items-center justify-center',
+                      'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+                      'transition-all duration-300',
+                      isLive
+                        ? [
+                            'bg-emerald-500 text-emerald-950 border-emerald-400',
+                            'shadow-[0_0_24px_rgba(16,185,129,0.65)]',
+                            'hover:bg-emerald-400 hover:border-emerald-300',
+                            'disabled:opacity-80 disabled:cursor-not-allowed',
+                          ].join(' ')
+                        : isClosedOnly
+                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+                        : isDistributing
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+                        : isDone
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+                        : 'bg-slate-950/80 text-slate-200 border-slate-700/80 cursor-not-allowed',
+                      isLive && canClaim && isPulseOn ? 'animate-pulse' : '',
+                    ].join(' ')}
+                  >
+                    {claimButtonLabel}
+                  </button>
 
                   {/* Inline message under CTA */}
                   {inlineMessage && (
@@ -1491,7 +1389,7 @@ export default function ClaimPoolPage() {
                       <span className="text-emerald-300/70 font-medium">
                         snapshot
                       </span>{' '}
-                      – wallets below the minimum sit out that round.
+                      - wallets below the minimum sit out that round.
                     </p>
                     <p>
                       • Rewards are auto-distributed in{' '}
@@ -1505,10 +1403,10 @@ export default function ClaimPoolPage() {
                       .
                     </p>
                   </div>
-                </div> {/* ← closes CLAIM WINDOW CARD */}
-              </div>   {/* ← closes the space-y-2 wrapper (title + card) */}
-
-              {/* MOBILE CONNECT CTA */}
+                </div>{' '}
+                {/* ← closes CLAIM WINDOW CARD */}
+              </div>{' '}
+              {/* ← closes the space-y-2 wrapper (title + card) */}
 
               {/* MOBILE CONNECT CTA */}
               <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
@@ -1629,72 +1527,71 @@ export default function ClaimPoolPage() {
             </div>
           </div>
 
-            {/* desktop timeline */}
-            <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
-              {steps.map((step, index) => {
-                const isDoneStep = activeIndex >= index;
-                const isActiveStep = step.id === currentPhase;
+          {/* desktop timeline */}
+          <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
+            {steps.map((step, index) => {
+              const isDoneStep = activeIndex >= index;
+              const isActiveStep = step.id === currentPhase;
 
-                return (
+              return (
+                <div
+                  key={step.id}
+                  className="flex flex-1 flex-col items-center"
+                >
                   <div
-                    key={step.id}
-                    className="flex flex-1 flex-col items-center"
-                  >
+                    className={[
+                      'h-2 w-full rounded-full',
+                      index === 0 ? '' : 'ml-1',
+                      isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
+                    ].join(' ')}
+                  />
+                  <div className="mt-2 flex items-center gap-2">
                     <div
                       className={[
-                        'h-2 w-full rounded-full',
-                        index === 0 ? '' : 'ml-1',
-                        isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
+                        'h-2.5 w-2.5 rounded-full border',
+                        isDoneStep
+                          ? 'bg-emerald-400 border-emerald-300'
+                          : 'bg-slate-800 border-slate-600',
+                        isActiveStep
+                          ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
+                          : '',
                       ].join(' ')}
                     />
-                    <div className="mt-2 flex items-center gap-2">
-                      <div
-                        className={[
-                          'h-2.5 w-2.5 rounded-full border',
-                          isDoneStep
-                            ? 'bg-emerald-400 border-emerald-300'
-                            : 'bg-slate-800 border-slate-600',
-                          isActiveStep
-                            ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
-                            : '',
-                        ].join(' ')}
-                      />
-                      <span
-                        className={[
-                          'tracking-wide',
-                          isDoneStep
-                            ? 'text-[12px] font-semibold text-slate-300'
-                            : 'text-[12px] font-medium text-slate-500',
-                        ].join(' ')}
-                      >
-                        {step.label}
-                      </span>
-                    </div>
+                    <span
+                      className={[
+                        'tracking-wide',
+                        isDoneStep
+                          ? 'text-[12px] font-semibold text-slate-300'
+                          : 'text-[12px] font-medium text-slate-500',
+                      ].join(' ')}
+                    >
+                      {step.label}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
-
-            {/* mobile bar */}
-            <div className="mt-2 sm:hidden space-y-2">
-              <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-emerald-400 transition-all"
-                  style={{
-                    width:
-                      activeIndex >= 0
-                        ? `${((activeIndex + 1) / steps.length) * 100}%`
-                        : '0%',
-                  }}
-                />
-              </div>
-              <p className="text-[11px] text-slate-400">
-                {activeStep ? activeStep.label : 'Round progress'}
-              </p>
-            </div>
-
-            <p className="mt-3 text-[12px] text-slate-200">{progressMessage}</p>
+                </div>
+              );
+            })}
           </div>
+
+          {/* mobile bar */}
+          <div className="mt-2 sm:hidden space-y-2">
+            <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-emerald-400 transition-all"
+                style={{
+                  width:
+                    activeIndex >= 0
+                      ? `${((activeIndex + 1) / steps.length) * 100}%`
+                      : '0%',
+                }}
+              />
+            </div>
+            <p className="text-[11px] text-slate-400">
+              {activeStep ? activeStep.label : 'Round progress'}
+            </p>
+          </div>
+
+          <p className="mt-3 text-[12px] text-slate-200">{progressMessage}</p>
         </SoftCard>
 
         {/* Three mini-cards */}
