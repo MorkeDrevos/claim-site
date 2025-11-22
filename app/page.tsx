@@ -851,21 +851,21 @@ export default function ClaimPoolPage() {
 
   let claimButtonLabel = 'Lock in my share';
 
-// If the round is NOT live, we override the text
-if (!isLive) {
-  claimButtonLabel = isClosedOnly
-    ? 'Claim window closed'
-    : isDistributing
-    ? 'Distribution in progress'
-    : isDone
-    ? 'Rewards distributed'
-    : 'Upcoming Claim Window';
-} else if (hasLockedIn) {
-  // Live window + already locked – optional, keep if you like
-  claimButtonLabel = 'Presence locked in';
-}
-// 👉 No override for not-eligible / preview while live.
-// It will always show "Lock in my share" when isLive && !hasLockedIn.
+  if (!isLive) {
+    claimButtonLabel = isClosedOnly
+  ? 'Claim window closed'
+  : isDistributionPhase
+  ? 'Distribution in progress'
+  : isDone
+  ? 'Rewards distributed'
+      : 'Opens soon';
+  } else if (hasLockedIn) {
+    claimButtonLabel = 'Presence locked in';
+  } else if (!isEligible) {
+    claimButtonLabel = 'Not eligible this round';
+  } else if (isPreview) {
+    claimButtonLabel = 'Preview mode';
+  }
 
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
