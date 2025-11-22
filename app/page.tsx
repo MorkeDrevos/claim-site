@@ -1299,28 +1299,38 @@ export default function ClaimPoolPage() {
                   </div>{/* ← closes TOP ROW */}
 
                   {/* CTA */}
-                  <button
-                    type="button"
-                    onClick={handleClaimClick}
-                    disabled={!canClaim}
-                    className={[
-                      'mt-6 w-full flex items-center justify-center',
-                      'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
-                      'transition-all duration-300',
-                      canClaim
-                        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
-                        : isClosedOnly
-                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-                        : isDistributing
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
-                        : isDone
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
-                        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
-                      canClaim && isPulseOn ? 'animate-pulse' : '',
-                    ].join(' ')}
-                  >
-                    {claimButtonLabel}
-                  </button>
+<button
+  type="button"
+  onClick={handleClaimClick}
+  disabled={!canClaim}
+  className={[
+    'mt-6 w-full flex items-center justify-center',
+    'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+    'transition-all duration-300',
+
+    // 🔥 Tone: bright green ONLY while window is live
+    isLive
+      ? [
+          'bg-emerald-500 text-emerald-950 border-emerald-400',
+          'shadow-[0_0_24px_rgba(16,185,129,0.65)]',
+          'hover:bg-emerald-400 hover:border-emerald-300',
+          // even if disabled, keep it bright but slightly dimmed + no pointer
+          'disabled:opacity-80 disabled:cursor-not-allowed',
+        ].join(' ')
+      : isClosedOnly
+      ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+      : isDistributing
+      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+      : isDone
+      ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+      : 'bg-slate-950/80 text-slate-200 border-slate-700/80 cursor-not-allowed',
+
+    // 💓 Pulse only when: window live + wallet can really claim
+    isLive && canClaim && isPulseOn ? 'animate-pulse' : '',
+  ].join(' ')}
+>
+  {claimButtonLabel}
+</button>
 
                   {/* Inline message under CTA */}
                   {inlineMessage && (
