@@ -989,7 +989,7 @@ export default function ClaimPoolPage() {
       </header>
 
       {/* MAIN CONTENT */}
-<div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-24 pt-10">
+      <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
           {/* Celebration banner when done */}
