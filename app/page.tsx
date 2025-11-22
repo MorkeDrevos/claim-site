@@ -288,15 +288,6 @@ export default function ClaimPoolPage() {
   const walletIsConnected = !!publicKey && !!walletAddress;
   const { setVisible: openWalletModal } = useWalletModal();
 
-  const bannerSubtext =
-  !walletIsConnected
-    ? 'Connect your wallet to check if you made this window.'
-    : eligibilityStatus === 'eligible'
-    ? 'You made it into this window. Check your wallet for rewards.'
-    : eligibilityStatus === 'not-eligible'
-    ? "You didn't make this window. Stand by for the next round."
-    : 'Checking your eligibility…';
-
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
   useAutoReloadOnNewBuild();
@@ -644,6 +635,25 @@ export default function ClaimPoolPage() {
       ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
       : '—');
 
+  const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
+  type EligibilityStatus = 'unknown' | 'eligible' | 'not-eligible';
+
+  const eligibilityStatus: EligibilityStatus =
+  !walletIsConnected
+    ? 'unknown'
+    : isEligible
+    ? 'eligible'
+    : 'not-eligible';
+
+  const bannerSubtext =
+  !walletIsConnected
+    ? 'Connect your wallet to check if you made this window.'
+    : eligibilityStatus === 'eligible'
+    ? 'You made it into this window. Check your wallet for rewards.'
+    : eligibilityStatus === 'not-eligible'
+    ? "You didn't make this window. Stand by for the next round."
+    : 'Checking your eligibility…';
+
   const effectiveSnapshotIso = SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
   const snapshotBaseMs = effectiveSnapshotIso
@@ -741,7 +751,6 @@ export default function ClaimPoolPage() {
     },
   ];
 
-  const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
   type EligibilityStatus = 'unknown' | 'eligible' | 'not-eligible';
 
   const eligibilityStatus: EligibilityStatus =
