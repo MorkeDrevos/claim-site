@@ -964,7 +964,7 @@ if (!isLive) {
             </Link>
 
             <a
-              href="https://x.com/clam_window"
+              href="https://x.com/CLAIMwindow"
               target="_blank"
               rel="noreferrer"
               className="hidden sm:inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200 hover:bg-slate-800 hover:border-emerald-500/60"
