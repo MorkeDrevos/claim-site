@@ -1,10 +1,10 @@
 {
   "roundNumber": 1,
-  "snapshotAt": "2025-11-22T20:43:00Z",
-  "windowOpensAt": "2025-11-22T20:44:00Z",
-  "windowClosesAt": "2025-11-22T20:45:00Z",
-  "distributionStartsAt": "2025-11-22T20:46:00Z",
-  "distributionDoneAt": "2025-11-22T20:47:00Z",
+  "snapshotAt": "2025-11-22T22::55Z",
+  "windowOpensAt": "2025-11-22T23:00:00Z",
+  "windowClosesAt": "2025-11-22T23:10:00Z",
+  "distributionStartsAt": "2025-11-22T23:10:40Z",
+  "distributionDoneAt": "2025-11-22T23:47:00Z",
   "sponsor": {
   "handle": "@NickyBuffett",
   "displayName": "Nicky Buffett",
