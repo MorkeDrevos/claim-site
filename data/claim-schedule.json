@@ -6,8 +6,9 @@
   "distributionStartsAt": "2025-11-22T19:40:00Z",
   "distributionDoneAt": "2025-11-22T19:42:00Z",
   "sponsor": {
-    "handle": "@selor",
-    "displayName": "Selor",
-    "kind": "free-intro"
+  "handle": "@NickyBuffett",
+  "displayName": "Nicky Buffett",
+  "avatarUrl": "https://pbs.twimg.com/profile_images/1234567890/abcdef_normal.jpg",
+  "kind": "free-intro"
   }
 }
