@@ -228,7 +228,10 @@ function formatCountdownLabel(targetIso?: string | null): string | null {
   if (Number.isNaN(targetMs)) return null;
 
   const diff = targetMs - Date.now();
-  if (diff <= 0) return '00:00:00';
+
+  // Once we hit or pass the target, stop showing a numeric label.
+  // This avoids the "00:00:00 for a few seconds" glitch.
+  if (diff <= 0) return null;
 
   const totalSeconds = Math.floor(diff / 1000);
   const seconds = totalSeconds % 60;
@@ -1104,38 +1107,45 @@ export default function ClaimPoolPage() {
                       </p>
 
                       {/* Countdown OR phase text */}
-                      {shouldShowCountdown && countdownTargetIso && (
-                        <>
-                          <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-                            {isLive && (
-                              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-                            )}
 
-                            <p
-                              className={[
-                                '-mt-1.5',
-                                'text-[38px] sm:text-[34px] font-bold tracking-tight',
-                                isLive ? 'text-emerald-300' : 'text-slate-50',
-                              ].join(' ')}
-                            >
-                              {isClosed ? '' : countdownLabel || '--:--:--'}
-                            </p>
-                          </div>
+                      {/* Countdown OR phase text */}
+{shouldShowCountdown && countdownTargetIso && (
+  <>
+    {countdownLabel && (
+      <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+        {isLive && (
+          <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+        )}
 
-                          <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                            {isLive
-                              ? 'Window is live. Lock in your share now.'
-                              : isClosedOnly
-                              ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
-                              : isDistributionPhase
-                              ? 'Rewards are being sent out - watch your wallet, this round is paying.'
-                              : hasSnapshotHappened
-                              ? 'Snapshot locked. Eligibility for this round is set.'
-                              : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
-                          </p>
-                        </>
-                      )}
+        <p
+          className={[
+            '-mt-1.5',
+            'text-[38px] sm:text-[34px] font-bold tracking-tight',
+            isLive ? 'text-emerald-300' : 'text-slate-50',
+            isFinalTen
+              ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+              : '',
+          ].join(' ')}
+        >
+          {countdownLabel}
+        </p>
+      </div>
+    )}
 
+    <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive
+        ? 'Window is live. Lock in your share now.'
+        : isClosedOnly
+        ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
+        : isDistributionPhase
+        ? 'Rewards are being sent out – watch your wallet, this round is paying.'
+        : hasSnapshotHappened
+        ? 'Snapshot locked. Eligibility for this round is set.'
+        : 'Snapshot engine is armed. It can trigger any time – make sure your wallet holds the minimum.'}
+    </p>
+  </>
+)}
+                      
                       {!shouldShowCountdown && (
                         <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
                           {currentPhase === 'closed'
