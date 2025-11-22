@@ -270,6 +270,8 @@ export default function ClaimPoolPage() {
   const [justUpdated, setJustUpdated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
+  const [eligibilityStatus, setEligibilityStatus] =
+  useState<'unknown' | 'eligible' | 'not-eligible'>('unknown');
   const [isPulseOn] = useState(false);
   const [inlineMessage, setInlineMessage] = useState<{
     type: 'error' | 'warning' | 'success';
@@ -1133,20 +1135,30 @@ export default function ClaimPoolPage() {
             Round {roundNumber ?? 1} complete · Rewards distributed
           </p>
           <p className="text-[13px] text-emerald-50/95">
-            Check your wallet – this round just paid out. Next window will be announced here.
+            Check your wallet – this round just paid out. Next round soon.
           </p>
         </div>
       </div>
 
       {/* Right side — desktop only */}
 <div className="hidden sm:flex items-center gap-3">
-  <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-100/90">
-    YOU MADE IT INTO THIS WINDOW
-  </span>
-  <span className="h-6 w-px bg-emerald-300/40" />
-  <span className="text-[12px] leading-[1.1] text-emerald-100/90">
-    Stay close - timing is everything.
-  </span>
+  <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-300/80">
+    
+    {/* NOT CONNECTED */}
+    {!walletIsConnected && (
+      <span>Stay close - timing is everything.</span>
+    )}
+
+    {/* CONNECTED + ELIGIBLE */}
+    {walletIsConnected && eligibilityStatus === 'eligible' && (
+      <span>YOU MADE IT INTO THIS WINDOW</span>
+    )}
+
+    {/* CONNECTED + NOT ELIGIBLE */}
+    {walletIsConnected && eligibilityStatus === 'not-eligible' && (
+      <span>You missed this window. Be ready for the next one.</span>
+    )}
+  </div>
 </div>
     </div>
   )}
