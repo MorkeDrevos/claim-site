@@ -1139,7 +1139,7 @@ export default function ClaimPoolPage() {
       </div>
 
       {/* Right side — desktop only */}
-<div className="hidden sm:flex items-center gap-2 translate-y-[-2px]">
+<div className="hidden sm:flex items-center gap-2 translate-y-[0px]">
   <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-100/90 leading-none">
     You made it into this window
   </span>
