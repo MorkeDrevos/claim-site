@@ -1162,11 +1162,12 @@ export default function ClaimPoolPage() {
                         </div>
                       )}
 
-                        {/* Timing label */}
-  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      {/* Redesigned Timing Block */}
+<div className="mt-[6px] mb-[6px] flex flex-col items-start sm:items-center">
+  <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400/90">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+      className="h-[12px] w-[12px] text-emerald-300 opacity-90"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -1180,13 +1181,20 @@ export default function ClaimPoolPage() {
     {isLive
       ? 'WINDOW CLOSES IN'
       : isClosedOnly
-      ? 'REWARDS DISTRIBUTION STARTS IN'
+      ? 'REWARDS DISTRIBUTION IN'
       : isDistributionPhase
       ? 'REWARDS ON THE WAY'
       : isDone
       ? 'ROUND COMPLETE'
-      : 'NEXT WINDOW IN'}
+      : 'WINDOW OPENS IN'}
   </p>
+
+  {countdownLabel && (
+    <p className="mt-[2px] text-[38px] sm:text-[42px] font-bold tracking-tight leading-none text-slate-50">
+      {countdownLabel}
+    </p>
+  )}
+</div>
 
                       {/* DONE STATE – green “Round X complete · Rewards distributed” */}
                       {isDone && (
