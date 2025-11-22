@@ -1197,9 +1197,9 @@ if (!isLive) {
                       {/* DONE STATE – green “Round X complete · Rewards distributed” */}
                       {isDone && (
                         <>
-                          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                            ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
-                          </p>
+                          <p className="w-full text-left text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+  ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
+</p>
 
                           <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
                             Check your wallet – this round just paid out. Next window
