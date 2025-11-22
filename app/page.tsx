@@ -907,7 +907,7 @@ export default function ClaimPoolPage() {
   const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  /* ───────────────────────────
+    /* ───────────────────────────
      Render
   ─────────────────────────── */
 
