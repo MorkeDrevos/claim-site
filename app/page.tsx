@@ -363,23 +363,22 @@ export default function ClaimPoolPage() {
   let countdownTargetIso: string | null = null;
 
   switch (currentPhase) {
-    case 'scheduled':
-    case 'snapshot':
-      countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
-      break;
-    case 'open':
-      countdownTargetIso = SCHEDULE.windowClosesAt ?? null;
-      break;
-    case 'closed':
-      countdownTargetIso = SCHEDULE.distributionStartsAt ?? null;
-      break;
-    case 'distribution':
-      countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
-      break;
-    case 'done':
-    default:
-      countdownTargetIso = null;
-  }
+  case 'scheduled':
+  case 'snapshot':
+    countdownTargetIso = SCHEDULE.windowOpensAt ?? null;
+    break;
+  case 'open':
+    countdownTargetIso = SCHEDULE.windowClosesAt ?? null;
+    break;
+  case 'closed':
+    countdownTargetIso = SCHEDULE.distributionStartsAt ?? null;
+    break;
+  case 'distribution':
+    countdownTargetIso = SCHEDULE.distributionDoneAt ?? null;
+    break;
+  default:
+    countdownTargetIso = null;
+}
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
