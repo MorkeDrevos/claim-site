@@ -1410,43 +1410,45 @@ export default function ClaimPoolPage() {
                         </div>
                       </div>
 
-                      <div className="mt-1.5 flex items-end justify-end">
-                        <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
-                          {rewardAmountText}
-                          <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
-                            $CLAIM
-                          </span>
-                        </p>
-                          {/* DISTRIBUTION INFO */}
-<div className="mt-1.5 pr-0.5 text-[10px] text-slate-500/70 leading-tight flex flex-col items-end">
-  <p>
-    <span className="text-slate-400/70">Distribution Wallet:</span>{' '}
-    {distributionWallet ? (
-      <a
-        href={`https://solscan.io/account/${distributionWallet}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-mono text-slate-300 hover:text-emerald-300 underline"
-      >
-        {distributionWallet.slice(0, 4)}...{distributionWallet.slice(-4)}
-      </a>
-    ) : (
-      <span className="font-mono text-slate-300">–</span>
-    )}
+                      <div className="mt-1.5 flex flex-col items-end text-right">
+  <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
+    {rewardAmountText}
+    <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+      $CLAIM
+    </span>
   </p>
 
-  {distributionTx && (
+  {/* DISTRIBUTION INFO */}
+  <div className="mt-1.5 pr-0.5 text-[10px] text-slate-500/70 leading-tight">
     <p>
-      <a
-        href={`https://solscan.io/tx/${distributionTx}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-emerald-400/80 hover:text-emerald-300 underline"
-      >
-        Latest Distribution TX →
-      </a>
+      <span className="text-slate-400/70">Distribution Wallet:</span>{' '}
+      {distributionWallet ? (
+        <a
+          href={`https://solscan.io/account/${distributionWallet}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-slate-300 hover:text-emerald-300 underline"
+        >
+          {distributionWallet.slice(0, 4)}...{distributionWallet.slice(-4)}
+        </a>
+      ) : (
+        <span className="font-mono text-slate-300">–</span>
+      )}
     </p>
-  )}
+
+    {distributionTx && (
+      <p>
+        <a
+          href={`https://solscan.io/tx/${distributionTx}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-emerald-400/80 hover:text-emerald-300 underline"
+        >
+          Latest Distribution TX →
+        </a>
+      </p>
+    )}
+  </div>
 </div>
                       </div>
                     </div>
