@@ -1256,7 +1256,7 @@ export default function ClaimPoolPage() {
                       </div>
                     )}
 
-                    {/* RIGHT SIDE: pool */}
+                                        {/* RIGHT SIDE: pool */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
@@ -1296,9 +1296,90 @@ export default function ClaimPoolPage() {
                         </p>
                       </div>
                     </div>
+                  </div>{/* ← closes TOP ROW */}
+
+                  {/* CTA */}
+                  <button
+                    type="button"
+                    onClick={handleClaimClick}
+                    disabled={!canClaim}
+                    className={[
+                      'mt-6 w-full flex items-center justify-center',
+                      'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
+                      'transition-all duration-300',
+                      canClaim
+                        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
+                        : isClosedOnly
+                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
+                        : isDistributing
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
+                        : isDone
+                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
+                        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
+                      canClaim && isPulseOn ? 'animate-pulse' : '',
+                    ].join(' ')}
+                  >
+                    {claimButtonLabel}
+                  </button>
+
+                  {/* Inline message under CTA */}
+                  {inlineMessage && (
+                    <div
+                      className={[
+                        'mt-3 rounded-2xl px-3.5 py-2.5 text-[11px] leading-relaxed',
+                        inlineMessage.type === 'error'
+                          ? 'bg-red-500/8 border border-red-400/60 text-red-100'
+                          : inlineMessage.type === 'warning'
+                          ? 'bg-amber-500/8 border border-amber-400/60 text-amber-50'
+                          : 'bg-emerald-500/8 border border-emerald-400/60 text-emerald-50',
+                      ].join(' ')}
+                    >
+                      <p className="font-semibold uppercase tracking-[0.22em]">
+                        {inlineMessage.title}
+                      </p>
+                      <p className="mt-1 text-[11px] opacity-90">
+                        {inlineMessage.message}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Bullets */}
+                  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
+                    <p>
+                      •{' '}
+                      <span className="text-emerald-300/70 font-medium">
+                        Show up
+                      </span>{' '}
+                      during the live window and{' '}
+                      <span className="text-emerald-300/70 font-medium">
+                        lock in your share
+                      </span>
+                      .
+                    </p>
+                    <p>
+                      • Eligibility: hold{' '}
+                      {MIN_HOLDING.toLocaleString('en-US')} $CLAIM at the{' '}
+                      <span className="text-emerald-300/70 font-medium">
+                        snapshot
+                      </span>{' '}
+                      – wallets below the minimum sit out that round.
+                    </p>
+                    <p>
+                      • Rewards are auto-distributed in{' '}
+                      <span className="text-emerald-300/70 font-medium">
+                        $CLAIM
+                      </span>{' '}
+                      via the{' '}
+                      <span className="text-emerald-300/70 font-medium">
+                        on-chain rewards engine
+                      </span>
+                      .
+                    </p>
                   </div>
-                </div>
-              </div>
+                </div> {/* ← closes CLAIM WINDOW CARD */}
+              </div>   {/* ← closes the space-y-2 wrapper (title + card) */}
+
+              {/* MOBILE CONNECT CTA */}
 
               {/* MOBILE CONNECT CTA */}
               <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
