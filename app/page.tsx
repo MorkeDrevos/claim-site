@@ -1101,167 +1101,154 @@ export default function ClaimPoolPage() {
                     </p>
                   )}
 
-                  {/* TOP ROW */}
+                                    {/* TOP ROW */}
                   <div className="flex items-start justify-between gap-6 pt-1">
                     {/* LEFT SIDE */}
-<div className="flex flex-col">
-  {/* Sponsorship row (optional) */}
-  {isSponsoredWindow && (
-    <div className="mb-[4px] flex items-center gap-2">
-      {/* Avatar / initial bubble */}
-      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/90 border border-slate-700/80 overflow-hidden">
-        {sponsorAvatarUrl ? (
-          <Image
-            src={sponsorAvatarUrl}
-            alt={sponsorDisplayName || sponsorHandle || 'Sponsor'}
-            width={24}
-            height={24}
-            className="object-cover"
-          />
-        ) : (
-          <span className="text-[11px] font-semibold text-slate-200">
-            {(sponsorDisplayName || sponsorHandle || 'S')
-              .replace('@', '')
-              .slice(0, 1)
-              .toUpperCase()}{/* LEFT SIDE */}
-<div className="flex flex-col">
-  {/* Sponsorship row (optional) */}
-  {isSponsoredWindow && (
-    <div className="mb-[4px] flex items-center gap-2">
-      {/* Avatar / initial bubble */}
-      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/90 border border-slate-700/80 overflow-hidden">
-        {sponsorAvatarUrl ? (
-          <Image
-            src={sponsorAvatarUrl}
-            alt={sponsorDisplayName || sponsorHandle || 'Sponsor'}
-            width={24}
-            height={24}
-            className="object-cover"
-          />
-        ) : (
-          <span className="text-[11px] font-semibold text-slate-200">
-            {(sponsorDisplayName || sponsorHandle || 'S')
-              .replace('@', '')
-              .slice(0, 1)
-              .toUpperCase()}
-          </span>
-        )}
-      </div>
+                    <div className="flex flex-col">
+                      {/* Sponsorship row (optional) */}
+                      {isSponsoredWindow && (
+                        <div className="mb-[4px] flex items-center gap-2">
+                          {/* Avatar / initial bubble */}
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/90 border border-slate-700/80 overflow-hidden">
+                            {sponsorAvatarUrl ? (
+                              <Image
+                                src={sponsorAvatarUrl}
+                                alt={
+                                  sponsorDisplayName ||
+                                  sponsorHandle ||
+                                  'Sponsor'
+                                }
+                                width={24}
+                                height={24}
+                                className="object-cover"
+                              />
+                            ) : (
+                              <span className="text-[11px] font-semibold text-slate-200">
+                                {(sponsorDisplayName || sponsorHandle || 'S')
+                                  .replace('@', '')
+                                  .slice(0, 1)
+                                  .toUpperCase()}
+                              </span>
+                            )}
+                          </div>
 
-      <div className="flex flex-col">
-        <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-          {sponsorKind === 'free-intro'
-            ? 'Launch partner · Sponsored window'
-            : 'Sponsored reward window'}
-        </p>
-        <p className="text-[12px] text-slate-200">
-          Sponsored by{' '}
-          {sponsorHandle ? (
-            <a
-              href={`https://x.com/${sponsorHandle.replace('@', '')}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-sky-300 hover:text-sky-200 underline underline-offset-2"
-            >
-              {sponsorHandle}
-            </a>
-          ) : (
-            <span className="text-emerald-300">
-              {sponsorDisplayName || 'Partner'}
-            </span>
-          )}
-        </p>
-      </div>
-    </div>
-  )}
+                          <div className="flex flex-col">
+                            <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                              {sponsorKind === 'free-intro'
+                                ? 'Launch partner · Sponsored window'
+                                : 'Sponsored reward window'}
+                            </p>
+                            <p className="text-[12px] text-slate-200">
+                              Sponsored by{' '}
+                              {sponsorHandle ? (
+                                <a
+                                  href={`https://x.com/${sponsorHandle.replace(
+                                    '@',
+                                    ''
+                                  )}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-sky-300 hover:text-sky-200 underline underline-offset-2"
+                                >
+                                  {sponsorHandle}
+                                </a>
+                              ) : (
+                                <span className="text-emerald-300">
+                                  {sponsorDisplayName || 'Partner'}
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )}
 
-  {/* Timing label */}
-  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="9" className="opacity-30" />
-      <circle cx="12" cy="12" r="5" className="opacity-60" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
+                      {/* Timing label */}
+                      <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <circle cx="12" cy="12" r="9" className="opacity-30" />
+                          <circle cx="12" cy="12" r="5" className="opacity-60" />
+                          <circle cx="12" cy="12" r="2" />
+                        </svg>
 
-    {isLive
-      ? 'WINDOW CLOSES IN'
-      : isClosedOnly
-      ? 'REWARDS DISTRIBUTION STARTS IN'
-      : isDistributionPhase
-      ? 'REWARDS ON THE WAY'
-      : 'NEXT WINDOW IN'}
-  </p>
+                        {isLive
+                          ? 'WINDOW CLOSES IN'
+                          : isClosedOnly
+                          ? 'REWARDS DISTRIBUTION STARTS IN'
+                          : isDistributionPhase
+                          ? 'REWARDS ON THE WAY'
+                          : 'NEXT WINDOW IN'}
+                      </p>
 
-  {/* DONE STATE – green “Round X complete · Rewards distributed” */}
-  {isDone && (
-    <>
-      <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-        ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
-      </p>
+                      {/* DONE STATE – green “Round X complete · Rewards distributed” */}
+                      {isDone && (
+                        <>
+                          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                            ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
+                          </p>
 
-      <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
-        Check your wallet – this round just paid out. Next window will be
-        announced soon.
-      </p>
-    </>
-  )}
+                          <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
+                            Check your wallet – this round just paid out. Next window
+                            will be announced soon.
+                          </p>
+                        </>
+                      )}
 
-  {/* Countdown text for scheduled / snapshot / open / closed (NOT done) */}
-  {shouldShowCountdown && countdownTargetIso && !isDone && (
-    <>
-      {countdownLabel && (
-        <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-          {isLive && (
-            <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-          )}
+                      {/* Countdown text for scheduled / snapshot / open / closed (NOT done) */}
+                      {shouldShowCountdown && countdownTargetIso && !isDone && (
+                        <>
+                          {countdownLabel && (
+                            <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+                              {isLive && (
+                                <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+                              )}
 
-          <p
-            className={[
-              '-mt-1.5',
-              'text-[38px] sm:text-[34px] font-bold tracking-tight',
-              isLive ? 'text-emerald-300' : 'text-slate-50',
-              isFinalTen
-                ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
-                : '',
-            ].join(' ')}
-          >
-            {countdownLabel}
-          </p>
-        </div>
-      )}
+                              <p
+                                className={[
+                                  '-mt-1.5',
+                                  'text-[38px] sm:text-[34px] font-bold tracking-tight',
+                                  isLive ? 'text-emerald-300' : 'text-slate-50',
+                                  isFinalTen
+                                    ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
+                                    : '',
+                                ].join(' ')}
+                              >
+                                {countdownLabel}
+                              </p>
+                            </div>
+                          )}
 
-      <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-        {isLive
-          ? 'Window is live. Lock in your share now.'
-          : isClosedOnly
-          ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
-          : isDistributionPhase
-          ? 'Rewards are being sent out – watch your wallet, this round is paying.'
-          : hasSnapshotHappened
-          ? 'Snapshot locked. Eligibility for this round is set.'
-          : 'Snapshot engine is armed. It can trigger any time – make sure your wallet holds the minimum.'}
-      </p>
-    </>
-  )}
+                          <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            {isLive
+                              ? 'Window is live. Lock in your share now.'
+                              : isClosedOnly
+                              ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
+                              : isDistributionPhase
+                              ? 'Rewards are being sent out – watch your wallet, this round is paying.'
+                              : hasSnapshotHappened
+                              ? 'Snapshot locked. Eligibility for this round is set.'
+                              : 'Snapshot engine is armed. It can trigger any time – make sure your wallet holds the minimum.'}
+                          </p>
+                        </>
+                      )}
 
-  {/* Non-countdown text for closed / distribution (not done) */}
-  {!shouldShowCountdown && !isDone && (
-    <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
-      {currentPhase === 'closed'
-        ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
-        : currentPhase === 'distribution'
-        ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
-        : 'Round complete. Rewards landed - next window will be announced here.'}
-    </p>
-  )}
-</div>
+                      {/* Non-countdown text for closed / distribution (not done) */}
+                      {!shouldShowCountdown && !isDone && (
+                        <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+                          {currentPhase === 'closed'
+                            ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
+                            : currentPhase === 'distribution'
+                            ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
+                            : 'Round complete. Rewards landed - next window will be announced here.'}
+                        </p>
+                      )}
+                    </div>
 
                     {/* RIGHT SIDE: pool */}
                     <div className="flex flex-col items-end text-right">
