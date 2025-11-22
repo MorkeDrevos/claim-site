@@ -1,14 +1,14 @@
 {
   "roundNumber": 1,
-  "snapshotAt": "2025-11-22T22::55Z",
-  "windowOpensAt": "2025-11-22T23:00:00Z",
-  "windowClosesAt": "2025-11-22T23:10:00Z",
-  "distributionStartsAt": "2025-11-22T23:10:40Z",
-  "distributionDoneAt": "2025-11-22T23:47:00Z",
+  "snapshotAt": "2025-11-22T22:05:00Z",
+  "windowOpensAt": "2025-11-22T22:36:00Z",
+  "windowClosesAt": "2025-11-22T22:46:00Z",
+  "distributionStartsAt": "2025-11-22T22:46:40Z",
+  "distributionDoneAt": "2025-11-22T22:52:00Z",
   "sponsor": {
-  "handle": "@NickyBuffett",
-  "displayName": "Nicky Buffett",
-  "avatarUrl": "/avatars/nicky.png",
+  "handle": "@mrhodlcrypto",
+  "displayName": "Mr HODL Official",
+  "avatarUrl": "/avatars/mrhodlcrypto.png",
   "kind": "free-intro"
   }
 }
