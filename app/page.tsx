@@ -992,6 +992,36 @@ export default function ClaimPoolPage() {
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
+          {/* ROUND STATUS HEADER */}
+<div className="mb-6">
+  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    {isDone
+      ? 'ROUND COMPLETE • REWARDS SENT'
+      : isDistributionPhase
+      ? 'REWARD DISTRIBUTION IN PROGRESS'
+      : isClosedOnly
+      ? 'ROUND CLOSED • FINALIZING'
+      : isSnapshotPhase
+      ? 'SNAPSHOT LOCKED • AWAITING WINDOW'
+      : isLive
+      ? 'CLAIM WINDOW LIVE'
+      : 'NEXT WINDOW SCHEDULED'}
+  </p>
+
+  <p className="mt-2 text-[15px] leading-relaxed text-slate-200">
+    {isDone
+      ? 'Check your wallet – this round just paid out. Next window will be announced soon.'
+      : isDistributionPhase
+      ? 'Rewards are being sent out right now. Watch your wallet.'
+      : isClosedOnly
+      ? 'Round complete. Rewards will be sent shortly.'
+      : isSnapshotPhase
+      ? 'Snapshot taken. Eligibility is locked for this round.'
+      : isLive
+      ? 'Window is live. Lock in your share now.'
+      : progressMessage}
+  </p>
+</div>
           {/* Celebration banner when done */}
           {isDone && (
             <div className="mb-5 flex items-center justify-between rounded-2xl border border-emerald-400/70 bg-gradient-to-r from-emerald-500/25 via-emerald-500/10 to-sky-500/25 px-4 sm:px-5 py-3 shadow-[0_0_40px_rgba(16,185,129,0.65)] animate-[pulse_2.2s_ease-in-out_infinite]">
@@ -1319,7 +1349,7 @@ export default function ClaimPoolPage() {
                       <span className="text-emerald-300/70 font-medium">
                         $CLAIM
                       </span>{' '}
-                      oncethe window closes.
+                      once the window closes.
                     </p>
                   </div>
                 </div>
