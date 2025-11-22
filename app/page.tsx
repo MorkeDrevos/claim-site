@@ -8,6 +8,7 @@ import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
 import ConnectWalletButton from '../components/ConnectWalletButton';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 // ⬇️ SNAPSHOT TYPES (for later wiring)
 import snapshotRaw from '../data/snapshots/round-1.json';
@@ -289,6 +290,9 @@ export default function ClaimPoolPage() {
 
   // Lock-in state
   const [hasLockedIn, setHasLockedIn] = useState(false);
+
+  const { publicKey } = useWallet();
+  const walletAddress = publicKey?.toBase58() ?? null;
 
   // FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
@@ -624,9 +628,15 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-  const walletIsConnected = walletConnected;
+  // Frontend sees a wallet as connected if Phantom is connected OR
+  // the backend already marked it as connected.
+  const walletIsConnected = !!publicKey || walletConnected;
 
-  const walletLabelShort = walletShort || '—';
+  const walletLabelShort =
+  walletShort ||
+  (walletAddress
+    ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+    : '—');
 
   // Choose where snapshot time comes from
   const effectiveSnapshotIso = SCHEDULE.snapshotAt ?? snapshotAt ?? null;
@@ -747,21 +757,21 @@ export default function ClaimPoolPage() {
     isEligible &&
     !hasLockedIn;
 
-  const eligibilityTitle = walletConnected
-    ? isEligible
-      ? 'Eligible this round'
-      : 'Not eligible this round'
-    : 'Wallet not connected';
+  const eligibilityTitle = walletIsConnected
+  ? isEligible
+    ? 'Eligible this round'
+    : 'Not eligible this round'
+  : 'Wallet not connected';
 
-  const eligibilityBody = walletConnected
-    ? isEligible
-      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM minimum at the snapshot used for this round.`
-      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-          'en-US'
-        )} CLAIM at the snapshot used for this round.`
-    : 'Connect a Solana wallet to check eligibility for this round.';
+const eligibilityBody = walletIsConnected
+  ? isEligible
+    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM minimum at the snapshot used for this round.`
+    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+        'en-US'
+      )} CLAIM at the snapshot used for this round.`
+  : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
      Claim handler
@@ -797,20 +807,20 @@ export default function ClaimPoolPage() {
       return;
     }
 
-    if (!walletConnected) {
-      setInlineMessage({
-        type: 'warning',
-        title: 'Connect a wallet first',
-        message:
-          'Connect the wallet you used at snapshot before locking your share.',
-      });
-      addToast(
-        'warning',
-        'Connect a wallet first',
-        'Connect the wallet you used at snapshot before locking your share.'
-      );
-      return;
-    }
+    if (!walletIsConnected) {
+  setInlineMessage({
+    type: 'warning',
+    title: 'Connect a wallet first',
+    message:
+      'Connect the wallet you used at snapshot before locking your share.',
+  });
+  addToast(
+    'warning',
+    'Connect a wallet first',
+    'Connect the wallet you used at snapshot before locking your share.'
+  );
+  return;
+}
 
     if (!isEligible) {
       setInlineMessage({
@@ -897,7 +907,7 @@ export default function ClaimPoolPage() {
   let progressMessage = '';
   if (currentPhase === 'scheduled') {
     progressMessage = isSnapshotSoon
-      ? 'Snapshot engine is nearly armed. It can trigger shortly before the window opens – make sure your wallet holds the minimum.'
+      ? 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'
       : 'Claim window scheduled. Countdown shows when it opens.';
   } else if (currentPhase === 'snapshot') {
     progressMessage = snapshotTimeLabel
