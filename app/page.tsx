@@ -751,15 +751,6 @@ export default function ClaimPoolPage() {
     },
   ];
 
-  type EligibilityStatus = 'unknown' | 'eligible' | 'not-eligible';
-
-  const eligibilityStatus: EligibilityStatus =
-  !walletIsConnected
-    ? 'unknown'
-    : isEligible
-    ? 'eligible'
-    : 'not-eligible';
-
   const rewardAmountText =
     typeof rewardPoolAmountClaim === 'number'
       ? rewardPoolAmountClaim.toLocaleString('en-US')
