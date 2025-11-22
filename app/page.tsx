@@ -885,22 +885,37 @@ export default function ClaimPoolPage() {
   );
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  let progressMessage = '';
-  if (currentPhase === 'scheduled') {
+  let progressMessage: React.ReactNode = '';
+
+if (currentPhase === 'scheduled') {
   if (isSnapshotSoon) {
     progressMessage = (
-      <p className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
+      <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
         SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT – MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
-      </p>
+      </span>
     );
   } else {
-    progressMessage = (
-      <p className="text-slate-400 text-[11px] tracking-[0.22em] uppercase">
-        Claim window scheduled. Countdown shows when it opens.
-      </p>
-    );
+    progressMessage =
+      'Claim window scheduled. Countdown shows when it opens.';
   }
 } else if (currentPhase === 'snapshot') {
+  progressMessage = snapshotTimeLabel
+    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+} else if (currentPhase === 'open') {
+  progressMessage =
+    'Claim window open. Lock in your share before the countdown hits zero.';
+} else if (currentPhase === 'closed') {
+  progressMessage =
+    'Claim window closed. No new wallets can lock in for this round.';
+} else if (currentPhase === 'distribution') {
+  progressMessage =
+    'Rewards are being sent out - watch your wallet, this round is paying.';
+} else if (currentPhase === 'done') {
+  progressMessage =
+    'Round complete. Rewards landed – get ready for the next cycle.';
+}    
+
     progressMessage = snapshotTimeLabel
       ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
       : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
