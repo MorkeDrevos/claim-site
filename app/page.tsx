@@ -1187,15 +1187,15 @@ const eligibilityBody = walletIsConnected
                               <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
                             )}
                             <p
-                              className={[
-                                'text-[38px] sm:text-[34px] font-bold tracking-tight text-slate-50 leading-none',
-                                isFinalTen
-                                  ? 'animate-[pulse_0.35s_ease-in-out_infinite]'
-                                  : '',
-                              ].join(' ')}
-                            >
-                              {countdownLabel || '--:--:--'}
-                            </p>
+  className={[
+    '-mt-1.5', // lift the number a bit
+    'text-[38px] sm:text-[34px] font-bold tracking-tight',
+    isLive ? 'text-emerald-300' : 'text-slate-50',
+    isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+  ].join(' ')}
+>
+  {isClosed ? '' : countdownLabel || '--:--:--'}
+</p>
                           </div>
                         )}
 
