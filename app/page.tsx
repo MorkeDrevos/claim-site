@@ -7,7 +7,7 @@ import { useToast } from './Toast';
 import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
-// Optional snapshot file – fine to keep even if not wired yet
+// Snapshot test import
 import snapshotRaw from '../data/snapshots/round-1.json';
 
 type SnapshotHolder = {
@@ -40,8 +40,10 @@ function useAutoReloadOnNewBuild() {
         const latest = data?.buildId ?? null;
 
         if (!initialBuildId) {
+          // First run – remember current build id
           initialBuildId = latest;
         } else if (latest && initialBuildId && latest !== initialBuildId) {
+          // New build detected -> mark and reload
           try {
             window.localStorage.setItem('claim_portal_recently_updated', '1');
           } catch {
@@ -54,7 +56,7 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 10_000);
+          timeoutId = window.setTimeout(check, 10_000); // every 10s
         }
       }
     };
@@ -82,7 +84,7 @@ type MissionRow = {
   label: string;
   value: string;
   tone: Tone;
-  mode?: MissionRowMode;
+  mode?: MissionRowMode; // default = 'plain'
 };
 
 type WindowPhase =
@@ -101,33 +103,41 @@ type ClaimHistoryEntry = {
 };
 
 type ClaimPortalState = {
+  // round
   roundNumber?: number;
 
+  // wallet / network
   walletConnected: boolean;
   walletShort: string;
   networkLabel: string;
 
+  // snapshot
   snapshotLabel: string;
   snapshotBlock: string;
 
+  // window status
   claimWindowStatus: string;
   windowPhase?: WindowPhase;
 
+  // schedule timings (match JSON)
   snapshotAt?: string | null;
   claimWindowOpensAt?: string | null;
   claimWindowClosesAt?: string | null;
   distributionStartsAt?: string | null;
   distributionDoneAt?: string | null;
 
+  // backend / contract status
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
 
+  // pool + eligibility
   eligibleAmount: number;
   claimHistory: ClaimHistoryEntry[];
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
 
+  // helper
   numericCountdown?: string;
 };
 
@@ -137,8 +147,8 @@ type ClaimPortalState = {
 
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
-
-// @ts-ignore – schedule JSON doesn’t define mode yet
+// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
+// @ts-ignore
 const SCHEDULE = schedule as ClaimSchedule;
 const SNAPSHOT_FOMO_WINDOW_MINUTES = 5;
 
@@ -274,16 +284,14 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired, setJustSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // Dev-only wallet input (replaces wallet-adapter)
-  const [devWallet, setDevWallet] = useState('');
-  const walletAddress = devWallet.trim() || null;
+  // Simple in-page wallet state (Phantom)
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
 
-  // Local "locked in" flag for this round
-  const [hasLockedIn, setHasLockedIn] = useState(false);
-
-  // Random FOMO banner text
+  // 🔥 NEW: random FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
+  // Enable the auto-reload hook
   useAutoReloadOnNewBuild();
 
   // Detect "we just reloaded because of a new build"
@@ -296,6 +304,7 @@ export default function ClaimPoolPage() {
         setJustUpdated(true);
         window.localStorage.removeItem('claim_portal_recently_updated');
 
+        // hide after a few seconds
         const id = window.setTimeout(() => setJustUpdated(false), 6000);
         return () => window.clearTimeout(id);
       }
@@ -315,9 +324,10 @@ export default function ClaimPoolPage() {
   }
 
   /* ───────────────────────────
-     Phase + countdown
+     Phase + countdown (safe when state is null)
   ─────────────────────────── */
 
+  // Force a re-render every second so time-based logic updates live
   const [, forceTick] = useState(0);
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -326,12 +336,14 @@ export default function ClaimPoolPage() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Purely schedule-based timings (no `state` used here)
   const nowMs = Date.now();
 
   const snapshotMs =
     SCHEDULE.snapshotAt ? new Date(SCHEDULE.snapshotAt).getTime() : null;
-  const opensMs =
-    SCHEDULE.windowOpensAt ? new Date(SCHEDULE.windowOpensAt).getTime() : null;
+  const opensMs = SCHEDULE.windowOpensAt
+    ? new Date(SCHEDULE.windowOpensAt).getTime()
+    : null;
   const closesMs = SCHEDULE.windowClosesAt
     ? new Date(SCHEDULE.windowClosesAt).getTime()
     : null;
@@ -342,10 +354,10 @@ export default function ClaimPoolPage() {
     ? new Date(SCHEDULE.distributionDoneAt).getTime()
     : null;
 
-  // FOMO banner between 30min and 5min before open
+  // 🔥 Random FOMO banner between 30min and 5min before window opens
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!opensMs) return;
+    if (!opensMs) return; // no window = nothing to do
 
     const thirtyMin = 30 * 60 * 1000;
     const fiveMin = 5 * 60 * 1000;
@@ -354,10 +366,12 @@ export default function ClaimPoolPage() {
     const fireWindowEnd = opensMs - fiveMin;
 
     const now = Date.now();
+
     if (now >= fireWindowEnd) return;
 
     const effectiveStart = Math.max(now, fireWindowStart);
     const range = Math.max(fireWindowEnd - effectiveStart, 0);
+
     if (range === 0) return;
 
     const randomTime = effectiveStart + Math.random() * range;
@@ -382,6 +396,7 @@ export default function ClaimPoolPage() {
     };
   }, [opensMs]);
 
+  // Monotonic phase ladder
   let currentPhase: WindowPhase = 'scheduled';
 
   if (snapshotMs && nowMs >= snapshotMs) currentPhase = 'snapshot';
@@ -390,6 +405,7 @@ export default function ClaimPoolPage() {
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
   if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
 
+  // What are we counting toward?
   let countdownTargetIso: string | null = null;
 
   switch (currentPhase) {
@@ -413,6 +429,7 @@ export default function ClaimPoolPage() {
 
   const countdownLabel = useCountdown(countdownTargetIso);
 
+  // Helpers used for styling
   const isLive = currentPhase === 'open';
   const isSnapshotPhase = currentPhase === 'snapshot';
   const isDistributionPhase = currentPhase === 'distribution';
@@ -425,8 +442,7 @@ export default function ClaimPoolPage() {
     currentPhase === 'snapshot' ||
     currentPhase === 'open';
 
-  const isRestingClosed =
-    isClosedOnly && !isDistributionPhase && !isDone;
+  const isRestingClosed = isClosedOnly && !isDistributionPhase && !isDone;
 
   const isClosed =
     currentPhase === 'closed' ||
@@ -441,7 +457,7 @@ export default function ClaimPoolPage() {
     ? 'warning'
     : 'muted';
 
-  // Flash highlight in last 3 seconds
+  // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
     if (!countdownTargetIso) {
       setPreFlash(false);
@@ -468,6 +484,7 @@ export default function ClaimPoolPage() {
     };
   }, [countdownTargetIso]);
 
+  // Final 10-second pulse
   let isFinalTen = false;
   if (countdownTargetIso) {
     const targetMs = new Date(countdownTargetIso).getTime();
@@ -569,7 +586,7 @@ export default function ClaimPoolPage() {
   ─────────────────────────── */
 
   const {
-    // backend wallet flags exist but we ignore them for now
+    walletConnected,
     walletShort,
     networkLabel,
     snapshotLabel,
@@ -588,13 +605,15 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-  // Dev wallet: treat as "connected" when non-empty
-  const walletIsConnected = !!walletAddress;
+  // Combine backend + local wallet info
+  const walletIsConnected = !!walletAddress || walletConnected;
 
-  const walletLabelShort = walletAddress
-    ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
-    : walletShort || '—';
+  const walletLabelShort =
+    walletAddress
+      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+      : walletShort || '—';
 
+  // Snapshot timing helpers
   const effectiveSnapshotIso = SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
   const snapshotBaseMs = effectiveSnapshotIso
@@ -706,8 +725,25 @@ export default function ClaimPoolPage() {
 
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
+  // Lock-in memory
+  const [hasLockedIn, setHasLockedIn] = useState(false);
+
+  // Restore lock-in state from localStorage for this round
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!roundNumber) return;
+
+    const roundKey = `claim_locked_round_${roundNumber}`;
+    const stored = window.localStorage.getItem(roundKey);
+    if (stored) setHasLockedIn(true);
+  }, [roundNumber]);
+
   const canClaim =
-    !isPreview && isLive && walletIsConnected && isEligible && !hasLockedIn;
+    !isPreview &&
+    isLive &&
+    walletIsConnected &&
+    isEligible &&
+    !hasLockedIn;
 
   const eligibilityTitle = walletIsConnected
     ? isEligible
@@ -723,49 +759,79 @@ export default function ClaimPoolPage() {
       : `This wallet held less than ${MIN_HOLDING.toLocaleString(
           'en-US'
         )} CLAIM at the snapshot used for this round.`
-    : 'Paste a Solana wallet address below to check eligibility for this round.';
+    : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
-     Load local "locked in" from storage
+     Wallet connect / disconnect
   ─────────────────────────── */
 
-  useEffect(() => {
+  const handleConnectWallet = async () => {
     if (typeof window === 'undefined') return;
-    if (!roundNumber) return;
+
+    const provider = (window as any).solana;
+    if (!provider) {
+      addToast(
+        'warning',
+        'Wallet not found',
+        'Install Phantom or another Solana wallet extension to connect.'
+      );
+      return;
+    }
 
     try {
-      const roundKey = `claim_locked_round_${roundNumber}`;
-      const stored = window.localStorage.getItem(roundKey);
-      if (stored) setHasLockedIn(true);
-    } catch {
-      // ignore
+      setIsConnectingWallet(true);
+      const res = await provider.connect();
+      const pubkey =
+        res?.publicKey?.toBase58?.() ??
+        res?.publicKey?.toString?.() ??
+        null;
+
+      if (pubkey) {
+        setWalletAddress(pubkey);
+        addToast(
+          'success',
+          'Wallet connected',
+          'Your wallet is now linked to the CLAIM portal.'
+        );
+      }
+    } catch (err: any) {
+      if (err?.code === 4001) {
+        addToast(
+          'warning',
+          'Connection cancelled',
+          'Wallet connection was cancelled.'
+        );
+      } else {
+        console.error('wallet connect error', err);
+        addToast(
+          'error',
+          'Wallet error',
+          'Unable to connect wallet. Please try again.'
+        );
+      }
+    } finally {
+      setIsConnectingWallet(false);
     }
-  }, [roundNumber]);
+  };
+
+  const handleDisconnectWallet = async () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const provider = (window as any).solana;
+        if (provider?.disconnect) {
+          await provider.disconnect();
+        }
+      } catch (e) {
+        console.warn('wallet disconnect error', e);
+      }
+    }
+    setWalletAddress(null);
+    addToast('success', 'Disconnected', 'Wallet disconnected from portal.');
+  };
 
   /* ───────────────────────────
      Claim handler
   ─────────────────────────── */
-
-  const CLAIM_CA = 'So11111111111111111111111111111111111111112';
-  const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
-
-  const handleCopyCa = async () => {
-    try {
-      await navigator.clipboard.writeText(CLAIM_CA);
-      addToast(
-        'success',
-        'Contract copied',
-        'Token contract address has been copied to your clipboard.'
-      );
-    } catch (err) {
-      console.error('Clipboard error', err);
-      addToast(
-        'error',
-        'Unable to copy',
-        'Please copy the contract address manually for now.'
-      );
-    }
-  };
 
   const handleClaimClick = async () => {
     if (hasLockedIn) {
@@ -800,14 +866,14 @@ export default function ClaimPoolPage() {
     if (!walletIsConnected) {
       setInlineMessage({
         type: 'warning',
-        title: 'Paste a wallet first',
+        title: 'Connect a wallet first',
         message:
-          'Paste the wallet you used at snapshot before locking your share.',
+          'Connect the wallet you used at snapshot before locking your share.',
       });
       addToast(
         'warning',
-        'Paste a wallet first',
-        'Paste the wallet you used at snapshot before locking your share.'
+        'Connect a wallet first',
+        'Connect the wallet you used at snapshot before locking your share.'
       );
       return;
     }
@@ -831,6 +897,11 @@ export default function ClaimPoolPage() {
     }
 
     try {
+      console.log(
+        'Claiming for wallet (short):',
+        walletLabelShort || walletShort || 'unknown'
+      );
+
       const roundKey = `claim_locked_round_${roundNumber}`;
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(
@@ -891,7 +962,9 @@ export default function ClaimPoolPage() {
   const effectivePhaseForSteps =
     currentPhase === 'done' ? 'distribution' : currentPhase;
 
-  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+  const activeIndex = steps.findIndex(
+    (s) => s.id === effectivePhaseForSteps
+  );
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
   let progressMessage = '';
@@ -942,11 +1015,13 @@ export default function ClaimPoolPage() {
   }
 
   let statusDotColor = 'bg-emerald-400';
+
   if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
   let claimButtonLabel = 'Lock in my share';
+
   if (hasLockedIn) {
     claimButtonLabel = 'Presence locked in';
   } else if (!isLive) {
@@ -958,7 +1033,7 @@ export default function ClaimPoolPage() {
       ? 'Rewards distributed'
       : 'Upcoming Claim Window';
   } else if (!walletIsConnected) {
-    claimButtonLabel = 'Paste wallet to lock in';
+    claimButtonLabel = 'Connect wallet to lock in';
   } else if (!isEligible) {
     claimButtonLabel = 'Not eligible this round';
   } else if (isPreview) {
@@ -967,13 +1042,34 @@ export default function ClaimPoolPage() {
     claimButtonLabel = 'Lock in my share';
   }
 
+  const CLAIM_CA = 'So11111111111111111111111111111111111111112';
+  const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
+
+  const handleCopyCa = async () => {
+    try {
+      await navigator.clipboard.writeText(CLAIM_CA);
+      addToast(
+        'success',
+        'Contract copied',
+        'Token contract address has been copied to your clipboard.'
+      );
+    } catch (err) {
+      console.error('Clipboard error', err);
+      addToast(
+        'error',
+        'Unable to copy',
+        'Please copy the contract address manually for now.'
+      );
+    }
+  };
+
   /* ───────────────────────────
      Render
   ─────────────────────────── */
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
-      {/* Update banner */}
+      {/* Update banner – shows after auto reload from new build */}
       {justUpdated && (
         <div className="fixed top-[68px] left-0 right-0 z-50 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/70 bg-emerald-500/20 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.5)]">
@@ -994,6 +1090,7 @@ export default function ClaimPoolPage() {
       {/* TOP NAV */}
       <header className="sticky top-0 z-40 border-b border-slate-900/80 bg-black/60 backdrop-blur shadow-[0_20px_40px_-12px_rgba(0,0,0,0.45)]">
         <div className="mx-auto max-w-6xl flex flex-wrap items-center justify-between gap-2 sm:gap-4 px-4 py-3 sm:px-6">
+          {/* Left: logo + title */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 ring-1 ring-slate-700/80 overflow-hidden shadow-[0_0_12px_rgba(16,185,129,0.25)] transition-all group-hover:ring-emerald-400/70 group-hover:shadow-[0_0_18px_rgba(16,185,129,0.35)]">
               <Image
@@ -1015,6 +1112,7 @@ export default function ClaimPoolPage() {
             </div>
           </Link>
 
+          {/* Right nav */}
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
             <Link
               href="/concept"
@@ -1058,6 +1156,26 @@ export default function ClaimPoolPage() {
             <span className="hidden text-xs text-slate-500 sm:inline">
               {networkLabel}
             </span>
+
+            {/* Desktop wallet button */}
+            <div className="hidden sm:inline-flex mr-2">
+              <button
+                type="button"
+                onClick={
+                  walletIsConnected ? handleDisconnectWallet : handleConnectWallet
+                }
+                className="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-100 hover:bg-emerald-500/20 hover:border-emerald-300 transition-all"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.9)]" />
+                <span>
+                  {walletIsConnected
+                    ? walletLabelShort
+                    : isConnectingWallet
+                    ? 'Connecting…'
+                    : 'Connect wallet'}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -1169,7 +1287,7 @@ export default function ClaimPoolPage() {
                           </p>
                         )}
 
-                        {/* FOMO banner */}
+                        {/* FOMO hype banner */}
                         {fomoBanner && (
                           <div
                             className="
@@ -1257,27 +1375,13 @@ export default function ClaimPoolPage() {
                     </div>
                   </div>
 
-                  {/* Dev wallet input */}
-                  <div className="mt-4 rounded-2xl border border-slate-800/80 bg-black/40 px-4 py-3 space-y-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                      Dev wallet (temporary)
-                    </p>
-                    <input
-                      type="text"
-                      value={devWallet}
-                      onChange={(e) => setDevWallet(e.target.value)}
-                      placeholder="Paste Solana wallet address to simulate connection"
-                      className="w-full rounded-full bg-slate-950/80 border border-slate-700 px-3 py-1.5 text-[12px] text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400"
-                    />
-                  </div>
-
                   {/* CTA */}
                   <button
                     type="button"
                     onClick={handleClaimClick}
                     disabled={!canClaim}
                     className={[
-                      'mt-4 w-full flex items-center justify-center',
+                      'mt-6 w-full flex items-center justify-center',
                       'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
                       'transition-all duration-300',
                       canClaim
@@ -1328,6 +1432,28 @@ export default function ClaimPoolPage() {
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* MOBILE CONNECT CTA */}
+              <div className="mt-6 mb-10 block sm:hidden wallet-mobile-btn">
+                <button
+                  type="button"
+                  onClick={
+                    walletIsConnected
+                      ? handleDisconnectWallet
+                      : handleConnectWallet
+                  }
+                  className="w-full inline-flex items-center justify-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-100 hover:bg-emerald-500/20 hover:border-emerald-300 transition-all"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.9)] mr-2" />
+                  <span>
+                    {walletIsConnected
+                      ? walletLabelShort
+                      : isConnectingWallet
+                      ? 'Connecting…'
+                      : 'Connect wallet'}
+                  </span>
+                </button>
               </div>
             </div>
 
@@ -1406,7 +1532,7 @@ export default function ClaimPoolPage() {
                 </div>
 
                 {/* Autopilot strip */}
-                <div className="mt-3 flex items<center gap-3">
+                <div className="mt-3 flex items-center gap-3">
                   <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                     Smart-contract autopilot
                   </span>
@@ -1457,7 +1583,7 @@ export default function ClaimPoolPage() {
             {/* desktop timeline */}
             <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
               {steps.map((step, index) => {
-                const stepDone = activeIndex >= index;
+                const stepIsDone = activeIndex >= index;
                 const isActiveStep = step.id === currentPhase;
 
                 return (
@@ -1469,14 +1595,14 @@ export default function ClaimPoolPage() {
                       className={[
                         'h-2 w-full rounded-full',
                         index === 0 ? '' : 'ml-1',
-                        stepDone ? 'bg-emerald-400' : 'bg-slate-800',
+                        stepIsDone ? 'bg-emerald-400' : 'bg-slate-800',
                       ].join(' ')}
                     />
                     <div className="mt-2 flex items-center gap-2">
                       <div
                         className={[
                           'h-2.5 w-2.5 rounded-full border',
-                          stepDone
+                          stepIsDone
                             ? 'bg-emerald-400 border-emerald-300'
                             : 'bg-slate-800 border-slate-600',
                           isActiveStep
@@ -1487,7 +1613,7 @@ export default function ClaimPoolPage() {
                       <span
                         className={[
                           'tracking-wide',
-                          stepDone
+                          stepIsDone
                             ? 'text-[12px] font-semibold text-slate-300'
                             : 'text-[12px] font-medium text-slate-500',
                         ].join(' ')}
@@ -1574,7 +1700,7 @@ export default function ClaimPoolPage() {
                 {MIN_HOLDING.toLocaleString('en-US')} CLAIM
               </p>
               <p className="text-[13px] text-slate-400">
-                Held in the wallet at snapshot.
+                Held in the connected wallet at snapshot.
               </p>
             </div>
             <div className="mt-4">
