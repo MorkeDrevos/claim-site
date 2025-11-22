@@ -1110,14 +1110,22 @@ export default function ClaimPoolPage() {
     </p>
   )}
 
-  {/* DONE STATE – green “Round 1 complete · Rewards distributed” */}
+  {/* DONE STATE – green “Round X complete · Rewards distributed” */}
 {isDone && (
   <>
-    <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
       ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
     </p>
 
-    <p className="text-[14px] text-slate-100 max-w-xl leading-relaxed">
+    <p
+      className="
+        mt-[2px]
+        text-[15px]
+        leading-relaxed
+        text-emerald-200/90
+        max-w-xl
+      "
+    >
       Check your wallet – this round just paid out. Next window will be announced soon.
     </p>
   </>
