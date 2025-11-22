@@ -1025,12 +1025,13 @@ export default function ClaimPoolPage() {
   const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
+    // ───────────────────────────
+  // Render
+  // ───────────────────────────
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
+      
       {/* Update banner */}
       {justUpdated && (
         <div className="fixed top-[68px] left-0 right-0 z-50 flex justify-center">
