@@ -743,6 +743,20 @@ export default function ClaimPoolPage() {
   ];
 
   const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
+  useEffect(() => {
+  // No wallet -> neutral / prompt to connect
+  if (!walletIsConnected) {
+    setEligibilityStatus('unknown');
+    return;
+  }
+
+  // Wallet connected -> map isEligible flag to status
+  if (isEligible) {
+    setEligibilityStatus('eligible');
+  } else {
+    setEligibilityStatus('not-eligible');
+  }
+}, [walletIsConnected, isEligible]);
 
   const rewardAmountText =
     typeof rewardPoolAmountClaim === 'number'
