@@ -1412,6 +1412,28 @@ export default function ClaimPoolPage() {
                             $CLAIM
                           </span>
                         </p>
+                          {/* DISTRIBUTION INFO */}
+  <div className="mt-1 text-[10px] text-slate-500/80 space-y-0.5 leading-tight">
+  <p>
+    Distribution Wallet:{' '}
+    <span className="font-mono text-slate-300">
+      {portalState.distributionWallet
+        ? `${portalState.distributionWallet.slice(0, 4)}...${portalState.distributionWallet.slice(-4)}`
+        : '–'}
+    </span>
+  </p>
+
+  {portalState.distributionTx && (
+    <a
+      href={`https://solscan.io/tx/${portalState.distributionTx}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-emerald-400/80 hover:text-emerald-300 underline"
+    >
+      Latest Distribution TX →
+    </a>
+  )}
+</div>
                       </div>
                     </div>
                   </div>{' '}
