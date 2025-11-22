@@ -870,23 +870,21 @@ export default function ClaimPoolPage() {
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  let claimButtonLabel = 'Lock in my share';
+  // Always show LOCK IN MY SHARE while the window is live.
+// Eligibility / already locked-in are handled via messages, not the label.
+let claimButtonLabel = 'LOCK IN MY SHARE';
 
-  if (!isLive) {
-    claimButtonLabel = isClosedOnly
-  ? 'Claim window closed'
-  : isDistributionPhase
-  ? 'Distribution in progress'
-  : isDone
-  ? 'Rewards distributed'
-      : 'Opens soon';
-  } else if (hasLockedIn) {
-    claimButtonLabel = 'Presence locked in';
-  } else if (!isEligible) {
-    claimButtonLabel = 'Not eligible this round';
-  } else if (isPreview) {
-    claimButtonLabel = 'Preview mode';
-  }
+if (!isLive) {
+  claimButtonLabel = isClosedOnly
+    ? 'Claim window closed'
+    : isDistributionPhase
+    ? 'Distribution in progress'
+    : isDone
+    ? 'Rewards distributed'
+    : 'Opens soon';
+} else if (isPreview) {
+  claimButtonLabel = 'PREVIEW MODE';
+}
 
   const steps: { id: WindowPhase | 'closed'; label: string }[] = [
     { id: 'scheduled', label: 'Opens soon' },
