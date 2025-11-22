@@ -421,9 +421,10 @@ export default function ClaimPoolPage() {
   const isDistributing = isDistributionPhase;
 
   const shouldShowCountdown =
-    currentPhase === 'scheduled' ||
-    currentPhase === 'snapshot' ||
-    currentPhase === 'open';
+  currentPhase === 'scheduled' ||
+  currentPhase === 'snapshot' ||
+  currentPhase === 'open' ||
+  (currentPhase === 'closed' && !!SCHEDULE.distributionStartsAt);
 
   const isRestingClosed = isClosedOnly && !isDistributionPhase && !isDone;
 
@@ -1204,10 +1205,12 @@ export default function ClaimPoolPage() {
 
                             {/* Message line under countdown */}
                             <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                              {isLive
-                                ? 'Window is live. Lock in your share now.'
-                                : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
-                            </p>
+  {isLive
+    ? 'Window is live. Lock in your share now.'
+    : isClosedOnly
+    ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
+    : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
+</p>
                           </>
                         )}
 
