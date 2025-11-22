@@ -731,12 +731,13 @@ export default function ClaimPoolPage() {
 
   const isPreview = process.env.NEXT_PUBLIC_PORTAL_MODE !== 'live';
 
+  // Button should be clickable during a live window,
+// even if wallet is not connected or not eligible.
+// Guarding happens inside handleClaimClick.
   const canClaim =
-    !isPreview &&
-    isLive &&
-    walletIsConnected &&
-    isEligible &&
-    !hasLockedIn;
+  !isPreview &&
+  isLive &&
+  !hasLockedIn;
 
   const eligibilityTitle = walletIsConnected
     ? isEligible
@@ -936,24 +937,21 @@ export default function ClaimPoolPage() {
   let claimButtonLabel = 'Lock in my share';
 
   if (hasLockedIn) {
-    claimButtonLabel = 'Presence locked in';
+  claimButtonLabel = 'Presence locked in';
   } else if (!isLive) {
-    claimButtonLabel = isClosedOnly
-      ? 'Claim window closed'
-      : isDistributing
-      ? 'Distribution in progress'
-      : isDone
-      ? 'Rewards distributed'
-      : 'Upcoming Claim Window';
-  } else if (!walletIsConnected) {
-    claimButtonLabel = 'Connect wallet to lock in';
-  } else if (!isEligible) {
-    claimButtonLabel = 'Not eligible this round';
+  claimButtonLabel = isClosedOnly
+    ? 'Claim window closed'
+    : isDistributing
+    ? 'Distribution in progress'
+    : isDone
+    ? 'Rewards distributed'
+    : 'Upcoming Claim Window';
   } else if (isPreview) {
-    claimButtonLabel = 'Preview mode';
-  } else {
-    claimButtonLabel = 'Lock in my share';
+  // Live but preview mode
+  claimButtonLabel = 'Preview mode';
   }
+// ⬆️ Notice: no special label for !walletIsConnected or !isEligible
+// During a live window it always says "Lock in my share"
 
   // ───────────────────────────
   // Progress bar steps
@@ -1214,12 +1212,16 @@ export default function ClaimPoolPage() {
 
                             {/* Message line under countdown */}
                             <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                              {isLive
-                                ? 'Window is live. Lock in your share now.'
-                                : isClosedOnly
-                                ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
-                                : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
-                            </p>
+  {isLive
+    ? 'Window is live. Lock in your share now.'
+    : isClosedOnly
+    ? 'Claim window closed. Rewards distribution starts when the countdown hits zero.'
+    : isDistributing
+    ? 'Rewards are being sent out - watch your wallet, this round is paying.'
+    : hasSnapshotHappened
+    ? 'Snapshot locked. Eligibility for this round is set.'
+    : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
+</p>
                           </>
                         )}
 
