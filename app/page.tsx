@@ -1117,17 +1117,9 @@ export default function ClaimPoolPage() {
       ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
     </p>
 
-    <p
-      className="
-        mt-[1px]
-        text-[13px]
-        leading-relaxed
-        text-emerald-200/90
-        max-w-xl
-      "
-    >
-      Check your wallet – this round just paid out. Next window will be announced soon.
-    </p>
+    <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
+  Check your wallet – this round just paid out. Next window will be announced soon.
+</p>
   </>
 )}
 
