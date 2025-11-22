@@ -549,7 +549,7 @@ export default function ClaimPoolPage() {
       ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
       : '—');
 
-  const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
+  const isEligible = eligibleAmount >= MIN_HOLDING;
 
   type EligibilityStatus = 'unknown' | 'eligible' | 'not-eligible';
 
