@@ -175,16 +175,10 @@ function StatusPill({ label, tone = 'neutral' }: StatusPillProps) {
   );
 }
 
-function SoftCard({
-  children,
-  className = '',
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function SoftCard({ children, className = '' }: { ... }) {
   return (
     <div
-      className={`rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
+      className={`relative rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
     >
       {children}
     </div>
@@ -1109,6 +1103,50 @@ export default function ClaimPoolPage() {
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
+          <SoftCard>
+  {/* 🎉 Celebration banner – only when rewards are done */}
+  {isDone && (
+    <div className="
+      mb-5 flex items-center justify-between
+      rounded-2xl border border-emerald-400/70
+      bg-gradient-to-r from-emerald-500/25 via-emerald-500/10 to-sky-500/25
+      px-4 sm:px-5 py-3
+      shadow-[0_0_40px_rgba(16,185,129,0.65)]
+      animate-[pulse_2.2s_ease-in-out_infinite]
+    ">
+      <div className="flex items-center gap-3">
+        {/* Icon + halo */}
+        <div className="relative inline-flex h-9 w-9 items-center justify-center">
+          <span className="absolute inline-flex h-9 w-9 rounded-full bg-emerald-400/40 blur-md opacity-70" />
+          <span className="absolute inline-flex h-8 w-8 rounded-full border border-emerald-300/70 animate-ping" />
+          <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/70 border border-emerald-300/80 text-lg">
+            🎉
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-200">
+            Round {roundNumber ?? 1} complete · Rewards distributed
+          </p>
+          <p className="text-[13px] text-emerald-50/95">
+            Check your wallet – this round just paid out. Next window will be announced here.
+          </p>
+        </div>
+      </div>
+
+      {/* Right side – desktop only */}
+      <div className="hidden sm:flex items-center gap-2">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-100/90">
+          You made this window
+        </span>
+        <span className="h-6 w-px bg-emerald-300/40" />
+        <span className="text-[11px] text-emerald-100/90">
+          Stay close – timing is everything.
+        </span>
+      </div>
+    </div>
+  )}
+  {/* existing content continues here... */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             {/* LEFT COLUMN */}
             <div className="flex-1 space-y-6">
