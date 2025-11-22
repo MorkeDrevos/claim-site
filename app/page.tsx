@@ -1449,83 +1449,89 @@ export default function ClaimPoolPage() {
             </div>
           </div>
 
-                   {/* ROUND PROGRESS */}
-          <div className="mt-8">
-            {/* Heading */}
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 mb-3">
-              Round progress
+                 </SoftCard>
+
+        {/* ROUND PROGRESS CARD */}
+        <SoftCard className="mt-6 pt-5 pb-4">
+          {/* Heading */}
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+              Round {roundNumber ?? 1} progress
             </p>
+            {activeStep && (
+              <p className="text-[11px] font-medium text-slate-400">
+                {activeStep.label}
+              </p>
+            )}
+          </div>
 
-            {/* desktop timeline */}
-            <div className="hidden sm:flex items-center justify-between gap-3">
-              {steps.map((step, index) => {
-                const isDoneStep = activeIndex >= index;
-                const isActiveStep = step.id === currentPhase;
+          {/* desktop timeline */}
+          <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
+            {steps.map((step, index) => {
+              const isDoneStep = activeIndex >= index;
+              const isActiveStep = step.id === currentPhase;
 
-                return (
+              return (
+                <div
+                  key={step.id}
+                  className="flex flex-1 flex-col items-center"
+                >
                   <div
-                    key={step.id}
-                    className="flex flex-1 flex-col items-center"
-                  >
+                    className={[
+                      'h-2 w-full rounded-full',
+                      index === 0 ? '' : 'ml-1',
+                      isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
+                    ].join(' ')}
+                  />
+                  <div className="mt-2 flex items-center gap-2">
                     <div
                       className={[
-                        'h-2 w-full rounded-full',
-                        index === 0 ? '' : 'ml-1',
-                        isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
+                        'h-2.5 w-2.5 rounded-full border',
+                        isDoneStep
+                          ? 'bg-emerald-400 border-emerald-300'
+                          : 'bg-slate-800 border-slate-600',
+                        isActiveStep
+                          ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
+                          : '',
                       ].join(' ')}
                     />
-                    <div className="mt-2 flex items-center gap-2">
-                      <div
-                        className={[
-                          'h-2.5 w-2.5 rounded-full border',
-                          isDoneStep
-                            ? 'bg-emerald-400 border-emerald-300'
-                            : 'bg-slate-800 border-slate-600',
-                          isActiveStep
-                            ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
-                            : '',
-                        ].join(' ')}
-                      />
-                      <span
-                        className={[
-                          'tracking-wide',
-                          isDoneStep
-                            ? 'text-[12px] font-semibold text-slate-300'
-                            : 'text-[12px] font-medium text-slate-500',
-                        ].join(' ')}
-                      >
-                        {step.label}
-                      </span>
-                    </div>
+                    <span
+                      className={[
+                        'tracking-wide',
+                        isDoneStep
+                          ? 'text-[12px] font-semibold text-slate-300'
+                          : 'text-[12px] font-medium text-slate-500',
+                      ].join(' ')}
+                    >
+                      {step.label}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
 
-            {/* mobile bar */}
-            <div className="mt-3 sm:hidden space-y-2">
-              <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-emerald-400 transition-all"
-                  style={{
-                    width:
-                      activeIndex >= 0
-                        ? `${((activeIndex + 1) / steps.length) * 100}%`
-                        : '0%',
-                  }}
-                />
-              </div>
-              <p className="text-[11px] text-slate-400">
-                {activeStep ? activeStep.label : 'Round progress'}
-              </p>
+          {/* mobile bar */}
+          <div className="mt-4 sm:hidden space-y-2">
+            <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-emerald-400 transition-all"
+                style={{
+                  width:
+                    activeIndex >= 0
+                      ? `${((activeIndex + 1) / steps.length) * 100}%`
+                      : '0%',
+                }}
+              />
             </div>
-
-            {/* status line under the bar */}
-            <p className="mt-4 text-[12px] text-slate-300">
-              {progressMessage}
+            <p className="text-[11px] text-slate-400">
+              {activeStep ? activeStep.label : 'Round progress'}
             </p>
-          </div> 
-          
+          </div>
+
+          {/* description */}
+          <p className="mt-4 text-[12px] text-slate-300">{progressMessage}</p>
+
         </SoftCard>
 
         {/* Three mini-cards */}
