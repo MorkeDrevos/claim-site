@@ -322,15 +322,14 @@ export default function ClaimPoolPage() {
   useEffect(() => {
   if (!walletIsConnected) return;
 
-  // Remove inline "Connect wallet first" box
   setInlineMessage((msg) =>
     msg && msg.title === 'Connect a wallet first' ? null : msg
   );
 
-  // Also clear any toast about connecting wallet
-  setError1(null);
-
+  // clear previous error about wallet connection, if any
+  setError(null);
 }, [walletIsConnected]);
+  
   /* ───────────────────────────
      Phase + countdown (schedule)
   ─────────────────────────── */
@@ -629,8 +628,6 @@ export default function ClaimPoolPage() {
     snapshotAt,
     distributionDoneAt,
   } = state;
-
-  const walletIsConnected = !!publicKey || walletConnected;
 
   const walletLabelShort =
     walletShort ||
