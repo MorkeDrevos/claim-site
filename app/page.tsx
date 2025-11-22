@@ -1517,14 +1517,30 @@ else if (currentPhase === 'done') {
           </div>
         </SoftCard>
 
-        {/* Round progress bar */}
-        <SoftCard className="mt-6">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Round {roundNumber ?? 1} progress
-              </p>
-            </div>
+/* ───────────────────────────
+   Progress bar + status summary
+──────────────────────────── */
+
+const steps: { id: WindowPhase | 'closed'; label: string }[] = [
+  { id: 'scheduled', label: 'Opens soon' },
+  { id: 'snapshot', label: 'Snapshot window' },
+  { id: 'open', label: 'Claim window open' },
+  { id: 'closed', label: 'Claim window closed' },
+  {
+    id: 'distribution',
+    label: isDone
+      ? 'Rewards distributed'
+      : 'Reward distribution in progress',
+  },
+];
+
+const effectivePhaseForSteps =
+  currentPhase === 'done' ? 'distribution' : currentPhase;
+
+const activeIndex = steps.findIndex(
+  (s) => s.id === effectivePhaseForSteps
+);
+const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
             {/* desktop timeline */}
             <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
