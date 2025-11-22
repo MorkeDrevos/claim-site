@@ -1,12 +1,12 @@
 {
-  "takenAt": "2025-11-21T14:44:12.523Z",
+  "takenAt": "2025-11-22T11:20:34.323Z",
   "round": 1,
   "mint": "BXvBhz6Va2Ed8HnzMDChzHCTqKXLvJpGadfLhvK5pump",
   "network": "https://api.mainnet-beta.solana.com",
   "holders": [
     {
       "wallet": "9hVAstjuDaVGznN4iAUW6cb2nQxNieSW7vR2pu6x32CQ",
-      "amount": 770535818.204099
+      "amount": 782012511.970319
     },
     {
       "wallet": "7ZXVVqndPktLXQ5FsmLMniwhUGvNFVJyKgVKR8tVpx77",
@@ -19,10 +19,6 @@
     {
       "wallet": "9ADeeZH6j1ghsvUT5vYhqXQChZEroGHpKjg9N8kyGaWT",
       "amount": 12799567.644751
-    },
-    {
-      "wallet": "A7SdJJx8mko1pwAw2qEjVkuVEX6e3BEFgPuK6VvGQyHm",
-      "amount": 12340262.156742
     },
     {
       "wallet": "3ScUqekx1cgKn8Ct2qvvVB4e5aCzq1fGBFSTxUdKunEe",
@@ -65,16 +61,16 @@
       "amount": 8898570.233539
     },
     {
+      "wallet": "A7SdJJx8mko1pwAw2qEjVkuVEX6e3BEFgPuK6VvGQyHm",
+      "amount": 6170131.078371
+    },
+    {
       "wallet": "BTAs5LMiLvYSKHAos7bJgstiFSDVYowQrGcwPVT8gbdS",
       "amount": 5734511.936677
     },
     {
       "wallet": "5u3twi3H55S4btjxHfzUk8GMVSZhJi9CcybGx5Cjc3EM",
       "amount": 5337180.511939
-    },
-    {
-      "wallet": "7UUuh3HuKSuZDEKuhGFgjppuh3Rn5TdvktxQpnjkH9vb",
-      "amount": 5306562.687849
     },
     {
       "wallet": "AEk4kcrmnfFYxB8SvWudyro8jZSNgCMrsqY4WbhFWhBR",
