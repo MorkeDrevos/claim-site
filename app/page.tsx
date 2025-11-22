@@ -565,7 +565,7 @@ export default function ClaimPoolPage() {
       : eligibilityStatus === 'eligible'
       ? 'You made it into this window. Check your wallet for rewards.'
       : eligibilityStatus === 'not-eligible'
-      ? "You didn&apos;t make this window. Stand by for the next round."
+      ? "You didn't make this window. Stand by for the next round."
       : 'Checking your eligibility…';
 
   const effectiveSnapshotIso = SCHEDULE.snapshotAt ?? snapshotAt ?? null;
