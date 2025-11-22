@@ -8,7 +8,9 @@ import schedule from '../data/claim-schedule.json';
 import { getPhaseForNow, ClaimSchedule } from '../lib/claimSchedule';
 
 import ConnectWalletButton from '../components/ConnectWalletButton';
+
 import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 
 // ⬇️ SNAPSHOT TYPES (for later wiring)
 import snapshotRaw from '../data/snapshots/round-1.json';
@@ -283,6 +285,7 @@ export default function ClaimPoolPage() {
 
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
+  const { setVisible: openWalletModal } = useWalletModal();
 
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
@@ -792,19 +795,22 @@ export default function ClaimPoolPage() {
     }
 
     if (!walletIsConnected) {
-      setInlineMessage({
-        type: 'warning',
-        title: 'Connect a wallet first',
-        message:
-          'Connect the wallet you used at snapshot before locking your share.',
-      });
-      addToast(
-        'warning',
-        'Connect a wallet first',
-        'Connect the wallet you used at snapshot before locking your share.'
-      );
-      return;
-    }
+  // 🔓 Open the Phantom / Jupiter / Glow modal
+  openWalletModal(true);
+
+  setInlineMessage({
+    type: 'warning',
+    title: 'Connect a wallet first',
+    message:
+      'Connect the wallet you used at snapshot before locking your share.',
+  });
+  addToast(
+    'warning',
+    'Connect a wallet first',
+    'Connect the wallet you used at snapshot before locking your share.'
+  );
+  return;
+}
 
     if (!isEligible) {
       setInlineMessage({
