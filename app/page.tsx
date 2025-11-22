@@ -289,6 +289,15 @@ export default function ClaimPoolPage() {
   const walletIsConnected = !!publicKey && !!walletAddress;
   const { setVisible: openWalletModal } = useWalletModal();
 
+  const bannerSubtext =
+  !walletIsConnected
+    ? 'Connect your wallet to check if you made this window.'
+    : eligibilityStatus === 'eligible'
+    ? 'You made it into this window. Check your wallet for rewards.'
+    : eligibilityStatus === 'not-eligible'
+    ? "You didn't make this window. Stand by for the next round."
+    : 'Checking your eligibility…';
+
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
   useAutoReloadOnNewBuild();
@@ -1135,8 +1144,8 @@ export default function ClaimPoolPage() {
             Round {roundNumber ?? 1} complete · Rewards distributed
           </p>
           <p className="text-[13px] text-emerald-50/95">
-            Check your wallet – this round just paid out. Next round soon.
-          </p>
+  {bannerSubtext}
+</p>
         </div>
       </div>
 
