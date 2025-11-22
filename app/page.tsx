@@ -285,6 +285,7 @@ export default function ClaimPoolPage() {
 
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
+  const walletIsConnected = !!publicKey && !!walletAddress;
   const { setVisible: openWalletModal } = useWalletModal();
 
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
@@ -318,6 +319,18 @@ export default function ClaimPoolPage() {
     return fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
   }
 
+  useEffect(() => {
+  if (!walletIsConnected) return;
+
+  // Remove inline "Connect wallet first" box
+  setInlineMessage((msg) =>
+    msg && msg.title === 'Connect a wallet first' ? null : msg
+  );
+
+  // Also clear any toast about connecting wallet
+  setError1(null);
+
+}, [walletIsConnected]);
   /* ───────────────────────────
      Phase + countdown (schedule)
   ─────────────────────────── */
