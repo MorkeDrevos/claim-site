@@ -1276,80 +1276,46 @@ const eligibilityBody = walletIsConnected
                       </div>
                     )}
 
-                    {/* RIGHT SIDE: pool */}
+                                        {/* RIGHT SIDE: pool */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
                           CURRENT ROUND POOL
                         </p>
-                        {/* tooltip block stays the same */}
-                        ...
+                        <div className="relative group">
+                          <button
+                            type="button"
+                            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-bold border border-slate-700 hover:bg-slate-700 hover:text-white hover:border-slate-500 transition relative top-[1px]"
+                          >
+                            ?
+                          </button>
+                          <div className="pointer-events-none absolute left-full ml-3 top-2 w-72 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                            <div className="rounded-2xl border border-slate-700/70 bg-slate-900/95 p-4 shadow-[0_8px_30px_rgba(0,0,0,0.55)] text-left">
+                              <p className="text-[12px] text-slate-200 leading-relaxed">
+                                Rewards are paid in{' '}
+                                <span className="text-emerald-300 font-medium">
+                                  $CLAIM
+                                </span>{' '}
+                                and shared equally among wallets that locked in
+                                during the live window.{' '}
+                                <span className="text-emerald-300 font-medium">
+                                  USD values are approximate.
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      {/* pool amount block stays the same */}
+
+                      <div className="mt-1.5 flex items-end justify-end">
+                        <p className="text-[24px] sm:text-[32px] font-semibold tracking-tight text-slate-50 leading-none">
+                          {rewardAmountText}
+                          <span className="ml-1 text-[14px] sm:text-[15px] text-emerald-300 font-semibold leading-none">
+                            $CLAIM
+                          </span>
+                        </p>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* CTA + bullets stay as you have them */}
-                  ...
-                </div>
-
-                  {/* CTA */}
-                  <button
-                    type="button"
-                    onClick={handleClaimClick}
-                    disabled={!canClaim}
-                    className={[
-                      'mt-6 w-full flex items-center justify-center',
-                      'rounded-[999px] border px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.32em]',
-                      'transition-all duration-300',
-                      canClaim
-                        ? 'bg-emerald-500 text-emerald-950 border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.65)] hover:bg-emerald-400'
-                        : isClosedOnly
-                        ? 'bg-slate-900 text-slate-500 border-slate-700 cursor-not-allowed'
-                        : isDistributing
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/50 cursor-default'
-                        : isDone
-                        ? 'bg-slate-950/80 text-emerald-200 border-emerald-400/60 cursor-default'
-                        : 'bg-slate-950/80 text-slate-200 border-emerald-400/40 shadow-[0_0_18px_rgba(16,185,129,0.35)] cursor-not-allowed',
-                      canClaim && isPulseOn ? 'animate-pulse' : '',
-                    ].join(' ')}
-                  >
-                    {claimButtonLabel}
-                  </button>
-
-                  {/* Bullets */}
-                  <div className="mt-6 space-y-0 text-[11.5px] text-slate-400/80 leading-relaxed">
-                    <p>
-                      •{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        Show up
-                      </span>{' '}
-                      during the live window and{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        lock in your share
-                      </span>
-                      .
-                    </p>
-                    <p>
-                      • Eligibility: hold 1,000,000 $CLAIM at the{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        snapshot
-                      </span>{' '}
-                      - wallets below the minimum sit out that round.
-                    </p>
-                    <p>
-                      • Rewards are auto-distributed in{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        $CLAIM
-                      </span>{' '}
-                      via the{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        on-chain rewards engine
-                      </span>
-                      .
-                    </p>
-                  </div>
-                </div>
               </div>
 
               {/* MOBILE CONNECT CTA */}
