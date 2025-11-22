@@ -916,9 +916,6 @@ if (currentPhase === 'scheduled') {
     'Round complete. Rewards landed – get ready for the next cycle.';
 }    
 
-    progressMessage = snapshotTimeLabel
-      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
   } else if (currentPhase === 'open') {
     progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
