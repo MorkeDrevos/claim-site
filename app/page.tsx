@@ -956,6 +956,102 @@ export default function ClaimPoolPage() {
     claimButtonLabel = 'Lock in my share';
   }
 
+    // ───────────────────────────
+  // Progress message
+  // ───────────────────────────
+
+  let progressMessage: React.ReactNode = '';
+
+  if (currentPhase === 'scheduled') {
+    if (isSnapshotSoon) {
+      // FOMO cyan glowing line
+      progressMessage = (
+        <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
+          SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT - MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
+        </span>
+      );
+    } else {
+      progressMessage =
+        'Claim window scheduled. Countdown shows when it opens.';
+    }
+  } else if (currentPhase === 'snapshot') {
+    progressMessage = snapshotTimeLabel
+      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+      : 'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
+  }
+
+  // Hide message when the green "Snapshot locked" pill is visible
+  if (showSnapshotLocked) {
+    progressMessage = '';
+  } else if (currentPhase === 'open') {
+    progressMessage =
+      'Claim window open. Lock in your share before the countdown hits zero.';
+  } else if (currentPhase === 'closed') {
+    progressMessage =
+      'Claim window closed. No new wallets can lock in for this round.';
+  } else if (currentPhase === 'distribution') {
+    progressMessage =
+      'Rewards are being sent out - watch your wallet, this round is paying.';
+  } else if (currentPhase === 'done') {
+    progressMessage =
+      'Round complete. Rewards landed - get ready for the next cycle.';
+  }
+
+  // ───────────────────────────
+  // Status summary + button label
+  // ───────────────────────────
+
+  let statusSummary =
+    'All systems nominal. Autonomous settlement sequence is active.';
+  const hasAnyIssue = hasBackendIssue || hasContractIssue;
+
+  if (hasAnyIssue) {
+    statusSummary =
+      'Attention flagged. One or more subsystems are reporting a non-normal status.';
+  } else if (currentPhase === 'open') {
+    statusSummary =
+      'All systems nominal. Live claim window running under autonomous settlement.';
+  } else if (currentPhase === 'scheduled') {
+    statusSummary =
+      'All systems nominal. Snapshot execution is standing by and may trigger at any time.';
+  } else if (currentPhase === 'distribution') {
+    statusSummary =
+      'All systems nominal. This round is paying out - rewards are streaming on-chain.';
+  } else if (currentPhase === 'done') {
+    statusSummary =
+      'All systems nominal. Rewards for this round are fully distributed. Standing by for the next window.';
+  } else if (currentPhase === 'closed') {
+    statusSummary =
+      'All systems nominal. Claim window closed and standing by for the next round.';
+  }
+
+  let statusDotColor = 'bg-emerald-400';
+  if (hasBackendIssue || hasContractIssue) statusDotColor = 'bg-amber-400';
+  if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
+  if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
+
+  let claimButtonLabel = 'Lock in my share';
+
+  if (hasLockedIn) {
+    claimButtonLabel = 'Presence locked in';
+  } else if (!isLive) {
+    claimButtonLabel = isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
+      : 'Upcoming Claim Window';
+  } else if (!walletIsConnected) {
+    claimButtonLabel = 'Connect wallet to lock in';
+  } else if (!isEligible) {
+    claimButtonLabel = 'Not eligible this round';
+  } else if (isPreview) {
+    claimButtonLabel = 'Preview mode';
+  } else {
+    claimButtonLabel = 'Lock in my share';
+  }
+
   // ───────────────────────────
   // Progress bar steps
   // ───────────────────────────
@@ -979,9 +1075,9 @@ export default function ClaimPoolPage() {
   const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
   const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
+  // ───────────────────────────
+  // Render
+  // ───────────────────────────
 
   return (
     <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
