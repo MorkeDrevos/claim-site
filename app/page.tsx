@@ -1461,74 +1461,83 @@ export default function ClaimPoolPage() {
             )}
           </div>
 
-          {/* desktop timeline */}
-          <div className="mt-1 hidden sm:flex items-center justify-between gap-3">
-            {steps.map((step, index) => {
-              const isDoneStep = activeIndex >= index;
-              const isActiveStep = step.id === currentPhase;
+          {/* ROUND PROGRESS CARD */}
+<SoftCard className="mt-8 pt-5 pb-5 px-4 sm:px-7">
+  {/* Heading */}
+  <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+      ROUND {roundNumber ?? 1} PROGRESS
+    </p>
+    <p className="text-[11px] sm:text-[12px] font-medium text-slate-400">
+      {activeStep ? activeStep.label : 'Round status'}
+    </p>
+  </div>
 
-              return (
-                <div
-                  key={step.id}
-                  className="flex flex-1 flex-col items-center"
-                >
-                  <div
-                    className={[
-                      'h-2 w-full rounded-full',
-                      index === 0 ? '' : 'ml-1',
-                      isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
-                    ].join(' ')}
-                  />
-                  <div className="mt-2 flex items-center gap-2">
-                    <div
-                      className={[
-                        'h-2.5 w-2.5 rounded-full border',
-                        isDoneStep
-                          ? 'bg-emerald-400 border-emerald-300'
-                          : 'bg-slate-800 border-slate-600',
-                        isActiveStep
-                          ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
-                          : '',
-                      ].join(' ')}
-                    />
-                    <span
-                      className={[
-                        'tracking-wide',
-                        isDoneStep
-                          ? 'text-[12px] font-semibold text-slate-300'
-                          : 'text-[12px] font-medium text-slate-500',
-                      ].join(' ')}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+  {/* desktop timeline */}
+  <div className="hidden sm:flex items-center justify-between gap-4">
+    {steps.map((step, index) => {
+      const isDoneStep = activeIndex >= index;
+      const isActiveStep = step.id === effectivePhaseForSteps;
+
+      return (
+        <div key={step.id} className="flex flex-1 flex-col items-center">
+          <div
+            className={[
+              'h-2 w-full rounded-full',
+              index === 0 ? '' : 'ml-1',
+              isDoneStep ? 'bg-emerald-400' : 'bg-slate-800',
+            ].join(' ')}
+          />
+          <div className="mt-2 flex items-center gap-2">
+            <div
+              className={[
+                'h-2.5 w-2.5 rounded-full border',
+                isDoneStep
+                  ? 'bg-emerald-400 border-emerald-300'
+                  : 'bg-slate-800 border-slate-600',
+                isActiveStep
+                  ? 'animate-[pulse_1.6s_ease-in-out_infinite]'
+                  : '',
+              ].join(' ')}
+            />
+            <span
+              className={[
+                'tracking-wide whitespace-nowrap',
+                isDoneStep
+                  ? 'text-[12px] font-semibold text-slate-300'
+                  : 'text-[12px] font-medium text-slate-500',
+              ].join(' ')}
+            >
+              {step.label}
+            </span>
           </div>
+        </div>
+      );
+    })}
+  </div>
 
-          {/* mobile bar */}
-          <div className="mt-4 sm:hidden space-y-2">
-            <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-emerald-400 transition-all"
-                style={{
-                  width:
-                    activeIndex >= 0
-                      ? `${((activeIndex + 1) / steps.length) * 100}%`
-                      : '0%',
-                }}
-              />
-            </div>
-            <p className="text-[11px] text-slate-400">
-              {activeStep ? activeStep.label : 'Round progress'}
-            </p>
-          </div>
+  {/* mobile bar */}
+  <div className="mt-3 sm:hidden space-y-2">
+    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+      <div
+        className="h-full rounded-full bg-emerald-400 transition-all"
+        style={{
+          width:
+            activeIndex >= 0
+              ? `${((activeIndex + 1) / steps.length) * 100}%`
+              : '0%',
+        }}
+      />
+    </div>
+    <p className="text-[11px] text-slate-400">
+      {activeStep ? activeStep.label : 'Round progress'}
+    </p>
+  </div>
 
-          {/* description */}
-          <p className="mt-4 text-[12px] text-slate-300">{progressMessage}</p>
-
-        </SoftCard>
+  <p className="mt-4 text-[12px] text-slate-200">
+    {progressMessage}
+  </p>
+</SoftCard>
 
         {/* Three mini-cards */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
