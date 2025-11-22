@@ -1417,7 +1417,7 @@ export default function ClaimPoolPage() {
             </div>
 
             {/* RIGHT COLUMN — Mission Control */}
-            <div className="w-full md:max-w-xs mt-8 md:mt-[18px] px-0 md:px-0">
+            <div className="w-full md:max-w-xs mt-0 md:mt-[-10px] px-0 md:px-0">
               <SoftCard className="relative space-y-4 py-7 min-h-[340px]">
                 {/* Header row */}
                 <div className="flex items-baseline justify-between pr-1">
