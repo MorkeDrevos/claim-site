@@ -1095,23 +1095,28 @@ const eligibilityBody = walletIsConnected
                 </h1>
 
                 {/* CLAIM WINDOW CARD */}
-                <div
-  className={[
-    'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
-    isLive
-      ? [
-          'border border-emerald-400/80',
-          'bg-gradient-to-b from-emerald-500/15 via-slate-950/85 to-slate-950/95',
-          'shadow-[0_0_45px_rgba(16,185,129,0.75)]',
-          'animate-[pulse_1.4s_ease-in-out_infinite]',
-        ].join(' ')
-      : [
-          'border border-emerald-500/40',
-          'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-          'shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-        ].join(' '),
-  ].join(' ')}
->
+                className={[
+  'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
+  isLive
+    ? [
+        'border border-emerald-400/80',
+        'bg-gradient-to-b from-emerald-500/15 via-slate-950/85 to-slate-950/95',
+        'shadow-[0_0_45px_rgba(16,185,129,0.75)]',
+        'animate-[pulse_1.4s_ease-in-out_infinite]',
+      ].join(' ')
+    : isDistributing
+    ? [
+        'border border-cyan-400/80',
+        'bg-gradient-to-b from-cyan-500/12 via-slate-950/85 to-slate-950/95',
+        'shadow-[0_0_45px_rgba(34,211,238,0.7)]',
+      ].join(' ')
+    : [
+        'border border-emerald-500/40',
+        'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+        'shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+      ].join(' '),
+].join(' ')}
+
 {/* LIVE indicator pill */}
 {isLive && (
   <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
@@ -1181,23 +1186,33 @@ const eligibilityBody = walletIsConnected
                         </p>
 
                         {/* Countdown OR phase text */}
-                        {shouldShowCountdown && countdownTargetIso && (
-                          <div className={isLive ? 'relative mt-1' : 'mt-1'}>
-                            {isLive && (
-                              <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
-                            )}
-                            <p
-  className={[
-    '-mt-1.5', // lift the number a bit
-    'text-[38px] sm:text-[34px] font-bold tracking-tight',
-    isLive ? 'text-emerald-300' : 'text-slate-50',
-    isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
-  ].join(' ')}
->
-  {isClosed ? '' : countdownLabel || '--:--:--'}
-</p>
-                          </div>
-                        )}
+{shouldShowCountdown && countdownTargetIso && (
+  <>
+    <div className={isLive ? 'relative mt-1' : 'mt-1'}>
+      {isLive && (
+        <div className="absolute inset-0 -z-10 blur-2xl opacity-20 bg-emerald-400/40" />
+      )}
+
+      <p
+        className={[
+          '-mt-1.5',
+          'text-[38px] sm:text-[34px] font-bold tracking-tight',
+          isLive ? 'text-emerald-300' : 'text-slate-50',
+          isFinalTen ? 'animate-[pulse_0.35s_ease-in-out_infinite]' : '',
+        ].join(' ')}
+      >
+        {isClosed ? '' : countdownLabel || '--:--:--'}
+      </p>
+    </div>
+
+    {/* Message line under countdown */}
+    <p className="mt-[4px] text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+      {isLive
+        ? 'Window is live. Lock in your share now.'
+        : 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'}
+    </p>
+  </>
+)}
 
                         {!shouldShowCountdown && (
                           <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
