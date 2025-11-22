@@ -1515,7 +1515,7 @@ else if (currentPhase === 'done') {
               </SoftCard>
             </div>
           </div>
-        </SoftCard>
+                </SoftCard>
 
 /* ───────────────────────────
    Progress bar + status summary
