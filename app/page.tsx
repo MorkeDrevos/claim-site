@@ -1139,14 +1139,12 @@ export default function ClaimPoolPage() {
       </div>
 
       {/* Right side — desktop only */}
-<div className="hidden sm:flex items-center gap-2 translate-y-[1px]">
-  <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-100/90 leading-[0] flex items-center">
-    You made it into this window
+<div className="hidden sm:flex items-center gap-3">
+  <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-emerald-100/90">
+    YOU MADE IT INTO THIS WINDOW
   </span>
-
   <span className="h-6 w-px bg-emerald-300/40" />
-
-  <span className="text-[11px] text-emerald-100/90 leading-[0] flex items-center">
+  <span className="text-[12px] leading-[1.1] text-emerald-100/90">
     Stay close - timing is everything.
   </span>
 </div>
