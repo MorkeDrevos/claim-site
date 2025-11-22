@@ -1016,7 +1016,7 @@ export default function ClaimPoolPage() {
 
               <div className="hidden sm:flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-300/80">
                 {!walletIsConnected && (
-                  <span>Stay close - timing is everything</span>
+                  <span>Stay close - timing is everything.</span>
                 )}
                 {walletIsConnected && eligibilityStatus === 'eligible' && (
                   <span>YOU MADE IT INTO THIS WINDOW</span>
@@ -1496,7 +1496,7 @@ export default function ClaimPoolPage() {
           </div>
 
           {/* mobile bar */}
-          <div className="mt-2 sm:hidden space-y-2">
+          <div className="mt-5 sm:hidden space-y-2">
             <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
               <div
                 className="h-full rounded-full bg-emerald-400 transition-all"
@@ -1513,7 +1513,9 @@ export default function ClaimPoolPage() {
             </p>
           </div>
 
-          <p className="mt-3 text-[12px] text-slate-200">{progressMessage}</p>
+          <p className="mt-6 mb-2 text-[13px] leading-relaxed text-slate-300">
+  {progressMessage}
+</p>
         </SoftCard>
 
         {/* Three mini-cards */}
