@@ -28,6 +28,8 @@ type SnapshotFile = {
 
 const SNAPSHOT = snapshotRaw as SnapshotFile;
 
+const TEST_MODE_BBURN = true; // 🔧 TEMP: allow everyone to be eligible during BBURN tests
+
 function useAutoReloadOnNewBuild() {
   useEffect(() => {
     let cancelled = false;
@@ -717,7 +719,7 @@ export default function ClaimPoolPage() {
     },
   ];
 
-  const isEligible = eligibleAmount >= MIN_HOLDING;
+  const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
 
   const rewardAmountText =
     typeof rewardPoolAmountClaim === 'number'
