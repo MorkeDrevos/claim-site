@@ -502,7 +502,7 @@ export default function ClaimPoolPage() {
      Contract + wallet helpers
   ─────────────────────────── */
 
-  const CLAIM_CA = 'BXvBhz6Va2Ed8HnzMDChzHCTqKXLvJpGadfLhvK5pump';
+  const CLAIM_CA = 'So11111111111111111111111111111111111111112';
   const shortCa = `${CLAIM_CA.slice(0, 4)}…${CLAIM_CA.slice(-4)}`;
 
   const handleCopyCa = async () => {
