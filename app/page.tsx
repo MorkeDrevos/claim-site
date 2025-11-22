@@ -43,10 +43,8 @@ function useAutoReloadOnNewBuild() {
         const latest = data?.buildId ?? null;
 
         if (!initialBuildId) {
-          // First run – remember current build id
           initialBuildId = latest;
         } else if (latest && initialBuildId && latest !== initialBuildId) {
-          // New build detected -> mark and reload
           try {
             window.localStorage.setItem('claim_portal_recently_updated', '1');
           } catch {
@@ -59,7 +57,7 @@ function useAutoReloadOnNewBuild() {
         console.error('build-info check failed', e);
       } finally {
         if (!cancelled) {
-          timeoutId = window.setTimeout(check, 10_000); // every 10s
+          timeoutId = window.setTimeout(check, 10_000);
         }
       }
     };
@@ -87,7 +85,7 @@ type MissionRow = {
   label: string;
   value: string;
   tone: Tone;
-  mode?: MissionRowMode; // default = 'plain'
+  mode?: MissionRowMode;
 };
 
 type WindowPhase =
@@ -106,41 +104,33 @@ type ClaimHistoryEntry = {
 };
 
 type ClaimPortalState = {
-  // round
   roundNumber?: number;
 
-  // wallet / network
   walletConnected: boolean;
   walletShort: string;
   networkLabel: string;
 
-  // snapshot
   snapshotLabel: string;
   snapshotBlock: string;
 
-  // window status
   claimWindowStatus: string;
   windowPhase?: WindowPhase;
 
-  // schedule timings (match JSON)
   snapshotAt?: string | null;
   claimWindowOpensAt?: string | null;
   claimWindowClosesAt?: string | null;
   distributionStartsAt?: string | null;
   distributionDoneAt?: string | null;
 
-  // backend / contract status
   frontEndStatus: string;
   contractStatus: string;
   firstPoolStatus: PoolStatus;
 
-  // pool + eligibility
   eligibleAmount: number;
   claimHistory: ClaimHistoryEntry[];
   rewardPoolAmountClaim?: number | null;
   rewardPoolAmountUsd?: number | null;
 
-  // helper
   numericCountdown?: string;
 };
 
@@ -151,8 +141,7 @@ type ClaimPortalState = {
 const MIN_HOLDING = 1_000_000;
 const JUPITER_BUY_URL = 'https://jup.ag/swap/SOL-CLAIM';
 
-// TEMP: JSON schedule doesn’t define `mode` yet, ignore type warning here
-// @ts-ignore
+// @ts-ignore – JSON doesn’t define mode yet
 const SCHEDULE = schedule as ClaimSchedule;
 const SNAPSHOT_FOMO_WINDOW_MINUTES = 5;
 
@@ -288,19 +277,15 @@ export default function ClaimPoolPage() {
   const [justSnapshotFired] = useState(false);
   const snapshotFiredRef = useRef(false);
 
-  // Lock-in state
   const [hasLockedIn, setHasLockedIn] = useState(false);
 
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;
 
-  // FOMO banner text
   const [fomoBanner, setFomoBanner] = useState<string | null>(null);
 
-  // Enable the auto-reload hook
   useAutoReloadOnNewBuild();
 
-  // Detect "we just reloaded because of a new build"
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -356,7 +341,6 @@ export default function ClaimPoolPage() {
     ? new Date(SCHEDULE.distributionDoneAt).getTime()
     : null;
 
-  // Random FOMO banner between 30min and 5min before window opens
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!opensMs) return;
@@ -456,7 +440,6 @@ export default function ClaimPoolPage() {
     ? 'warning'
     : 'muted';
 
-  // Flash highlight in the last 3 seconds before a phase change
   useEffect(() => {
     if (!countdownTargetIso) {
       setPreFlash(false);
@@ -628,17 +611,14 @@ export default function ClaimPoolPage() {
     distributionDoneAt,
   } = state;
 
-  // Frontend sees a wallet as connected if Phantom is connected OR
-  // the backend already marked it as connected.
   const walletIsConnected = !!publicKey || walletConnected;
 
   const walletLabelShort =
-  walletShort ||
-  (walletAddress
-    ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
-    : '—');
+    walletShort ||
+    (walletAddress
+      ? `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`
+      : '—');
 
-  // Choose where snapshot time comes from
   const effectiveSnapshotIso = SCHEDULE.snapshotAt ?? snapshotAt ?? null;
 
   const snapshotBaseMs = effectiveSnapshotIso
@@ -758,20 +738,20 @@ export default function ClaimPoolPage() {
     !hasLockedIn;
 
   const eligibilityTitle = walletIsConnected
-  ? isEligible
-    ? 'Eligible this round'
-    : 'Not eligible this round'
-  : 'Wallet not connected';
+    ? isEligible
+      ? 'Eligible this round'
+      : 'Not eligible this round'
+    : 'Wallet not connected';
 
-const eligibilityBody = walletIsConnected
-  ? isEligible
-    ? `This wallet met the ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM minimum at the snapshot used for this round.`
-    : `This wallet held less than ${MIN_HOLDING.toLocaleString(
-        'en-US'
-      )} CLAIM at the snapshot used for this round.`
-  : 'Connect a Solana wallet to check eligibility for this round.';
+  const eligibilityBody = walletIsConnected
+    ? isEligible
+      ? `This wallet met the ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM minimum at the snapshot used for this round.`
+      : `This wallet held less than ${MIN_HOLDING.toLocaleString(
+          'en-US'
+        )} CLAIM at the snapshot used for this round.`
+    : 'Connect a Solana wallet to check eligibility for this round.';
 
   /* ───────────────────────────
      Claim handler
@@ -808,19 +788,19 @@ const eligibilityBody = walletIsConnected
     }
 
     if (!walletIsConnected) {
-  setInlineMessage({
-    type: 'warning',
-    title: 'Connect a wallet first',
-    message:
-      'Connect the wallet you used at snapshot before locking your share.',
-  });
-  addToast(
-    'warning',
-    'Connect a wallet first',
-    'Connect the wallet you used at snapshot before locking your share.'
-  );
-  return;
-}
+      setInlineMessage({
+        type: 'warning',
+        title: 'Connect a wallet first',
+        message:
+          'Connect the wallet you used at snapshot before locking your share.',
+      });
+      addToast(
+        'warning',
+        'Connect a wallet first',
+        'Connect the wallet you used at snapshot before locking your share.'
+      );
+      return;
+    }
 
     if (!isEligible) {
       setInlineMessage({
@@ -1094,7 +1074,7 @@ const eligibilityBody = walletIsConnected
                   Show up. Lock in. Get your share.
                 </h1>
 
-                                {/* CLAIM WINDOW CARD */}
+                {/* CLAIM WINDOW CARD */}
                 <div
                   className={[
                     'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
@@ -1276,7 +1256,7 @@ const eligibilityBody = walletIsConnected
                       </div>
                     )}
 
-                                        {/* RIGHT SIDE: pool */}
+                    {/* RIGHT SIDE: pool */}
                     <div className="flex flex-col items-end text-right">
                       <div className="flex items-baseline gap-2">
                         <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400/80">
@@ -1316,6 +1296,8 @@ const eligibilityBody = walletIsConnected
                         </p>
                       </div>
                     </div>
+                  </div>
+                </div>
               </div>
 
               {/* MOBILE CONNECT CTA */}
