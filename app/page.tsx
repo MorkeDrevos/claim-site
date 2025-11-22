@@ -1162,7 +1162,7 @@ export default function ClaimPoolPage() {
     
     {/* NOT CONNECTED */}
     {!walletIsConnected && (
-  <span>Stay close - timing is everything.</span>
+  <span>Stay close - timing is everything</span>
 )}
 
 {walletIsConnected && eligibilityStatus === 'eligible' && (
