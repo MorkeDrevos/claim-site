@@ -1161,7 +1161,7 @@ if (!isLive) {
                       )}
 
                       {/* Redesigned Timing Block */}
-<div className="mt-[6px] mb-[6px] flex flex-col items-start sm:items-center">
+<div className="mt-[6px] mb-[6px] flex flex-col items-start">
   <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400/90">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -1197,9 +1197,9 @@ if (!isLive) {
                       {/* DONE STATE – green “Round X complete · Rewards distributed” */}
                       {isDone && (
                         <>
-                          <p className="w-full text-left text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-  ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
-</p>
+                          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                            ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
+                          </p>
 
                           <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
                             Check your wallet – this round just paid out. Next window
