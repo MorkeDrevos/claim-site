@@ -860,73 +860,56 @@ export default function ClaimPoolPage() {
     }
   };
 
-  /* ───────────────────────────
-     Progress bar + status summary
-  ─────────────────────────── */
+  // ───────────────────────────
+// Progress message
+// ───────────────────────────
+  
+let progressMessage: React.ReactNode = '';
 
-  const steps: { id: WindowPhase | 'closed'; label: string }[] = [
-    { id: 'scheduled', label: 'Opens soon' },
-    { id: 'snapshot', label: 'Snapshot window' },
-    { id: 'open', label: 'Claim window open' },
-    { id: 'closed', label: 'Claim window closed' },
-    {
-      id: 'distribution',
-      label: isDone
-        ? 'Rewards distributed'
-        : 'Reward distribution in progress',
-    },
-  ];
-
-  const effectivePhaseForSteps =
-    currentPhase === 'done' ? 'distribution' : currentPhase;
-
-  const activeIndex = steps.findIndex(
-    (s) => s.id === effectivePhaseForSteps
-  );
-  const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
-
-    let progressMessage: React.ReactNode = '';
-
-  if (currentPhase === 'scheduled') {
-    if (isSnapshotSoon) {
-      progressMessage = (
-        <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
-          SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT – MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
-        </span>
-      );
-    } else {
-      progressMessage =
-        'Claim window scheduled. Countdown shows when it opens.';
-    }
-  } else if (currentPhase === 'snapshot') {
-    progressMessage = snapshotTimeLabel
-      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-      : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
-  } else if (currentPhase === 'open') {
+if (currentPhase === 'scheduled') {
+  if (isSnapshotSoon) {
+    // FOMO cyan glowing line
+    progressMessage = (
+      <span className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
+        SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT – MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
+      </span>
+    );
+  } else {
     progressMessage =
-      'Claim window open. Lock in your share before the countdown hits zero.';
-  } else if (currentPhase === 'closed') {
-    progressMessage =
-      'Claim window closed. No new wallets can lock in for this round.';
-  } else if (currentPhase === 'distribution') {
-    progressMessage =
-      'Rewards are being sent out - watch your wallet, this round is paying.';
-  } else if (currentPhase === 'done') {
-    progressMessage =
-      'Round complete. Rewards landed – get ready for the next cycle.';
-  } else if (currentPhase === 'open') {
-    progressMessage =
-      'Claim window open. Lock in your share before the countdown hits zero.';
-  } else if (currentPhase === 'closed') {
-    progressMessage =
-      'Claim window closed. No new wallets can lock in for this round.';
-  } else if (currentPhase === 'distribution') {
-    progressMessage =
-      'Rewards are being sent out - watch your wallet, this round is paying.';
-  } else if (currentPhase === 'done') {
-    progressMessage =
-      'Round complete. Rewards landed – get ready for the next cycle.';
+      'Claim window scheduled. Countdown shows when it opens.';
   }
+}
+
+else if (currentPhase === 'snapshot') {
+  progressMessage = snapshotTimeLabel
+    ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
+    : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
+}
+
+// Hide message when the green “Snapshot locked” pill is visible
+if (showSnapshotLocked) {
+  progressMessage = '';
+}
+
+else if (currentPhase === 'open') {
+  progressMessage =
+    'Claim window open. Lock in your share before the countdown hits zero.';
+}
+
+else if (currentPhase === 'closed') {
+  progressMessage =
+    'Claim window closed. No new wallets can lock in for this round.';
+}
+
+else if (currentPhase === 'distribution') {
+  progressMessage =
+    'Rewards are being sent out - watch your wallet, this round is paying.';
+}
+
+else if (currentPhase === 'done') {
+  progressMessage =
+    'Round complete. Rewards landed – get ready for the next cycle.';
+}
 
   let statusSummary =
     'All systems nominal. Autonomous settlement sequence is active.';
