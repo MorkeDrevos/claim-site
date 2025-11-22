@@ -867,7 +867,7 @@ export default function ClaimPoolPage() {
   // Progress message
   // ───────────────────────────
 
-  let progressMessage: React.ReactNode = '';
+    let progressMessage: React.ReactNode = '';
 
   if (currentPhase === 'scheduled') {
     if (isSnapshotSoon) {
@@ -881,14 +881,13 @@ export default function ClaimPoolPage() {
         'Claim window scheduled. Countdown shows when it opens.';
     }
   } else if (currentPhase === 'snapshot') {
-    progressMessage = snapshotTimeLabel
-      ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
-      : 'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
-  }
-
-  // Hide message when the green "Snapshot locked" pill is visible
-  if (showSnapshotLocked) {
-    progressMessage = '';
+    // During snapshot phase, we only ever show one of these two:
+    if (snapshotTimeLabel) {
+      progressMessage = `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`;
+    } else {
+      progressMessage =
+        'Snapshot engine is armed. It can trigger at any moment - make sure your wallet holds the minimum.';
+    }
   } else if (currentPhase === 'open') {
     progressMessage =
       'Claim window open. Lock in your share before the countdown hits zero.';
@@ -901,6 +900,11 @@ export default function ClaimPoolPage() {
   } else if (currentPhase === 'done') {
     progressMessage =
       'Round complete. Rewards landed - get ready for the next cycle.';
+  }
+
+  // If the green "Snapshot locked" pill is visible, we hide the middle text
+  if (showSnapshotLocked) {
+    progressMessage = '';
   }
 
   // ───────────────────────────
@@ -936,24 +940,29 @@ export default function ClaimPoolPage() {
   if (currentPhase === 'closed') statusDotColor = 'bg-slate-500';
   if (currentPhase === 'done') statusDotColor = 'bg-emerald-400';
 
-  let claimButtonLabel = 'Lock in my share';
+    let claimButtonLabel = 'Lock in my share';
 
-  if (hasLockedIn) {
-  claimButtonLabel = 'Presence locked in';
-  } else if (!isLive) {
-  claimButtonLabel = isClosedOnly
-    ? 'Claim window closed'
-    : isDistributing
-    ? 'Distribution in progress'
-    : isDone
-    ? 'Rewards distributed'
-    : 'Upcoming Claim Window';
+  // If the round is NOT live, we override the text
+  if (!isLive) {
+    claimButtonLabel = isClosedOnly
+      ? 'Claim window closed'
+      : isDistributing
+      ? 'Distribution in progress'
+      : isDone
+      ? 'Rewards distributed'
+      : 'Upcoming Claim Window';
+  } else if (hasLockedIn) {
+    // Live window + already locked
+    claimButtonLabel = 'Presence locked in';
+  } else if (!isEligible) {
+    // Live window but wallet didn’t meet snapshot minimum
+    claimButtonLabel = 'Not eligible this round';
   } else if (isPreview) {
-  // Live but preview mode
-  claimButtonLabel = 'Preview mode';
+    // Preview mode for future rounds / staging
+    claimButtonLabel = 'Preview mode';
   }
-// ⬆️ Notice: no special label for !walletIsConnected or !isEligible
-// During a live window it always says "Lock in my share"
+  // 👉 Otherwise (live + can claim + maybe wallet not connected yet),
+  // we keep "Lock in my share" and let handleClaimClick do the gating.
 
   // ───────────────────────────
   // Progress bar steps
