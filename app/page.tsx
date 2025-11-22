@@ -1113,14 +1113,14 @@ export default function ClaimPoolPage() {
   {/* DONE STATE – green “Round X complete · Rewards distributed” */}
 {isDone && (
   <>
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+    <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
       ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
     </p>
 
     <p
       className="
-        mt-[2px]
-        text-[15px]
+        mt-[1px]
+        text-[13px]
         leading-relaxed
         text-emerald-200/90
         max-w-xl
