@@ -358,7 +358,9 @@ export default function ClaimPoolPage() {
   if (opensMs && nowMs >= opensMs) currentPhase = 'open';
   if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
-    let countdownTargetIso: string | null = null;
+  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
+
+  let countdownTargetIso: string | null = null;
 
   switch (currentPhase) {
     case 'scheduled':
