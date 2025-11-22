@@ -886,10 +886,20 @@ export default function ClaimPoolPage() {
 
   let progressMessage = '';
   if (currentPhase === 'scheduled') {
-    progressMessage = isSnapshotSoon
-      ? 'Snapshot engine is armed. It can trigger any time - make sure your wallet holds the minimum.'
-      : 'Claim window scheduled. Countdown shows when it opens.';
-  } else if (currentPhase === 'snapshot') {
+  if (isSnapshotSoon) {
+    progressMessage = (
+      <p className="text-cyan-300 tracking-[0.22em] text-[11px] font-semibold uppercase animate-[pulse_3s_ease-in-out_infinite]">
+        SNAPSHOT ENGINE IS ARMED. IT CAN TRIGGER ANY MOMENT – MAKE SURE YOUR WALLET HOLDS THE MINIMUM.
+      </p>
+    );
+  } else {
+    progressMessage = (
+      <p className="text-slate-400 text-[11px] tracking-[0.22em] uppercase">
+        Claim window scheduled. Countdown shows when it opens.
+      </p>
+    );
+  }
+} else if (currentPhase === 'snapshot') {
     progressMessage = snapshotTimeLabel
       ? `Snapshot locked at ${snapshotTimeLabel}. Eligibility for this round is set.`
       : 'Snapshot engine is armed. It can trigger at any moment – make sure your wallet holds the minimum.';
