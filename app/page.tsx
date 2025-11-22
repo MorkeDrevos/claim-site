@@ -1096,19 +1096,41 @@ const eligibilityBody = walletIsConnected
 
                 {/* CLAIM WINDOW CARD */}
                 <div
-                  className={[
-                    'mt-3 rounded-3xl border px-5 py-4 shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
-                    'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
-                    preFlash || justSnapshotFired ? 'animate-pulse' : '',
-                    isLive
-                      ? 'border-emerald-500/50'
-                      : isRestingClosed
-                      ? 'border-slate-700/60 bg-slate-900/70 opacity-70 grayscale'
-                      : isDistributing || isDone
-                      ? 'border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.7)]'
-                      : 'border-emerald-400/60',
-                  ].join(' ')}
-                >
+  className={[
+    'mt-3 rounded-3xl px-6 py-4 transition-all duration-300',
+    isLive
+      ? [
+          'border border-emerald-400/80',
+          'bg-gradient-to-b from-emerald-500/15 via-slate-950/85 to-slate-950/95',
+          'shadow-[0_0_45px_rgba(16,185,129,0.75)]',
+          'animate-[pulse_1.4s_ease-in-out_infinite]',
+        ].join(' ')
+      : [
+          'border border-emerald-500/40',
+          'bg-gradient-to-b from-emerald-500/8 via-slate-950/80 to-slate-950/90',
+          'shadow-[0_24px_80px_rgba(16,185,129,0.45)]',
+        ].join(' '),
+  ].join(' ')}
+>
+{/* LIVE indicator pill */}
+{isLive && (
+  <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200">
+    <span className="relative inline-flex h-[8px] w-[8px]">
+      <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+      <span className="relative inline-flex h-[8px] w-[8px] rounded-full bg-emerald-300" />
+    </span>
+    Claim window live
+  </p>
+)}
+
+{/* REWARDS ON THE WAY pill */}
+{isRewardsOnTheWay && (
+  <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100">
+    <span className="inline-flex h-[10px] w-[10px] animate-spin rounded-full border-[2px] border-cyan-300 border-t-transparent" />
+    Rewards on the way
+  </p>
+)}
+
                   {/* TOP ROW */}
                   <div className="flex items-start justify-between gap-6 pt-1">
                     {/* LEFT SIDE */}
