@@ -858,7 +858,7 @@ export default function ClaimPoolPage() {
       ? 'Distribution in progress'
       : isDone
       ? 'Rewards distributed'
-      : 'Upcoming Claim Window';
+      : 'Opens soon';
   } else if (hasLockedIn) {
     claimButtonLabel = 'Presence locked in';
   } else if (!isEligible) {
@@ -1319,9 +1319,9 @@ export default function ClaimPoolPage() {
                       <span className="text-emerald-300/70 font-medium">
                         $CLAIM
                       </span>{' '}
-                      via the{' '}
+                      once{' '}
                       <span className="text-emerald-300/70 font-medium">
-                        on-chain rewards engine
+                        once the window closes
                       </span>
                       .
                     </p>
