@@ -1124,7 +1124,7 @@ const eligibilityBody = walletIsConnected
 )}
 
 {/* REWARDS ON THE WAY pill */}
-{isRewardsOnTheWay && (
+{isDistributing && (
   <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100">
     <span className="inline-flex h-[10px] w-[10px] animate-spin rounded-full border-[2px] border-cyan-300 border-t-transparent" />
     Rewards on the way
