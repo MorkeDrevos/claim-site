@@ -270,8 +270,7 @@ export default function ClaimPoolPage() {
   const [justUpdated, setJustUpdated] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PortalTab>('eligibility');
-  const [eligibilityStatus, setEligibilityStatus] =
-  useState<'unknown' | 'eligible' | 'not-eligible'>('unknown');
+
   const [isPulseOn] = useState(false);
   const [inlineMessage, setInlineMessage] = useState<{
     type: 'error' | 'warning' | 'success';
@@ -743,20 +742,14 @@ export default function ClaimPoolPage() {
   ];
 
   const isEligible = TEST_MODE_BBURN ? true : eligibleAmount >= MIN_HOLDING;
-  useEffect(() => {
-  // No wallet -> neutral / prompt to connect
-  if (!walletIsConnected) {
-    setEligibilityStatus('unknown');
-    return;
-  }
+  type EligibilityStatus = 'unknown' | 'eligible' | 'not-eligible';
 
-  // Wallet connected -> map isEligible flag to status
-  if (isEligible) {
-    setEligibilityStatus('eligible');
-  } else {
-    setEligibilityStatus('not-eligible');
-  }
-}, [walletIsConnected, isEligible]);
+  const eligibilityStatus: EligibilityStatus =
+  !walletIsConnected
+    ? 'unknown'
+    : isEligible
+    ? 'eligible'
+    : 'not-eligible';
 
   const rewardAmountText =
     typeof rewardPoolAmountClaim === 'number'
@@ -1169,18 +1162,16 @@ export default function ClaimPoolPage() {
     
     {/* NOT CONNECTED */}
     {!walletIsConnected && (
-      <span>Stay close - timing is everything.</span>
-    )}
+  <span>Stay close - timing is everything.</span>
+)}
 
-    {/* CONNECTED + ELIGIBLE */}
-    {walletIsConnected && eligibilityStatus === 'eligible' && (
-      <span>YOU MADE IT INTO THIS WINDOW</span>
-    )}
+{walletIsConnected && eligibilityStatus === 'eligible' && (
+  <span>YOU MADE IT INTO THIS WINDOW</span>
+)}
 
-    {/* CONNECTED + NOT ELIGIBLE */}
-    {walletIsConnected && eligibilityStatus === 'not-eligible' && (
-      <span>You missed this window. Be ready for the next one.</span>
-    )}
+{walletIsConnected && eligibilityStatus === 'not-eligible' && (
+  <span>You missed this window. Be ready for the next one.</span>
+)}
   </div>
 </div>
     </div>
