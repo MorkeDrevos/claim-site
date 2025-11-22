@@ -1418,9 +1418,9 @@ export default function ClaimPoolPage() {
                           </span>
                         </p>
                           {/* DISTRIBUTION INFO */}
-<div className="mt-1 text-[10px] text-slate-500/80 space-y-0.5 leading-tight">
-  <p>
-    Distribution Wallet:{' '}
+<div className="mt-0.5 pr-0.5 text-[10px] text-slate-500/70 leading-tight">
+  <p className="text-right">
+    <span className="text-slate-400/70">Distribution Wallet:</span>{' '}
     <span className="font-mono text-slate-300">
       {distributionWallet
         ? `${distributionWallet.slice(0, 4)}...${distributionWallet.slice(-4)}`
@@ -1429,14 +1429,16 @@ export default function ClaimPoolPage() {
   </p>
 
   {distributionTx && (
-    <a
-      href={`https://solscan.io/tx/${distributionTx}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-emerald-400/80 hover:text-emerald-300 underline"
-    >
-      Latest Distribution TX →
-    </a>
+    <p className="text-right">
+      <a
+        href={`https://solscan.io/tx/${distributionTx}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-emerald-400/80 hover:text-emerald-300 underline"
+      >
+        Latest Distribution TX →
+      </a>
+    </p>
   )}
 </div>
                       </div>
