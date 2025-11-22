@@ -1,10 +1,10 @@
 {
   "roundNumber": 1,
-  "snapshotAt": "2025-11-22T10:38:00Z",
-  "windowOpensAt": "2025-11-22T10:40:00Z",
-  "windowClosesAt": "2025-11-22T10:41:00Z",
-  "distributionStartsAt": "2025-11-22T10:41:40Z",
-  "distributionDoneAt": "2025-11-22T10:43:00Z",
+  "snapshotAt": "2025-11-22T10:51:00Z",
+  "windowOpensAt": "2025-11-22T10:55:00Z",
+  "windowClosesAt": "2025-11-22T10:56:00Z",
+  "distributionStartsAt": "2025-11-22T10:56:40Z",
+  "distributionDoneAt": "2025-11-22T10:57:00Z",
   "lastSnapshotTakenAt": null,
   "snapshotFile": "round-1.json"
 }
