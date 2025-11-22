@@ -1162,29 +1162,31 @@ export default function ClaimPoolPage() {
                         </div>
                       )}
 
-                      {/* Timing label */}
-                      <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-[13px] w-[13px] text-emerald-300 opacity-90"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <circle cx="12" cy="12" r="9" className="opacity-30" />
-                          <circle cx="12" cy="12" r="5" className="opacity-60" />
-                          <circle cx="12" cy="12" r="2" />
-                        </svg>
+                        {/* Timing label */}
+  <p className="mt-[8px] mb-[8px] flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-[13px] w-[13px] text-emerald-300 opacity-90"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="9" className="opacity-30" />
+      <circle cx="12" cy="12" r="5" className="opacity-60" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
 
-                        {isLive
-                          ? 'WINDOW CLOSES IN'
-                          : isClosedOnly
-                          ? 'REWARDS DISTRIBUTION STARTS IN'
-                          : isDistributionPhase
-                          ? 'REWARDS ON THE WAY'
-                          : 'NEXT WINDOW IN'}
-                      </p>
+    {isLive
+      ? 'WINDOW CLOSES IN'
+      : isClosedOnly
+      ? 'REWARDS DISTRIBUTION STARTS IN'
+      : isDistributionPhase
+      ? 'REWARDS ON THE WAY'
+      : isDone
+      ? 'ROUND COMPLETE'
+      : 'NEXT WINDOW IN'}
+  </p>
 
                       {/* DONE STATE – green “Round X complete · Rewards distributed” */}
                       {isDone && (
