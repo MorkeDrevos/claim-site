@@ -836,11 +836,8 @@ export default function ClaimPoolPage() {
     message:
       'Connect the wallet you used at snapshot before locking your share.',
   });
-  addToast(
-    'warning',
-    'Connect a wallet first',
-    'Connect the wallet you used at snapshot before locking your share.'
-  );
+
+  // no toast here – inline message only
   return;
 }
 
@@ -1020,17 +1017,17 @@ export default function ClaimPoolPage() {
   ];
 
   const effectivePhaseForSteps: WindowPhase | 'closed' =
-    currentPhase === 'done' ? 'distribution' : currentPhase;
+  currentPhase === 'done' ? 'distribution' : currentPhase;
 
-  const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
-    const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
+const activeIndex = steps.findIndex((s) => s.id === effectivePhaseForSteps);
+const activeStep = activeIndex >= 0 ? steps[activeIndex] : null;
 
-  /* ───────────────────────────
-     Render
-  ─────────────────────────── */
+/* ───────────────────────────
+   Render
+─────────────────────────── */
 
-  return (
-    <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
+return (
+  <main className="relative min-h-screen bg-slate-950 text-slate-50 overflow-x-hidden">
       {/* Update banner */}
       {justUpdated && (
         
