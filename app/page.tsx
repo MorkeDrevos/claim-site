@@ -1123,6 +1123,26 @@ export default function ClaimPoolPage() {
             {(sponsorDisplayName || sponsorHandle || 'S')
               .replace('@', '')
               .slice(0, 1)
+              .toUpperCase()}{/* LEFT SIDE */}
+<div className="flex flex-col">
+  {/* Sponsorship row (optional) */}
+  {isSponsoredWindow && (
+    <div className="mb-[4px] flex items-center gap-2">
+      {/* Avatar / initial bubble */}
+      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900/90 border border-slate-700/80 overflow-hidden">
+        {sponsorAvatarUrl ? (
+          <Image
+            src={sponsorAvatarUrl}
+            alt={sponsorDisplayName || sponsorHandle || 'Sponsor'}
+            width={24}
+            height={24}
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-[11px] font-semibold text-slate-200">
+            {(sponsorDisplayName || sponsorHandle || 'S')
+              .replace('@', '')
+              .slice(0, 1)
               .toUpperCase()}
           </span>
         )}
@@ -1178,20 +1198,20 @@ export default function ClaimPoolPage() {
       ? 'REWARDS ON THE WAY'
       : 'NEXT WINDOW IN'}
   </p>
-  )}
 
   {/* DONE STATE – green “Round X complete · Rewards distributed” */}
-{isDone && (
-  <>
-    <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
-      ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
-    </p>
+  {isDone && (
+    <>
+      <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-300">
+        ROUND {roundNumber ?? 1} COMPLETE • REWARDS DISTRIBUTED
+      </p>
 
-    <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
-  Check your wallet – this round just paid out. Next window will be announced soon.
-</p>
-  </>
-)}
+      <p className="mt-[6px] text-[14px] leading-[1.45] text-slate-200/90">
+        Check your wallet – this round just paid out. Next window will be
+        announced soon.
+      </p>
+    </>
+  )}
 
   {/* Countdown text for scheduled / snapshot / open / closed (NOT done) */}
   {shouldShowCountdown && countdownTargetIso && !isDone && (
