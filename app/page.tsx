@@ -175,7 +175,12 @@ function StatusPill({ label, tone = 'neutral' }: StatusPillProps) {
   );
 }
 
-function SoftCard({ children, className = '' }: { ... }) {
+type SoftCardProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+function SoftCard({ children, className = '' }: SoftCardProps) {
   return (
     <div
       className={`relative rounded-3xl border border-slate-800/80 bg-slate-950/80 p-4 sm:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.75)] backdrop-blur ${className}`}
@@ -1103,7 +1108,6 @@ export default function ClaimPoolPage() {
       <div className="mx-auto w-full max-w-6xl px-0 sm:px-6 pb-14 pt-10">
         {/* HERO / CLAIM CARD */}
         <SoftCard>
-          <SoftCard>
   {/* 🎉 Celebration banner – only when rewards are done */}
   {isDone && (
     <div className="
