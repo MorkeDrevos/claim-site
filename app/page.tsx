@@ -358,9 +358,7 @@ export default function ClaimPoolPage() {
   if (opensMs && nowMs >= opensMs) currentPhase = 'open';
   if (closesMs && nowMs >= closesMs) currentPhase = 'closed';
   if (distStartMs && nowMs >= distStartMs) currentPhase = 'distribution';
-  if (distDoneMs && nowMs >= distDoneMs) currentPhase = 'done';
-
-  let countdownTargetIso: string | null = null;
+    let countdownTargetIso: string | null = null;
 
   switch (currentPhase) {
     case 'scheduled':
@@ -382,6 +380,18 @@ export default function ClaimPoolPage() {
   }
 
   const countdownLabel = useCountdown(countdownTargetIso);
+
+  // Final 10-second pulse for the countdown
+  let isFinalTen = false;
+  if (countdownTargetIso) {
+    const targetMs = new Date(countdownTargetIso).getTime();
+    if (!Number.isNaN(targetMs)) {
+      const diff = targetMs - nowMs;
+      if (diff > 0 && diff <= 10_000) {
+        isFinalTen = true;
+      }
+    }
+  }
 
   const isLive = currentPhase === 'open';
   const isSnapshotPhase = currentPhase === 'snapshot';
@@ -1105,8 +1115,6 @@ export default function ClaimPoolPage() {
                           ? 'REWARDS ON THE WAY'
                           : 'NEXT WINDOW IN'}
                       </p>
-
-                      {/* Countdown OR phase text */}
 
                       {/* Countdown OR phase text */}
 {shouldShowCountdown && countdownTargetIso && (
