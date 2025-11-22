@@ -1319,11 +1319,7 @@ export default function ClaimPoolPage() {
                       <span className="text-emerald-300/70 font-medium">
                         $CLAIM
                       </span>{' '}
-                      once{' '}
-                      <span className="text-emerald-300/70 font-medium">
-                        once the window closes
-                      </span>
-                      .
+                      oncethe window closes.
                     </p>
                   </div>
                 </div>
