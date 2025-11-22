@@ -332,6 +332,52 @@ export default function ClaimPoolPage() {
   // clear previous error about wallet connection, if any
   setError(null);
 }, [walletIsConnected]);
+
+    // 🔍 Re-check eligibility instantly from the snapshot JSON when wallet connects
+  useEffect(() => {
+    // If wallet is disconnected, reset local eligibility view
+    if (!walletIsConnected || !walletAddress) {
+      setState((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          walletConnected: false,
+          walletShort: '',
+          eligibleAmount: 0,
+        };
+      });
+      return;
+    }
+
+    // Look up this wallet in the imported snapshot file
+    const lower = walletAddress.toLowerCase();
+    const holder = SNAPSHOT.holders.find(
+      (h) => h.wallet.toLowerCase() === lower
+    );
+    const snapshotAmount = holder?.amount ?? 0;
+
+    const newShort = `${walletAddress.slice(0, 4)}…${walletAddress.slice(-4)}`;
+
+    // Update state only if something actually changed
+    setState((prev) => {
+      if (!prev) return prev;
+
+      if (
+        prev.walletConnected &&
+        prev.walletShort === newShort &&
+        prev.eligibleAmount === snapshotAmount
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        walletConnected: true,
+        walletShort: newShort,
+        eligibleAmount: snapshotAmount,
+      };
+    });
+  }, [walletIsConnected, walletAddress]);
   
   /* ───────────────────────────
      Phase + countdown (schedule)
