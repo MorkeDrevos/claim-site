@@ -1156,12 +1156,12 @@ export default function ClaimPoolPage() {
 )}
                       
                       {!shouldShowCountdown && (
-                        <p className="mt-2 text-[13px] text-slate-400/90 max-w-md">
+                        <p className="mt-3 text-[14px] leading-relaxed text-slate-300 tracking-wide drop-shadow-[0_0_8px_rgba(16,185,129,0.15)]">
                           {currentPhase === 'closed'
                             ? 'Claim window closed. Rewards for this round are being prepared - payout starts shortly.'
                             : currentPhase === 'distribution'
                             ? 'Rewards are being paid out right now. Check your wallet and recent activity.'
-                            : 'Round complete. Rewards landed - next window will be announced here.'}
+                            : 'Round complete. Rewards have landed, next window soon.'}
                         </p>
                       )}
                     </div>
